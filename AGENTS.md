@@ -2,6 +2,8 @@
 
 这是独立 Mod 构建工具包。先读 README.md、docs/DEPLOYMENT.md、docs/MODS.md、upstream.lock.json。
 
+本地开服或接入上游统一启动端时，再读 docs/LOCAL-LAUNCHER.md。构建入口属于工具包，启动入口属于生成后的游戏目录；不要在工具包根目录直接运行 npm start，也不要直接启动未打 Mod 的官方整合包并当作部署完成。
+
 ## 部署信息与授权
 
 确认目标服务器、目录、资源余量、Docker/Compose v2、公网端口或反代入口。检查已有服务、端口和游戏 healthz。用户已有的信息和授权继续有效，无需重复询问。

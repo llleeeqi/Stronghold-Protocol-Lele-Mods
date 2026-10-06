@@ -48,7 +48,7 @@ if [[ -n "$assets_from" ]]; then
 fi
 # The base checkout remains untouched; all installs and generated files live in source.
 build_memory=${BUILD_MEMORY:-768m}
-build=(docker run --rm --memory "$build_memory" -e NODE_OPTIONS=--max-old-space-size=512
+build=(docker run --rm --user "$(id -u):$(id -g)" --memory "$build_memory" -e HOME=/tmp -e npm_config_cache=/tmp/npm-cache -e NODE_OPTIONS=--max-old-space-size=512
   --mount "type=bind,src=$stage_dir,dst=/stage"
   --mount "type=bind,src=$source_dir,dst=/baseline,readonly"
   --mount "type=bind,src=$repo_dir,dst=/mod,readonly"

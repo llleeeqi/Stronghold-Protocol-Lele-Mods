@@ -27,6 +27,8 @@
 
 ## 更新与失败处理
 
+改动 AI 决策前阅读 docs/AI-STATUS.md，按真实资料集做同种子整局比较；不能只凭单个波次、纯原版改善或总漏怪减少，就全局部署到拓展房间。
+
 用 `--revision FULL_SHA` 构建新上游候选，成功后更新 lock。保持完整提交固定；git apply、数据生成、资源下载或测试失败时停止切换。
 
 有冲突时在新 worktree 适配补丁，保留默认关闭、4 席、原版数据隔离与最后一关 Boss 规则，复测后切换。回退使用旧 READY 阶段：`bash scripts/activate.sh PREVIOUS_NAME`。

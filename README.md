@@ -41,6 +41,7 @@ Compose 默认限制 640 MiB、Node heap 384 MiB、1 CPU，只读运行目录、
 - [Agent 操作说明](AGENTS.md)
 - [部署与更新流程](docs/DEPLOYMENT.md)
 - [Mod 分层与开关协议](docs/MODS.md)
+- [AI 托管、漏怪与实验结果](docs/AI-STATUS.md)
 - [来源与许可](notices/SOURCES.md)
 
 `stage.sh` 只构建候选；`activate.sh` 才切换线上，存在房间或对局会拒绝切换，启动检查失败自动回退。上游更新先在隔离目录验证补丁与联机，再修改固定版本。

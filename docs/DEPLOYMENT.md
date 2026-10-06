@@ -7,7 +7,7 @@ stage.sh 在 `state/stages/NAME/source` 中：
 1. 获取固定干净上游并克隆候选。
 2. 应用莱茵补丁、安装锁文件依赖，生成莱茵及原版快照。
 3. 生成原版/+4 回合数据，复制四个联机适配文件。
-4. 应用 party 和朋友服补丁，生成 vanilla-extra / rhine-extra。
+4. 应用 party、朋友服及 source-updates 增量补丁；刷新莱茵科研数据，再生成 vanilla-extra / rhine-extra。
 5. 校验/下载原版、莱茵、新干员和收藏品资源，执行测试。
 6. 记录 UPSTREAM_REVISION / MODKIT_REVISION，全部成功才写 READY。
 
@@ -57,3 +57,5 @@ bash scripts/status.sh
 ```
 
 旧阶段保留作回退，确认不再需要后只清理明确指定的目录。公网链接使用 .env 的 PORT，配置反代时检查 WebSocket。
+
+科研增量补丁的导出基线为此前完整稳定 Mod 源码（含朋友服配置），排除 data/，由 refresh-data.mjs 和 party 生成器重建资料集。不要把整个来源 fork 覆盖到候选目录。

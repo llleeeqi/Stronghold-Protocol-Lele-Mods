@@ -20,5 +20,4 @@ jobs:
         shell: bash
         run: |
           candidates=(state/patch-check-*/source)
-          git -C "${candidates[0]}" apply "$GITHUB_WORKSPACE/patches/friends-profile.patch"
           bash scripts/test.sh "${candidates[0]}"

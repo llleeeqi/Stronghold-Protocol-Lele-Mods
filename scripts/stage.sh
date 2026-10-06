@@ -60,7 +60,9 @@ git apply --check "$repo_dir/mods/party/party-code.patch"
 git apply "$repo_dir/mods/party/party-code.patch"
 git apply --check "$repo_dir/patches/friends-profile.patch"
 git apply "$repo_dir/patches/friends-profile.patch"
-"${build[@]}" sh -c 'node /mod/mods/party/generate-data.mjs /stage/source && node tools/fetch-assets.mjs && node tools/fetch-rhine-assets.mjs && node tools/fetch-custom-assets.mjs && node tools/fetch-relic-icons.mjs && node --test test/party-mods.test.js test/match/party-runtime.test.js test/ui/data-profile.test.js test/content/relics.test.js test/content/makoto.test.js test/content/narant.test.js test/content/extra6.test.js test/ui/damage-board.test.js'
+git apply --check "$repo_dir/patches/source-updates.patch"
+git apply "$repo_dir/patches/source-updates.patch"
+"${build[@]}" sh -c 'node /mod/mods/rhine/refresh-data.mjs /stage/source && node /mod/mods/party/generate-data.mjs /stage/source && node tools/fetch-assets.mjs && node tools/fetch-rhine-assets.mjs && node tools/fetch-custom-assets.mjs && node tools/fetch-relic-icons.mjs && node --test test/party-mods.test.js test/match/party-runtime.test.js test/ui/data-profile.test.js test/content/relics.test.js test/content/makoto.test.js test/content/narant.test.js test/content/extra6.test.js test/ui/damage-board.test.js test/content/rhine.test.js test/content/rhine_equipment.test.js test/content/rhine_fx.test.js test/rhineResearch_shared.test.js test/rhine_data.test.js test/rhine_equipment_data.test.js test/render/rhineDevices.test.js test/match/rhine_equipment_bot.test.js test/content/egir-unite-down.test.js test/match/elite-acquisition.test.js test/match/feedback1-meta.test.js'
 git -C "$repo_dir" rev-parse HEAD > "$stage_dir/MODKIT_REVISION" 2>/dev/null || printf 'working-copy\n' > "$stage_dir/MODKIT_REVISION"
 chmod -R a+rX "$stage_dir/source"
 touch "$stage_dir/READY"

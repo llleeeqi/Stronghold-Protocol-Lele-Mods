@@ -1,0 +1,1966 @@
+diff --git a/public/js/render/app.js b/public/js/render/app.js
+index 2346bcd..2471e1f 100644
+--- a/public/js/render/app.js
++++ b/public/js/render/app.js
+@@ -294,6 +294,7 @@ export function renderInfo(u) {
+     form: typeof u.form === 'string' ? u.form : undefined,
+     // Reconnecting / observing must show the device's current breakthrough before its next effect is emitted.
+     researchStage: Number.isInteger(u.researchStage) && u.researchStage >= 0 && u.researchStage <= 2 ? u.researchStage : undefined,
++    researchActive: typeof u.researchActive === 'boolean' ? u.researchActive : undefined,
+     // Canvas clicks carry this info directly to the detail card (including a teammate's morph-granted bonds).
+     items: Array.isArray(u.items) ? u.items.filter(id => typeof id === 'string' && id.length > 0) : undefined,
+     // DESIGN §16 loadout of an ally (UnitInfo.skillIndex / moduleId): the Spine actor plays that skill's clip, and a
+diff --git a/public/js/render/fx.js b/public/js/render/fx.js
+index 0dad5c9..77efedb 100644
+--- a/public/js/render/fx.js
++++ b/public/js/render/fx.js
+@@ -36,7 +36,7 @@
+ import { fxAtlas } from './textures.js';
+ import { DMG_STYLE, dmgStyleKey, HIT_TINT, PROJ, COLORS } from './style.js';
+ import { RHINE_BALANCE } from '../../../shared/rhineResearch.js';
+-import { researchRangeTiles } from '../../../shared/rhineRange.js';
++import { researchRange, researchRangeTiles, energyPulseRange } from '../../../shared/rhineRange.js';
+ import { GEO } from '../../../shared/constants.js';
+ 
+ /**
+@@ -1744,7 +1744,16 @@ export class FxSystem {
+     // Idle rigs never invent activations; these cues are tied to successful sim events only.
+     if (spec.a.startsWith('research')) {
+       const src = this._viewOf(ex.source ?? ex.src ?? ex.id);
++      if (spec.a === 'researchEcology' && src?.info && typeof ex.active === 'boolean') src.info.researchActive = ex.active;
+       src?.onResearchFx?.(kind, ex);
++      if (spec.a === 'researchEcology' && ex.active === false) {
++        const key = `rhineEcology:${ex.source ?? ex.src ?? ex.id ?? `${at.x},${at.y}`}`;
++        for (let i = this.tileFlashes.length - 1; i >= 0; i--) {
++          const f = this.tileFlashes[i];
++          if (f.key === key || f.key === `${key}:bind` || (src && f.anchor === src)) this.tileFlashes.splice(i, 1);
++        }
++        return;
++      }
+       if (spec.a === 'researchHeal') {
+         const target = this._viewOf(ex.target);
+         if (src && target && src !== target) this._beam(src, target, col, 0.28, 0.1);
+@@ -1761,12 +1770,28 @@ export class FxSystem {
+             this.particle('glow', p.x, p.y, { tint: 0xffe8c4, life: .22, s0: p.s * .5 / 128, s1: p.s / 128, a0: .95, a1: 0 });
+           }
+         }
+-        const radius = ex.stage >= 1 ? r : 0.38;
+-        this.ring(at.x, at.y, at.z, 0.1, radius, col, 0.46, 'shock');
+-        if (this.rich && ex.stage >= 1) this.ring(at.x, at.y, at.z, 0.18, radius * 0.86, col, 0.65);
++        const pulse = energyPulseRange(ex.stage);
++        if (pulse.tileBased) {
++          // Calcification is a tile grid, not a larger Euclidean circle. Centre it on the
++          // struck enemy's cell exactly as the sim does; the tower still acquires nearby targets.
++          const bounds = this.ctx.fieldRect?.() || { r0: 0, r1: GEO.ROWS - 1, c0: 0, c1: GEO.COLS - 1 };
++          const row = Math.floor(at.y + .5), column = Math.floor(at.x + .5);
++          const tiles = pulse.grid.map(([dr, dc]) => [row + dr, column + dc])
++            .filter(([r, c]) => r >= bounds.r0 && r <= bounds.r1 && c >= bounds.c0 && c <= bounds.c1);
++          this.tileFlash(tiles, col, .65);
++          this.ring(at.x, at.y, at.z, .1, .38, col, .46, 'shock');
++        } else {
++          this.ring(at.x, at.y, at.z, 0.1, pulse.radius, col, 0.46, 'shock');
++          if (this.rich) this.ring(at.x, at.y, at.z, 0.18, pulse.radius * 0.86, col, 0.65);
++        }
+       } else {
+         const bounds = this.ctx.fieldRect?.() || { r0: 0, r1: GEO.ROWS - 1, c0: 0, c1: GEO.COLS - 1 };
+-        this.tileFlash(researchRangeTiles(Math.round(at.y), Math.round(at.x), r, bounds), col, Math.max(.6, dur || 1.5), true);
++        const tiles = researchRangeTiles(Math.floor(at.y + .5), Math.floor(at.x + .5), r, bounds);
++        this.tileFlash(tiles, col, Math.max(.2, dur || RHINE_BALANCE.ecologyInterval / ts), !ex.continuous,
++          ex.continuous ? { steady: true, key: `rhineEcology:${ex.source ?? ex.src ?? ex.id ?? `${at.x},${at.y}`}` } : undefined);
++        // The persistent slow field starts immediately; only explicit periodic bind events flash.
++        if (ex.bind) this.tileFlash(tiles, 0xbaffef, RHINE_BALANCE.ecologyBindDuration / ts, true,
++          { key: `rhineEcology:${ex.source ?? ex.src ?? ex.id ?? `${at.x},${at.y}`}:bind` });
+       }
+       return;
+     }
+@@ -2123,11 +2148,37 @@ export class FxSystem {
+     this.zones.length = w;
+   }
+ 
++  /** Restore an effective ecology field from UnitInfo, without waiting for a replayed periodic event. */
++  researchArea(view, previous = null) {
++    if (!view || view.prep || !view.alive || view.remove || view.destroyed || view.researchDevice?.key !== 'ecology'
++      || view.info?.researchActive === false || !Number.isInteger(view.info?.researchStage)) return null;
++    const stage = view.info.researchStage;
++    if (stage < 0 || stage > 2) return null;
++    const bounds = this.ctx.fieldRect?.() || { r0: 0, r1: GEO.ROWS - 1, c0: 0, c1: GEO.COLS - 1 };
++    const row = Math.floor(view.y + .5), column = Math.floor(view.x + .5);
++    const key = `rhineEcology:${view.id}`;
++    const field = previous && this.tileFlashes.includes(previous) ? previous : this.tileFlashes.find(f => f.key === key);
++    const sameBounds = field?.bounds && ['r0','r1','c0','c1'].every(k => field.bounds[k] === bounds[k]);
++    if (field && field.row === row && field.column === column && field.stage === stage && sameBounds) {
++      field.anchor = view; field.dur = Infinity;
++      return field;
++    }
++    const range = researchRange({ id: view.info.defId, stage });
++    const tiles = researchRangeTiles(row, column, range.radius, bounds);
++    return this.tileFlash(tiles, FX_KINDS.rhineEcology.c, Infinity, false,
++      { steady: true, key, anchor: view, row, column, stage, bounds });
++  }
++
+   /** Flash a set of tiles ([[r,c]]) on the ground (telegraphed boxes, blast tiles). */
+-  tileFlash(tiles, tint, dur, warn = false) {
++  tileFlash(tiles, tint, dur, warn = false, options = undefined) {
+     if (!Array.isArray(tiles) || !tiles.length) return;
+-    this.tileFlashes.push({ tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn });
+-    if (this.tileFlashes.length > 12) this.tileFlashes.shift();
++    const record = { tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn, ...options };
++    const previous = options?.key && this.tileFlashes.find(f => f.key === options.key);
++    if (previous) Object.assign(previous, record);
++    else this.tileFlashes.push(record);
++    // Ordinary hit flashes may churn rapidly; they must not evict a still-active research field.
++    if (this.tileFlashes.filter(f => !f.steady).length > 12) this.tileFlashes.splice(this.tileFlashes.findIndex(f => !f.steady), 1);
++    return previous || record;
+   }
+ 
+   _updateTileFlashes(dt) {
+@@ -2138,10 +2189,13 @@ export class FxSystem {
+     const p = this._p;
+     let w = 0;
+     for (const f of this.tileFlashes) {
++      if (f.anchor && (!f.anchor.alive || f.anchor.remove || f.anchor.destroyed || f.anchor.prep
++        || f.anchor.info?.researchActive === false || !Number.isInteger(f.anchor.info?.researchStage))) continue;
+       f.t += dt;
+       if (f.t >= f.dur) continue;
+       const k = f.t / f.dur;
+-      const a = (f.warn ? 0.35 + 0.35 * Math.abs(Math.sin(f.t * 7)) : 0.55 * (1 - k)) * (k > 0.85 ? (1 - k) / 0.15 : 1);
++      const a = f.steady ? .15 + .025 * Math.sin(f.t * 2)
++        : (f.warn ? 0.35 + 0.35 * Math.abs(Math.sin(f.t * 7)) : 0.55 * (1 - k)) * (k > 0.85 ? (1 - k) / 0.15 : 1);
+       for (const [r, c] of f.tiles) {
+         const z = (this.ctx.heightAt ? this.ctx.heightAt(r, c) : 0) + 0.015;
+         const pts = [];
+diff --git a/public/js/render/rhineDevices.js b/public/js/render/rhineDevices.js
+index aaa28f4..004d9b9 100644
+--- a/public/js/render/rhineDevices.js
++++ b/public/js/render/rhineDevices.js
+@@ -46,16 +46,25 @@ export class ResearchDeviceActor {
+   trigger(kind, extra) {
+     if (kind !== { medical: 'rhineHeal', energy: 'rhinePulse', ecology: 'rhineEcology' }[this.key]) return;
+     if (extra?.stage != null) this.setStage(extra.stage);
++    if (this.key === 'ecology' && extra?.active === false) { this.pulse = 0; return; }
++    if (this.key === 'ecology' && extra?.continuous && !extra.bind) return;
+     this.pulse = 1;
+   }
+ 
+   // Kept separate from drawing so an offscreen device never replays an expired activation on re-entry.
+-  advance(dt) { this.pulse = Math.max(0, this.pulse - Math.max(0, dt) * 2.2); }
++  advance(dt) {
++    this.pulse = Math.max(0, this.pulse - Math.max(0, dt) * 2.2);
++    if (this.key === 'ecology') this.field = this.view.ctx.fx?.researchArea?.(this.view, this.field);
++  }
+ 
+   update(time, tileSize) {
+     const v = this.view, sp = v.fallback, l = this.look;
+     this.root.visible = v.alive && v._pic?.state === 'img';
+     const pose = researchPose(this.key, time + v.bob, this.stage, this.pulse);
++    // A charged tower can wait indefinitely for a target. Keep that state distinct from the
++    // short firing pulse; snapshots (including reconnects) are the sole source of charge.
++    const charge = this.key === 'energy' && !v.prep && v.spMax > 0 ? Math.max(0, Math.min(1, v.sp / v.spMax)) : 0;
++    const ready = charge >= 1;
+     const scale = Math.min(l.width / sp.texture.width, l.height / sp.texture.height) * tileSize;
+     sp.scale.set(scale * pose.scaleX, scale * pose.scaleY);
+     sp.position.set(0, tileSize * pose.y); sp.rotation = pose.rotation;
+@@ -64,7 +73,8 @@ export class ResearchDeviceActor {
+     this.root.rotation = sp.rotation;
+     this.core.position.set(l.core[0] * w, -l.core[1] * h);
+     this.core.scale.set(tileSize * (this.key === 'energy' ? 0.29 : 0.33) / 128, tileSize * (this.key === 'energy' ? 0.5 : 0.29) / 128);
+-    this.core.alpha = pose.light;
++    this.core.alpha = pose.light + charge * .09 + (ready ? .12 : 0);
++    this.core.tint = ready ? 0xffe8c4 : l.tint;
+     // One/two/three small lamps indicate prototype / breakthrough I / II without making the body larger.
+     this.lights.forEach((light, i) => {
+       light.visible = i <= this.stage;
+@@ -86,7 +96,7 @@ export class ResearchDeviceActor {
+       } else {
+         detail.position.set(w * 0.045, -h * (0.39 + i * 0.11));
+         detail.scale.set(tileSize * 0.032 / 32);
+-        detail.alpha = 0.15 + (Math.sin(time * 3.2 - i * 1.1) + 1) * 0.18 + this.pulse * 0.35;
++        detail.alpha = 0.15 + (Math.sin(time * 3.2 - i * 1.1) + 1) * 0.18 + this.pulse * 0.35 + charge * .12;
+       }
+     });
+   }
+diff --git a/public/js/ui/rhineDock.js b/public/js/ui/rhineDock.js
+index 63700ed..89a91b8 100644
+--- a/public/js/ui/rhineDock.js
++++ b/public/js/ui/rhineDock.js
+@@ -2,8 +2,8 @@ import { useEffect, useState } from '../../vendor/hooks.module.js';
+ import { html } from './components.js';
+ import { boardTargets } from './gameLogic.js';
+ import { GEO } from '../../../shared/constants.js';
+-import { RHINE_DEVICES, RHINE_BALANCE, rhineAttack } from '../../../shared/rhineResearch.js';
+-import { researchRange, researchRangeText } from '../../../shared/rhineRange.js';
++import { RHINE_DEVICES, RHINE_BALANCE, rhineAttack, rhineStage } from '../../../shared/rhineResearch.js';
++import { researchRange, researchRangeText, energyPulseRange } from '../../../shared/rhineRange.js';
+ import { showRange } from './facingWheel.js';
+ 
+ export function containsPoint(poly, x, y) {
+@@ -31,6 +31,17 @@ export function researchProgress(points = 0, stage = 0) {
+   return goal == null ? '阶段突破已完成' : `研究 ${points}/${goal} · 成功+${RHINE_BALANCE.successPoints} / 失败+${RHINE_BALANCE.failurePoints}`;
+ }
+ 
++/** Keep target acquisition, skill charging and splash distinct in the compact bench card. */
++export function researchRangeSummary(piece) {
++  const range = researchRange(piece);
++  if (!range) return '';
++  if (range.key === 'energy') {
++    const pulse = energyPulseRange(range.stage);
++    return `选敌 ${range.grid.length} 格 · ${range.stage >= 1 ? '本方全场充能' : '范围内充能'} · ${pulse.tileBased ? `钙质化 ${pulse.grid.length} 格` : `溅射半径 ${pulse.radius}`}`;
++  }
++  return `范围 ${range.grid.length} 格 · 半径 ${range.radius}${range.key === 'ecology' ? ` · 持续减速 ${Math.round(RHINE_BALANCE.ecologySlow * 100)}%` : ''}`;
++}
++
+ /** Three reserved bench slots. Pointer dragging and click-then-place work in either renderer. */
+ export function RhineDock({ research, editable, view, placeCtx, onDeploy, onRecall, onDetail }) {
+   const [armed, setArmed] = useState(null);
+@@ -77,15 +88,14 @@ export function RhineDock({ research, editable, view, placeCtx, onDeploy, onReca
+       const piece = research.hand?.[index];
+       const uid = status.uid ?? piece?.uid;
+       const canDeploy = editable && research.capacity > deployed && !status.onBoard && uid != null;
+-      const stage = status.stage || 0;
+-      const range = researchRange({ id: def.tokenId, stage });
++      const stage = rhineStage(status.stage);
+       return html`<article key=${def.key} class=${`rhine-card${armed === uid ? ' is-armed' : ''}${status.onBoard ? ' is-deployed' : ''}`} style=${`--research-color:${def.color}`} data-research=${def.key}>
+         <button type="button" class="rhine-card__select" disabled=${!canDeploy} aria-label=${`部署${def.name}`} title=${def.description}
+           onPointerDown=${() => { if (canDeploy) setArmed(uid); }} onClick=${() => { if (canDeploy) setArmed(uid); }}>
+           <img src=${def.sprite || def.icon} alt="" draggable="false" /><strong>${def.name}</strong><small>${['原型', '改良型', '成熟型'][stage]}</small>
+         </button>
+         <div class="rhine-card__stats">攻击 ${Math.round(status.attack ?? rhineAttack(research.layers))}${status.onBoard ? ' · 已部署' : ''}</div>
+-        <div class="rhine-card__range" title=${researchRangeText({id:def.tokenId,stage})}>范围 ${range.grid.length} 格 · 半径 ${range.radius}${def.key==='energy' && stage>=1 ? ` · 溅射 ${RHINE_BALANCE.energySpreadRadius}` : ''}</div>
++        <div class="rhine-card__range" title=${researchRangeText({id:def.tokenId,stage})}>${researchRangeSummary({id:def.tokenId,stage})}</div>
+         <div class="rhine-card__progress" title="每阶段需要5点；突破后研究点清零，溢出不保留。">${researchProgress(status.points || 0, stage)}</div>
+         <div class="rhine-card__next">${stage < 2 ? `下次：${def.breakthroughs[stage]}` : def.breakthroughs.join(' · ')}</div>
+         <div class="rhine-card__actions"><button type="button" onClick=${() => uid != null && onDetail?.(uid)}>详情</button>
+diff --git a/server/match/Match.js b/server/match/Match.js
+index 27d3967..f649794 100644
+--- a/server/match/Match.js
++++ b/server/match/Match.js
+@@ -1260,7 +1260,7 @@ export class Match {
+     const b = this.newBattle({
+       seed: deriveSeed(this.seed, `preview:${this.round}:${ps.seat}`), kind: 'normal', modeId: this.modeId, round: this.round,
+       stageId: this.stageId, rect: { ...GEO.NORMAL_RECT }, timeLimit: 60, players, spawns: [], routes: this.wave ? this.wave.routes : [],
+-      sharedBoss: null, flags: { layerGainsEnabled: !bossRound, ...this.gd.dp }, fieldId: `n:${ps.playerId}`, recordEvents: false,
++      sharedBoss: null, flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: !bossRound, ...this.gd.dp }, fieldId: `n:${ps.playerId}`, recordEvents: false,
+     });
+     try {
+       if (typeof b.start === 'function') b.start();
+@@ -1984,7 +1984,7 @@ export class Match {
+       spawns: this._sanitizeSpawns(Array.isArray(ev.spawns) ? ev.spawns : spawns, ps.playerId),
+       routes: wave.routes,
+       sharedBoss: null,
+-      flags: { layerGainsEnabled: true, ...this.gd.dp },
++      flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: true, ...this.gd.dp },
+       fieldId: `n:${ps.playerId}`,
+       enemyOverrides: wave.overrides,
+       waveId: wave.templateId,
+@@ -2115,7 +2115,7 @@ export class Match {
+       spawns: this._sanitizeSpawns(wave.spawns),
+       routes: wave.routes,
+       sharedBoss: null,
+-      flags: { layerGainsEnabled: false, ...this.gd.dp },
++      flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: false, ...this.gd.dp },
+       fieldId: 'u',
+       // leaked enemies re-enter with the stats they had: the round template's stat overrides apply again
+       enemyOverrides: this.wave && this.wave.overrides ? this.wave.overrides : {},
+@@ -3160,7 +3160,7 @@ export class Match {
+         spawns: this._sanitizeSpawns(spawns),
+         routes: wave.routes,
+         sharedBoss: this.bossPool,
+-        flags: { layerGainsEnabled: false, ...this.gd.dp },
++        flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: false, ...this.gd.dp },
+         fieldId,
+         enemyOverrides: wave.overrides,
+         waveId: wave.templateId,
+diff --git a/server/match/PlayerState.js b/server/match/PlayerState.js
+index c7e0be0..1c83cf9 100644
+--- a/server/match/PlayerState.js
++++ b/server/match/PlayerState.js
+@@ -32,7 +32,7 @@
+ //     outside PREP (a SETTLE merge's elite waits in temp for the next prep).
+ //   * Per-piece round counters (pieceRoundCount, piece.meta.round): an operator's own counts of the current round
+ //     (拉普兰德: the manual refreshes she witnessed — player feedback after 0.1.0); a new piece starts at 0, an elite
+-//     merged this round keeps the highest of its copies' [ASSUMED].
++//     made by merging is a new piece with fresh counters; consumed normal copies never pass their counters on.
+ //   * Transformations (transformChess, 突变细胞 — PRTS 备注 "生效时，原干员销毁，获得一名高一阶的随机初始干员"): a destroy
+ //     followed by a gain. The carrier leaves wherever it stands (a board tile is freed, the deploy count drops), its
+ //     equipment — the cell included — returns to the hand first (overflow temp), then the new chess is gained like any
+@@ -394,7 +394,7 @@ export class PlayerState {
+   /**
+    * Per-piece counter of the current round (`piece.meta.round` = { r, n: { key: count } }): 0 for a key not counted yet
+    * this round. The counters belong to the operator: a move keeps them, a new piece (bought, granted, transformed)
+-   * starts at 0, and an elite merged this round keeps the highest count of its copies (_mergeChess) — 拉普兰德's
++   * starts at 0, including an elite acquired by merging (_mergeChess) — 拉普兰德's
+    * "本回合首次主动刷新" is the first manual refresh she witnesses (player feedback after 0.1.0, garrisons/meta.js).
+    */
+   pieceRoundCount(piece, key) {
+@@ -562,12 +562,8 @@ export class PlayerState {
+       l.piece.items = [];
+     }
+     const elite = this.newPiece('chess', goldenId, { poolCopies: copies });
+-    // this round's per-piece counters: the highest of the copies' (an elite made from 拉普兰德 that already saw their
+-    // first refresh this round does not fire again this round — [ASSUMED] conservative, pieceRoundCount)
+-    for (const l of consumed) {
+-      const rc = l.piece.meta && l.piece.meta.round;
+-      if (rc && rc.r === this.m.round) for (const [k, v] of Object.entries(rc.n)) this.bumpPieceRoundCount(elite, k, Math.max(0, v - this.pieceRoundCount(elite, k)));
+-    }
++    // A merged elite is a newly acquired operator: new UID / metadata / per-piece counters.
++    // Player-scoped funds, layers and round totals remain intact; normal copies pass on no trait state.
+     const deployed = consumed.filter((l) => l.key && !this.board.has(l.key)).map((l) => ({ key: l.key, dir: pieceDir(l.piece) }));
+     const toTile = (t) => { elite.dir = parseDir(t.dir) || 'RIGHT'; this.board.set(t.key, elite); return 'board'; };
+     const tile = mergeTile(deployed, (r, c) => this._legal(elite, r, c));
+diff --git a/server/match/bot.js b/server/match/bot.js
+index 7e41655..dfe8e61 100644
+--- a/server/match/bot.js
++++ b/server/match/bot.js
+@@ -1060,7 +1060,7 @@ export function* createRehearsalSteps(m, ps, chosen, plans) {
+         seed: deriveSeed(m.seed, `rehearse:${m.round}:${ps.seat}`), kind: 'normal', modeId: m.modeId, round: m.round,
+         stageId: m.stageId, rect: { ...GEO.NORMAL_RECT }, timeLimit: wave.timeLimit, players: [ps.battleInput({ side: 'L', colOffset: 0 })],
+         spawns: m._sanitizeSpawns(spawns, ps.playerId), routes: wave.routes, sharedBoss: null,
+-        flags: { layerGainsEnabled: false, ...m.gd.dp }, fieldId: `r:${ps.playerId}`, enemyOverrides: wave.overrides, waveId: wave.templateId,
++        flags: { operatorFixesEnabled: m.operatorsEnabled, layerGainsEnabled: false, ...m.gd.dp }, fieldId: `r:${ps.playerId}`, enemyOverrides: wave.overrides, waveId: wave.templateId,
+       }));
+     } catch (e) {
+       failed = true;
+@@ -1169,7 +1169,9 @@ export function rhineItemSynergy(m, ps, id) {
+   const active = !!ps.bonds?.[RHINE_BOND]?.active;
+   const layers = active ? Math.max(0, Number(ps.layers?.[RHINE_BOND] ?? ps.bonds[RHINE_BOND].layers) || 0) : 0;
+   if (key === RE.mainframe.key && !members.length) return 0;
+-  return (active ? 3 + Math.min(5, layers / 20) : 0) + (paired ? 4 : 0);
++  // A mainframe or its terminal pairing keeps gaining value after the terminal's ASPD has capped.
++  const growth = key === RE.mainframe.key || paired ? layers / 20 : Math.min(5, layers / 20);
++  return (active ? 3 + growth : 0) + (paired ? 4 : 0);
+ }
+ 
+ function context(m, ps) {
+diff --git a/server/match/effectsMeta.js b/server/match/effectsMeta.js
+index 23ca2d6..d3bdb9a 100644
+--- a/server/match/effectsMeta.js
++++ b/server/match/effectsMeta.js
+@@ -491,8 +491,7 @@ export function makeCtx(m, ps, source, hook, ev = null) {
+     counter: (k) => (Number.isFinite(ps.counters[k]) ? ps.counters[k] : 0),
+     setCounter: (k, v) => { if (typeof k === 'string' && Number.isFinite(v)) ps.counters[k] = v; return ps.counters[k] ?? 0; },
+     incCounter: (k, n = 1) => { if (typeof k !== 'string' || !Number.isFinite(n)) return 0; ps.counters[k] = (Number.isFinite(ps.counters[k]) ? ps.counters[k] : 0) + n; return ps.counters[k]; },
+-    /** Per-piece counter of the current round (0 in a new round / for a new piece; an elite merged this round keeps the
+-     *  highest of its copies' — PlayerState.pieceRoundCount). */
++    /** Per-piece counter of the current round (0 in a new round / for a new piece, including a merged elite). */
+     pieceCounter: (uid, k) => { const l = ps.find(uid); return l ? ps.pieceRoundCount(l.piece, k) : 0; },
+     incPieceCounter: (uid, k, n = 1) => { const l = ps.find(uid); return l ? ps.bumpPieceRoundCount(l.piece, k, n) : 0; },
+ 
+diff --git a/server/sim/Battle.js b/server/sim/Battle.js
+index 419a140..ef4bdab 100644
+--- a/server/sim/Battle.js
++++ b/server/sim/Battle.js
+@@ -390,6 +390,7 @@ export class Battle {
+     // own combat is withdrawn right after the deployment — down on its tile, its redeploy timer starting now (re-read
+     // after battleStart below; DESIGN §5.5). Its HP ratio is the end-of-phase one (0, as after kill()) until it
+     // redeploys at full HP.
++    this.emit('uniteEntry', {});
+     for (const u of this.allyUnits) {
+       if (u.kind === 'op' && u.alive && u.carry && u.carry.down === true) {
+         this._safe(() => { u.hp = 0; this.retreat(u, { reason: FORCED_EXIT }); }, 'forcedExit', u);
+@@ -2379,8 +2380,8 @@ export class Battle {
+    * decision of 2026-10-04): knocked out ('killed'), entering the battle knocked out (FORCED_EXIT, 联防) and forced out
+    * by its own effects ('retreat': 史尔特尔's 余烬, 耀骑士临光 S2, 骑士戒律 + 竞技旗, 伊内丝 S3; 'merchant': a 商人 that cannot
+    * pay) — except the 突袭 retreat ('raid', redeployed at once on its landing tile); not removed for good, after it was
+-   * deployed. A forced exit stays no kill: its 'die' / `death` reason is not 'killed' (no 被击倒 effect, 不屈, 阿戈尔, no
+-   * knock-down count). The client keeps its model on that tile knocked down with a redeploy countdown (b.snap `down`,
++   * deployed. A forced exit stays no kill: its 'die' / `death` reason is not 'killed' (no 被击倒 effect, 不屈 or
++   * knock-down count). 阿戈尔 5 and 埃芒加德 specially revive carried-down operators when entering 联防 (阿戈尔 first). The client keeps its model on that tile knocked down with a redeploy countdown (b.snap `down`,
+    * render/units.js); summons, devices and enemies simply leave.
+    */
+   isDown(u) {
+diff --git a/server/sim/content/bands/battle.js b/server/sim/content/bands/battle.js
+index 2f11d47..083f522 100644
+--- a/server/sim/content/bands/battle.js
++++ b/server/sim/content/bands/battle.js
+@@ -39,6 +39,7 @@ import {
+ } from '../support/index.js';
+ import { weaknessRetype, addShieldLayer, PRIO_REVIVE, revivedInPlace } from '../items/battle.js';
+ import { spawnMapChar } from '../tokens.js';
++import { FORCED_EXIT } from '../../constants.js';
+ 
+ export const AMEDIC_BAND = 'band_amedic';
+ /** 'fatal' priority of 埃芒加德: after the operators' own items (PRIO_REVIVE / PRIO_RESPAWN) and every talent / skill saver. */
+@@ -77,6 +78,16 @@ const BY_KEY = {
+       revivedInPlace(u); // in place for PRTS's 0-time / 0-cost redeploy: a new deployment for 坚固维式重锤's lock (items)
+       fxOn(battle, 'revive', u, keyOf(bandId), bandId, { left: max - used });
+     }, { priority: PRIO_BAND_REVIVE });
++    // 联防 inherits down state without taking damage, so it never emits fatal. Restore such operators here,
++    // after 阿戈尔's priority-11 revive, sharing the band's three charges with ordinary fatal saves.
++    battle.on('death', (c) => {
++      const u = c.unit;
++      if (!battle.flags.operatorFixesEnabled || battle.kind !== 'unite' || c.reason !== FORCED_EXIT || u?.carry?.down !== true
++          || used >= max || !isOp(u) || u.ownerId !== ps.playerId || u.alive || u.removed) return;
++      if (!battle.redeploy(u, { free: true })) return;
++      used++;
++      fxOn(battle, 'revive', u, keyOf(bandId), bandId, { left: max - used });
++    }, { priority: PRIO_BAND_REVIVE });
+   },
+ 
+   // 克莱门莎 崇高牺牲
+diff --git a/server/sim/content/bonds/core.js b/server/sim/content/bonds/core.js
+index 6eea787..1606da2 100644
+--- a/server/sim/content/bonds/core.js
++++ b/server/sim/content/bonds/core.js
+@@ -454,8 +454,12 @@ function installEgir(battle, pid, bb, members) {
+   // always the one used, same outcome. The marks still pending on a revived member are cancelled (devour).
+   const max = reached(battle, pid, 'egirShip', bb.power_bond_char_cnt) ? Math.max(0, Math.floor(num(bb.max_free_respawn_cnt, 0))) : 0;
+   const holders = new Map(); // beneficiary → its in-place revives (mem.revives) at battle start
+-  battle.on('battleStart', () => {
++  const selectHolders = () => {
+     for (const u of members.filter((x) => S.isOp(x) && (S.onField(x) || egirDownAtStart(battle, x))).sort(egirOrder).slice(0, max)) holders.set(u, u.mem.revives | 0);
++  };
++  battle.on('uniteEntry', () => { if (battle.flags.operatorFixesEnabled) selectHolders(); }, { once: true });
++  battle.on('battleStart', () => {
++    if (!battle.flags.operatorFixesEnabled) selectHolders();
+     devour(battle, pid, bb, members);
+   }, { once: true });
+   if (!(max > 0)) return;
+@@ -463,7 +467,8 @@ function installEgir(battle, pid, bb, members) {
+   let revives = 0;
+   battle.on('death', (c) => {
+     const u = c.unit;
+-    if (c.reason !== 'killed' || !holders.has(u) || used.has(u)) return;
++    const carriedDown = battle.flags.operatorFixesEnabled && battle.kind === 'unite' && c.reason === FORCED_EXIT && u?.carry?.down === true;
++    if ((c.reason !== 'killed' && !carriedDown) || !holders.has(u) || used.has(u)) return;
+     used.add(u);
+     if ((u.mem.revives | 0) !== holders.get(u)) return; // saved in place since the battle start: the revive is gone
+     if (u.alive || u.removed) return;
+diff --git a/server/sim/content/garrisons/meta.js b/server/sim/content/garrisons/meta.js
+index cb8f0ff..91f37d5 100644
+--- a/server/sim/content/garrisons/meta.js
++++ b/server/sim/content/garrisons/meta.js
+@@ -22,8 +22,8 @@
+ //     of any tier (the text gives no tier cap); a bond without an available chess falls through to the next tied one.
+ //   * [ASSUMED] 松果: the "免费特殊招募" is a free pick-one offer of `rewardOffer.count` (3) chess of the pool's tier.
+ //   * 拉普兰德 SERVER_GAIN_BOND_LAYER_BY_REFRESH_CNT "若为本回合首次主动刷新": per copy — the first manual refresh this
+-//     operator witnesses in the round (players' report after 0.1.0); [ASSUMED] an elite merged this round keeps its
+-//     copies' count, and a copy bought after selling one this round is a new copy (fires on its own first refresh).
++//     operator witnesses in the round (players' report after 0.1.0); a newly merged elite resets this counter,
++//     as does a newly bought copy. Paid and free manual refreshes both count.
+ //     "本回合每刷新过1次" (SERVER_ADD_REFRESH_CNT_MULTIPLIER_BOND_LAYER, 阿罗玛 / 安洁莉娜 / 售出时)
+ //     fires on another event and reads the player's refreshes of the round (roundStats), like 本回合每获得过 / 每花费.
+ 
+@@ -198,11 +198,10 @@ H.SERVER_ADD_REFRESH_CNT_MULTIPLIER_BOND_LAYER = {
+ // refreshes this copy witnessed this round (board or hand), so a 拉普兰德 bought after the round's first refresh still
+ // fires on the next one (players' report after 0.1.0: "获得该干员后该回合的首次刷新" also stacks — the official behaviour;
+ // read as each trait instance counting its own SERVER_REFRESH_SHOP triggers against bb.refresh_cnt). A re-triggered trait
+-// (ev.trigger) is no manual refresh: it neither fires nor counts. A new copy (bought, granted) starts at 0. [ASSUMED]:
+-// the copies of an elite merged this round pass on their highest count (PlayerState.pieceRoundCount — no second trigger
+-// that round, conservative); a copy bought after selling one this round is a new copy — "获得该干员后" — and fires on its
+-// own first refresh (the server cannot tell it from any other copy; each such +4 costs her price + a refresh − the
+-// 1-fund refund, and needs her in the shop again).
++// (ev.trigger) is no manual refresh: it neither fires nor counts. A new copy (bought, granted) starts at 0.
++// Promotion also resets this first-refresh counter: the acquired elite fires +8 on the next manual refresh,
++// even when consumed normal copies already fired this round. A re-bought copy similarly counts from 0.
++// Free manual refreshes follow the same onRefresh event and count exactly like paid manual refreshes.
+ const REFRESH_CNT_KEY = 'garrison:SERVER_GAIN_BOND_LAYER_BY_REFRESH_CNT:refreshes'; // per-piece counter (module-prefixed)
+ H.SERVER_GAIN_BOND_LAYER_BY_REFRESH_CNT = {
+   onRefresh(ctx, ev) {
+diff --git a/server/sim/content/items/battle.js b/server/sim/content/items/battle.js
+index 3a9f215..328763f 100644
+--- a/server/sim/content/items/battle.js
++++ b/server/sim/content/items/battle.js
+@@ -171,8 +171,7 @@ export function rhineEquipmentAttack(battle, ownerId, layers) {
+       const p = bp(itemRecord(grant.id), 'rhine_mainframe');
+       if (!p) continue;
+       const rate = num(combo ? p.combo_atk_per_layer : p.atk_per_layer);
+-      const cap = num(combo ? p.combo_max_atk : p.max_atk);
+-      best = Math.max(best, Math.min(Math.max(0, cap), Math.max(0, num(layers)) * Math.max(0, rate)));
++      best = Math.max(best, Math.max(0, num(layers)) * Math.max(0, rate));
+     }
+   }
+   return best;
+diff --git a/server/sim/content/rhine.js b/server/sim/content/rhine.js
+index d00512b..4c2680a 100644
+--- a/server/sim/content/rhine.js
++++ b/server/sim/content/rhine.js
+@@ -1,18 +1,21 @@
+ // Rhine research devices and the battle-side protocol traits. Device experience belongs to Match;
+ // this module consumes its frozen selection and reads the owner's live bond layers only.
+ import { RHINE_BALANCE as B, RHINE_BOND, RHINE_CHARACTERS as C, RHINE_DEVICES, rhineDevice, rhineCapacity, rhineAttack } from '../../../shared/rhineResearch.js';
+-import { researchContainsTile } from '../../../shared/rhineRange.js';
++import { energyPulseRange, researchContainsTile } from '../../../shared/rhineRange.js';
+ import { frontOf } from '../dir.js';
+-import { bodyDist } from '../body.js';
++import { bodyDist, bodyInKeys } from '../body.js';
++import { absoluteRangeKeys } from '../targeting.js';
+ import { canReceiveHeal } from '../damage.js';
+ import { TICK } from '../constants.js';
+-import { rhineEquipmentAttack } from './items/battle.js';
++import { memberOf, rhineEquipmentAttack } from './items/battle.js';
+ 
+ const alive = (u) => !!u?.alive && u.deployed && !u.removed && !u.hidden;
+ const charId = (u) => u.def?.charId ?? u.def?.raw?.charId;
+ const elite = (u) => !!u.def?.golden;
+ const layersOf = (ps) => ps?.bonds?.[RHINE_BOND]?.active ? Math.max(0, Number(ps.bonds[RHINE_BOND].layers) || 0) : 0;
+ const healCapture = Symbol('rhineMedicalHeal');
++const damageOperator = (u) => u.def?.profession !== 'MEDIC' && charId(u) !== C.saria
++  && ['phys', 'arts', 'true'].includes(u.profile?.dmgType ?? u.dmgType);
+ 
+ function inertDevice() {
+   return {
+@@ -71,19 +74,26 @@ export function install(battle) {
+     const entries = selectedDevices(ps);
+     for (const entry of entries) {
+       entry.unit.researchStage = entry.stage;
++      entry.unit.researchActive = false;
+       if (entry.key === 'energy') {
+         entry.unit.researchCharges = 0;
+         entry.unit.researchChargeMax = B.energyCharges;
+       }
+-      states.push({ ...entry, ps, charges: 0, contributors: new Map(), zoneUntil: -1 });
++      states.push({ ...entry, ps, charges: 0, contributors: new Map(), active: false });
+     }
+   }
+   const enabled = (s) => alive(s.unit) && selectedDevices(s.ps).some((d) => d.unit === s.unit);
++  let ready = false;
++  const ecologyFx = (s, active, bind = false) => battle.fx('rhineEcology', {
++    x: s.unit.x, y: s.unit.y, source: s.unit.id, stage: s.stage, active,
++    radius: B.radius + (s.stage >= 2 ? 1 : 0), continuous: true, duration: B.ecologyInterval, bind,
++  });
+   // Use the engine's ally-side selector: unrevealed, unblocked stealth enemies cannot be selected by a device.
+   const targets = (s, radius = B.radius) => battle.foesInRadius(s.unit.x, s.unit.y, radius + Math.SQRT1_2)
+     .filter(u => researchContainsTile(u, s.unit.x, s.unit.y, radius));
+   const setCharges = (s, charges) => {
+-    s.charges = charges;
++    s.charges = Math.min(B.energyCharges, Math.max(0, charges));
++    charges = s.charges;
+     if (s.key === 'energy' && s.unit.researchCharges !== charges) {
+       s.unit.researchCharges = charges;
+       s.unit.markDirty();
+@@ -94,15 +104,29 @@ export function install(battle) {
+     for (const s of states) {
+       const atk = deviceBaseAttack(battle, s.unit);
+       if (s.unit.base.atk !== atk) { s.unit.base.atk = atk; s.unit.markDirty(); }
+-      if (!enabled(s)) { setCharges(s, 0); s.contributors.clear(); s.zoneUntil = -1; }
++      const active = enabled(s);
++      if (s.active !== active) {
++        s.active = active;
++        s.unit.researchActive = active;
++        s.unit.markDirty();
++        if (ready && s.key === 'ecology') ecologyFx(s, active);
++      }
++      if (!active) { setCharges(s, 0); s.contributors.clear(); }
+     }
+     for (const ps of battle.players) {
+       const layers = layersOf(ps);
+-      const inherited = states.filter((s) => s.ps === ps && enabled(s)).reduce((n, s) => n + deviceBaseAttack(battle, s.unit), 0);
++      const deviceAttacks = states.filter((s) => s.ps === ps && enabled(s)).map((s) => deviceBaseAttack(battle, s.unit));
++      const inherited = deviceAttacks.reduce((n, atk) => n + atk, 0);
++      const highest = Math.max(0, ...deviceAttacks);
++      const sharing = ps.bonds?.[RHINE_BOND]?.active && ps.bonds[RHINE_BOND].count >= B.sharingCount;
+       for (const u of ps.units) {
+         if (u.kind !== 'op') continue;
+         if (charId(u) === C.saria) setPassive(battle, u, 'rhine:saria', { healingDealtMul: 1 + Math.floor(layers / B.sariaLayerStep) * B.sariaHealBonus[elite(u) ? 1 : 0] });
+         if (charId(u) === C.ifrit) setPassive(battle, u, 'rhine:ifrit', { atkFlat: inherited * B.ifritInheritance[elite(u) ? 1 : 0] });
++        const shared = sharing && alive(u) && charId(u) !== C.ifrit && damageOperator(u) && memberOf(battle, u, RHINE_BOND)
++          ? highest * B.researchSharing[elite(u) ? 1 : 0] : 0;
++        if (shared > 0) setPassive(battle, u, 'rhine:sharing', { atkFlat: shared });
++        else if (u.findBuff('rhine:sharing')) battle.removeBuff(u, 'rhine:sharing');
+       }
+     }
+   };
+@@ -138,11 +162,18 @@ export function install(battle) {
+   };
+ 
+   const pulse = (s) => {
++    if (!enabled(s) || s.charges < B.energyCharges) return;
+     const enemies = targets(s).sort((a, b) => bodyDist(a, s.unit.x, s.unit.y) - bodyDist(b, s.unit.x, s.unit.y) || a.id - b.id);
+     if (!enemies.length) return;
+     const primary = enemies[0];
+-    const hit = s.stage >= 1 ? battle.foesInRadius(primary.x, primary.y, B.energySpreadRadius ?? 1, true) : [primary];
+-    const amount = deviceBaseAttack(battle, s.unit) * B.energyPulseScale * (s.stage >= 2 ? (B.energyStage2Scale ?? 1.5) : 1);
++    const range = energyPulseRange(s.stage);
++    const row = Math.round(primary.y), col = Math.round(primary.x);
++    const keys = range.tileBased ? absoluteRangeKeys(range.grid, row, col, 'RIGHT') : null;
++    const hit = keys ? battle.foesInRadius(col, row, range.radius + Math.SQRT1_2).filter((u) => bodyInKeys(u, keys))
++      : battle.foesInRadius(primary.x, primary.y, range.radius, true);
++    const amount = deviceBaseAttack(battle, s.unit) * B.energyPulseScale;
++    // Consume only after finding a selectable primary, before damage hooks can cause another skill start.
++    setCharges(s, 0);
+     for (const target of hit) battle.dealDamage(s.unit, target, { type: 'arts', amount, canDodge: false, tags: ['rhinePulse'] });
+     battle.fx('rhinePulse', { x: primary.x, y: primary.y, fromX: s.unit.x, fromY: s.unit.y, source: s.unit.id, target: primary.id, stage: s.stage });
+   };
+@@ -151,28 +182,32 @@ export function install(battle) {
+     if (unit?.kind !== 'op' || !alive(unit) || reason === 'carry' || skill?.kind === 'passive') return;
+     refresh();
+     for (const s of states) {
+-      if (s.key !== 'energy' || !enabled(s) || unit.ownerId !== s.unit.ownerId || !researchContainsTile(unit, s.unit.x, s.unit.y, B.radius)) continue;
++      if (s.key !== 'energy' || !enabled(s) || unit.ownerId !== s.unit.ownerId
++        || (s.stage < 1 && !researchContainsTile(unit, s.unit.x, s.unit.y, B.radius))) continue;
+       const last = s.contributors.get(unit.id) ?? -Infinity;
+       if (battle.time - last < B.energyContributorCooldown - 1e-9) continue;
+       s.contributors.set(unit.id, battle.time);
+       setCharges(s, s.charges + 1);
+-      if (s.charges >= B.energyCharges) { setCharges(s, s.charges - B.energyCharges); pulse(s); }
++      pulse(s);
+     }
+   });
+ 
+-  const ecology = (s) => {
++  const ecology = (s, bind = true) => {
+     if (!enabled(s)) return;
+-    s.zoneUntil = battle.time + B.ecologyDuration;
+-    if (s.stage >= 1) for (const target of targets(s, B.radius + (s.stage >= 2 ? 1 : 0))) {
++    if (bind && s.stage >= 1) for (const target of targets(s, B.radius + (s.stage >= 2 ? 1 : 0))) {
+       battle.applyStatus(target, 'bind', { duration: B.ecologyBindDuration, source: s.unit });
+     }
+-    battle.fx('rhineEcology', { x: s.unit.x, y: s.unit.y, source: s.unit.id, stage: s.stage, radius: B.radius + (s.stage >= 2 ? 1 : 0) });
++    ecologyFx(s, true, bind && s.stage >= 1);
+   };
++  battle.on('battleStart', () => {
++    ready = true;
++    for (const s of states) if (s.key === 'ecology') ecology(s, false);
++  });
+   battle.on('tick', () => {
+     for (const s of states) {
+-      if (s.key !== 'ecology' || !enabled(s) || battle.time >= s.zoneUntil) continue;
+-      const slow = Math.min(B.ecologySlowCap, B.ecologySlow + layersOf(s.ps) * B.ecologySlowPerLayer);
+-      for (const target of targets(s, B.radius + (s.stage >= 2 ? 1 : 0))) battle.applyStatus(target, 'slow', { value: slow, duration: TICK * 2, source: s.unit });
++      if (s.key === 'energy') { pulse(s); continue; }
++      if (s.key !== 'ecology' || !enabled(s)) continue;
++      for (const target of targets(s, B.radius + (s.stage >= 2 ? 1 : 0))) battle.applyStatus(target, 'slow', { value: B.ecologySlow, duration: TICK * 2, source: s.unit });
+     }
+   });
+   for (const s of states) {
+diff --git a/server/sim/snapshot.js b/server/sim/snapshot.js
+index 0a5fed1..83b3459 100644
+--- a/server/sim/snapshot.js
++++ b/server/sim/snapshot.js
+@@ -2,7 +2,7 @@
+ //
+ // b.snap  = { fieldId, t, units: [[id, x, y, hp, maxHp, sp, spMax, flags, anim]], dp, killed, total }
+ // UnitInfo = { id, kind, side, ownerId, defId, name, tier, golden, spine, avatar, x, y, facing, dir, maxHp, motion?, boss?, uid?,
+-//   form?, skillIndex?, moduleId?, items?, researchStage?, sp?, spMax? }  (form = the unit's current model form — an enemy's, content/enemies.js setForm:
++//   form?, skillIndex?, moduleId?, items?, researchStage?, researchActive?, sp?, spMax? }  (form = the unit's current model form — an enemy's, content/enemies.js setForm:
+ //   掠海漂移体 'crawl', 暴鸰 'bombed', 转译基底·α's forms …; a 傀儡师 fighting as its 替身 'doll', professions.js — a view built
+ //   after the change, a field opened mid-battle, draws it: render/units.js FORMS. Research devices keep their charge bar,
+ //   and Dorothy's critical traps keep their current form in a newly opened field.)
+@@ -50,6 +50,8 @@ export function unitInfo(u) {
+     // field shows its owner's module in the detail card)
+     moduleId: u.side === 'ally' && d.golden && typeof d.loadout?.moduleId === 'string' ? d.loadout.moduleId : undefined,
+     researchStage: Number.isInteger(u.researchStage) ? u.researchStage : undefined,
++    // Keep the model's stage while a device is disabled; reconnects must not restore its inactive area.
++    researchActive: typeof u.researchActive === 'boolean' ? u.researchActive : undefined,
+     // Independent research charging reuses the ordinary skill-bar slots, including late joins.
+     sp: Number.isFinite(u.researchCharges) ? u.researchCharges : undefined,
+     spMax: Number.isFinite(u.researchChargeMax) ? u.researchChargeMax : undefined,
+diff --git a/shared/rhineRange.js b/shared/rhineRange.js
+index 0e831d9..1d7fe17 100644
+--- a/shared/rhineRange.js
++++ b/shared/rhineRange.js
+@@ -3,6 +3,17 @@
+ import { RHINE_BALANCE as B, rhineDevice, rhineStage } from './rhineResearch.js';
+ import { GEO } from './constants.js';
+ 
++// Saria's skchr_demkni_3 (rangeId x-3): a 25-cell diamond, not the 29-cell radius-3 circle.
++// Keep a shared shape so the sim, low/high graphics and descriptions use the same mature pulse.
++export const CALCIFICATION_GRID = Object.freeze(Array.from({ length: 7 }, (_, i) => i - 3)
++  .flatMap(r => Array.from({ length: 7 }, (_, i) => i - 3)
++    .filter(c => Math.abs(r) + Math.abs(c) <= 3).map(c => Object.freeze([r, c]))));
++
++export function energyPulseRange(stage = 0) {
++  const tileBased = rhineStage(stage) >= 2;
++  return { radius: tileBased ? 3 : B.energySpreadRadius, grid: tileBased ? CALCIFICATION_GRID : null, tileBased };
++}
++
+ export function researchRange(piece) {
+   const def = rhineDevice(typeof piece === 'string' ? piece : piece?.id ?? piece?.tokenId ?? piece?.defId);
+   if (!def) return null;
+@@ -51,8 +62,13 @@ export function researchRangeText(piece) {
+   const range = researchRange(piece);
+   if (!range) return '';
+   if (range.key === 'medical') return `覆盖半径 ${B.radius} 格内的整格区域（${range.grid.length} 格）；治疗本方干员及可受治疗的召唤物，包括机械水獭。突破不扩大范围。`;
+-  if (range.key === 'energy') return `充能干员与主目标均在半径 ${B.radius} 格内的整格区域（${range.grid.length} 格）；突破Ⅰ起，溅射主目标周围实际半径 ${B.energySpreadRadius} 格，可波及装置范围外。`;
+-  return `当前覆盖半径 ${range.radius} 格内的整格区域（${range.grid.length} 格）；原型及突破Ⅰ为 ${B.radius} 格，突破Ⅱ为 ${B.radius + 1} 格。每 ${B.ecologyInterval} 秒开启 ${B.ecologyDuration} 秒。`;
++  if (range.key === 'energy') {
++    const pulse = energyPulseRange(range.stage);
++    const charging = range.stage >= 1 ? '己方全场干员释放技能均可充能' : `半径 ${B.radius} 格内己方干员释放技能时充能`;
++    const splash = pulse.tileBased ? `主目标所在格为中心的钙质化 ${pulse.grid.length} 格菱形` : `主目标周围实际半径 ${pulse.radius} 格`;
++    return `${charging}；主目标仍须在装置半径 ${B.radius} 格内（${range.grid.length} 格）。一级起造成范围法术伤害，溅射为${splash}，可波及装置选敌范围外。满充无目标时保留，敌人进入后释放。`;
++  }
++  return `当前覆盖半径 ${range.radius} 格内的整格区域（${range.grid.length} 格），持续减速 ${B.ecologySlow * 100}%；一级及二级为 ${B.radius} 格，三级为 ${B.radius + 1} 格。二级起每 ${B.ecologyInterval} 秒额外束缚 ${B.ecologyBindDuration} 秒。`;
+ }
+ 
+ /** Polygon clipped to a tile's square. Coordinates throughout are [column, row]. */
+diff --git a/shared/rhineResearch.js b/shared/rhineResearch.js
+index 808984f..87e3e3d 100644
+--- a/shared/rhineResearch.js
++++ b/shared/rhineResearch.js
+@@ -5,22 +5,23 @@ export const RHINE_BALANCE = Object.freeze({
+   thresholds: [3, 6, 9], baseAttack: 300, attackPerLayer: 3,
+   mayerLayerStep: 5, mayerAttack: [2, 4], mayerSummons: [1, 2], ptilopsisLayersPerMember: [2, 4],
+   sariaLayerStep: 3, sariaHealBonus: [0.01, 0.02], ifritInheritance: [0.30, 0.60],
++  sharingCount: 6, researchSharing: [0.15, 0.25],
+   astgenneFirstSkillLayers: [3, 6], dorothyTrapLayers: [2, 4], dorothyBattleLayerCap: [24, 48], dorothyTrapLimit: [4, 5],
+   successPoints: 2, failurePoints: 1, breakthroughPoints: [5, 5],
+   medicalInterval: 3, medicalHealScale: 0.5, medicalShieldRatio: 0.5, medicalShieldDuration: 6,
+-  energyCharges: 3, energyContributorCooldown: 3, energyPulseScale: 1.2, energySpreadRadius: 1, energyStage2Scale: 1.5,
+-  ecologyInterval: 8, ecologyDuration: 4, ecologySlow: 0.25, ecologySlowPerLayer: 0.001,
+-  ecologySlowCap: 0.65, ecologyBindDuration: 1, radius: 2,
++  energyCharges: 3, energyContributorCooldown: 3, energyPulseScale: 1.2, energySpreadRadius: 1,
++  ecologyInterval: 8, ecologyDuration: 8, ecologySlow: 0.5,
++  ecologyBindDuration: 1, radius: 2,
+ });
+ // Equipment values are shared by generated records and the combat/bot implementations.
+ export const RHINE_EQUIPMENT = Object.freeze({
+   terminal: Object.freeze({ key: 'chess_item_rhine_terminal', tier: 3, attack: [0.15, 0.25], layerStep: 10, attackSpeed: [2, 3], attackSpeedCap: [20, 30] }),
+-  mainframe: Object.freeze({ key: 'chess_item_rhine_mainframe', tier: 6, hp: [0.45, 0.70], attackPerLayer: 1, attackCap: 100, comboAttackPerLayer: 2, comboAttackCap: 200 }),
++  mainframe: Object.freeze({ key: 'chess_item_rhine_mainframe', tier: 6, hp: [0.45, 0.70], attackPerLayer: 1, comboAttackPerLayer: 2 }),
+ });
+ export const RHINE_DEVICES = Object.freeze([
+   { key: 'medical', tokenId: 'token_rhine_medical', name: '生命维持仪', color: '#6fe8c1', icon: '/art/rhine/medical.svg', sprite: '/art/rhine/medical-unit.png', description: '每3秒治疗范围内生命比例最低的友军。突破Ⅰ：溢出治疗转为短时护盾；突破Ⅱ：同时治疗两个目标。', breakthroughs: ['溢出治疗转为护盾', '同时治疗两个目标'] },
+-  { key: 'energy', tokenId: 'token_rhine_energy', name: '能量谐振仪', color: '#ffbc70', icon: '/art/rhine/energy.svg', sprite: '/art/rhine/energy-unit.png', description: '范围内友军释放技能时充能，3次充能释放法术脉冲；同一干员3秒内至多贡献一次。突破Ⅰ：脉冲向附近扩散；突破Ⅱ：伤害提高。', breakthroughs: ['脉冲向附近扩散', '脉冲伤害提高'] },
+-  { key: 'ecology', tokenId: 'token_rhine_ecology', name: '生态调控器', color: '#8bbdff', icon: '/art/rhine/ecology.svg', sprite: '/art/rhine/ecology-unit.png', description: '周期产生减速区域，减速随莱茵层数增强。突破Ⅰ：区域启动时短暂束缚；突破Ⅱ：作用范围扩大。', breakthroughs: ['区域启动时束缚敌人', '作用范围扩大'] },
++  { key: 'energy', tokenId: 'token_rhine_energy', name: '能量谐振仪', color: '#ffbc70', icon: '/art/rhine/energy.svg', sprite: '/art/rhine/energy-unit.png', description: '一级：范围内己方干员释放技能时充能，3点充能发射120%攻击的范围法术脉冲；无目标时保留满充能。同一干员3秒内至多贡献一次。二级：己方全场干员释放技能均可充能。三级：溅射扩大至塞雷娅“钙质化”的25格范围，以主目标为中心。', breakthroughs: ['己方全场技能充能', '钙质化25格溅射'] },
++  { key: 'ecology', tokenId: 'token_rhine_ecology', name: '生态调控器', color: '#8bbdff', icon: '/art/rhine/ecology.svg', sprite: '/art/rhine/ecology-unit.png', description: '一级：范围内敌人持续减速50%。二级：每8秒额外束缚范围内敌人1秒。三级：作用半径由2格扩大至3格。', breakthroughs: ['周期束缚敌人', '作用范围扩大'] },
+ ]);
+ export const rhineDevice = (id) => RHINE_DEVICES.find(d => d.key === id || d.tokenId === id) ?? null;
+ export const isRhineDevice = (id) => rhineDevice(id) !== null;
+diff --git a/test/content/egir-unite-down.test.js b/test/content/egir-unite-down.test.js
+new file mode 100644
+index 0000000..f8e49ab
+--- /dev/null
++++ b/test/content/egir-unite-down.test.js
+@@ -0,0 +1,89 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { makeBattle, chessRec, checkInvariants } from '../helpers/battleHarness.js';
++import { FORCED_EXIT } from '../../server/sim/constants.js';
++const bonds = count => ({ egirShip: { count, active: count >= 3, tier: count >= 5 ? 2 : 1, layers: 0 } });
++const rec = (id, member = true) => chessRec({ id, profession: 'WARRIOR', bonds: member ? ['egirShip'] : [], stats: { atk: 0, maxHp: 1000, cost: 20, respawnTime: 60 }, skill: { spCost: 30, initSp: 5, duration: 10 } });
++function field({ down = [0], count = 5, kind = 'unite', players = null, bandId = null, enabled = true } = {}) {
++  const chess = Object.fromEntries(Array.from({ length: 6 }, (_, i) => [`g${i}`, rec(`g${i}`, i < 5)]));
++  const units = Array.from({ length: 6 }, (_, i) => ({ chessId: `g${i}`, dir: 'RIGHT', row: 12 - i % 4, col: 3 + 2 * Math.floor(i / 4), carryState: down.includes(i) ? { down: true } : { hpPct: .5, sp: 20 } }));
++  return makeBattle({ kind, defs: { chess }, units, players, bandId, bonds: bonds(count), autoFinish: false, timeLimit: 120, flags: { operatorFixesEnabled: enabled, dpInit: 0, dpPerSec: 0 }, hooks: ['deploy', 'death', 'kill', 'battleStart'] });
++}
++test('Egir five: a carried-down member revives immediately before battleStart at zero DP, full HP and initial SP', () => {
++  const h = field(); h.b.start(); const u = h.unit('g0');
++  assert.ok(u.alive && u.deployed); assert.equal(u.hp, u.s.maxHp); assert.equal(u.skill.sp, 5);
++  assert.equal(h.b.isDown(u), false); assert.equal(h.b.players[0].dp, 0);
++  assert.ok(h.hooksOf('death').some(c => c.unit === u && c.reason === FORCED_EXIT));
++  assert.equal(h.hooksOf('kill').length, 0, 'no ordinary knockout effects');
++  assert.equal(h.hooksOf('deploy').filter(c => c.unit === u && !c.initial).length, 1);
++  assert.equal(h.unit('g1').hp, h.unit('g1').s.maxHp * .5, 'standing member keeps carried HP');
++  assert.equal(h.unit('g1').skill.sp, 20);
++  h.b.kill(u); assert.ok(!u.alive, 'same member cannot spend a second Egir revive'); checkInvariants(h.b);
++});
++test('carried-down members consume the same three-charge budget used by later combat deaths', () => {
++  const h = field({ down: [0, 1] }); h.b.start();
++  assert.ok(h.unit('g0').alive && h.unit('g1').alive);
++  h.b.kill(h.unit('g2')); assert.ok(h.unit('g2').alive, 'one charge remains');
++  h.b.kill(h.unit('g3')); assert.ok(!h.unit('g3').alive, 'three charges used'); checkInvariants(h.b);
++});
++test('four carried-down members: only the first three revive; others and nonmembers wait normally', () => {
++  const h = field({ down: [0, 1, 2, 3, 5] }); h.b.start();
++  const members = [0, 1, 2, 3].map(i => h.unit(`g${i}`));
++  assert.equal(members.filter(u => u.alive).length, 3);
++  assert.equal(members.filter(u => h.b.isDown(u)).length, 1);
++  assert.ok(h.b.isDown(h.unit('g5')), 'nonmember stays down'); checkInvariants(h.b);
++});
++test('no five-member tier, non-unite fields and later voluntary retreats never use the carried-down revive exception', () => {
++  for (const opts of [{ count: 3 }, { kind: 'normal' }, { kind: 'boss' }]) {
++    const h = field(opts); h.b.start(); assert.ok(h.b.isDown(h.unit('g0'))); checkInvariants(h.b);
++  }
++  const h = field({ down: [] }); h.b.start(); const u = h.unit('g0');
++  h.b.retreat(u, { reason: 'retreat' }); assert.ok(h.b.isDown(u));
++  h.b.redeploy(u, { free: true }); h.b.kill(u); assert.ok(u.alive, 'voluntary retreat did not consume charge');
++});
++test('each helper uses only its own Egir tier and charges on a shared unite field', () => {
++  const units = pid => [0, 1, 2, 3].map(i => ({ uid: `${pid}-${i}`, chessId: `g${i}`, dir: 'RIGHT', row: 12 - i, col: 3, carryState: { down: true } }));
++  const h = field({ players: [{ playerId: 'p1', seat: 0, colOffset: 0, bonds: bonds(5), units: units('p1') }, { playerId: 'p2', seat: 1, colOffset: 10, bonds: bonds(5), units: units('p2') }] });
++  h.b.start();
++  for (const p of h.b.players) {
++    assert.equal(p.units.filter(u => u.alive).length, 3, p.playerId);
++    assert.equal(p.units.filter(u => h.b.isDown(u)).length, 1, p.playerId);
++  }
++  checkInvariants(h.b);
++});
++
++test('埃芒加德: entering unite already down uses a band charge; remaining charges save later fatal damage', () => {
++  const h = field({ down: [0], count: 3, bandId: 'band_ermengard' }); h.b.start();
++  const u = h.unit('g0'); assert.ok(u.alive); assert.equal(u.hp, u.s.maxHp); assert.equal(u.skill.sp, 5);
++  assert.equal(h.hooksOf('kill').length, 0);
++  const hit = () => h.b.dealDamage(null, u, { type: 'true', amount: 1e9 });
++  hit(); assert.ok(u.alive); hit(); assert.ok(u.alive); hit(); assert.ok(!u.alive, 'three band charges total');
++  checkInvariants(h.b);
++});
++test('Egir has priority on unite entry: three Egir revives leave all three 埃芒加德 charges untouched', () => {
++  const h = field({ down: [0, 1, 2], bandId: 'band_ermengard' }); h.b.start();
++  for (const i of [0, 1, 2]) assert.ok(h.unit(`g${i}`).alive);
++  const u = h.unit('g5');
++  for (let i = 0; i < 3; i++) { h.b.dealDamage(null, u, { type: 'true', amount: 1e9 }); assert.ok(u.alive, 'band charge remains'); }
++  h.b.dealDamage(null, u, { type: 'true', amount: 1e9 }); assert.ok(!u.alive); checkInvariants(h.b);
++});
++test('埃芒加德 covers excess Egir members and nonmembers; ordinary retreats remain excluded', () => {
++  const h = field({ down: [0, 1, 2, 3, 5], bandId: 'band_ermengard' }); h.b.start();
++  for (const i of [0, 1, 2, 3, 5]) assert.ok(h.unit(`g${i}`).alive);
++  const u = h.unit('g4'); h.b.retreat(u, { reason: 'retreat' }); assert.ok(h.b.isDown(u));
++  h.b.redeploy(u, { free: true });
++  h.b.dealDamage(null, u, { type: 'true', amount: 1e9 }); assert.ok(u.alive, 'last band charge');
++  h.b.dealDamage(null, u, { type: 'true', amount: 1e9 }); assert.ok(!u.alive, 'all band charges used'); checkInvariants(h.b);
++});
++test('埃芒加德 belongs to its own helper: it never consumes charges for the teammate', () => {
++  const units = pid => [0, 1, 2, 3].map(i => ({ uid: `${pid}-${i}`, chessId: `g${i}`, dir: 'RIGHT', row: 12 - i, col: 3, carryState: { down: true } }));
++  const h = field({ players: [{ playerId: 'p1', seat: 0, colOffset: 0, bandId: 'band_ermengard', bonds: bonds(3), units: units('p1') }, { playerId: 'p2', seat: 1, colOffset: 10, bonds: bonds(3), units: units('p2') }] });
++  h.b.start();
++  assert.equal(h.b.players[0].units.filter(u => u.alive).length, 3);
++  assert.equal(h.b.players[1].units.filter(u => u.alive).length, 0);
++  checkInvariants(h.b);
++});
++
++test('operator-source revive fix disabled preserves original carried-down exit',()=>{
++ const h=field({enabled:false});h.b.start();assert.ok(h.b.isDown(h.unit('g0')));checkInvariants(h.b);
++});
+diff --git a/test/content/rhine.test.js b/test/content/rhine.test.js
+index 594bee2..942747e 100644
+--- a/test/content/rhine.test.js
++++ b/test/content/rhine.test.js
+@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
+ import { makeBattle, chessRec, enemyRec, checkInvariants } from '../helpers/battleHarness.js';
+ import { RHINE_CHARACTERS as C, RHINE_DEVICES, RHINE_BALANCE as B } from '../../shared/rhineResearch.js';
+ import { deviceBaseAttack } from '../../server/sim/content/rhine.js';
++import { DATA } from '../match/harness.js';
+ 
+ const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-6, `expected ${b}, got ${a}`);
+ const op = (uid, charId = 'test', row = 10, col = 4, extra = {}) => ({ uid, chessId: `${uid}_a`, charId, row, col, ...extra });
+@@ -15,7 +16,8 @@ const player = (playerId, units, { count = 3, layers = 0, active = true, devices
+ function battle(players, extra = {}) {
+   const chess = {}, kits = {};
+   for (const p of players) for (const u of p.units) if (u.kind !== 'token') {
+-    chess[u.chessId] = chessRec({ id: u.chessId, charId: u.charId, golden: u.elite, stats: { atk: 100, maxHp: 2000, blockCnt: 0 }, skill: u.cast ? {} : null });
++    chess[u.chessId] = chessRec({ id: u.chessId, charId: u.charId, golden: u.elite, bonds: u.bonds,
++      profession: u.profession, dmgType: u.dmgType, stats: { atk: 100, maxHp: 2000, blockCnt: 0 }, skill: u.cast ? {} : null });
+     kits[u.chessId] = () => ({ trait: { noAttack: true }, skill: u.cast ? { kind: u.passive ? 'passive' : 'instant', trigger: { rule: u.auto ? 'SP_FULL' : 'NEVER' }, spCost: u.auto ? 1 : 10 } : null });
+   }
+   const tokens = Object.fromEntries(RHINE_DEVICES.map((d) => [d.tokenId, { name: d.name, stats: { maxHp: 100, atk: 1, blockCnt: 5 }, rangeGrid: [[0, 0]] }]));
+@@ -86,11 +88,13 @@ test('Rhine sim boundary enables the third distinct device only at count nine',
+ test('Rhine grid effects include entire highlighted tiles for moving enemies and exclude neighboring unhighlighted tiles', () => {
+   const h = battle([player('p1', [op('a', 'test', 10, 4, { cast: true }), op('b', 'test', 11, 5, { cast: true }),
+     op('c', 'test', 9, 5, { cast: true }), device('energy')])]);
+-  const inside = h.spawn('dummy', { pos: [11.49, 6.49] });
+   const outside = h.spawn('dummy', { pos: [11.51, 6.51] });
+   for (const uid of ['a', 'b', 'c']) cast(h, uid);
+-  close(inside.s.maxHp - inside.hp, 300 * B.energyPulseScale);
+   close(outside.hp, outside.s.maxHp);
++  assert.equal(h.unit('energy').researchCharges, 3, 'an enemy outside the highlighted cells cannot trigger release');
++  const inside = h.spawn('dummy', { pos: [11.49, 6.49] });
++  h.step();
++  close(inside.s.maxHp - inside.hp, 300 * B.energyPulseScale);
+   checkInvariants(h.b);
+ 
+   const ecology = battle([player('p1', [device('ecology')])]);
+@@ -135,15 +139,15 @@ test('Rhine medical breakthroughs: final overheal yields 50% timed shield; stage
+   checkInvariants(h.b);
+ });
+ 
+-test('Rhine energy: actual skill starts charge once per contributor / 3s; stages add spread then damage', () => {
++test('Rhine energy: actual skill starts charge once per contributor / 3s; every stage deals 120% splash', () => {
+   for (const stage of [0, 1, 2]) {
+     const h = battle([player('p1', [op('a', 'test', 10, 4, { cast: true }), op('b', 'test', 11, 5, { cast: true }), op('c', 'test', 9, 5, { cast: true }), device('energy', 10, 5, stage)]), player('p2', [op('other', 'test', 10, 6, { cast: true })])]);
+-    const e = h.spawn('dummy', { pos: [10, 6] }), nearby = h.spawn('dummy', { pos: [10, 7] }), far = h.spawn('dummy', { pos: [12, 7] });
++    const e = h.spawn('dummy', { pos: [10, 6] }), nearby = h.spawn('dummy', { pos: [10, 7] }), far = h.spawn('dummy', { pos: [12, 8] });
+     cast(h, 'a'); cast(h, 'a'); cast(h, 'other'); cast(h, 'b');
+     close(e.hp, e.s.maxHp);
+     cast(h, 'c');
+-    const damage = 300 * B.energyPulseScale * (stage >= 2 ? B.energyStage2Scale : 1);
+-    close(e.s.maxHp - e.hp, damage); close(nearby.s.maxHp - nearby.hp, stage >= 1 ? damage : 0); close(far.hp, far.s.maxHp);
++    const damage = 300 * B.energyPulseScale;
++    close(e.s.maxHp - e.hp, damage); close(nearby.s.maxHp - nearby.hp, damage); close(far.hp, far.s.maxHp);
+     h.run(3); cast(h, 'a'); cast(h, 'b'); cast(h, 'c');
+     close(e.s.maxHp - e.hp, 2 * damage);
+     assert.equal(h.hooksOf('skillStart').length, 8, 'pulses do not emit skill starts or create a charging loop');
+@@ -151,17 +155,22 @@ test('Rhine energy: actual skill starts charge once per contributor / 3s; stages
+   }
+ });
+ 
+-test('Rhine ecology: zone is periodic, slow scales to cap, stage I binds only at start and stage II extends range', () => {
++test('Rhine ecology: continuous 50% slow starts immediately, bind pulses every 8s, mature radius is 3', () => {
+   for (const stage of [0, 1, 2]) {
+     const h = battle([player('p1', [device('ecology', 10, 5, stage)], { layers: 900 })]);
+     const near = h.spawn('dummy', { pos: [10, 7] }), far = h.spawn('dummy', { pos: [10, 8] });
+-    h.run(7.8); assert.equal(near.findBuff('slow'), null);
++    h.step(); close(near.findBuff('slow').mods.moveMul, 0.5);
++    assert.equal(!!near.s.flags.bind, false, 'the opening aura does not bind');
++    assert.equal(!!far.findBuff('slow'), stage >= 2);
++    h.run(7.7); close(near.findBuff('slow').mods.moveMul, 0.5);
+     h.run(0.3);
+-    close(near.findBuff('slow').mods.moveMul, 1 - B.ecologySlowCap);
++    close(near.findBuff('slow').mods.moveMul, 0.5);
+     assert.equal(!!near.s.flags.bind, stage >= 1);
+     assert.equal(!!far.findBuff('slow'), stage >= 2);
+     h.run(1.1); assert.equal(!!near.s.flags.bind, false, 'no perpetual bind while inside zone');
+-    h.run(3.2); assert.equal(near.findBuff('slow'), null);
++    h.run(3.2); close(near.findBuff('slow').mods.moveMul, 0.5, 'slow has no four-second gap');
++    h.b.getPlayer('p1').bonds.rhineShip.active = false; h.step(4);
++    assert.equal(near.findBuff('slow'), null);
+     checkInvariants(h.b);
+   }
+ });
+@@ -174,11 +183,12 @@ test('Rhine energy: concealed and untargetable enemies cannot be primary targets
+   h.b.addBuff(untargetable, { key: 'test:untargetable', flags: { untargetable: true }, persist: true });
+   for (const id of ['a', 'b', 'c']) cast(h, id);
+   close(concealed.hp, concealed.s.maxHp); close(untargetable.hp, untargetable.s.maxHp);
++  assert.equal(h.unit('energy').researchCharges, 3);
+   h.b.addBuff(concealed, { key: 'test:reveal', flags: { reveal: true }, persist: true });
+-  h.run(3.1);
+-  for (const id of ['a', 'b', 'c']) cast(h, id);
++  h.step();
+   close(concealed.s.maxHp - concealed.hp, 300 * B.energyPulseScale);
+   close(untargetable.hp, untargetable.s.maxHp);
++  assert.equal(h.unit('energy').researchCharges, 0);
+   checkInvariants(h.b);
+ });
+ 
+@@ -275,14 +285,14 @@ test('Rhine: boss mirrors and unite helpers keep independent device ATK, inherit
+   }
+ });
+ 
+-test('Rhine: normal Saria healing and an active ecological zone react to live layer changes', () => {
++test('Rhine: Saria healing scales with live layers while the continuous ecology slow remains 50%', () => {
+   const h = battle([player('p1', [op('s', C.saria, 10, 4), op('patient', 'test', 11, 4), device('ecology')], { layers: 2 })]);
+   const target = h.spawn('dummy', { pos: [10, 7] });
+-  h.run(8.1); close(target.findBuff('slow').mods.moveMul, 1 - 0.252);
++  h.step(); close(target.findBuff('slow').mods.moveMul, 0.5);
+   h.unit('patient').hp = 100;
+   close(h.b.heal(h.unit('s'), h.unit('patient'), 100), 100);
+   h.b.addLayers('p1', 'rhineShip', 298, 'test'); h.step(2);
+-  close(target.findBuff('slow').mods.moveMul, 0.45);
++  close(target.findBuff('slow').mods.moveMul, 0.5);
+   close(h.b.heal(h.unit('s'), h.unit('patient'), 100), 200);
+   h.b.getPlayer('p1').bonds.rhineShip.active = false; h.step(3);
+   close(h.b.heal(h.unit('s'), h.unit('patient'), 100), 100);
+@@ -332,3 +342,130 @@ test('Rhine real Mayer / Saria: normal and elite records carry only their replac
+     assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
+   }
+ });
++
++test('Rhine sharing: damage members inherit one highest own device, while Ifrit alone inherits the sum', () => {
++  const rhine = { bonds: ['rhineShip'] };
++  const h = battle([player('p1', [
++    op('m', C.mayer, 10, 4, { ...rhine, elite: true }),
++    op('ordinary', 'test', 9, 4, rhine), op('elite', 'test', 9, 6, { ...rhine, elite: true }),
++    op('medic', 'test', 11, 4, { ...rhine, profession: 'MEDIC', dmgType: 'arts' }),
++    op('healer', 'test', 12, 4, { ...rhine, profession: 'SUPPORT', dmgType: 'heal' }),
++    op('saria', C.saria, 9, 7, rhine), op('ifrit', C.ifrit, 11, 6, { ...rhine, elite: true }),
++    op('unrelated', 'test', 12, 6), device('medical'), device('energy', 11, 5), device('ecology', 12, 5),
++  ], { count: 9, layers: 15 }), player('p2', [op('other', 'test', 10, 7, rhine), device('medical', 12, 8, 0, 'otherDevice')], { count: 6, layers: 100 })]);
++  close(h.unit('ordinary').s.atk, 100 + 357 * 0.15);
++  close(h.unit('elite').s.atk, 100 + 357 * 0.25);
++  close(h.unit('other').s.atk, 100 + 600 * 0.15);
++  close(h.unit('ifrit').s.atk, 100 + (357 + 345 + 345) * 0.6);
++  for (const uid of ['medic', 'healer', 'saria', 'unrelated', 'ifrit']) assert.equal(h.unit(uid).findBuff('rhine:sharing'), null);
++  h.b.addBuff(h.unit('medical'), { key: 'test:devicePower', mods: { atkMul: 20, atkFlat: 10000 } });
++  h.b.addBuff(h.unit('m'), { key: 'test:mayerPower', mods: { atkPct: 3 } });
++  h.b.addBuff(h.unit('ordinary'), { key: 'test:operatorPower', mods: { atkPct: 0.5 } });
++  h.run(10);
++  close(deviceBaseAttack(h.b, h.unit('medical')), 357);
++  close(h.unit('ordinary').s.atk, (100 + 357 * 0.15) * 1.5);
++  assert.equal(h.unit('ordinary').buffs.filter((b) => b.key === 'rhine:sharing').length, 1);
++  assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++});
++
++test('Rhine sharing: transformation and harmony use live membership; losing six members or a device clears the bonus', () => {
++  const morph = Object.values(DATA.items).find((it) => it.canGiveBond && !it.isGolden).id;
++  const p = player('p1', [op('native', 'test', 9, 4, { bonds: ['rhineShip'] }),
++    op('morph', 'test', 11, 4, { items: ['chess_item_rhine_terminal_a', morph] }),
++    op('harmony', 'test', 12, 4, { bonds: ['maniShip'] }), device('energy')], { count: 6 });
++  p.bonds.maniShip = { active: true, count: 2, layers: 0 };
++  const h = battle([p]), ps = h.b.getPlayer('p1');
++  for (const uid of ['native', 'morph', 'harmony']) close(h.unit(uid).findBuff('rhine:sharing').mods.atkFlat, 45);
++  h.unit('morph').items = h.unit('morph').items.filter((id) => id !== morph);
++  ps.bonds.maniShip.active = false; h.step();
++  assert.equal(h.unit('morph').findBuff('rhine:sharing'), null);
++  assert.equal(h.unit('harmony').findBuff('rhine:sharing'), null);
++  ps.bonds.rhineShip.count = 5; h.step(); close(h.unit('native').s.atk, 100);
++  ps.bonds.rhineShip.count = 6; h.b.addLayers('p1', 'rhineShip', 10, 'test'); h.step(2);
++  close(h.unit('native').s.atk, 100 + 330 * 0.15);
++  h.b.retreat(h.unit('native')); close(h.unit('native').s.atk, 100);
++  assert.equal(h.b.redeploy(h.unit('native')), true); close(h.unit('native').s.atk, 100 + 330 * 0.15);
++  h.b.retreat(h.unit('energy'), { permanent: true }); close(h.unit('native').s.atk, 100);
++  assert.equal(h.unit('native').findBuff('rhine:sharing'), null);
++  assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++});
++
++test('Rhine energy: stage one accepts distant same-owner casts, excludes foreign, passive and carried starts', () => {
++  for (const stage of [0, 1, 2]) {
++    const h = battle([player('p1', [op('a', 'test', 9, 2, { cast: true }), op('b', 'test', 12, 2, { cast: true }),
++      op('c', 'test', 9, 10, { cast: true }), device('energy', 10, 5, stage)]),
++    player('p2', [op('other', 'test', 12, 10, { cast: true })])]);
++    const target = h.spawn('dummy', { pos: [10, 6] });
++    cast(h, 'other');
++    h.b.emit('skillStart', { unit: h.unit('a'), reason: 'carry', skill: { kind: 'duration' } });
++    h.b.emit('skillStart', { unit: h.unit('b'), reason: 'passive', skill: { kind: 'passive' } });
++    assert.equal(h.unit('energy').researchCharges, 0);
++    cast(h, 'a'); cast(h, 'a'); cast(h, 'b');
++    assert.equal(h.unit('energy').researchCharges, stage >= 1 ? 2 : 0);
++    cast(h, 'c'); close(target.s.maxHp - target.hp, stage >= 1 ? 360 : 0);
++    assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++  }
++});
++
++test('Rhine energy: full charge waits without overflow or empty FX, releases on enemy entry, and never charges itself', () => {
++  const h = battle([player('p1', [op('a', 'test', 10, 4, { cast: true }), op('b', 'test', 11, 5, { cast: true }),
++    op('c', 'test', 9, 5, { cast: true }), device('energy', 10, 5, 1)])]);
++  for (const uid of ['a', 'b', 'c']) cast(h, uid);
++  assert.equal(h.unit('energy').researchCharges, 3);
++  h.run(3.1); for (const uid of ['a', 'b', 'c']) cast(h, uid);
++  assert.equal(h.unit('energy').researchCharges, 3);
++  assert.equal(h.eventsOf('fx').filter((e) => e[1] === 'rhinePulse').length, 0);
++  const outside = h.spawn('dummy', { pos: [10, 9] }); h.step();
++  assert.equal(h.unit('energy').researchCharges, 3); close(outside.hp, outside.s.maxHp);
++  const inside = h.spawn('dummy', { pos: [10, 6] }); h.step();
++  close(inside.s.maxHp - inside.hp, 360); assert.equal(h.unit('energy').researchCharges, 0);
++  h.run(10); close(inside.s.maxHp - inside.hp, 360); assert.equal(h.unit('energy').researchCharges, 0);
++  h.b.kill(inside);
++  for (const uid of ['a', 'b', 'c']) cast(h, uid);
++  assert.equal(h.unit('energy').researchCharges, 3);
++  h.b.getPlayer('p1').bonds.rhineShip.active = false; h.step();
++  assert.equal(h.unit('energy').researchCharges, 0);
++  h.b.getPlayer('p1').bonds.rhineShip.active = true;
++  const later = h.spawn('dummy', { pos: [10, 6] }); h.step(); close(later.hp, later.s.maxHp);
++  assert.equal(h.eventsOf('fx').filter((e) => e[1] === 'rhinePulse').length, 1);
++  assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++});
++
++test('Rhine mature energy: the primary-centered Saria diamond includes whole cells and giant bodies, excluding circle corners and stealth', () => {
++  const h = battle([player('p1', [op('a', 'test', 10, 4, { cast: true }), op('b', 'test', 11, 5, { cast: true }),
++    op('c', 'test', 9, 5, { cast: true }), device('energy', 10, 5, 2)])]);
++  const primary = h.spawn('dummy', { pos: [10, 5] });
++  const covered = [];
++  for (let dr = -3; dr <= 3; dr++) for (let dc = -3; dc <= 3; dc++) {
++    if (10 + dr >= 9 && 10 + dr <= 12 && Math.abs(dr) + Math.abs(dc) <= 3 && (dr || dc)) {
++      covered.push(h.spawn('dummy', { pos: [10 + dr, 5 + dc] }));
++    }
++  }
++  const corners = [[2, -2], [2, 2]].map(([dr, dc]) => h.spawn('dummy', { pos: [10 + dr, 5 + dc] }));
++  const tileEdge = h.spawn('dummy', { pos: [10.49, 8.49] });
++  const giant = h.spawn('dummy', { pos: [10, 10.49] }); giant.hitArea = { w: 5, h: 1, dx: 0, dy: 0 };
++  const concealed = h.spawn('dummy', { pos: [11, 5] }), untargetable = h.spawn('dummy', { pos: [10, 7] });
++  const hidden = h.spawn('dummy', { pos: [10, 4] }); hidden.hidden = true;
++  h.b.addBuff(concealed, { key: 'test:stealth', flags: { stealth: true }, persist: true });
++  h.b.addBuff(untargetable, { key: 'test:untargetable', flags: { untargetable: true }, persist: true });
++  for (const uid of ['a', 'b', 'c']) cast(h, uid);
++  for (const target of [primary, ...covered, tileEdge, giant]) close(target.s.maxHp - target.hp, 360);
++  for (const target of [...corners, concealed, untargetable, hidden]) {
++    assert.equal(target.hp, target.s.maxHp, `excluded enemy ${target.id} at (${target.y},${target.x})`);
++  }
++  assert.equal(h.eventsOf('fx').filter((e) => e[1] === 'rhinePulse').length, 1);
++  assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++});
++
++test('Rhine mature energy: splash follows a moving primary tile beyond device range without turning into a circle', () => {
++  const h = battle([player('p1', [op('a', 'test', 10, 4, { cast: true }), op('b', 'test', 11, 5, { cast: true }),
++    op('c', 'test', 9, 5, { cast: true }), device('energy', 10, 5, 2)])]);
++  const primary = h.spawn('dummy', { pos: [10.49, 6.49] });
++  const tip = h.spawn('dummy', { pos: [10.49, 9.49] });
++  const corner = h.spawn('dummy', { pos: [12.49, 8.49] });
++  for (const uid of ['a', 'b', 'c']) cast(h, uid);
++  close(primary.s.maxHp - primary.hp, 360);
++  close(tip.s.maxHp - tip.hp, 360);
++  close(corner.hp, corner.s.maxHp);
++  assert.deepEqual(h.b.errors, []); checkInvariants(h.b);
++});
+diff --git a/test/content/rhine_equipment.test.js b/test/content/rhine_equipment.test.js
+index c2d6fd7..57cfd9a 100644
+--- a/test/content/rhine_equipment.test.js
++++ b/test/content/rhine_equipment.test.js
+@@ -43,45 +43,45 @@ test('Rhine terminal: normal/elite ATK is universal; live complete tens grant ow
+   }
+ });
+ 
+-test('Rhine mainframe: HP qualities, membership, per-device layer caps and same-carrier pairing', () => {
++test('Rhine mainframe: HP qualities, membership, uncapped layer growth and same-carrier pairing', () => {
+   for (const [q, hp] of [['a', 2900], ['b', 3400]]) for (const tq of ['a', 'b']) {
+     const h = fight([player('p1', [op('m', [mainframe(q)]), op('t', [terminal(tq)], { row: 11 }), dev()])]);
+     const m = h.unit('m'), d = h.unit('medical'), bond = h.b.getPlayer('p1').bonds[RHINE_BOND];
+     close(m.s.maxHp, hp); close(d.base.atk, 500); // 300 + 150 + 50; a different carrier is not the combo.
+     const g = installItem(h.b, m, terminal(tq), { lent: true });
+     close(d.base.atk, 550);
+-    bond.layers = 150; h.step(); close(d.base.atk, 950); // +200 cap, rather than +300.
+-    g.dispose(); close(d.base.atk, 850); // falls to +100 immediately.
++    bond.layers = 400; h.step(); close(d.base.atk, 2300); // 300 + 1200 + 800, still growing past 100 layers.
++    g.dispose(); close(d.base.atk, 1900); // falls to +400 immediately.
+     valid(h);
+-    const foreign = fight([player('p1', [op('f', [mainframe(q), terminal(tq)], { bonds: [] }), dev()], 150)]);
+-    close(foreign.unit('medical').base.atk, 750); close(foreign.unit('f').s.maxHp, hp); valid(foreign);
++    const foreign = fight([player('p1', [op('f', [mainframe(q), terminal(tq)], { bonds: [] }), dev()], 400)]);
++    close(foreign.unit('medical').base.atk, 1500); close(foreign.unit('f').s.maxHp, hp); valid(foreign);
+   }
+ });
+ 
+ test('Rhine mainframes: strongest only, two devices, independent owners, death/retreat/redeploy', () => {
+   const h = fight([player('p1', [op('strong', [mainframe(), terminal()]), op('weak', [mainframe('b')], { row: 11 }),
+-    dev(), dev('energy', 11, 5)]), player('p2', [op('foreign', [mainframe(), terminal('b')], { row: 12 }), dev('medical', 12, 5, 'foreignDevice')], 10)]);
+-  for (const id of ['medical', 'energy']) close(h.unit(id).base.atk, 550);
++    dev(), dev('energy', 11, 5)], 400), player('p2', [op('foreign', [mainframe(), terminal('b')], { row: 12 }), dev('medical', 12, 5, 'foreignDevice')], 10)]);
++  for (const id of ['medical', 'energy']) close(h.unit(id).base.atk, 2300);
+   close(h.unit('foreignDevice').base.atk, 350);
+   h.b.kill(h.unit('strong'));
+-  for (const id of ['medical', 'energy']) close(h.unit(id).base.atk, 500);
+-  h.b.retreat(h.unit('weak'), { permanent: true }); close(h.unit('medical').base.atk, 450);
+-  assert.equal(h.b.redeploy(h.unit('strong')), true); close(h.unit('medical').base.atk, 550);
++  for (const id of ['medical', 'energy']) close(h.unit(id).base.atk, 1900);
++  h.b.retreat(h.unit('weak'), { permanent: true }); close(h.unit('medical').base.atk, 1500);
++  assert.equal(h.b.redeploy(h.unit('strong')), true); close(h.unit('medical').base.atk, 2300);
+   close(h.unit('foreignDevice').base.atk, 350);
+   valid(h);
+ });
+ 
+ test('Rhine lending: terminal combo expires without residual stats/hooks; existing tier limit excludes VI', () => {
+-  const h = fight([player('p1', [op('donor', [terminal('b'), mainframe('b')], { row: 11 }), op('borrower', [mainframe()]), dev()])]);
++  const h = fight([player('p1', [op('donor', [terminal('b'), mainframe('b')], { row: 11 }), op('borrower', [mainframe()]), dev()], 400)]);
+   // Remove the donor from the field but keep its equipment available for the existing lending helper.
+   h.b.retreat(h.unit('donor'));
+   const u = h.unit('borrower'), baselineHooks = Object.values(h.b._hooks).reduce((n, hs) => n + hs.filter((x) => !x.removed).length, 0);
+-  close(h.unit('medical').base.atk, 500);
++  close(h.unit('medical').base.atk, 1900); close(u.s.atk, 785);
+   assert.equal(lendItemEffects(h.b, h.unit('donor'), u, { duration: 1 }), 1);
+-  h.step(); close(h.unit('medical').base.atk, 550); close(u.s.atk, 625); close(u.s.aspd, 115);
++  h.step(); close(h.unit('medical').base.atk, 2300); close(u.s.atk, 1056.25); close(u.s.aspd, 130);
+   assert.equal(itemGrants(h.b, u).filter((g) => g.lent).length, 1);
+   lendItemEffects(h.b, h.unit('donor'), u, { duration: 1 });
+-  h.run(1.1); close(h.unit('medical').base.atk, 500); close(u.s.atk, 500); close(u.s.aspd, 100);
++  h.run(1.1); close(h.unit('medical').base.atk, 1900); close(u.s.atk, 785); close(u.s.aspd, 100);
+   assert.equal(itemGrants(h.b, u).filter((g) => g.lent).length, 0);
+   assert.equal(Object.values(h.b._hooks).reduce((n, hs) => n + hs.filter((x) => !x.removed).length, 0), baselineHooks);
+   valid(h);
+@@ -89,33 +89,54 @@ test('Rhine lending: terminal combo expires without residual stats/hooks; existi
+ 
+ test('Rhine mainframe uses transformation membership and removes borrowed aura completely', () => {
+   const morph = Object.values(DATA.items).find((it) => it.canGiveBond && !it.isGolden).id;
+-  const h = fight([player('p1', [op('u', [terminal(), morph], { bonds: [] }), dev()])]);
++  const h = fight([player('p1', [op('u', [terminal(), morph], { bonds: [] }), dev()], 400)]);
+   const u = h.unit('u'); assert.ok(unitBonds(u).includes(RHINE_BOND));
+-  close(h.unit('medical').base.atk, 450);
++  close(h.unit('medical').base.atk, 1500);
+   const grant = installItem(h.b, u, mainframe(), { lent: true });
+-  close(h.unit('medical').base.atk, 550); close(u.s.maxHp, 2900);
+-  grant.dispose(); close(h.unit('medical').base.atk, 450); close(u.s.maxHp, 2000);
++  close(h.unit('medical').base.atk, 2300); close(u.s.maxHp, 2900);
++  grant.dispose(); close(h.unit('medical').base.atk, 1500); close(u.s.maxHp, 2000);
+   valid(h);
+ });
+ 
+ test('Rhine mainframe: normal plus elite still contributes one aura; generic HP remains additive', () => {
+-  const h = fight([player('p1', [op('u', [mainframe(), mainframe('b')]), dev()], 200)]);
+-  close(h.unit('u').s.maxHp, 4300); close(h.unit('medical').base.atk, 1000);
++  const h = fight([player('p1', [op('u', [mainframe(), mainframe('b')]), dev()], 400)]);
++  close(h.unit('u').s.maxHp, 4300); close(h.unit('medical').base.atk, 1900);
+   h.b.getPlayer('p1').bonds[RHINE_BOND].active = false; h.step();
+   close(h.unit('medical').base.atk, 300); valid(h);
+ });
+ 
+ test('Rhine real Ifrit: mainframe bonus is inherited once per device, stable under equipment and external buffs', () => {
+   for (const q of ['a', 'b']) {
+-    const h = fight([player('p1', [op('ifrit', [terminal(q), mainframe(q)], { real: true, chessId: `chess_rhine_ifrit_${q}`, moduleId: 'none' }), dev(), dev('energy', 11, 5)], 100)]);
+-    const u = h.unit('ifrit'), inherit = 1600 * (q === 'b' ? 0.6 : 0.3), mult = q === 'b' ? 1.25 : 1.15;
+-    close(h.unit('medical').base.atk, 800); close(u.findBuff('rhine:ifrit').mods.atkFlat, inherit);
++    const h = fight([player('p1', [op('ifrit', [terminal(q), mainframe(q)], { real: true, chessId: `chess_rhine_ifrit_${q}`, moduleId: 'none' }), dev(), dev('energy', 11, 5)], 400)]);
++    const u = h.unit('ifrit'), inherit = 4600 * (q === 'b' ? 0.6 : 0.3), mult = q === 'b' ? 1.25 : 1.15;
++    close(h.unit('medical').base.atk, 2300); close(u.findBuff('rhine:ifrit').mods.atkFlat, inherit);
+     close(u.s.atk, (u.base.atk + inherit) * mult);
+     h.b.addBuff(h.unit('medical'), { key: 'externalDevice', mods: { atkMul: 20, atkFlat: 10000 } });
+     h.b.addBuff(u, { key: 'externalIfrit', mods: { atkPct: 0.5 } });
+-    h.run(10); close(deviceBaseAttack(h.b, h.unit('medical')), 800);
++    h.run(10); close(deviceBaseAttack(h.b, h.unit('medical')), 2300);
+     close(u.findBuff('rhine:ifrit').mods.atkFlat, inherit); close(u.s.atk, (u.base.atk + inherit) * (mult + 0.5));
+     assert.equal(u.buffs.filter((b) => b.key === 'rhine:ifrit').length, 1);
+     valid(h);
+   }
+ });
++
++test('Rhine real Ifrit: uncapped inheritance refreshes on borrowed equipment disposal and expiry', () => {
++  for (const q of ['a', 'b']) {
++    const h = fight([player('p1', [op('ifrit', [], { real: true, chessId: `chess_rhine_ifrit_${q}`, moduleId: 'none' }),
++      op('donor', [terminal(q)], { row: 12 }), dev(), dev('energy', 11, 5)], 400)]);
++    const u = h.unit('ifrit'), ratio = q === 'b' ? 0.6 : 0.3;
++    const inheritance = (deviceAttack) => {
++      for (const id of ['medical', 'energy']) close(h.unit(id).base.atk, deviceAttack);
++      close(u.findBuff('rhine:ifrit').mods.atkFlat, deviceAttack * 2 * ratio);
++      assert.equal(u.buffs.filter((b) => b.key === 'rhine:ifrit').length, 1);
++    };
++    inheritance(1500);
++    const grant = installItem(h.b, u, mainframe(q), { lent: true });
++    inheritance(1900);
++    assert.equal(lendItemEffects(h.b, h.unit('donor'), u, { duration: 1 }), 1);
++    inheritance(2300);
++    h.run(1.1); inheritance(1900);
++    grant.dispose(); inheritance(1500);
++    valid(h);
++  }
++});
+diff --git a/test/content/rhine_fx.test.js b/test/content/rhine_fx.test.js
+index 7a06a15..506fdb1 100644
+--- a/test/content/rhine_fx.test.js
++++ b/test/content/rhine_fx.test.js
+@@ -54,12 +54,52 @@ test('Rhine visual metadata: all three spawn stages serialize and pulse/ecology
+     assert.equal(energy.eventsOf('spawn').find(e=>e[1].id===d.id)[1].researchStage,stage);
+     assert.equal('researchStage' in JSON.parse(JSON.stringify(unitInfo(energy.unit('a')))),false);
+     const ecology=setup('ecology',stage);ecology.run(B.ecologyInterval);
+-    assert.equal(fx(ecology,'rhineEcology').length,1);
+-    assert.deepEqual(fx(ecology,'rhineEcology')[0][4],{source:ecology.unit('device').id,stage,radius:B.radius+(stage>=2?1:0)});
++    assert.equal(fx(ecology,'rhineEcology').length,2);
++    for(const [i,event] of fx(ecology,'rhineEcology').entries()){
++      assert.deepEqual(event[4],{source:ecology.unit('device').id,stage,active:true,radius:B.radius+(stage>=2?1:0),
++        continuous:true,duration:B.ecologyInterval,bind:i>0&&stage>=1});
++    }
+     done(energy);done(ecology);
+   }
+ });
+ 
++test('ecology active state keeps its stage for reconnects and emits one stop/restart without an immediate bind',()=>{
++  const h=setup('ecology',2), d=h.unit('device'), bond=h.b.getPlayer('p1').bonds.rhineShip;
++  const target=h.spawn('dummy',{pos:[10,7]});h.step();
++  assert.equal(unitInfo(d).researchActive,true);assert.equal(unitInfo(d).researchStage,2);
++  assert.equal(target.findBuff('slow').mods.moveMul,0.5);
++  bond.active=false;h.step(4);
++  assert.equal(unitInfo(d).researchActive,false);assert.equal(unitInfo(d).researchStage,2);
++  assert.equal(target.findBuff('slow'),null);
++  assert.deepEqual(fx(h,'rhineEcology').map(e=>[e[4].active,e[4].bind]),[[true,false],[false,false]]);
++  h.step(4);assert.equal(fx(h,'rhineEcology').length,2,'disabled ticks do not repeat stop events');
++  bond.active=true;h.step();
++  assert.equal(unitInfo(d).researchActive,true);assert.equal(unitInfo(d).researchStage,2);
++  assert.equal(target.findBuff('slow').mods.moveMul,0.5);assert.equal(!!target.s.flags.bind,false);
++  assert.deepEqual(fx(h,'rhineEcology').map(e=>[e[4].active,e[4].bind]),[[true,false],[false,false],[true,false]]);
++  bond.count=2;h.step();assert.equal(unitInfo(d).researchActive,false);
++  bond.count=3;h.step();assert.equal(unitInfo(d).researchActive,true);
++  assert.deepEqual(fx(h,'rhineEcology').slice(-2).map(e=>e[4].active),[false,true]);
++  assert.equal('researchActive' in JSON.parse(JSON.stringify(unitInfo(h.unit('a')))),false);
++  h.b.retreat(d,{permanent:true});assert.equal(unitInfo(d).researchActive,false);
++  assert.equal(fx(h,'rhineEcology').at(-1)[4].active,false);
++  done(h);
++});
++
++test('energy full charge remains visible to snapshots and late joins until a target triggers one pulse',()=>{
++  const h=setup('energy',1), d=h.unit('device');
++  for(const uid of ['a','b','c'])assert.equal(h.unit(uid).skill.activate('test',{free:true}),true);
++  h.run(B.energyContributorCooldown+0.1);
++  assert.deepEqual(unitTuple(d,h.b.time).slice(5,7),[B.energyCharges,B.energyCharges]);
++  assert.deepEqual([unitInfo(d).sp,unitInfo(d).spMax],[B.energyCharges,B.energyCharges]);
++  assert.equal(fx(h,'rhinePulse').length,0);
++  h.spawn('dummy',{pos:[10,6]});h.step();
++  assert.equal(fx(h,'rhinePulse').length,1);
++  assert.deepEqual(unitTuple(d,h.b.time).slice(5,7),[0,B.energyCharges]);
++  h.step(5);assert.equal(fx(h,'rhinePulse').length,1);
++  done(h);
++});
++
+ test('energy charging serializes the actual progress for spawn, live snapshots and late joins, then resets after a pulse',()=>{
+   const h=setup('energy',0), d=h.unit('device');
+   assert.deepEqual([unitInfo(d).sp,unitInfo(d).spMax],[0,B.energyCharges]);
+diff --git a/test/match/elite-acquisition.test.js b/test/match/elite-acquisition.test.js
+new file mode 100644
+index 0000000..66a5ba9
+--- /dev/null
++++ b/test/match/elite-acquisition.test.js
+@@ -0,0 +1,68 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { DATA, makeMatch } from './harness.js';
++const NORMALS = Object.values(DATA.chess).filter(c => c.charId && !c.isDiy && !c.isGolden && c.goldenId);
++const GAIN = NORMALS.filter(c => (DATA.chess[c.goldenId].garrisonIds || []).some(g => DATA.garrisons[g]?.eventType === 'SERVER_GAIN'));
++function setup() {
++  const h = makeMatch({ mode: 'solo', seed: 70, fake: true, data: DATA, rhineEnabled: true }).start(); h.toPrep(1);
++  const ps = h.ps('p_0');
++  for (const p of ps.allChess()) ps.returnCopies(p);
++  ps.board.clear(); ps.hand.fill(null); ps.temp.fill(null); ps.offers.length = 0;
++  ps.bandId = null; ps.funds = 100; ps.pendingFunds = 0; ps.layers = {}; ps.shop.freeRefreshes = 0;
++  for (const b of h.m.gd.bondIds) ps.bondCountBonus[b] = 20;
++  ps.layers.egirShip = 7; ps.recompute();
++  return { h, m: h.m, ps };
++}
++const state = ps => {
++  const pieces = [...ps.board.values(), ...ps.hand.filter(Boolean), ...ps.temp.filter(Boolean)];
++  const owned = {};
++  for (const p of pieces) if (p.kind === 'chess' || p.kind === 'item') owned[p.id] = (owned[p.id] || 0) + 1;
++  return { layers: { ...ps.layers }, pending: ps.pendingFunds, free: ps.shop.freeRefreshes, owned };
++};
++test('all installed operator pairs: normal merging acquires one fresh elite and dispatches its onGain exactly once', () => {
++  assert.ok(NORMALS.length >= 129);
++  for (const c of NORMALS) {
++    const { h, m, ps } = setup();
++    try {
++      const old = [];
++      for (let n = 1; n < m.gd.mergeCount(c.chessId); n++) {
++        const p = ps.acquireChess(c.chessId, { silent: true }); assert.ok(p, c.name);
++        ps.bumpPieceRoundCount(p, 'audit:old-trait', 9); p.meta.audit = 'old'; old.push(p.uid);
++      }
++      const gain = [], dispatch = m.dispatch.bind(m);
++      m.dispatch = (player, hook, ev) => { if (hook === 'onGain') gain.push({ uid: ev.piece.uid, id: ev.piece.id }); return dispatch(player, hook, ev); };
++      const elite = ps.acquireChess(c.chessId);
++      assert.equal(elite.id, c.goldenId, c.name);
++      assert.ok(!old.includes(elite.uid)); assert.ok(old.every(uid => !ps.find(uid)));
++      assert.equal(ps.pieceRoundCount(elite, 'audit:old-trait'), 0, `${c.name}: fresh round counter`);
++      assert.equal(elite.meta.audit, undefined);
++      assert.equal(gain.filter(e => e.uid === elite.uid && e.id === c.goldenId).length, 1, `${c.name}: elite gain once`);
++      assert.equal(ps.stats.merges, 1);
++      assert.deepEqual(h.logs.error, [], c.name);
++    } finally { m.dispose(); }
++  }
++});
++test('all 29 operators with gain traits: merged elite gives the same rewards as acquiring that elite directly', () => {
++  assert.equal(GAIN.length, 29);
++  for (const c of GAIN) {
++    const a = setup(), b = setup();
++    try {
++      a.ps.acquireChess(c.goldenId);
++      for (let n = 1; n < b.m.gd.mergeCount(c.chessId); n++) b.ps.acquireChess(c.chessId, { silent: true });
++      b.ps.acquireChess(c.chessId);
++      assert.deepEqual(state(b.ps), state(a.ps), c.name);
++      assert.deepEqual(a.h.logs.error, []); assert.deepEqual(b.h.logs.error, []);
++    } finally { a.m.dispose(); b.m.dispose(); }
++  }
++});
++test('博士投影/升华 direct promotion remains separate: no new onGain or per-piece counter reset', () => {
++  const { m, ps } = setup();
++  try {
++    const p = ps.acquireChess('chess_char_1_07_a'); // 普罗旺斯: gain grants a free refresh
++    const uid = p.uid, free = ps.shop.freeRefreshes;
++    ps.bumpPieceRoundCount(p, 'audit:old-trait', 9);
++    assert.equal(ps.promote(p), true);
++    assert.equal(p.uid, uid); assert.equal(ps.pieceRoundCount(p, 'audit:old-trait'), 9);
++    assert.equal(ps.shop.freeRefreshes, free, 'no elite gain reward from direct promotion');
++  } finally { m.dispose(); }
++});
+diff --git a/test/match/feedback1-meta.test.js b/test/match/feedback1-meta.test.js
+index 9c1b51f..071c530 100644
+--- a/test/match/feedback1-meta.test.js
++++ b/test/match/feedback1-meta.test.js
+@@ -94,7 +94,7 @@ test('#1 players\' scenario: 普罗旺斯 + 德克萨斯 deployed, refresh, buy
+   m.dispose();
+ });
+ 
+-test('#1 each copy counts its own refreshes: a bench copy (整备区时也有效) bought later fires on its own first refresh; an elite keeps "already fired"', () => {
++test('#1 each copy counts its own refreshes: a bench copy (整备区时也有效) bought later fires on its own first refresh; a newly merged elite fires again', () => {
+   const s = setup();
+   const { m, ps } = s;
+   s.activate();
+@@ -107,18 +107,19 @@ test('#1 each copy counts its own refreshes: a bench copy (整备区时也有效
+   assert.equal(s.L(), 8, 'copy B: its first refresh (A already fired this round)');
+   s.refresh();
+   assert.equal(s.L(), 8, 'nothing more this round');
+-  // the third copy completes the elite: A and B already fired this round, so the elite does not fire again this round
+-  // [ASSUMED: conservative — the elite keeps the highest refresh count of its copies]
++  // Promotion acquires the elite: her next manual refresh grants +8 anew.
+   const elite = s.buy(LAP);
+   assert.equal(elite.id, LAP_B, 'merged into the elite');
+   assert.ok(!ps.find(a.uid) && !ps.find(b.uid), 'copies consumed');
+   s.refresh();
+-  assert.equal(s.L(), 8, 'the elite made this round from copies that already fired: no second trigger');
++  assert.equal(s.L(), 16, 'the newly merged elite grants +8 even after her normal copies fired');
++  s.refresh();
++  assert.equal(s.L(), 16, 'the elite fires only once after acquisition this round');
+   s.h.toPrep(2);
+   ps.funds = 50;
+   s.activate();
+   s.refresh();
+-  assert.equal(s.L(), 8 + 8, 'R2: the elite fires +8 on the round\'s first refresh');
++  assert.equal(s.L(), 24, 'R2: the elite fires +8 on the round\'s first refresh');
+   checkInvariants(m);
+   m.dispose();
+ });
+@@ -146,6 +147,34 @@ test('#1 an elite merged from copies that had not fired yet this round fires on
+   m.dispose();
+ });
+ 
++test('#1 free manual refreshes grant +4/+8, spend no funds, and share the first-refresh limit with paid ones', () => {
++  for (const [id, layer] of [[LAP, 4], [LAP_B, 8]]) for (const freeFirst of [false, true]) {
++    const s = setup(); s.activate(); give(s.m, s.ps, id, 'hand');
++    try {
++      if (!freeFirst) s.refresh();
++      const beforeFunds = s.ps.funds;
++      s.ps.shop.freeRefreshes = 1; s.refresh();
++      assert.equal(s.ps.funds, beforeFunds, 'free refresh costs zero');
++      assert.equal(s.ps.shop.freeRefreshes, 0);
++      assert.equal(s.L(), layer, 'paid and free refresh share one trigger per acquisition');
++      s.refresh(); assert.equal(s.L(), layer, 'no repeat on a subsequent paid refresh');
++    } finally { s.m.dispose(); }
++  }
++});
++
++test('#1 free refresh after acquiring the elite re-triggers +8 after paid normal triggers in the same round', () => {
++  const s = setup(); s.activate();
++  try {
++    give(s.m, s.ps, LAP, 'hand'); give(s.m, s.ps, LAP, 'hand');
++    s.refresh(); assert.equal(s.L(), 8, 'two normal copies grant +4 each');
++    const elite = s.buy(LAP); assert.equal(elite.id, LAP_B);
++    s.ps.funds = 0; s.ps.shop.freeRefreshes = 1;
++    s.refresh(); assert.equal(s.L(), 16, 'free refresh after promotion grants +8');
++    assert.equal(s.ps.funds, 0);
++    s.ps.shop.freeRefreshes = 1; s.refresh(); assert.equal(s.L(), 16, 'no repeat');
++  } finally { s.m.dispose(); }
++});
++
+ test('#1 only manual refreshes count: a re-triggered "刷新时" trait (ctx.triggerGarrisons) neither fires nor uses up her first refresh', () => {
+   const s = setup();
+   const { m, ps } = s;
+diff --git a/test/match/party-runtime.test.js b/test/match/party-runtime.test.js
+index f88633a..93ccfc8 100644
+--- a/test/match/party-runtime.test.js
++++ b/test/match/party-runtime.test.js
+@@ -14,3 +14,16 @@ test('all mods: real server combat samples HP damage, freezes, reconnects, and r
+ });
+ 
+ 
++
++for (const rhineEnabled of [false,true]) for (const operatorsEnabled of [false,true]) {
++ test(`operator-source revive flag reaches real combat: rhine=${rhineEnabled}, operators=${operatorsEnabled}`,()=>{
++  const data=getDataProfile(rhineEnabled,{operatorsEnabled});
++  const h=makeMatch({mode:'solo',combat:'server',instant:false,data,rhineEnabled,operatorsEnabled}).start();
++  try {
++   h.toPrep(1);const ps=[...h.m.players.values()][0];
++   h.m.handle(ps.playerId,{t:'g.ready',ready:true});h.runToPhase('COMBAT',1);
++   assert.equal(h.m.fields[0].battle.flags.operatorFixesEnabled,operatorsEnabled);
++   assert.deepEqual(h.logs.error,[]);
++  } finally {h.m.dispose();}
++ });
++}
+diff --git a/test/match/rhine_equipment_bot.test.js b/test/match/rhine_equipment_bot.test.js
+index 420175c..cd195ed 100644
+--- a/test/match/rhine_equipment_bot.test.js
++++ b/test/match/rhine_equipment_bot.test.js
+@@ -40,6 +40,27 @@ test('Rhine equipment bot uses an existing partner and never treats a full carri
+   m.dispose();
+ });
+ 
++test('Rhine equipment bot values mainframe growth beyond 100 layers while standalone terminal ASPD stays capped', () => {
++  const { h, m, ps } = prep();
++  const rhine = give(m, ps, chess(C.saria), 'board', [10, 4]);
++  give(m, ps, chess(C.silence), 'board', [11, 4]);
++  give(m, ps, chess(C.ptilopsis), 'board', [12, 4]);
++  const score = (key, layers) => {
++    ps.layers[RHINE_BOND] = layers; ps.recompute();
++    return rhineItemSynergy(m, ps, `${E[key].key}_a`);
++  };
++  const mainframe100 = score('mainframe', 100), mainframe400 = score('mainframe', 400);
++  assert.ok(mainframe400 > mainframe100);
++  assert.ok(score('mainframe', 999) > mainframe400);
++  assert.equal(score('terminal', 100), score('terminal', 400), 'terminal alone has no uncapped effect');
++  const mf = giveItem(m, ps, `${E.mainframe.key}_a`);
++  assert.equal(ps.equip(mf.uid, rhine.uid).ok, true);
++  const paired100 = score('terminal', 100), paired400 = score('terminal', 400);
++  assert.ok(paired400 > paired100, 'pairing doubles the uncapped mainframe contribution');
++  assert.ok(score('terminal', 999) > paired400);
++  assert.deepEqual(h.logs.error, []); m.dispose();
++});
++
+ test('Rhine equipment bot leaves a full transformed carrier intact and chooses a free deployed Rhine member', () => {
+   const { h, m, ps } = prep();
+   const transformed = give(m, ps, chess('char_416_zumama'), 'board', [10, 5]);
+diff --git a/test/render/rhineDevices.browser.test.js b/test/render/rhineDevices.browser.test.js
+index 240429d..30b48be 100644
+--- a/test/render/rhineDevices.browser.test.js
++++ b/test/render/rhineDevices.browser.test.js
+@@ -10,14 +10,17 @@ import { fileURLToPath } from 'node:url';
+ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+ const OUT = path.join(ROOT, 'test/e2e/out');
+ const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+-const enabled = process.env.RENDER_E2E === '1' && existsSync(CHROME) && existsSync(path.join(ROOT, 'public/assets'));
++const remoteBase = process.env.RENDER_BASE;
++const enabled = process.env.RENDER_E2E === '1' && existsSync(CHROME) && (remoteBase || existsSync(path.join(ROOT, 'public/assets')));
+ 
+ describe('Rhine grid ranges, charge gauge and pulse cues in Chromium', { skip: enabled ? false : 'set RENDER_E2E=1 with Chrome and downloaded assets' }, () => {
+   let srv, browser;
+   before(async () => {
+-    const { startServer } = await import('../../server/index.js');
+     const puppeteer = (await import('puppeteer-core')).default;
+-    srv = await startServer({ port: 0, host: '127.0.0.1', quiet: true });
++    if (!remoteBase) {
++      const {startServer}=await import('../../server/index.js');
++      srv=await startServer({port:0,host:'127.0.0.1',quiet:true});
++    }
+     browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-first-run'] });
+     mkdirSync(OUT, { recursive: true });
+   });
+@@ -27,7 +30,7 @@ describe('Rhine grid ranges, charge gauge and pulse cues in Chromium', { skip: e
+     const page = await browser.newPage(), problems = [];
+     page.on('pageerror', e => problems.push(e.message));
+     await page.setViewport({ width: 1600, height: 900 });
+-    await page.goto(`http://127.0.0.1:${srv.port}/${url}`);
++    await page.goto(`${remoteBase || `http://127.0.0.1:${srv.port}`}/${url}`);
+     await page.waitForFunction(hook, { timeout: 40000 });
+     return { page, problems };
+   }
+@@ -116,12 +119,24 @@ describe('Rhine grid ranges, charge gauge and pulse cues in Chromium', { skip: e
+       });
+       assert.ok(Math.abs(partial.share - 2 / 3) < .001); assert.equal(partial.below, true); assert.equal(partial.tint, 0xffbc70);
+       await page.screenshot({ path: path.join(OUT, 'rhine-charge-partial.png') });
+-      const activation = await page.evaluate(() => {
++      await page.evaluate(() => window.__demo.view.pushSnapshot({ gt: .5, units: [[701,6,10,1,1,3,3,0,0], [702,8,10,1000,1000,0,0,0,0]] }));
++      await page.waitForFunction('window.__demo.view.debug.views.get(701).spGlow.visible && window.__demo.view.debug.views.get(701).researchActor.core.tint === 0xffe8c4');
++      const readyAt = await page.evaluate(() => performance.now());
++      await page.waitForFunction(start => performance.now() - start > 5000 && window.__demo.view.debug.views.get(701).spGlow.visible,
++        { timeout: 10000 }, readyAt);
++      assert.equal(await page.evaluate(() => window.__demo.view.debug.views.get(701).researchActor.pulse), 0, 'full charge waits without pretending to fire');
++      await page.screenshot({ path: path.join(OUT, 'rhine-charge-ready.png') });
++      const activation = await page.evaluate(async () => {
++        const { energyPulseRange } = await import('/shared/rhineRange.js');
+         const v = window.__demo.view, fx = v.debug.fx;
+         fx.simFx('rhinePulse', 8, 10, { source: 701, stage: 2 });
+-        return { beams: fx.beamList.length, rings: fx.rings.length, pulse: v.debug.views.get(701).researchActor.pulse };
++        const rect = fx.ctx.fieldRect();
++        return { beams: fx.beamList.length, rings: fx.rings.length, pulse: v.debug.views.get(701).researchActor.pulse,
++          tiles: fx.tileFlashes.at(-1).tiles,
++          expected: energyPulseRange(2).grid.map(([r,c]) => [10+r,8+c]).filter(([r,c]) => r >= rect.r0 && r <= rect.r1 && c >= rect.c0 && c <= rect.c1) };
+       });
+       assert.equal(activation.beams, 1); assert.ok(activation.rings >= 2); assert.equal(activation.pulse, 1);
++      assert.deepEqual(activation.tiles, activation.expected);
+       await page.screenshot({ path: path.join(OUT, 'rhine-pulse-low-quality.png') });
+       await page.evaluate(() => window.__demo.view.pushSnapshot({ gt: 1, units: [[701,6,10,1,1,0,3,0,0], [702,8,10,900,1000,0,0,0,0]] }));
+       await page.waitForFunction('window.__demo.view.debug.views.get(701).sp < .01');
+@@ -129,4 +144,38 @@ describe('Rhine grid ranges, charge gauge and pulse cues in Chromium', { skip: e
+       assert.deepEqual(problems, []);
+     } finally { await page.close(); }
+   });
++
++  test('a mid-battle ecology UnitInfo restores the continuous grid without any periodic fx replay', async () => {
++    const { page, problems } = await open('dev/render-demo.html?scene=prep&paused=1&board=2d&quality=low&panel=0',
++      'window.__demo?.ready');
++    try {
++      await page.evaluate(() => {
++        const v = window.__demo.view;
++        v.setCamera('normal', { instant: true });
++        v.enterBattle({ fieldId: 'rhine-join-test', kind: 'normal', stageId: 'act2autochess_m01',
++          units: [{ id: 703, kind: 'token', side: 'ally', defId: 'token_rhine_ecology', x: 5, y: 10, maxHp: 1, researchStage: 2, researchActive: true },
++            { id: 704, kind: 'token', side: 'ally', defId: 'token_rhine_ecology', x: 9, y: 11, maxHp: 1, researchStage: 2, researchActive: false }] });
++        v.pushSnapshot({ gt: 15, units: [[703,5,10,1,1,0,0,0,0], [704,9,11,1,1,0,0,0,0]] });
++      });
++      await page.waitForFunction('window.__demo.view.debug.fx.tileFlashes.some(f => f.key === "rhineEcology:703")');
++      const area = await page.evaluate(async () => {
++        const { researchRangeTiles } = await import('/shared/rhineRange.js');
++        const fx = window.__demo.view.debug.fx, field = fx.tileFlashes.find(f => f.key === 'rhineEcology:703');
++        return { tiles: field.tiles, expected: researchRangeTiles(10, 5, 3, fx.ctx.fieldRect()),
++          persistent: field.dur === Infinity, pulse: field.anchor.researchActor.pulse,
++          stoppedField: fx.tileFlashes.some(f => f.key === 'rhineEcology:704') };
++      });
++      assert.deepEqual(area.tiles, area.expected);
++      assert.equal(area.persistent, true);
++      assert.equal(area.pulse, 0, 'restoring the continuous slow does not replay a bind');
++      assert.equal(area.stoppedField, false, 'inactive UnitInfo must not restore a stale field after reconnect');
++      await page.waitForFunction('window.__demo.view.debug.fx.tileFlashes.some(f => f.key === "rhineEcology:703" && f.t > 5)', { timeout: 10000 });
++      await page.screenshot({ path: path.join(OUT, 'rhine-ecology-reconnect.png') });
++      await page.evaluate(() => window.__demo.view.debug.fx.simFx('rhineEcology', 5, 10, { source: 703, stage: 2, continuous: true, active: false }));
++      await page.waitForFunction('window.__demo.view.debug.views.get(703).info.researchActive === false && !window.__demo.view.debug.fx.tileFlashes.some(f => f.key === "rhineEcology:703")');
++      await page.evaluate(() => window.__demo.view.debug.fx.simFx('rhineEcology', 5, 10, { source: 703, stage: 2, radius: 3, continuous: true, active: true }));
++      await page.waitForFunction('window.__demo.view.debug.fx.tileFlashes.some(f => f.key === "rhineEcology:703" && f.dur === Infinity)');
++      assert.deepEqual(problems, []);
++    } finally { await page.close(); }
++  });
+ });
+diff --git a/test/render/rhineDevices.test.js b/test/render/rhineDevices.test.js
+index 559f188..21c73a2 100644
+--- a/test/render/rhineDevices.test.js
++++ b/test/render/rhineDevices.test.js
+@@ -4,7 +4,8 @@ import { installFakePixi, fakeViewCtx } from './fakepixi.js';
+ import { presetCamera } from '../../public/js/render/projection.js';
+ import { researchPose, RHINE_LOOK } from '../../public/js/render/rhineDevices.js';
+ import { FxSystem } from '../../public/js/render/fx.js';
+-import { RHINE_DEVICES } from '../../shared/rhineResearch.js';
++import { energyPulseRange } from '../../shared/rhineRange.js';
++import { RHINE_DEVICES, RHINE_BALANCE } from '../../shared/rhineResearch.js';
+ import { createAssets } from '../../public/js/assets.js';
+ import { GEO } from '../../shared/constants.js';
+ import { COLORS } from '../../public/js/render/style.js';
+@@ -142,18 +143,22 @@ test('actual source ids animate the device while medical and pulse effects use t
+   assert.deepEqual(rings[0].slice(0, 2), [3, 4]);
+   rings.length = 0;
+   fx.simFx('rhinePulse', 3, 4, { source: 20, stage: 0 });
+-  assert.deepEqual(rings.map(r => r.slice(0, 2)), [[1, 2], [3, 4]]);
+-  assert.equal(rings[1][4], 0.38, 'prototype impact does not imply an area attack');
++  assert.deepEqual(rings.map(r => r.slice(0, 2)), [[1, 2], [3, 4], [3, 4]]);
++  assert.equal(rings[1][4], energyPulseRange(0).radius, 'the prototype already has the actual radius-one splash');
+   assert.equal(beams[1][0], source, 'a visible beam starts at the firing tower');
+   assert.deepEqual([beams[1][1].x, beams[1][1].y], [3, 4], 'instant hit cue terminates at the sim impact point');
+   assert.equal(particles.length, 1, 'high quality adds a muzzle flare to the persistent actor pulse');
+   rings.length = 0;
+   fx.simFx('rhinePulse', 3, 4, { source: 20, stage: 2 });
+-  assert.equal(rings.length, 3); assert.equal(rings[1][4], 1);
+-  fx.simFx('rhineEcology', 1, 2, { source: 20, stage: 2, radius: 3 });
+-  assert.ok(flashes[0][0].length > 0, 'ecology activation lights complete cells instead of a round area');
+-  assert.equal(flashes[0][2], 2, 'four game seconds at 2x battle speed');
+-  assert.equal(flashes[0][3], true, 'the cells pulse for the active interval');
++  assert.equal(rings.length, 2);
++  assert.deepEqual(flashes[0][0], energyPulseRange(2).grid.map(([r,c]) => [4+r,3+c]), 'the mature grid centres on the struck target, not the source');
++  fx.simFx('rhineEcology', 1, 2, { source: 20, stage: 2, radius: 3, continuous: true, bind: true, duration: RHINE_BALANCE.ecologyInterval });
++  assert.ok(flashes[1][0].length > 0, 'ecology activation lights complete cells instead of a round area');
++  assert.equal(flashes[1][2], RHINE_BALANCE.ecologyInterval / 2, 'continuous field covers the full refresh interval at 2x battle speed');
++  assert.equal(flashes[1][3], false, 'the continuous field is not a periodic danger flash');
++  assert.equal(flashes[1][4].steady, true);
++  assert.equal(flashes[2][2], RHINE_BALANCE.ecologyBindDuration / 2, 'bind is a separate one-game-second cue');
++  assert.equal(flashes[2][3], true);
+   assert.doesNotThrow(() => fx.simFx('rhineHeal', 3, 4, { source: 999, target: 999 }), 'missing/removed source leaves a safe point effect');
+ });
+ 
+@@ -185,6 +190,29 @@ test('energy charge uses the real skill gauge under the tower, including zero/pa
+   prep.destroy();
+ });
+ 
++test('a fully charged tower stays visibly ready without inventing firing events, including after reconnect', async () => {
++  const ctx = fakeViewCtx(fake.P, { cam: () => cam, settings: { quality: 'low' }, assets: { image: async () => ({ width: 100, height: 140 }) } });
++  const info = renderInfo({ id: 220, kind: 'token', defId: 'token_rhine_energy', side: 'ally', x: 5, y: 12,
++    maxHp: 1, sp: 3, spMax: 3, researchStage: 2 });
++  const v = new UnitView(ctx, info);
++  await tick(); await tick();
++  for (let i = 0; i <= 600; i++) v.update(1 / 60, cam, i / 60);
++  assert.equal(v.spGlow.visible, true, 'held charge does not expire with the brief firing animation');
++  assert.equal(v.spFill.tint, COLORS.spReady);
++  assert.equal(v.researchActor.core.tint, 0xffe8c4);
++  assert.equal(v.researchActor.pulse, 0, 'a full charge is not itself a successful shot');
++  assert.ok(v.researchActor.core.alpha > researchPose('energy', 10 + v.bob, 2).light);
++  v.sync({ x: 5, y: 12, hp: 1, maxHp: 1, sp: 0, spMax: 3, flags: 0, anim: 0, vx: 0 }, 1);
++  v.update(1 / 60, cam, 11);
++  assert.equal(v.spGlow.visible, false);
++  assert.equal(v.researchActor.core.tint, RHINE_LOOK.energy.tint, 'the next snapshot clears readiness after consumption');
++  v.destroy();
++  const prep = new UnitView(ctx, info, { prep: true });
++  await tick(); await tick(); prep.update(1 / 60, cam, 0);
++  assert.equal(prep.researchActor.core.tint, RHINE_LOOK.energy.tint, 'preparation does not reuse combat readiness');
++  prep.destroy();
++});
++
+ test('low quality keeps the actual pulse beam and impact, and ecology visuals match the clipped field grid', () => {
+   const beams = [], rings = [], flashes = [];
+   const source = { id: 1, x: 6, y: 10, z: 0, onResearchFx() {} };
+@@ -195,16 +223,95 @@ test('low quality keeps the actual pulse beam and impact, and ecology visuals ma
+     particle: () => { throw new Error('low quality must shed the extra muzzle particle'); } });
+   fx.simFx('rhinePulse', 8.4, 10.4, { source: 1, stage: 2 });
+   assert.equal(beams.length, 1);
+-  assert.equal(rings.length, 2, 'source firing and true splash remain clear');
++  assert.equal(rings.length, 2, 'source firing and the impact point remain clear');
++  assert.deepEqual(flashes[0][0], energyPulseRange(2).grid.map(([r,c]) => [10+r,8+c]).filter(([r,c]) => r >= 9 && r <= 12 && c >= 0 && c <= 10));
++  assert.equal(flashes[0][0].some(([r,c]) => r === 12 && c === 10), false, 'calcification is the 25-cell diamond, not the 29-cell ecology disc');
+   const before = rings.length;
+-  fx.simFx('rhineEcology', 6, 10, { source: 1, stage: 2, radius: 3 });
++  fx.simFx('rhineEcology', 6, 10, { source: 1, stage: 2, radius: 3, continuous: true });
+   assert.equal(rings.length, before, 'ecology range no longer emits a circular boundary');
+-  const tiles = flashes[0][0];
++  const tiles = flashes[1][0];
+   assert.ok(tiles.every(([r,c]) => r >= 9 && r <= 12 && c >= 0 && c <= 10));
+   assert.ok(tiles.some(([r,c]) => r === 10 && c === 9));
+   assert.equal(tiles.some(([r,c]) => r === 12 && c === 9), false);
+ });
+ 
++test('continuous ecology stays visible through its refresh interval and only bind events animate its activation', async () => {
++  const fills = [], fx = Object.create(FxSystem.prototype);
++  Object.assign(fx, { ctx: { cam: () => cam, heightAt: () => 0 }, tileFlashes: [], _p: {},
++    tileGfx: { clear() {}, lineStyle() {}, beginFill(c, a) { fills.push(a); }, drawPolygon() {}, endFill() {} } });
++  const field = { steady: true, key: 'rhineEcology:1' };
++  fx.tileFlash([[10,6]], 0x73dfd5, RHINE_BALANCE.ecologyInterval, false, field);
++  for (let i = 0; i < 20; i++) fx.tileFlash([[10,7]], 0xffffff, .3);
++  assert.equal(fx.tileFlashes.filter(f => f.steady).length, 1, 'ordinary hit flashes cannot evict the continuous field');
++  assert.equal(fx.tileFlashes.filter(f => !f.steady).length, 12);
++  fx._updateTileFlashes(RHINE_BALANCE.ecologyInterval - .01);
++  assert.equal(fx.tileFlashes.length, 1);
++  assert.ok(fills.at(-1) > .05, 'a continuous aura does not fade away during the last part of its cycle');
++  fx.tileFlash([[10,6]], 0x73dfd5, RHINE_BALANCE.ecologyInterval, false, field);
++  assert.equal(fx.tileFlashes.length, 1, 'refresh replaces the same field instead of stacking brightness');
++  assert.equal(fx.tileFlashes[0].t, 0);
++  fx._updateTileFlashes(RHINE_BALANCE.ecologyInterval);
++  assert.equal(fx.tileFlashes.length, 0, 'an unrefreshed field expires instead of leaking into another battle');
++  const ctx = fakeViewCtx(fake.P, { cam: () => cam, assets: { image: async () => ({ width: 100, height: 140 }) } });
++  const v = new UnitView(ctx, { id: 230, kind: 'token', defId: 'token_rhine_ecology', side: 'ally', x: 5, y: 12, maxHp: 1, researchStage: 1 });
++  await tick(); await tick();
++  v.onResearchFx('rhineEcology', { stage: 1, continuous: true });
++  assert.equal(v.researchActor.pulse, 0, 'the opening slow aura does not imply a bind');
++  v.onResearchFx('rhineEcology', { stage: 1, continuous: true, bind: true });
++  assert.equal(v.researchActor.pulse, 1);
++  v.destroy();
++});
++
++test('joining mid-battle restores ecology immediately from effective UnitInfo and cleans it up with the device', async () => {
++  const ctx = fakeViewCtx(fake.P, { cam: () => cam, fieldRect: () => ({ r0: 0, r1: 18, c0: 0, c1: 20 }),
++    assets: { image: async () => ({ width: 100, height: 140 }) } });
++  const fx = Object.create(FxSystem.prototype);
++  Object.assign(fx, { ctx, tileFlashes: [], _p: {}, tileGfx: new fake.P.Graphics() });
++  ctx.fx = fx;
++  const info = renderInfo({ id: 240, kind: 'token', defId: 'token_rhine_ecology', side: 'ally', x: 5, y: 12, maxHp: 1, researchStage: 0 });
++  const v = new UnitView(ctx, info);
++  ctx.view = id => id === v.id ? v : null;
++  await tick(); await tick();
++  v.update(1 / 60, cam, 15); // no research event has been replayed
++  assert.equal(fx.tileFlashes.length, 1);
++  const field = fx.tileFlashes[0], tiles = field.tiles;
++  assert.equal(tiles.length, 13);
++  assert.equal(field.anchor, v);
++  assert.equal(field.dur, Infinity, 'effective deployed ecology is continuous rather than a stale eight-second burst');
++  for (let i = 0; i < 600; i++) { v.update(1 / 60, cam, 15 + i / 60); fx._updateTileFlashes(1 / 60); }
++  assert.equal(fx.tileFlashes.length, 1);
++  assert.equal(fx.tileFlashes[0], field);
++  assert.equal(field.tiles, tiles, 'idle updates allocate neither a new effect nor a new range array');
++  v.setResearchStage(2); v.update(1 / 60, cam, 26);
++  assert.equal(fx.tileFlashes[0], field);
++  assert.equal(field.tiles.length, 29, 'metadata refresh replaces the smaller field');
++  fx.simFx('rhineEcology', 5, 12, { source: v.id, stage: 2, continuous: true, active: false });
++  assert.equal(v.info.researchActive, false);
++  assert.equal(fx.tileFlashes.length, 0, 'an alliance shutdown removes the field immediately');
++  for (let i = 0; i < 10; i++) v.update(1 / 60, cam, 26 + i / 60);
++  assert.equal(fx.tileFlashes.length, 0, 'stage metadata alone cannot resurrect an explicitly inactive field');
++  fx.simFx('rhineEcology', 5, 12, { source: v.id, stage: 2, radius: 3, continuous: true, active: true });
++  v.update(1 / 60, cam, 26.5);
++  assert.equal(fx.tileFlashes.length, 1);
++  assert.equal(fx.tileFlashes[0].tiles.length, 29);
++  assert.equal(fx.tileFlashes[0].dur, Infinity);
++  assert.equal(v.researchActor.pulse, 0, 'reactivation resumes slow without replaying a bind');
++  v.destroy(); fx._updateTileFlashes(1 / 60);
++  assert.equal(fx.tileFlashes.length, 0, 'removed units cannot leave a persistent field behind');
++  const prep = new UnitView(ctx, info, { prep: true });
++  prep.update(1 / 60, cam, 27);
++  assert.equal(fx.tileFlashes.length, 0, 'preparation metadata never implies an active combat aura');
++  prep.destroy();
++  const inactive = new UnitView(ctx, { ...info, id: 241, researchStage: undefined });
++  inactive.update(1 / 60, cam, 27);
++  assert.equal(fx.tileFlashes.length, 0, 'an unselected device without effective stage metadata stays inert');
++  inactive.destroy();
++  const stopped = new UnitView(ctx, { ...info, id: 242, researchStage: 2, researchActive: false });
++  stopped.update(1 / 60, cam, 28);
++  assert.equal(fx.tileFlashes.length, 0, 'joining a stopped device does not restore its old effective range');
++  stopped.destroy();
++});
++
+ test('an activation expires offscreen and is not replayed when its device re-enters the viewport', async () => {
+   const ctx = fakeViewCtx(fake.P, { cam: () => cam, assets: { image: async () => ({ width: 100, height: 140 }) } });
+   const v = new UnitView(ctx, { id: 100, kind: 'token', defId: 'token_rhine_energy', side: 'ally', x: 5, y: 12, maxHp: 1 });
+diff --git a/test/rhineResearch_shared.test.js b/test/rhineResearch_shared.test.js
+index 29c217a..27137ec 100644
+--- a/test/rhineResearch_shared.test.js
++++ b/test/rhineResearch_shared.test.js
+@@ -1,6 +1,8 @@
+ import { test } from 'node:test';
+ import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
+ import { RHINE_BALANCE, advanceRhineResearch, rhineStage } from '../shared/rhineResearch.js';
++import { CALCIFICATION_GRID, energyPulseRange } from '../shared/rhineRange.js';
+ 
+ test('Rhine shared progress: each stage requires five points and resets exactly to zero', () => {
+   assert.deepEqual(RHINE_BALANCE.breakthroughPoints, [5, 5]);
+@@ -29,3 +31,28 @@ test('Rhine shared progress: stage is independent of current points and one sett
+   assert.deepEqual(advanceRhineResearch(before, 2), { stage: 2, points: 0 });
+   assert.deepEqual(before, { stage: 1, points: 3 }, 'snapshots are not mutated');
+ });
++
++test('mature energy splash matches Saria Calcification in both actual operator records', () => {
++  const chess = JSON.parse(readFileSync(new URL('../data/chess.json', import.meta.url), 'utf8'));
++  const canonical = grid => grid.map(([r, c]) => `${r},${c}`).sort();
++  const variants = Object.values(chess).filter(c => c.charId === 'char_202_demkni');
++  assert.equal(variants.length, 2);
++  for (const variant of variants) {
++    const s3 = variant.skills.find(s => s.skillId === 'skchr_demkni_3');
++    assert.equal(s3.rangeId, 'x-3');
++    assert.deepEqual(canonical(CALCIFICATION_GRID), canonical(s3.rangeGrid));
++  }
++  assert.equal(CALCIFICATION_GRID.length, 25);
++  for (const [r, c] of CALCIFICATION_GRID) assert.ok(Math.abs(r) + Math.abs(c) <= 3);
++  assert.equal(CALCIFICATION_GRID.some(([r, c]) => r === 2 && c === 2), false, 'not a radius-3 circle');
++  assert.ok(CALCIFICATION_GRID.some(([r, c]) => r === 3 && c === 0));
++  assert.ok(Object.isFrozen(CALCIFICATION_GRID));
++  assert.ok(CALCIFICATION_GRID.every(Object.isFrozen));
++});
++
++test('energy splash has AOE at level one and changes only to the mature tile shape at level three', () => {
++  for (const stage of [0, 1]) assert.deepEqual(energyPulseRange(stage), { radius: 1, grid: null, tileBased: false });
++  assert.deepEqual(energyPulseRange(2), { radius: 3, grid: CALCIFICATION_GRID, tileBased: true });
++  assert.deepEqual(energyPulseRange(99), energyPulseRange(2));
++  assert.deepEqual(energyPulseRange(-3), energyPulseRange(0));
++});
+diff --git a/test/rhine_data.test.js b/test/rhine_data.test.js
+index 1f4ad62..17d60c1 100644
+--- a/test/rhine_data.test.js
++++ b/test/rhine_data.test.js
+@@ -14,6 +14,23 @@ const names=['chess','bonds','garrisons','tokens','effects','config','items'];
+ const files=Object.fromEntries(await Promise.all(names.map(async n=>[n,JSON.parse(await readFile(new URL(`../data/${n}.json`,import.meta.url),'utf8'))])));
+ const source=JSON.parse(await readFile(new URL('../tools/rhine-data-source.json',import.meta.url),'utf8'));
+ 
++test('Rhine data: six-member research sharing and the new three device levels are discoverable', () => {
++  const bond = files.bonds.rhineShip;
++  assert.equal(bond.bb.sharing_count, 6);
++  assert.equal(bond.bb.sharing_atk, .15);
++  assert.equal(bond.bb.sharing_golden_atk, .25);
++  assert.match(bond.desc, /最高基础攻击力的15%/);
++  assert.match(bond.desc, /精锐25%/);
++  const energy = files.tokens.token_rhine_energy;
++  assert.match(energy.desc, /一级/);
++  assert.match(energy.desc, /范围法术脉冲/);
++  assert.match(energy.desc, /己方全场/);
++  assert.match(energy.desc, /钙质化.*25格/);
++  assert.doesNotMatch(energy.desc, /伤害提高/);
++  const ecology = files.tokens.token_rhine_ecology;
++  assert.match(ecology.desc, /持续减速50%/);
++  assert.match(ecology.desc, /每8秒/);
++});
+ test('Rhine data: offline overlay is idempotent and preserves unrelated operator identities',async()=>{
+   const before=JSON.stringify(files);const original=structuredClone(files.chess.chess_char_1_01_a);
+   await applyRhineData(files);assert.equal(JSON.stringify(files),before);
+@@ -151,7 +168,7 @@ test('Rhine data: both Mayer skills keep deployable otters with correct module v
+     }
+   }
+ });
+-test('Rhine data: every selectable skill has a manifest entry',async()=>{
++test('Rhine data: every selectable skill has a manifest entry',{skip:!existsSync(new URL('../public/assets/',import.meta.url))},async()=>{
+   const assets=JSON.parse(await readFile(new URL('../data/assets.json',import.meta.url),'utf8'));
+   for(const spec of RHINE_ADDITIONS)for(const s of files.chess[`chess_rhine_${spec.key}_a`].skills){
+     const path=assets.skills[assets.skillsById[s.skillId]];
+diff --git a/test/rhine_equipment_data.test.js b/test/rhine_equipment_data.test.js
+index ef0ad77..c37b4ea 100644
+--- a/test/rhine_equipment_data.test.js
++++ b/test/rhine_equipment_data.test.js
+@@ -13,7 +13,9 @@ import { addRhineArt } from '../tools/assets/rhine-plan.mjs';
+ const data = getData(), gd = new GameData(data, 'mode_single_normal');
+ const item = (key, gold = false) => `${RHINE_EQUIPMENT[key].key}_${gold ? 'b' : 'a'}`;
+ 
+-test('Rhine equipment: normal and elite effects preserve approved stats, layer limits and upgrade links', () => {
++test('Rhine equipment: normal and elite effects preserve stats, uncapped mainframe growth and upgrade links', () => {
++  assert.equal(Object.hasOwn(RHINE_EQUIPMENT.mainframe, 'attackCap'), false);
++  assert.equal(Object.hasOwn(RHINE_EQUIPMENT.mainframe, 'comboAttackCap'), false);
+   for (const [key, r] of Object.entries(RHINE_EQUIPMENT)) for (const gold of [false, true]) {
+     const it = data.items[item(key, gold)], e = data.effects[it.effectId];
+     assert.equal(it.itemType, 'EQUIP'); assert.equal(it.tier, r.tier); assert.equal(it.isGolden, gold);
+@@ -26,7 +28,7 @@ test('Rhine equipment: normal and elite effects preserve approved stats, layer l
+     assert.deepEqual(stat.bb, key === 'terminal' ? { atk: gold ? .25 : .15 } : { max_hp: gold ? .70 : .45 });
+     assert.deepEqual(extra.bb, key === 'terminal'
+       ? { layer_step: 10, attack_speed: gold ? 3 : 2, max_attack_speed: gold ? 30 : 20 }
+-      : { atk_per_layer: 1, max_atk: 100, combo_atk_per_layer: 2, combo_max_atk: 200 });
++      : { atk_per_layer: 1, combo_atk_per_layer: 2 });
+     assert.equal(it.canGiveBond, false);
+     assert.equal(it.giveBondId, key === 'terminal' ? 'rhineShip' : null);
+     assert.equal(it.requiresBondId, key === 'mainframe' ? 'rhineShip' : null);
+diff --git a/test/ui/rhine.test.js b/test/ui/rhine.test.js
+index 3b3896e..afe0b6a 100644
+--- a/test/ui/rhine.test.js
++++ b/test/ui/rhine.test.js
+@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
+ import { readFileSync } from 'node:fs';
+ import { placementContext, canPlace, dropIntent, indexPieces, boardTargets } from '../../public/js/ui/gameLogic.js';
+ import { retreatSlot, underframeActions } from '../../public/js/ui/facing.js';
+-import { researchTileAt, researchProgress } from '../../public/js/ui/rhineDock.js';
++import { researchTileAt, researchProgress, researchRangeSummary } from '../../public/js/ui/rhineDock.js';
+ import { summonDeployHint } from '../../public/js/ui/detailPanel.js';
+ import { RHINE_DEVICES, rhineAttack, rhineStage } from '../../shared/rhineResearch.js';
+ const stage = JSON.parse(readFileSync(new URL('../../data/stages.json', import.meta.url))).act2autochess_m01;
+@@ -58,3 +58,15 @@ test('UI shows growth thresholds and research instructions without a fictional s
+   assert.equal(rhineStage(2), 2);
+   assert.match(summonDeployHint({ tokenId: RHINE_DEVICES[0].tokenId }), /科研/);
+ });
++
++test('dock range summaries separate nearby targeting from global charging and mature splash', () => {
++  const energy = RHINE_DEVICES.find(d => d.key === 'energy').tokenId;
++  assert.match(researchRangeSummary({ id: energy, stage: 0 }), /选敌 13 格.*范围内充能.*溅射半径 1/);
++  assert.match(researchRangeSummary({ id: energy, stage: 1 }), /选敌 13 格.*本方全场充能.*溅射半径 1/);
++  assert.match(researchRangeSummary({ id: energy, stage: 2 }), /选敌 13 格.*本方全场充能.*钙质化 25 格/);
++  assert.equal(researchRangeSummary({ id: energy, stage: 99 }), researchRangeSummary({ id: energy, stage: 2 }));
++  const ecology = RHINE_DEVICES.find(d => d.key === 'ecology').tokenId;
++  assert.match(researchRangeSummary({ id: ecology, stage: 0 }), /范围 13 格.*半径 2.*持续减速 50%/);
++  assert.match(researchRangeSummary({ id: ecology, stage: 2 }), /范围 29 格.*半径 3.*持续减速 50%/);
++  assert.equal(researchRangeSummary({ id: 'unrelated' }), '');
++});
+diff --git a/test/ui/rhineRange.test.js b/test/ui/rhineRange.test.js
+index eadd094..b1149f1 100644
+--- a/test/ui/rhineRange.test.js
++++ b/test/ui/rhineRange.test.js
+@@ -173,10 +173,13 @@ test('renderer draws clipped circles on terrain tops, replaces them at breakthro
+   assert.equal(rendered.hlGfx.polygons.length, 0);
+ });
+ 
+-test('descriptions distinguish complete cell coverage from circular splash and explain ecology timing', () => {
++test('descriptions distinguish targeting, global charging and both splash shapes, plus continuous ecology', () => {
+   assert.match(researchRangeText(device('medical')), /半径 2 格.*整格区域.*13 格.*本方干员.*召唤物.*机械水獭/);
+-  assert.match(researchRangeText(device('energy')), /充能干员与主目标.*半径 2 格.*整格区域.*突破Ⅰ.*实际半径 1 格.*范围外/);
+-  assert.match(researchRangeText(device('ecology', 2)), /当前覆盖半径 3 格.*整格区域.*29 格.*突破Ⅱ为 3 格.*每 8 秒开启 4 秒/);
++  assert.match(researchRangeText(device('energy')), /半径 2 格内己方干员.*主目标仍须.*半径 2 格.*13 格.*一级起.*实际半径 1 格.*范围外.*满充无目标时保留/);
++  assert.match(researchRangeText(device('energy', 1)), /己方全场干员.*主目标仍须.*半径 2 格.*实际半径 1 格/);
++  assert.match(researchRangeText(device('energy', 2)), /己方全场干员.*主目标仍须.*钙质化 25 格菱形/);
++  assert.match(researchRangeText(device('ecology', 2)), /当前覆盖半径 3 格.*整格区域.*29 格.*持续减速 50%.*三级为 3 格.*每 8 秒额外束缚 1 秒/);
++  assert.doesNotMatch(researchRangeText(device('ecology', 0)), /开启 4 秒|随.*层数/);
+ });
+ 
+ // Inspect component nodes without a DOM: this verifies the label decision, not screenshot rendering.
+diff --git a/test/ui/rhineUpstream.test.js b/test/ui/rhineUpstream.test.js
+index ed976fb..f18ddab 100644
+--- a/test/ui/rhineUpstream.test.js
++++ b/test/ui/rhineUpstream.test.js
+@@ -38,6 +38,18 @@ function* walk(node) {
+   yield* walk(node.props?.children);
+ }
+ 
++test('renderer metadata retains research shutdown separately from the breakthrough when joining a battle', () => {
++  const unit = { id: 500, kind: 'token', side: 'ally', defId: 'token_rhine_ecology', researchStage: 2 };
++  for (const active of [true, false]) {
++    const info = renderInfo({ ...unit, researchActive: active });
++    assert.equal(info.researchStage, 2);
++    assert.equal(info.researchActive, active, 'false is an explicit shutdown rather than absent metadata');
++  }
++  for (const invalid of [undefined, null, 'false', 0, 1]) {
++    assert.equal(renderInfo({ ...unit, researchActive: invalid }).researchActive, undefined);
++  }
++});
++
+ test('clicking a teammate rendered on the canvas retains equipment and the Rhine morph-granted chip', () => {
+   // render/app emits this exact `unit` in pieceClick; game.js uses it directly instead of looking up field meta.
+   const raw = { id: 501, kind: 'op', side: 'ally', ownerId: 'p2', defId: stranger,
+diff --git a/tools/rhine-data.mjs b/tools/rhine-data.mjs
+index 5661f9e..e43a30f 100644
+--- a/tools/rhine-data.mjs
++++ b/tools/rhine-data.mjs
+@@ -21,7 +21,7 @@ export const DOROTHY_TOKEN = 'token_10025_doroth_recttp';
+ const clone = x => structuredClone(x);
+ const BASE_STATS = { maxHp: 3000, atk: 300, def: 0, res: 0, cost: 0, blockCnt: 0, bat: 1, aspd: 100,
+   respawnTime: 999, spRecovery: 0, hpRecoveryPerSec: 0, moveSpeed: 0, tauntLevel: -10, massLevel: 0, deployLimit: 1, deckStack: 0 };
+-const TEXT = `在场${RHINE_BALANCE.thresholds[0]}名不同【莱茵生命】干员时启动一台科研装置；在场${RHINE_BALANCE.thresholds[1]}名时同时启动两台，${RHINE_BALANCE.thresholds[2]}名时三台全部启动。休整期选择生命维持仪、能量谐振仪或生态调控器。装置基础攻击力${RHINE_BALANCE.baseAttack}，每层科研增加${RHINE_BALANCE.attackPerLayer}点。参战成功获得${RHINE_BALANCE.successPoints}研究点，失败获得${RHINE_BALANCE.failurePoints}点；${RHINE_BALANCE.breakthroughPoints.map((n,i) => `第${i+1}次突破需要${n}点`).join('，')}。每次突破后研究点清零，溢出不保留；科研层数不受影响。`;
++const TEXT = `在场${RHINE_BALANCE.thresholds[0]}名不同【莱茵生命】干员时启动一台科研装置；在场${RHINE_BALANCE.thresholds[1]}名时同时启动两台，${RHINE_BALANCE.thresholds[2]}名时三台全部启动。达到${RHINE_BALANCE.sharingCount}名时，除伊芙利特和治疗干员外的莱茵输出干员获得己方已部署装置中最高基础攻击力的${RHINE_BALANCE.researchSharing[0] * 100}%，精锐${RHINE_BALANCE.researchSharing[1] * 100}%，作为额外攻击力；多个装置不重复共享。休整期选择生命维持仪、能量谐振仪或生态调控器。装置基础攻击力${RHINE_BALANCE.baseAttack}，每层科研增加${RHINE_BALANCE.attackPerLayer}点。参战成功获得${RHINE_BALANCE.successPoints}研究点，失败获得${RHINE_BALANCE.failurePoints}点；${RHINE_BALANCE.breakthroughPoints.map((n,i) => `第${i+1}次突破需要${n}点`).join('，')}。每次突破后研究点清零，溢出不保留；科研层数不受影响。`;
+ 
+ // This expansion is not a sandbox/roguelike mode. Preserve the source conditions for auditing,
+ // but never compile mode-restricted module parts into the live ordinary-battle blackboards.
+@@ -68,7 +68,7 @@ function makeGarrison(key, gold) {
+   if (key === 'copy_end') return garrison(id, '身前一格干员若为“休整期结束时”特质，本干员的特质与其相同', 'SERVER_PREP_FIN', 'SERVER_FRONT_SAME_EFFECT_PREP_FIN');
+   if (key === 'mayer') return garrison(id, `战斗中，每${r.mayerLayerStep}层科研使身前一格的科研装置攻击力+${r.mayerAttack[grade]}`, 'IN_BATTLE', 'RHINE_MAYER_RESEARCH', { layer_step: r.mayerLayerStep, atk: r.mayerAttack[grade] });
+   if (key === 'saria') return garrison(id, `战斗中，每${r.sariaLayerStep}层科研使自身治疗量提高${r.sariaHealBonus[grade] * 100}%`, 'IN_BATTLE', 'RHINE_SARIA_HEALING', { layer_step: r.sariaLayerStep, heal: r.sariaHealBonus[grade] });
+-  if (key === 'ifrit') return garrison(id, `战斗中，自身获得己方已部署科研装置基础攻击力总和的${r.ifritInheritance[grade] * 100}%作为额外攻击力`, 'IN_BATTLE', 'RHINE_IFRIT_INHERITANCE', { atk_scale: r.ifritInheritance[grade] });
++  if (key === 'ifrit') return garrison(id, `战斗中，自身获得己方已部署科研装置基础攻击力总和的${r.ifritInheritance[grade] * 100}%作为额外攻击力，无独立继承上限`, 'IN_BATTLE', 'RHINE_IFRIT_INHERITANCE', { atk_scale: r.ifritInheritance[grade] });
+   if (key === 'astgenne') return garrison(id, `战斗中，首次开启技能时，使已激活的【莱茵生命】与【精准】各增加${r.astgenneFirstSkillLayers[grade]}层`, 'IN_BATTLE', 'RHINE_ASTGENNE_FIRST_SKILL', { layer: r.astgenneFirstSkillLayers[grade] }, { bond_ids: `${RHINE_BOND},preciShip` });
+   if (key === 'dorothy') return garrison(id, `战斗中，自身布置的陷阱每触发一枚，使已激活的【莱茵生命】增加${r.dorothyTrapLayers[grade]}层；每场普通主战最多获得${r.dorothyBattleLayerCap[grade]}层。一枚陷阱命中多人只计一次，连锁引爆逐枚计数；双倍伤害陷阱不额外产层，撤回、搬动或未触发销毁不产层`, 'IN_BATTLE', 'RHINE_DOROTHY_TRAP_RESEARCH', { layer: r.dorothyTrapLayers[grade], max_layer: r.dorothyBattleLayerCap[grade] }, { bond_id: RHINE_BOND });
+   return garrison(id, `休整期结束时，每名实际在场的莱茵生命干员使莱茵生命增加${r.ptilopsisLayersPerMember[grade]}层科研；同名干员分别计数，调和的虚拟人数不计入`, 'SERVER_PREP_FIN', 'RHINE_RESEARCH_BY_MEMBER', { layer: r.ptilopsisLayersPerMember[grade] }, { conditionkey: 'character_target_inboard' });
+@@ -168,7 +168,7 @@ function applyEquipment({ items, effects }) {
+     const stat = terminal ? { atk: r.attack[grade] } : { max_hp: r.hp[grade] };
+     const special = terminal
+       ? { layer_step: r.layerStep, attack_speed: r.attackSpeed[grade], max_attack_speed: r.attackSpeedCap[grade] }
+-      : { atk_per_layer: r.attackPerLayer, max_atk: r.attackCap, combo_atk_per_layer: r.comboAttackPerLayer, combo_max_atk: r.comboAttackCap };
++      : { atk_per_layer: r.attackPerLayer, combo_atk_per_layer: r.comboAttackPerLayer };
+     const specialStrings = { key: `rhine_${spec.key}`, ...(terminal ? {} : { equip_chess_id: RHINE_EQUIPMENT.terminal.key }) };
+     const buffs = [
+       { key: 'env_gbuff_new_with_verify', countType: 'NONE', bb: stat, bbStr: { key: 'attr_common_global_buff' } },
+@@ -176,7 +176,7 @@ function applyEquipment({ items, effects }) {
+     ];
+     const desc = terminal
+       ? `攻击力+${r.attack[grade] * 100}%；己方【莱茵生命】盟约激活时，携带者每${r.layerStep}层科研获得${r.attackSpeed[grade]}攻击速度，最多${r.attackSpeedCap[grade]}。`
+-      : `生命上限+${r.hp[grade] * 100}%；携带者属于【莱茵生命】且在场时，己方每台已部署科研装置每层科研额外获得${r.attackPerLayer}点基础攻击力，最多${r.attackCap}。携带者同时装备“莱茵实验终端”时，变为每层${r.comboAttackPerLayer}点，最多${r.comboAttackCap}。多个主机只取最强效果，不叠加。该增益计入伊芙利特的继承。`;
++      : `生命上限+${r.hp[grade] * 100}%；携带者属于【莱茵生命】且在场时，己方每台已部署科研装置每层科研额外获得${r.attackPerLayer}点基础攻击力。携带者同时装备“莱茵实验终端”时，变为每层${r.comboAttackPerLayer}点。该额外攻击无数值上限；多个主机只取最强效果，不叠加。该增益计入伊芙利特的继承与科研成果共享。`;
+     const effectId = `eff_rhine_${spec.key}_${gold ? 'b' : 'a'}`;
+     effects[effectId] = { effectId, effectType: 'EQUIP', name: spec.name, desc, descRaw: desc,
+       counterType: 'NONE', continuedRound: -1, decoIconId: null, enemyPrice: 0,
+@@ -189,7 +189,7 @@ function applyEquipment({ items, effects }) {
+       effectId, effectName: spec.name, desc, descRaw: desc, buffs, params: clone(effects[effectId].params),
+       category: 'BOND_SIGNATURE', kind: 'passive', family: 'rhine',
+       implFormula: terminal ? 'ATK% += atk. If own Rhine bond is active, ASPD += min(floor(layers / layer_step) * attack_speed, max_attack_speed).'
+-        : 'HP% += max_hp. Each deployed research device gains the strongest live Rhine carrier contribution: min(layers * atk_per_layer, max_atk), or combo values when that carrier also equips the terminal. This enters device base ATK before Ifrit inheritance and never reads device ATK.',
++        : 'HP% += max_hp. Each deployed research device gains the strongest live Rhine carrier contribution: layers * atk_per_layer, or combo_atk_per_layer when that carrier also equips the terminal, without an attack cap. This enters device base ATK before inheritance/sharing and never reads device ATK.',
+       rangeGrid: [[0, 0]], flavor: null };
+   }
+   // The ordinary grant mechanism already reads the OTHER item's giveBondId. Explain the new
+@@ -228,7 +228,7 @@ export async function applyRhineData(files, source = null) {
+   const bond = { ...clone(bonds.yanShip), bondId: RHINE_BOND, name: '莱茵生命', identifier: 24, bondOrder: 24,
+     isCore: true, bondType: 'SEASON', iconId: 'rhineShip', activeCount: RHINE_BALANCE.thresholds[0], thresholds: [...RHINE_BALANCE.thresholds], maxCount: null,
+     layerMilestones: [], powerIdList: [], desc: TEXT, descRaw: TEXT, effectId: 'bondeffect_rhine', effectName: '莱茵生命',
+-    effectDesc: TEXT, effectDescRaw: TEXT, effectDescParams: [], bb: { base_atk: RHINE_BALANCE.baseAttack, atk_per_stack: RHINE_BALANCE.attackPerLayer },
++    effectDesc: TEXT, effectDescRaw: TEXT, effectDescParams: [], bb: { base_atk: RHINE_BALANCE.baseAttack, atk_per_stack: RHINE_BALANCE.attackPerLayer, sharing_count: RHINE_BALANCE.sharingCount, sharing_atk: RHINE_BALANCE.researchSharing[0], sharing_golden_atk: RHINE_BALANCE.researchSharing[1] },
+     bbStr: { key: 'rhine_research' }, buffs: [], baseParams: {}, perStackParams: {}, spec: { researchDevices: RHINE_DEVICES.map(d => d.tokenId) } };
+   bonds[RHINE_BOND] = bond;
+   for (const b of Object.values(bonds)) {
+@@ -236,7 +236,7 @@ export async function applyRhineData(files, source = null) {
+     b.visibleMembers = b.members.filter(id => chess[id].visible);
+   }
+   effects.bondeffect_rhine = { effectId: 'bondeffect_rhine', effectType: 'BOND', name: '莱茵生命', desc: TEXT, descRaw: TEXT,
+-    counterType: 'NONE', continuedRound: -1, decoIconId: null, enemyPrice: 0, buffs: [], params: { base_atk: RHINE_BALANCE.baseAttack, atk_per_stack: RHINE_BALANCE.attackPerLayer } };
++    counterType: 'NONE', continuedRound: -1, decoIconId: null, enemyPrice: 0, buffs: [], params: { base_atk: RHINE_BALANCE.baseAttack, atk_per_stack: RHINE_BALANCE.attackPerLayer, sharing_count: RHINE_BALANCE.sharingCount, sharing_atk: RHINE_BALANCE.researchSharing[0], sharing_golden_atk: RHINE_BALANCE.researchSharing[1] } };
+   for (const m of Object.values(config.modes)) {
+     if (!m.activeBondIds.includes(RHINE_BOND)) m.activeBondIds.push(RHINE_BOND);
+     m.inactiveBondIds = m.inactiveBondIds.filter(id => id !== RHINE_BOND);

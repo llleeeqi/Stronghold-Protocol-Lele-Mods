@@ -9,9 +9,9 @@
 | 内容 | 来源仓库 | 作者账号 | 引用提交 |
 |---|---|---|---|
 | 游戏本体、规则、服务端、浏览器客户端及统一启动入口 | [Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | [sganggs](https://github.com/sganggs) | [a9dfd17bee029e09527f08c890f8933163e0bbaa](https://github.com/sganggs/Stronghold-Protocol/commit/a9dfd17bee029e09527f08c890f8933163e0bbaa) |
-| 莱茵生命扩展 | [Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | [YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA) | [cd09d57771f1d3ded43e3330ee47ace2de338130](https://github.com/YUYUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/commit/cd09d57771f1d3ded43e3330ee47ace2de338130) |
+| 莱茵生命扩展 | [Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | [YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA) | [1c520a17e9e161558464853b6aad385c96998af8](https://github.com/YUYUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/commit/1c520a17e9e161558464853b6aad385c96998af8) |
 | 收藏品玩法 | [Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | [UNDFFIO](https://github.com/UNDFFIO) | [17691f155a8fe062d85aecfeec2abe50f0359009](https://github.com/UNDFFIO/Stronghold-Protocol-dlc/commit/17691f155a8fe062d85aecfeec2abe50f0359009) |
-| 新干员包 | [Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | [remember-4](https://github.com/remember-4) | [df2488f021e1b069c22c9215f586559ec388b153](https://github.com/remember-4/Stronghold-Protocol-Rem/commit/df2488f021e1b069c22c9215f586559ec388b153) |
+| 新干员包 | [Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | [remember-4](https://github.com/remember-4) | [97887cac3abc474f4933ac620ecbd043974c6f3d](https://github.com/remember-4/Stronghold-Protocol-Rem/commit/97887cac3abc474f4933ac620ecbd043974c6f3d) |
 | 伤害统计 | [Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol) | [Stardust-minus](https://github.com/Stardust-minus) | [9bb6b2d833978c0aa9ef1713ef188d6c1588169f](https://github.com/Stardust-minus/Stronghold-Protocol/commit/9bb6b2d833978c0aa9ef1713ef188d6c1588169f) |
 
 ## 移植范围与本仓库改动
@@ -30,3 +30,11 @@
 代码采用 GPL-3.0-or-later，保留原项目 LICENSE、NOTICE 和第三方许可。游戏角色、美术、音频、Spine、官方数据及其他第三方内容仍归相应权利人，代码许可不扩大到这些内容。
 
 详见 [上游声明](UPSTREAM-NOTICE.md)、[莱茵声明](RHINE-NOTICE.md)、[莱茵第三方声明](RHINE-THIRD-PARTY-NOTICES.md) 与 [LICENSE](../LICENSE)。再发布构建或继续移植时须保留相关声明，并同步记录新增来源。
+
+## 2026-10-06 选择性同步
+
+莱茵原覆盖层基于 `cd09d57771f1d3ded43e3330ee47ace2de338130`，科研更新取自 `1c520a17e9e161558464853b6aad385c96998af8`（v0.1.3-rhine.2）。移植六莱茵攻击共享、三阶段能量装置、持续减速、主机上限调整与装置停机/重连反馈；没有整体替换为来源 fork 的六人规则，也没有完整合入该 fork 的本体分支。
+
+新干员原覆盖层基于 `df2488f021e1b069c22c9215f586559ec388b153`，修复取自 `97887cac3abc474f4933ac620ecbd043974c6f3d`。四名自定义干员保持；同步普通合成后的计数重置、拉普兰德刷新重触发与联防复活。联防复活随新干员包开启，适配为沿用当前本体的站位优先三名规则，分队及盟约额度由各玩家独立使用。没有移植来源的自持有 +10%、禁怪或默认 Touch AI。
+
+伤害统计来源的新提交主要为来源部署及网络设置，本轮仍引用原统计提交；收藏品来源没有变化。代码增量在 `patches/source-updates.patch`，数据刷新在 `mods/rhine/refresh-data.mjs`。原有许可、署名及源项目声明继续适用。

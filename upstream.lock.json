@@ -1,11 +1,18 @@
 {
   "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
   "revision": "a9dfd17bee029e09527f08c890f8933163e0bbaa",
-  "modpack_source_revision": "471174a8f7eb18a0780dfa72124a1527718ff30a",
+  "modpack_source_revision": "37d39a7575a26a1d94f2517b0661ced811e14d43",
   "mods": {
-    "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/cd09d57771f1d3ded43e3330ee47ace2de338130",
+    "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/1c520a17e9e161558464853b6aad385c96998af8",
     "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/17691f155a8fe062d85aecfeec2abe50f0359009",
-    "operators": "https://github.com/remember-4/Stronghold-Protocol-Rem/tree/df2488f021e1b069c22c9215f586559ec388b153",
+    "operators": "https://github.com/remember-4/Stronghold-Protocol-Rem/tree/97887cac3abc474f4933ac620ecbd043974c6f3d",
     "damage": "https://github.com/Stardust-minus/Stronghold-Protocol/tree/9bb6b2d833978c0aa9ef1713ef188d6c1588169f"
+  },
+  "mod_updates": {
+    "rhine_base_revision": "cd09d57771f1d3ded43e3330ee47ace2de338130",
+    "rhine_gameplay_revision": "1c520a17e9e161558464853b6aad385c96998af8",
+    "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
+    "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
+    "scope": "Selective research gameplay and operator-source bug fixes; excludes fork deployment changes and six-player rules."
   }
 }

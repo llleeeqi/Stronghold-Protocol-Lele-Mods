@@ -15,4 +15,7 @@ for file in public/js/screens/lobby.js public/js/screens/room.js server/lobby.js
 git -C "$check_dir/source" apply --check "$repo_dir/mods/party/party-code.patch"
 git -C "$check_dir/source" apply "$repo_dir/mods/party/party-code.patch"
 git -C "$check_dir/source" apply --check "$repo_dir/patches/friends-profile.patch"
+git -C "$check_dir/source" apply "$repo_dir/patches/friends-profile.patch"
+git -C "$check_dir/source" apply --check "$repo_dir/patches/source-updates.patch"
+git -C "$check_dir/source" apply "$repo_dir/patches/source-updates.patch"
 echo "Patches apply cleanly: $check_dir/source. This is not a deployable READY build."

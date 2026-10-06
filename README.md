@@ -2,13 +2,17 @@
 
 为朋友小服整理的独立 Mod 工具包，基于 [Stronghold Protocol](https://github.com/sganggs/Stronghold-Protocol)。采用可重放补丁与数据生成器：保留干净上游，构建单独运行目录，再交给 Docker Compose。适配版本见 [upstream.lock.json](upstream.lock.json)。
 
-| 可选内容 | 开启后的效果 |
-|---|---|
-| 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 |
-| 莱茵生命 | 科研装置、莱茵干员、盟约和装备 |
-| 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 |
-| 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 |
-| 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 |
+莱茵生命、收藏品、新干员和伤害统计来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
+
+| 可选内容 | 开启后的效果 | 来源项目 / 作者 |
+|---|---|---|
+| 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
+| 莱茵生命 | 科研装置、莱茵干员、盟约和装备 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) |
+| 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
+| 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
+| 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |
+
+游戏本体来自 [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。本仓库主要补充独立房间开关、+4 回合、多资料集联机适配、朋友服配置、界面整合与 Docker 部署流程。[完整来源、引用提交与移植范围](notices/SOURCES.md) 可供核对；引用不代表来源作者参与或认可本整合版。
 
 所有拓展默认关闭，可自由组合。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
 

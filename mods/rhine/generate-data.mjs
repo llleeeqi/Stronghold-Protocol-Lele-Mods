@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+const [source, baseline] = process.argv.slice(2).map(p=>path.resolve(p));
+if (!source || !baseline || source === baseline) throw new Error('Usage: generate-data.mjs STAGED_SOURCE CLEAN_UPSTREAM');
+const {applyRhineData,validateRhineData}=await import(pathToFileURL(path.join(source,'tools/rhine-data.mjs')));
+const names=['chess','bonds','garrisons','tokens','effects','config','items'];
+const files=Object.fromEntries(names.map(n=>[n,JSON.parse(fs.readFileSync(path.join(source,'data',n+'.json'),'utf8'))]));
+await applyRhineData(files);
+const errors=validateRhineData(files);
+if(errors.length)throw new Error(JSON.stringify(errors));
+for(const n of names)fs.writeFileSync(path.join(source,'data',n+'.json'),JSON.stringify(files[n]));
+const vanilla=path.join(source,'data/vanilla');fs.mkdirSync(vanilla,{recursive:true});
+for(const e of fs.readdirSync(path.join(baseline,'data'),{withFileTypes:true}))if(e.isFile()&&e.name.endsWith('.json'))fs.copyFileSync(path.join(baseline,'data',e.name),path.join(vanilla,e.name));
+console.log('Rhine generated from current upstream; vanilla copied from clean current upstream.');

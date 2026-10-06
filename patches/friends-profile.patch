@@ -1,0 +1,44 @@
+diff --git a/server/index.js b/server/index.js
+index 7a8a834..eb78234 100644
+--- a/server/index.js
++++ b/server/index.js
+@@ -111,7 +111,7 @@ export const COMPRESSIBLE = new Set([
+ 
+ const GZIP_MIN_BYTES = 512;
+ const GZIP_CACHE_MAX_FILE = 8 << 20;      // larger files are gzip-streamed on the fly
+-const GZIP_CACHE_MAX_TOTAL = 96 << 20;
++const GZIP_CACHE_MAX_TOTAL = (process.env.SP_FRIENDS === '1' ? 16 : 96) << 20;
+ // Asset URLs carry no content hash yet, and tools/fetch-assets.mjs / tools/vendor.mjs can rewrite files in
+ // place (atlas + png + skel must stay consistent), so "long" is one day; revalidation after that is a cheap 304.
+ const LONG_CACHE = 'public, max-age=86400';          // 1 day
+@@ -612,6 +612,13 @@ function makeLogger(quiet) {
+  *                     lobby: Lobby, network: Network, registry: SessionRegistry, close: () => Promise<void> }>}
+  */
+ export async function startServer(opts = {}) {
++  // Small private server: keep reconnect support, bound unattended rooms and send queues.
++  if (process.env.SP_FRIENDS === '1') opts = {
++    maxRooms: 4, maxRoomsPerAddr: 4, maxMatchesPerAddr: 4,
++    maxConnections: 24, maxConnectionsPerAddr: 24, maxSessions: 64,
++    soloReconnectWindowMs: 30 * 60_000, hardBufferBytes: 2 << 20,
++    ...opts,
++  };
+   const port = opts.port ?? (process.env.PORT != null && process.env.PORT !== '' ? Number(process.env.PORT) : 3000);
+   const host = opts.host ?? process.env.HOST ?? '0.0.0.0';
+   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new RangeError(`invalid PORT ${port}`);
+@@ -624,11 +631,14 @@ export async function startServer(opts = {}) {
+   const data = opts.dataDir ? loadData(dataDir, { log }) : getData({ dir: dataDir, log });
+   const netOptions = {};
+   for (const k of ['reconnectWindowMs', 'heartbeatMs', 'helloTimeoutMs', 'ratePerSec', 'rateBurst', 'maxConnections', 'abuseDropsPerSec',
+-    'maxConnectionsPerAddr', 'heavyPerSec', 'heavyBurst', 'trustProxy']) {
++    'maxConnectionsPerAddr', 'heavyPerSec', 'heavyBurst', 'trustProxy', 'hardBufferBytes']) {
+     if (opts[k] != null) netOptions[k] = opts[k];
+   }
+   if (netOptions.trustProxy == null) netOptions.trustProxy = parseTrustProxy(process.env.TRUST_PROXY);
+-  const registry = new SessionRegistry({ reconnectWindowMs: netOptions.reconnectWindowMs ?? NET_DEFAULTS.reconnectWindowMs });
++  const registry = new SessionRegistry({
++    reconnectWindowMs: netOptions.reconnectWindowMs ?? NET_DEFAULTS.reconnectWindowMs,
++    maxSessions: opts.maxSessions ?? NET_DEFAULTS.maxSessions,
++  });
+   const lobbyOptions = {};
+   for (const k of ['lobbyGraceMs', 'maxRooms', 'maxRoomsPerAddr', 'maxMatchesPerAddr', 'resyncMinGapMs', 'soloReconnectWindowMs']) {
+     if (opts[k] != null) lobbyOptions[k] = opts[k];

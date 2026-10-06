@@ -1,0 +1,48 @@
+# 乐勒砳特供 · Stronghold Protocol Mods
+
+为朋友小服整理的独立 Mod 工具包，基于 [Stronghold Protocol](https://github.com/sganggs/Stronghold-Protocol)。采用可重放补丁与数据生成器：保留干净上游，构建单独运行目录，再交给 Docker Compose。适配版本见 [upstream.lock.json](upstream.lock.json)。
+
+| 可选内容 | 开启后的效果 |
+|---|---|
+| 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 |
+| 莱茵生命 | 科研装置、莱茵干员、盟约和装备 |
+| 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 |
+| 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 |
+| 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 |
+
+所有拓展默认关闭，可自由组合。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
+
+服务器演算，最多 4 人合作；原版/莱茵 × 新干员关闭/开启四套资料隔离。
+
+## 首次部署
+
+推荐 Linux 服务器或 WSL，安装 Git、Python 3、Docker Engine 和 Compose v2。宿主机无需安装 Node。预留资源下载和候选版本的磁盘空间；小内存服务器建议配置至少 2 GB swap。
+
+```bash
+git clone https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods.git
+cd Stronghold-Protocol-Lele-Mods
+cp .env.example .env
+# 按需修改 PORT，默认 33000
+bash scripts/stage.sh --name first
+bash scripts/activate.sh first
+bash scripts/status.sh
+```
+
+打开 `http://服务器公网IP:33000/`，在安全组/防火墙放行实际 PORT 的 TCP。域名和 HTTPS 可接已有反向代理。首次构建需访问 GitHub、npm 和资源站点，图片、模型和音频由脚本下载到本机。
+
+Compose 默认限制 640 MiB、Node heap 384 MiB、1 CPU，只读运行目录、受限权限和滚动日志。朋友服保留在线断线重连，并限制闲置房间和队列；重启进程会结束原有房间和对局。
+
+## 部署、更新与回退
+
+- [Agent 操作说明](AGENTS.md)
+- [部署与更新流程](docs/DEPLOYMENT.md)
+- [Mod 分层与开关协议](docs/MODS.md)
+- [来源与许可](notices/SOURCES.md)
+
+`stage.sh` 只构建候选；`activate.sh` 才切换线上，存在房间或对局会拒绝切换，启动检查失败自动回退。上游更新先在隔离目录验证补丁与联机，再修改固定版本。
+
+GitHub 的 Code → Download ZIP 下载本工具包；游戏本体由脚本获取。
+
+## 版权
+
+代码 GPL-3.0-or-later，见 [LICENSE](LICENSE)。保留上游与扩展作者署名。《明日方舟》的角色、美术、音频、官方数据等归相应权利人所有，不因本仓库 GPL 获得许可；详见 [上游声明](notices/UPSTREAM-NOTICE.md) 和莱茵相关声明。

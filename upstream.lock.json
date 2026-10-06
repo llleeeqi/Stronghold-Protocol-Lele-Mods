@@ -1,0 +1,11 @@
+{
+  "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
+  "revision": "a9dfd17bee029e09527f08c890f8933163e0bbaa",
+  "modpack_source_revision": "471174a8f7eb18a0780dfa72124a1527718ff30a",
+  "mods": {
+    "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/cd09d57",
+    "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/17691f155a8fe062d85aecfeec2abe50f0359009",
+    "operators": "https://github.com/remember-4/Stronghold-Protocol-Rem/tree/df2488f021e1b069c22c9215f586559ec388b153",
+    "damage": "https://github.com/Stardust-minus/Stronghold-Protocol/tree/9bb6b2d833978c0aa9ef1713ef188d6c1588169f"
+  }
+}

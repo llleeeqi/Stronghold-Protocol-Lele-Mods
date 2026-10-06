@@ -1,0 +1,24 @@
+name: Verify pinned mods
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch pinned upstream
+        run: |
+          revision=$(python3 -c 'import json; print(json.load(open("upstream.lock.json"))["revision"])')
+          git init /tmp/stronghold-upstream
+          git -C /tmp/stronghold-upstream fetch --depth=1 https://github.com/sganggs/Stronghold-Protocol.git "$revision"
+          git -C /tmp/stronghold-upstream checkout --detach FETCH_HEAD
+      - name: Apply patches and regenerate base data
+        run: bash scripts/verify-patches.sh /tmp/stronghold-upstream
+      - name: Test optional rules, operators and multiplayer
+        shell: bash
+        run: |
+          candidates=(state/patch-check-*/source)
+          git -C "${candidates[0]}" apply "$GITHUB_WORKSPACE/patches/friends-profile.patch"
+          bash scripts/test.sh "${candidates[0]}"

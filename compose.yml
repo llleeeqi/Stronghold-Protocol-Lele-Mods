@@ -1,0 +1,36 @@
+name: lele-stronghold
+services:
+  game:
+    image: node:22-alpine
+    working_dir: /app
+    user: "1000:1000"
+    command: ["node", "server/index.js"]
+    restart: unless-stopped
+    init: true
+    ports: ["${PORT:-33000}:3000"]
+    volumes: ["./state/current:/app:ro"]
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: "--max-old-space-size=${NODE_HEAP_MB:-384}"
+      SP_COMBAT: server
+      SP_VERIFY: "off"
+      SP_FRIENDS: "1"
+      TRUST_PROXY: "0"
+      TZ: Asia/Shanghai
+    mem_limit: ${MEMORY_LIMIT:-640m}
+    memswap_limit: ${MEMORY_LIMIT:-640m}
+    cpus: ${CPUS:-1.0}
+    pids_limit: 64
+    read_only: true
+    tmpfs: ["/tmp:size=16m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/healthz || exit 1"]
+      interval: 30s
+      timeout: 3s
+      start_period: 15s
+      retries: 3

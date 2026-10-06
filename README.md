@@ -22,6 +22,16 @@
 
 ## 首次部署
 
+### 推荐：交给 Agent 部署
+
+建议优先交给 Agent 完成部署。可以使用 DSH、WorkBuddy、OpenCode 等能读仓库并执行命令的 Agent。把仓库链接与下面这段话交给它，提供目标电脑或服务器的实际环境即可；这些工具不是本项目的运行依赖。
+
+> 请部署这个仓库的 Mod 版。先阅读 AGENTS.md、README.md 和 docs/DEPLOYMENT.md，按 upstream.lock.json 固定版本，在独立目录构建并验证，保留五个默认关闭的拓展开关。云服务器优先 Docker Compose；本地开服请按 docs/LOCAL-LAUNCHER.md 使用上游统一启动入口，必须启动带 Mod 的构建目录。保护已有服务和活跃房间，部署后验证多人同步与重连，最后给我可用地址。
+
+上游整合包和本地统一启动入口的接入说明见 [本地开服与 Agent 适配指引](docs/LOCAL-LAUNCHER.md)。当前工具包默认仍用 Docker 构建（Windows 可用 WSL），不宣称提供原生 Windows 一键 Mod 安装器，也不自动兼容未经验证的最新上游。
+
+### 手动部署
+
 推荐 Linux 服务器或 WSL，安装 Git、Python 3、Docker Engine 和 Compose v2。宿主机无需安装 Node。预留资源下载和候选版本的磁盘空间；小内存服务器建议配置至少 2 GB swap。
 
 ```bash
@@ -49,14 +59,6 @@ Compose 默认限制 640 MiB、Node heap 384 MiB、1 CPU，只读运行目录、
 `stage.sh` 只构建候选；`activate.sh` 才切换线上，存在房间或对局会拒绝切换，启动检查失败自动回退。上游更新先在隔离目录验证补丁与联机，再修改固定版本。
 
 GitHub 的 Code → Download ZIP 下载本工具包；游戏本体由脚本获取。
-
-## 交给 Agent 部署
-
-可以使用 DSH、WorkBuddy、OpenCode 等能读仓库并执行命令的 Agent。把仓库链接与下面这段话交给它，提供目标电脑或服务器的实际环境即可；这些工具不是本项目的运行依赖。
-
-> 请部署这个仓库的 Mod 版。先阅读 AGENTS.md、README.md 和 docs/DEPLOYMENT.md，按 upstream.lock.json 固定版本，在独立目录构建并验证，保留五个默认关闭的拓展开关。云服务器优先 Docker Compose；本地开服请按 docs/LOCAL-LAUNCHER.md 使用上游统一启动入口，必须启动带 Mod 的构建目录。保护已有服务和活跃房间，部署后验证多人同步与重连，最后给我可用地址。
-
-上游整合包和本地统一启动入口的接入说明见 [本地开服与 Agent 适配指引](docs/LOCAL-LAUNCHER.md)。当前工具包默认仍用 Docker 构建（Windows 可用 WSL），不宣称提供原生 Windows 一键 Mod 安装器，也不自动兼容未经验证的最新上游。
 
 ## 版权
 

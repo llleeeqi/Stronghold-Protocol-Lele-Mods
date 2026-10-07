@@ -4,10 +4,10 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Fetch pinned upstream
         run: |
           revision=$(python3 -c 'import json; print(json.load(open("upstream.lock.json"))["revision"])')

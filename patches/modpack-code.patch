@@ -153367,10 +153367,10 @@ index 0000000..1411a1a
 +});
 diff --git a/test/match/rhineResearch.test.js b/test/match/rhineResearch.test.js
 new file mode 100644
-index 0000000..ce4b478
+index 0000000..47a1b9e
 --- /dev/null
 +++ b/test/match/rhineResearch.test.js
-@@ -0,0 +1,371 @@
+@@ -0,0 +1,374 @@
 +import { test } from 'node:test';
 +import assert from 'node:assert/strict';
 +import { DATA, makeMatch, give, checkInvariants } from './harness.js';
@@ -153468,7 +153468,7 @@ index 0000000..ce4b478
 +  checkInvariants(h.m);
 +});
 +
-+test('the shipped seven-member roster reaches Rhine nine through Muelsyse harmony and a terminal-isomorph recruit', () => {
++test('the original seven-member roster reaches Rhine nine through Muelsyse harmony and a terminal-isomorph recruit', () => {
 +  const h = makeMatch({ mode: 'solo', fake: true }).start(); h.toPrep(1).setStage('act2autochess_m01');
 +  const ps = h.ps('p_0');
 +  for (const p of [...ps.board.values(), ...ps.hand.filter(Boolean), ...ps.temp.filter(Boolean)]) if (p.kind === 'chess') ps.returnCopies(p);
@@ -153478,7 +153478,10 @@ index 0000000..ce4b478
 +    const tile = [...ps.deployMap()].find(([k]) => !ps.board.has(k) && canPlace(ps.deployMap(), position, ...parseKey(k)));
 +    return give(h.m, ps, id, 'board', parseKey(tile[0]));
 +  };
-+  for (const id of DATA.bonds[RHINE_BOND].visibleMembers.filter(id => !['char_135_halo', 'char_4048_doroth'].includes(DATA.chess[id].charId))) place(id);
++  // Keep the original seven-member scenario independent of later roster additions.
++  const originalRoster = DATA.bonds[RHINE_BOND].visibleMembers.filter(id => !['char_135_halo', 'char_4048_doroth', 'char_4229_aphris'].includes(DATA.chess[id].charId));
++  assert.equal(originalRoster.length, 7);
++  for (const id of originalRoster) place(id);
 +  assert.equal(ps.bonds[RHINE_BOND].count, 8, 'seven real Rhine operators plus Muelsyse harmony');
 +  const recruitId = Object.values(DATA.chess).find(c => c.visible && !c.isGolden && !c.bonds.includes(RHINE_BOND)).chessId;
 +  const recruit = place(recruitId);

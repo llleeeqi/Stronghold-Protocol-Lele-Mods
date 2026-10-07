@@ -1,7 +1,7 @@
 {
   "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
-  "revision": "1303321407f9a9b80c68e0a4d47b40871a5d06c3",
-  "modpack_source_revision": "a4e84f536a74156d04d9ed09f3c1b3e7e5f2b83b",
+  "revision": "c2a2ef778cf728ff29b953b9842b2a39b1e9cbea",
+  "modpack_source_revision": "73720faf9beee30d718e472245bf8d8c3ff72273",
   "mods": {
     "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/12d418cc6efc7b19d3ddc418d902ed07e526c2a2",
     "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/17691f155a8fe062d85aecfeec2abe50f0359009",
@@ -17,6 +17,6 @@
     "rhine_gameplay_revision": "12d418cc6efc7b19d3ddc418d902ed07e526c2a2",
     "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
     "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-    "scope": "Official 0.2.0 module migration plus selective Rhine.3 device-work layers, Ifrit inheritance, and client allowance fixes; excludes Windows fork updaters and six-player rules."
+    "scope": "Official 0.2.1 full-potential data, terrain-preserving unite, cross-half raid and pending battle messages; selective Rhine.3 and eight optional Mods retained. Official update ZIPs must not overwrite Mod builds."
   }
 }

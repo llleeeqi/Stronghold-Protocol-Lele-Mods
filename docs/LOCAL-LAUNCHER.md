@@ -6,7 +6,7 @@
 
 本仓库是 Mod 构建工具包，不是整合好的游戏本体。`stage.sh` 生成的 `state/stages/NAME/source` 才是带 Mod 的游戏目录。上游整合包可以用于原版游玩，但直接运行它不会加载本工具包的拓展。
 
-上游统一开服入口包括 `scripts/start-windows.bat`、`scripts/start.sh` 和共用的 `scripts/launch.mjs`：检查环境、准备资源、启动 Node 服务并打开浏览器。当前固定版本为官方 0.2.0，以上入口继续保留；它不是独立渲染客户端，也不会自动安装本仓库的补丁。
+上游统一开服入口包括 `scripts/start-windows.bat`、`scripts/start.sh` 和共用的 `scripts/launch.mjs`：检查环境、准备资源、启动 Node 服务并打开浏览器。当前固定版本为官方 0.2.1，以上入口继续保留；它不是独立渲染客户端，也不会自动安装本仓库的补丁。
 
 优先保留这个入口，接入已生成的 Mod 目录，不另写一套游戏服务器。官方整合包或其他外部启动器的最新版仍需单独检查，不能仅凭“能打开页面”判定 Mod 兼容。
 
@@ -37,6 +37,10 @@ node scripts/launch.mjs --no-setup --port 3000
 本地直接启动不会读取工具包的 `.env` 或自动继承 Compose 的内存/CPU限制。Agent 应按目标机器设置实际环境变量与资源限制。跨系统搬运时不要默认 Linux `node_modules` 适用于 Windows；依照锁文件在目标系统安装运行依赖并检查 `public/vendor`，不要重建或覆盖 Mod 数据。以上是接入指导，不代表已完成 Windows/macOS 实机验收。
 
 ## 跟进新上游时
+
+### 官方更新包与 Mod 构建
+
+官方 0.2.1 增加 `MANIFEST.json` / `UPDATE.json` 和文件校验更新包。官方更新 ZIP 面向原版整合包；不要把它覆盖到本工具包生成的 Mod 目录，否则可能覆盖拓展代码、恢复原版资料或与更新清单校验冲突。Mod 版仍按固定提交重新构建独立候选，复用资源、验证后切换，旧目录保留用于回退。以源码构建的候选不伪造官方整合包清单。
 
 1. 先比较新旧 `scripts/launch.mjs`、启动包装脚本、`tools/setup.mjs` 和 `package.json`；确认参数、环境继承、资源下载与数据生成行为。
 2. 在新候选适配补丁和生成器，不覆盖干净基线，不直接把最新整合包当作 `--source`。该参数要求完整 SHA 对应的干净 Git checkout。

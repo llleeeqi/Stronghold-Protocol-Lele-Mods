@@ -1,5 +1,5 @@
 diff --git a/.gitignore b/.gitignore
-index 767b416..fbe9c9a 100644
+index 37a6479..22bd5af 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,7 @@
@@ -7,10 +7,10 @@ index 767b416..fbe9c9a 100644
  node_modules/
 +# official runtime is shipped as a Release asset, never as Git source
 +/runtime/node/
+ # a local npm cache (npm_config_cache=./.npm-cache, npm ci --cache .npm-cache — GitHub #258)
+ .npm-cache/
  # copied from node_modules by tools/vendor.mjs (postinstall); never commit third-party builds
- public/vendor/
- 
-@@ -12,6 +14,9 @@ public/fonts/
+@@ -14,6 +16,9 @@ public/fonts/
  data/local-assets.json
  # download caches, upstream tables, ledgers, reports, setup state
  .cache/
@@ -76,7 +76,7 @@ index 0000000..2dd327f
 +}
 \ No newline at end of file
 diff --git a/docs/BALANCE.md b/docs/BALANCE.md
-index 8119010..d95b6d3 100644
+index 5edb42d..a967ddc 100644
 --- a/docs/BALANCE.md
 +++ b/docs/BALANCE.md
 @@ -1,5 +1,7 @@
@@ -290,7 +290,7 @@ index 0000000..413c142
 +更新方法：先应用莱茵补丁并生成原版/莱茵数据，再运行 +4 回合生成器，覆盖 data 及四个 overlay 文件；随后 git apply --check mods/party/party-code.patch 验证后应用补丁，运行 generate-data.mjs 生成额外干员的两个独立数据目录。最后应用 friends-profile.patch，增量下载干员模型与收藏品图标。
 +任何补丁冲突都停止暂存构建；测试通过并确认无对局后才切换 Compose 挂载。reapply.sh 不会改动线上或自动重启。
 diff --git a/docs/PLAYING.md b/docs/PLAYING.md
-index 90eb333..c412844 100644
+index f357981..1189258 100644
 --- a/docs/PLAYING.md
 +++ b/docs/PLAYING.md
 @@ -1,6 +1,6 @@
@@ -137864,10 +137864,10 @@ index 31d32cc..8dfb161 100644
    padding: .1rem .12rem .1rem .08rem; background: rgba(12, 15, 14, .82); border: 1px solid var(--line);
    transition: border-color var(--t-med), background var(--t-med);
 diff --git a/public/css/screens/game-panels.css b/public/css/screens/game-panels.css
-index 4589b71..1250948 100644
+index 1cda7ad..e2575c3 100644
 --- a/public/css/screens/game-panels.css
 +++ b/public/css/screens/game-panels.css
-@@ -405,6 +405,7 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
+@@ -408,6 +408,7 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
  .spov__who.is-cur .spov__wstate { color: var(--gold); }
  .spov__grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .2rem; }
  .spov__grid--3 { grid-template-columns: repeat(3, minmax(0, 4.3rem)); grid-template-rows: minmax(0, 4.6rem); justify-content: center; align-content: start; gap: .36rem; margin-top: .3rem; }
@@ -137875,7 +137875,7 @@ index 4589b71..1250948 100644
  .spov__grid--3 .spcard__icon { width: 1.3rem; height: 1.3rem; }
  /* The official card (research 06 §11.5; the official 悬赏 / 机密商店 / 战术 screenshots): a framed icon at the top-left
     with the bold name beside it, the effect text under both across the card, left-aligned; the tier chip on the icon's
-@@ -683,3 +684,68 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
+@@ -686,3 +687,68 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
  .eqr__hint { margin: .04rem 0 0; text-align: center; font-size: .15rem; color: var(--text-lo); min-height: .24rem; }
  .eqr__hint b { color: var(--text-hi); }
  .eqr__ok-icon { width: .2rem; height: .2rem; margin-right: .06rem; vertical-align: -.03rem; filter: brightness(0) invert(1); }
@@ -137945,7 +137945,7 @@ index 4589b71..1250948 100644
 +.gm__relic-wait { position: absolute; left: 50%; bottom: .55rem; transform: translateX(-50%); display: flex; align-items: center; gap: .08rem; padding: .12rem .2rem; border: 1px solid var(--mint-700); background: var(--bg-glass); color: var(--mint-400); font-size: max(.17rem, 10px); white-space: nowrap; }
 +.gm__relic-wait .icon { width: .2rem; height: .2rem; }
 diff --git a/public/css/screens/game.css b/public/css/screens/game.css
-index 09b26f6..4f7f394 100644
+index be58029..c48e61f 100644
 --- a/public/css/screens/game.css
 +++ b/public/css/screens/game.css
 @@ -1,3 +1,4 @@
@@ -137953,7 +137953,7 @@ index 09b26f6..4f7f394 100644
  /* ==========================================================================================
     screens/game.css — in-match screen layout & HUD (js/screens/game.js, js/ui/hud.js, bondStrip.js,
     teamPanel.js, emotes.js, ticker.js, effectsList.js, combatHud.js, settings.js, matchChrome.js,
-@@ -276,6 +277,9 @@
+@@ -278,6 +279,9 @@
  
  /* ---- team panel ------------------------------------------------------------------------------------------- */
  .team { position: absolute; left: .22rem; top: 2.36rem; display: flex; flex-direction: column; gap: .14rem; pointer-events: none; }
@@ -138116,7 +138116,7 @@ index 2cfdb87..eb6cbca 100644
    <link rel="stylesheet" href="/css/screens/draft.css" />
    <link rel="stylesheet" href="/css/screens/result.css" />
 diff --git a/public/dev/game-mock.js b/public/dev/game-mock.js
-index dce22ad..9025675 100644
+index 0c4f218..b822d5e 100644
 --- a/public/dev/game-mock.js
 +++ b/public/dev/game-mock.js
 @@ -19,6 +19,7 @@ import { settingsStore } from '/js/ui/settings.js';
@@ -138226,10 +138226,10 @@ index 19bdfa0..b64f1ba 100644
      /** Already-loaded image element or null (sync). */
      imageNow(u) { const e = images.get(str(u) || ''); return e && e.done ? e.value : null; },
 diff --git a/public/js/battle/runner.js b/public/js/battle/runner.js
-index fa91c56..1b80d91 100644
+index e8d25fb..be52642 100644
 --- a/public/js/battle/runner.js
 +++ b/public/js/battle/runner.js
-@@ -66,7 +66,7 @@ import { net as appNet } from '../net.js';
+@@ -72,7 +72,7 @@ import { net as appNet } from '../net.js';
  import { store as appStore } from '../store.js';
  import { unitStatsEntry, fxForm } from '../../../shared/protocol.js';
  import { spectateEffects } from './observe.js';
@@ -138238,7 +138238,7 @@ index fa91c56..1b80d91 100644
  const TICK = 1 / 30;
  /** Fast-forward budget per frame (ticks) when far behind. */
  export const CATCHUP_TICKS = 240;
-@@ -128,9 +128,9 @@ function deepFreeze(root) {
+@@ -134,9 +134,9 @@ function deepFreeze(root) {
   * Browser sim loader: the /sim/ modules + the data files (own frozen copies — the server's data is frozen too, so a
   * content bug that writes into a record fails identically on both sides).
   */
@@ -138251,7 +138251,7 @@ index fa91c56..1b80d91 100644
    ]);
    const fetchOnce = async (n) => {
      try {
-@@ -145,8 +145,7 @@ export async function loadBrowserSim({ base = '/sim/', dataBase = '/data/', fetc
+@@ -151,8 +151,7 @@ export async function loadBrowserSim({ base = '/sim/', dataBase = '/data/', fetc
    if (missing.length) throw new Error(`simulation data unavailable: ${missing.join(', ')}`);
    const raw = {};
    SIM_DATA_FILES.forEach((n, i) => { raw[n] = deepFreeze(files[i]); });
@@ -138261,7 +138261,7 @@ index fa91c56..1b80d91 100644
    return { spec, ds: new simdata.DataSource(raw, null) };
  }
  
-@@ -172,7 +171,7 @@ export function createBattleRunner(deps) {
+@@ -178,7 +177,7 @@ export function createBattleRunner(deps) {
    const setIv = deps.setInterval || ((fn, ms) => globalThis.setInterval(fn, ms));
    const clearIv = deps.clearInterval || ((h) => globalThis.clearInterval(h));
    const doc = deps.doc !== undefined ? deps.doc : (typeof document !== 'undefined' ? document : null);
@@ -138270,23 +138270,26 @@ index fa91c56..1b80d91 100644
    const logger = deps.logger || SIM_LOGGER;
  
    const listeners = new Map();
-@@ -187,8 +186,14 @@ export function createBattleRunner(deps) {
-   /** @type {Map<string, any>} battleId → entry */
-   const entries = new Map();
+@@ -195,9 +194,15 @@ export function createBattleRunner(deps) {
+   /** @type {Map<string, any>} battleId → entry of a b.start still being prepared (prepare(); `battle` null until built) */
+   const pending = new Map();
    let cur = null;              // entry on screen
 -  let simP = null;
+-  let startSeq = 0;            // counts the b.starts: the latest one is the view asked for
+-  let loading = null;          // the pending entry of the latest b.start (shown when prepared)
 +  const simPromises = new Map();
 +  const enabledOf = (msg) => typeof msg?.rhineEnabled === 'boolean' ? msg.rhineEnabled
 +    : msg?.dataProfile ? msg.dataProfile !== 'vanilla' : true;
 +  const initial = store?.get?.();
 +  let activeProfile = enabledOf(initial?.match?.public ?? initial?.room);
 +  let lastStoreProfile = activeProfile;
-   let startSeq = 0;
++  let startSeq = 0;
 +  let clearEpoch = 0;
-   let loading = null;          // b.start being prepared
++  let loading = null;          // b.start being prepared
    let rafH = null;
    let ivH = null;
-@@ -206,11 +211,20 @@ export function createBattleRunner(deps) {
+   let lastPool = null;
+@@ -214,11 +219,20 @@ export function createBattleRunner(deps) {
    const clock = () => (pausedAt != null ? pausedAt : now());
    const bossLike = (e) => e.kind === 'boss' || e.kind === 'hidden';
  
@@ -138311,7 +138314,7 @@ index fa91c56..1b80d91 100644
    }
  
    /** Counted leaks so far of every normal field simulated here: { [fieldId]: n } (user playtest #3 item 2). */
-@@ -426,13 +440,13 @@ export function createBattleRunner(deps) {
+@@ -434,13 +448,13 @@ export function createBattleRunner(deps) {
        msg.bossDmg = pool && Number.isFinite(pool.cum) ? pool.cum : 0;
        if (pool && pool.byPlayer) {
          const by = {};
@@ -138328,7 +138331,7 @@ index fa91c56..1b80d91 100644
      }
      try { net.send('b.progress', msg); } catch { /* offline */ }
    }
-@@ -591,9 +605,13 @@ export function createBattleRunner(deps) {
+@@ -600,11 +614,15 @@ export function createBattleRunner(deps) {
  
    async function onStart(msg) {
      if (!msg || typeof msg !== 'object' || !msg.spec || typeof msg.battleId !== 'string') return;
@@ -138336,46 +138339,46 @@ index fa91c56..1b80d91 100644
 +      : typeof msg.spec.rhineEnabled === 'boolean' || msg.spec.dataProfile ? enabledOf(msg.spec) : activeProfile;
 +    selectProfile(enabled);
      const speed = Number(msg.speed) > 0 ? Number(msg.speed) : 2;
-     const existing = entries.get(msg.battleId);
+     const seq = ++startSeq;
+     const prep = pending.get(msg.battleId);
+     const existing = entries.get(msg.battleId) || prep;
 -    if (existing) {
 +    const changedInputs=existing&&JSON.stringify(existing.spec.customActions||[])!==JSON.stringify(msg.spec.customActions||[]);
 +    if (existing && !changedInputs) {
+       existing.seq = seq;
        const was = existing.authoritative;
        existing.authoritative = !!msg.authoritative && !existing.resultSent;
-       existing.watch = !!msg.watch;
-@@ -612,11 +630,13 @@ export function createBattleRunner(deps) {
+@@ -632,6 +650,7 @@ export function createBattleRunner(deps) {
        else { publishState(); schedule(); }
        return;
      }
-+    if(changedInputs)entries.delete(msg.battleId);
-     const seq = ++startSeq;
-+    const epoch = clearEpoch;
-     loading = { battleId: msg.battleId, fieldId: msg.fieldId, kind: msg.kind };
-     publishState();
-     let sim;
--    try { sim = await ensureSim(); } catch (err) {
-+    try { sim = await ensureSim(enabled); } catch (err) {
-       console.warn('[runner] simulation unavailable', err);
-       if (seq === startSeq) { loading = null; publishState(); }
-       return;
-@@ -638,6 +658,7 @@ export function createBattleRunner(deps) {
++    if(changedInputs){entries.delete(msg.battleId);pending.delete(msg.battleId);}
+     const e = {
+       battleId: msg.battleId, fieldId: msg.fieldId || msg.spec.fieldId, kind: msg.kind || msg.spec.kind, spec: msg.spec,
+       // built by prepare(); `seq` = its latest b.start, `elapsed` = the field clock to start from, `endReason` = the first
+@@ -641,6 +660,8 @@ export function createBattleRunner(deps) {
        members: (msg.spec.players || []).map((p) => p && p.playerId).filter(Boolean),
-       t0: clock() - ((Number(msg.elapsed) || 0) / speed) * 1000, lastProgressAt: -Infinity, done: false, resultSent: false,
+       t0: null, lastProgressAt: -Infinity, done: false, resultSent: false,
        result: null, delivery: null,
 +      inputSeq: Math.max(existing?.inputSeq||0,...(msg.spec.customActions||[]).map(a=>Number.isInteger(a.requestSeq)?a.requestSeq+1:0)),
-       meter: sim.spec.attachLpMeter(battle),
++      profile: enabled, epoch: clearEpoch,
        // counted leaks so far (normal fields; noteLeaks) and the Battle state they were counted at; 联防 fields: each
        // leaker's enemies still standing (noteUniteLeft)
-@@ -662,7 +683,7 @@ export function createBattleRunner(deps) {
-       await yieldFrame();
-       if (seq !== startSeq) {
-         // superseded while preparing: an authoritative battle must still finish (it is kept), a replica is dropped
--        if (e.authoritative) { entries.set(e.battleId, e); evict(); if (e.leaks) leaksDirty = true; schedule(); }
-+        if (e.authoritative && epoch === clearEpoch && enabled === activeProfile) { entries.set(e.battleId, e); evict(); if (e.leaks) leaksDirty = true; schedule(); }
+       leaks: 0, leakMark: '', left: null,
+@@ -665,10 +686,10 @@ export function createBattleRunner(deps) {
+    * authority (it must finish and report) or the server already ended it (switching back shows the end).
+    */
+   async function prepare(e) {
+-    const wanted = () => pending.get(e.battleId) === e && (e.seq === startSeq || e.authoritative || !!e.endReason);
++    const wanted = () => e.epoch === clearEpoch && e.profile === activeProfile && pending.get(e.battleId) === e && (e.seq === startSeq || e.authoritative || !!e.endReason);
+     try {
+       let sim;
+-      try { sim = await ensureSim(); } catch (err) {
++      try { sim = await ensureSim(e.profile); } catch (err) {
+         console.warn('[runner] simulation unavailable', err);
          return;
        }
-     }
-@@ -704,6 +725,7 @@ export function createBattleRunner(deps) {
+@@ -753,6 +774,7 @@ export function createBattleRunner(deps) {
  
    /** Drop every battle (a new round's prep, the match ended, the player left). */
    function clear() {
@@ -138383,7 +138386,7 @@ index fa91c56..1b80d91 100644
      ++startSeq;
      loading = null;
      for (const e of entries.values()) {
-@@ -731,6 +753,11 @@ export function createBattleRunner(deps) {
+@@ -782,6 +804,11 @@ export function createBattleRunner(deps) {
    if (store && typeof store.subscribe === 'function') {
      offs.push(store.subscribe((s) => {
        const pub = s && s.match && s.match.public ? s.match.public : null;
@@ -138395,8 +138398,8 @@ index fa91c56..1b80d91 100644
        // solo pause (DESIGN §14): the local battle clocks follow m.public.paused
        setPaused(!!(pub && pub.paused));
        const phase = pub ? pub.phase : null;
-@@ -740,7 +767,7 @@ export function createBattleRunner(deps) {
-         if (entries.size || loading) clear();
+@@ -791,7 +818,7 @@ export function createBattleRunner(deps) {
+         if (entries.size || pending.size) clear();
        }
        // warm the simulation up as soon as a match runs (the first b.start then starts at once)
 -      if (phase && phase !== 'LOBBY' && !simP) ensureSim().catch(() => {});
@@ -138404,7 +138407,7 @@ index fa91c56..1b80d91 100644
      }));
    }
    if (doc && typeof doc.addEventListener === 'function') {
-@@ -755,8 +782,19 @@ export function createBattleRunner(deps) {
+@@ -806,8 +833,19 @@ export function createBattleRunner(deps) {
        return () => listeners.get(type)?.delete(fn);
      },
      state,
@@ -138694,7 +138697,7 @@ index 5b109e9..6bedafd 100644
      <${ToastHost} />
      <${UiHosts} />
 diff --git a/public/js/render/app.js b/public/js/render/app.js
-index 2a3237e..faaec1d 100644
+index 3278460..2af2f24 100644
 --- a/public/js/render/app.js
 +++ b/public/js/render/app.js
 @@ -128,7 +128,7 @@ import { loadThree, loadBoardPack, webgl2Available, boardArtListed } from './boa
@@ -139326,7 +139329,7 @@ index 68c2b90..dee3d93 100644
  
    _buildDevices() {
 diff --git a/public/js/render/units.js b/public/js/render/units.js
-index 0ab4e3d..f6ef397 100644
+index 4e38aaf..de264ef 100644
 --- a/public/js/render/units.js
 +++ b/public/js/render/units.js
 @@ -66,8 +66,10 @@
@@ -139341,7 +139344,7 @@ index 0ab4e3d..f6ef397 100644
  import { COLORS, TIER_COLORS, ENEMY_FRAME, UNIT, PROJ, statusIconKey, statusIconSuppressed } from './style.js';
  import { drawCrate, rowDepthKey, ROW_KEY, deviceBoxOf, DEVICE_BOX } from './tiles.js';
  
-@@ -256,6 +258,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
+@@ -257,6 +259,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
    idle, deploy: idle, die, attack: attack ? Object.freeze({ begin: null, loop: attack, end: null }) : null, attackDown: null, skill: null,
  });
  export const FORMS = Object.freeze({
@@ -139359,7 +139362,7 @@ index 0ab4e3d..f6ef397 100644
    char_1023_ghost2: Object.freeze({
      doll: Object.freeze({ change: 'Start_B', end: 'Die_B', leave: 'Start_2', roles: dollRoles('Idle_B', 'Die_B_2') }),
    }),
-@@ -370,6 +383,7 @@ export class UnitView {
+@@ -389,6 +402,7 @@ export class UnitView {
      this.modelKY = this.isEnemy ? enemyModelScaleY(def) : 1;
      this.mirrorX = this.isEnemy && !!(def && def.mirrorX);
      this.isToken = info.kind === 'token';
@@ -139367,7 +139370,7 @@ index 0ab4e3d..f6ef397 100644
      this.golden = !!info.golden;
      this.tier = clamp(Number(info.tier) || 1, 1, 6);
      this.x = Number(info.x) || 0; this.y = Number(info.y) || 0; this.z = 0;
-@@ -383,7 +397,7 @@ export class UnitView {
+@@ -406,7 +420,7 @@ export class UnitView {
      this.facing = this.dir === 'LEFT' ? -1 : 1;
      this.visFacing = this.isEnemy ? -1 : this.facing;
      this.hp = Number(info.maxHp) || 1; this.maxHp = Number(info.maxHp) || 1; this.ghostHp = this.hp;
@@ -139376,7 +139379,7 @@ index 0ab4e3d..f6ef397 100644
      this.flags = 0; this.anim = ANIM.IDLE;
      this.statuses = new Set();
      this.alive = true;
-@@ -431,6 +445,7 @@ export class UnitView {
+@@ -454,6 +468,7 @@ export class UnitView {
      this.fallback = new P.Sprite(P.Texture.EMPTY);
      this.fallback.anchor.set(0.5, 1);
      this.body.addChild(this.fallback);
@@ -139384,7 +139387,7 @@ index 0ab4e3d..f6ef397 100644
      this.actor = null;
      this.spineReady = false;
      this._modelDirty = false;            // died / stood up since the last frame: update() checks Front ⇄ Back (_syncModel)
-@@ -463,19 +478,25 @@ export class UnitView {
+@@ -486,19 +501,25 @@ export class UnitView {
    // the first frame it is actually visible: never for a unit whose Spine model is ready before that, and never as
    // an image-less placeholder that the avatar replaces a moment later (the placeholder only shows when the avatar
    // is missing or still loading after PIC_WAIT_MS).
@@ -139418,7 +139421,7 @@ index 0ab4e3d..f6ef397 100644
    }
  
    /** Put the right diamond on the fallback sprite (called while the fallback is visible). */
-@@ -485,12 +506,15 @@ export class UnitView {
+@@ -508,12 +529,15 @@ export class UnitView {
      let want = pic.state === 'img' ? 'img' : 'placeholder';
      if (pic.state === 'wait' && nowMs() - pic.t0 < PIC_WAIT_MS) want = null;
      if (!want || pic.shown === want) return;
@@ -139435,7 +139438,7 @@ index 0ab4e3d..f6ef397 100644
      const a = this.ctx.assets;
      if (!a || !a.spineEntry || !a.spine) return;
      const id = this.info.spine || this.info.defId;
-@@ -513,7 +537,7 @@ export class UnitView {
+@@ -536,7 +560,7 @@ export class UnitView {
     */
    retryAssets() {
      if (this.destroyed) return;
@@ -139444,16 +139447,16 @@ index 0ab4e3d..f6ef397 100644
      if (this.actor) return;
      if (!this._spineBusy) { this._retryAt = 0; this._loadSpine(true); return; }
      if (this._spineHidden && !this._stuckAt && !globalThis.document?.hidden) this._stuckAt = nowMs() + SPINE_STUCK_MS;
-@@ -543,7 +567,7 @@ export class UnitView {
-         actor = new SpineActor(data, entry);
-         actor.setSkillIndex(this.info.skillIndex);
+@@ -567,7 +591,7 @@ export class UnitView {
+         actor.setSkillIndex(this.skillIndex ?? undefined);
+         actor.setRunMode(this.moveFast);
          // enemies play their attack clip once per attack, then walk on (GitHub #58: the sim stands them for that clip)
 -        actor.clipPerAttack = this.isEnemy;
 +        actor.clipPerAttack = this.isEnemy || ((id==='char_1035_wisdel'||this.info.spine==='char_1035_wisdel')&&this.info.skillIndex===2);
        } catch (err) {
          console.warn('[render] spine build failed', id, err?.message || err);
          this._releaseEntry(entry);
-@@ -587,8 +611,15 @@ export class UnitView {
+@@ -611,8 +635,15 @@ export class UnitView {
      });
    }
  
@@ -139470,7 +139473,7 @@ index 0ab4e3d..f6ef397 100644
    }
  
    /**
-@@ -698,6 +729,7 @@ export class UnitView {
+@@ -722,6 +753,7 @@ export class UnitView {
    /** Apply an interpolated sample (render/interp.js); `t` = the render clock's game time (ring countdowns). */
    sync(s, t) {
      if (!s) return;
@@ -139478,7 +139481,7 @@ index 0ab4e3d..f6ef397 100644
      if (Number.isFinite(t)) this.gameT = t;
      // the element gauge shown (b.snap `elem`): element, fill 0..1, cooldown end (game s) and length
      this.el = typeof s.el === 'string' ? s.el : null;
-@@ -973,6 +1005,8 @@ export class UnitView {
+@@ -1019,6 +1051,8 @@ export class UnitView {
      this.root.position.set(bx, by);
      this.root.alpha = alpha;
      this.root.zIndex = unitDepthKey(cam, this.x, this.y, this.lift);
@@ -139487,7 +139490,7 @@ index 0ab4e3d..f6ef397 100644
      // off-screen: nothing to animate or draw (bounds / hit-testing still follow `screen`)
      if (this._cull(bx, by, s, dt)) return;
      const flip = (this.isEnemy ? (ENEMY_MODEL_FACES_LEFT ? -this.visFacing : this.visFacing) : this.visFacing) * (this.mirrorX ? -1 : 1);
-@@ -993,7 +1027,7 @@ export class UnitView {
+@@ -1041,7 +1075,7 @@ export class UnitView {
        this.fallback.visible = this.swapT < 1;
        const sc = s * UNIT.modelScale * this.modelK;
        const flashK = this.flash > 0 ? this.flash : 0;
@@ -139496,7 +139499,7 @@ index 0ab4e3d..f6ef397 100644
        if (this.down) tint = DOWN_LOOK.tint;
        else if (this.flags & UF.FROZEN) tint = 0x9fd4ff;
        else if (this.flags & UF.COLD) tint = 0xcfe6ff;
-@@ -1029,14 +1063,16 @@ export class UnitView {
+@@ -1077,14 +1111,16 @@ export class UnitView {
        const bob = this.alive ? Math.sin(t * 2.4 + this.bob) * s * 0.03 : 0;
        this.fallback.scale.set(size / 160);
        this.fallback.position.set(0, -s * 0.08 + bob);
@@ -139515,7 +139518,7 @@ index 0ab4e3d..f6ef397 100644
      if (wedge && this.alive) {
        if (!this.facingArrow) {
          this.facingArrow = new P.Sprite(fxAtlas().tex.chevron);
-@@ -1070,7 +1106,7 @@ export class UnitView {
+@@ -1118,7 +1154,7 @@ export class UnitView {
  
      // head height: operators/tokens are uniform chibis; enemies vary (setup-pose bounds, when known; else the chibi
      // headroom × their official model factor)
@@ -139524,7 +139527,7 @@ index 0ab4e3d..f6ef397 100644
      if (this.isEnemy && spineShown && this.actor.entry.bounds) headTiles = clamp(this.actor.height * UNIT.modelScale * this.modelK * this.modelKY * 0.92, 0.55, this.isBoss ? 3.2 : 2.2);
      else if (this.isEnemy && this.isBoss) headTiles = 2.2;
      else if (this.isEnemy && spineShown) headTiles = clamp(UNIT.headroom * this.modelK * this.modelKY, 0.55, 2.2);
-@@ -1130,6 +1166,7 @@ export class UnitView {
+@@ -1178,6 +1214,7 @@ export class UnitView {
      this.shieldBar.visible = !!shielded;
      if (shielded) { this.shieldBar.position.set(x0, cy - bh / 2 - 1); this.shieldBar.width = bw; this.shieldBar.height = Math.max(1.5, bh * 0.35); }
      // SP
@@ -139532,7 +139535,7 @@ index 0ab4e3d..f6ef397 100644
      const showSp = showBars && !this.isEnemy && this.spMax > 0;
      this.spBg.visible = this.spFill.visible = showSp;
      const spH = Math.max(2, bh * 0.6);
-@@ -1138,10 +1175,11 @@ export class UnitView {
+@@ -1186,10 +1223,11 @@ export class UnitView {
        const active = !!(this.flags & UF.SKILL);
        const k = clamp(this.sp / this.spMax, 0, 1);
        ready = !active && k >= 0.999;
@@ -139546,7 +139549,7 @@ index 0ab4e3d..f6ef397 100644
        this._spY = sy;
      }
      this.spGlow.visible = ready;
-@@ -1175,7 +1213,9 @@ export class UnitView {
+@@ -1223,7 +1261,9 @@ export class UnitView {
        ic.position.set(x - ((icons.length - 1) * (isz + 2)) / 2 + i * (isz + 2), iy);
      }
      // element gauge row under the bars (b.snap `elem`); redeploy ring above a knocked-down operator (b.snap `down`)
@@ -139557,7 +139560,7 @@ index 0ab4e3d..f6ef397 100644
      this._updateDownRing(!prep && !!this.down && !this.alive, x, this.screen.y - DOWN_LOOK.height * s, s, t);
      // blocked marker at the feet (enemies held by a blocker)
      const blocked = !prep && this.alive && this.isEnemy && (this.flags & UF.BLOCKED);
-@@ -1209,6 +1249,26 @@ export class UnitView {
+@@ -1257,6 +1297,26 @@ export class UnitView {
     * The share of the element bar drawn (0..1): the remaining 元素值 (1 − fill), or during a 爆发冷却 the part of the
     * cooldown already run (the bar refills to full, PRTS 元素 "元素条显示缓慢恢复至上限"). 0 without a gauge.
     */
@@ -139609,7 +139612,7 @@ index 582bac3..8e23fa1 100644
          <div class="brief-boss brackets">
            <${MicroLabel} tone="gold">${t('ENEMY LEADER // 敌方领袖')}</${MicroLabel}>
 diff --git a/public/js/screens/game.js b/public/js/screens/game.js
-index 35f6d39..885d979 100644
+index 52a79eb..34d4608 100644
 --- a/public/js/screens/game.js
 +++ b/public/js/screens/game.js
 @@ -80,6 +80,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
@@ -139679,7 +139682,7 @@ index 35f6d39..885d979 100644
  
    // ---- camera: every request goes through setCam, which remembers it for the pen's way back -----------------------
    // the own prep board: the normal board, or — in the prep of a boss round — the player's half of the boss field
-@@ -848,6 +851,7 @@ function MatchScreen() {
+@@ -847,6 +850,7 @@ function MatchScreen() {
        moveOff?.(); moveOff = null;
        setDrag(null);
        view.highlightTiles(null, null);
@@ -139687,7 +139690,7 @@ index 35f6d39..885d979 100644
      };
      /** Open the direction wheel for a legal board drop (the piece stays on the tile meanwhile). */
      const openFacing = (entry, t) => {
-@@ -872,12 +876,20 @@ function MatchScreen() {
+@@ -871,12 +875,20 @@ function MatchScreen() {
          view.highlightTiles(null, null);
          view.highlightTiles(legal, 'legal');
          ptr.released = false; ptr.tile = null;
@@ -139709,7 +139712,7 @@ index 35f6d39..885d979 100644
        view.on('pieceDrop', async (e) => {
          endDrag();
          const L = live.current;
-@@ -911,13 +923,30 @@ function MatchScreen() {
+@@ -910,13 +922,30 @@ function MatchScreen() {
          const reason = dropFailureReason(L.placeCtx, e.uid, tile);
          if (reason) refuse(reason);
        }),
@@ -139741,7 +139744,7 @@ index 35f6d39..885d979 100644
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1061,10 +1090,10 @@ function MatchScreen() {
+@@ -1060,10 +1089,10 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
@@ -139754,7 +139757,7 @@ index 35f6d39..885d979 100644
      return () => showRange(view, null, 0, 0, null, SEL_RANGE);
    }, [view, selRangeKey]);
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
-@@ -1157,6 +1186,7 @@ function MatchScreen() {
+@@ -1156,6 +1185,7 @@ function MatchScreen() {
        if (shortcutBlocked(act, { modal: !!document.querySelector('.modal, .guide'), drawer: !!L.drawer })) return;
        if (act === 'escape') {
          if (L.emoteOpen) setEmoteOpen(false);
@@ -139762,7 +139765,7 @@ index 35f6d39..885d979 100644
          else if (L.pen && !L.detail) togglePenRef.current(false);
          else if (L.bondOpen) setBondOpen(null);
          else if (L.detail) setDetail(null);
-@@ -1230,6 +1260,8 @@ function MatchScreen() {
+@@ -1229,6 +1259,8 @@ function MatchScreen() {
      field, layers, layer, who: watchWho, bondLayers: battleState?.bondLayers || null,
    });
    const stripFid = strip.fieldId;
@@ -139771,7 +139774,7 @@ index 35f6d39..885d979 100644
    const liveLayers = (combat || settleMode) && battleState?.bondLayers ? battleState.bondLayers : null;
    // the observing pill names the player whose bonds the strip shows (the same teammate as the strip's "👁 name" tag)
    const observingName = cc && combat && watchedFid ? (!strip.self && stripFid === watchedFid ? strip.name : (players.find((p) => p.fieldId === watchedFid || ownFieldId(p.playerId) === watchedFid)?.name || t('队友'))) : null;
-@@ -1311,6 +1343,10 @@ function MatchScreen() {
+@@ -1310,6 +1342,10 @@ function MatchScreen() {
    return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', collapsed && 'is-collapsed', sp && 'has-sp', pen && 'is-pen', readyWhy && 'has-readywhy')}
        data-camera=${pen ? 'pen' : camKind}>
      <div class="gm__field" ref=${hostRef} onContextMenu=${(e) => e.preventDefault()}></div>
@@ -139782,7 +139785,7 @@ index 35f6d39..885d979 100644
      ${viewKind === 'loading' ? html`<div class="gm__loading"><${Spinner} label="LOADING FIELD" /></div>` : null}
      <div class="gm__vignette" aria-hidden="true"></div>
      ${tempNotice ? html`<${TempRowNotice} view=${view} count=${temp.count} items=${temp.items} label=${!drag && !facing}
-@@ -1346,8 +1382,18 @@ function MatchScreen() {
+@@ -1345,8 +1381,18 @@ function MatchScreen() {
          self=${Number.isFinite(priv?.lp) ? { lp: priv.lp, pending: liveLpNow.pending, unite: liveLpNow.unite, left: liveLpNow.left } : null}
          observe=${cc ? { canObserve: (p) => observeTarget(p, pub, myId, { observing: watchingOther, ownDone: localDone }), observing: watchingOther, onBack: backHome } : null} />
  
@@ -139803,7 +139806,7 @@ index 35f6d39..885d979 100644
        ${watchingOther && !combat ? html`<div class="gm__watching" role="status">
          <${GIcon} name="eye" /><span>${tParts('正在查看 {name} 的阵地（只读）', { name: html`<b>${watchedName}</b>` })}</span>
          ${spectator ? null : html`<${Button} size="sm" variant="primary" icon="back" onClick=${() => watchPlayer({ playerId: myId })}>${t('返回自己')}<//>`}
-@@ -1370,15 +1416,17 @@ function MatchScreen() {
+@@ -1369,15 +1415,17 @@ function MatchScreen() {
          client=${cc ? { progress, observing: observingName ? { name: observingName } : null, onBack: alive ? backHome : null, layers, layer, onLayer: setLayer } : null} />` : null}
  
        ${showDeadPill(alive, phase) ? (spectator
@@ -139826,7 +139829,7 @@ index 35f6d39..885d979 100644
          <${FullscreenButton} class="gm__gear gm__fs" />
        </div>
  
-@@ -1406,12 +1454,13 @@ function MatchScreen() {
+@@ -1405,12 +1453,13 @@ function MatchScreen() {
  
      ${banner ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
        tone=${banner.tone} duration=${banner.duration || 1500} onDone=${() => setBanner(null)} />` : null}
@@ -139842,7 +139845,7 @@ index 35f6d39..885d979 100644
      ${paused ? html`<${PausedOverlay} canResume=${solo} busy=${pauseBusy} onResume=${() => togglePause(false)} onExit=${() => setExitOpen(true)} />` : null}
  
 diff --git a/public/js/screens/loadout.js b/public/js/screens/loadout.js
-index c98ab8f..3783eb9 100644
+index ae8e3a1..4e69353 100644
 --- a/public/js/screens/loadout.js
 +++ b/public/js/screens/loadout.js
 @@ -27,10 +27,7 @@ import { chessLoadout } from '../ui/gameLogic.js';
@@ -139886,7 +139889,7 @@ index c98ab8f..3783eb9 100644
    const bonds = useMemo(() => {
      const used = new Set(roster.flatMap((c) => c.bonds || []));
      return (data.list('bonds') || []).filter((b) => b && used.has(b.bondId))
-@@ -721,7 +720,7 @@ export function badgeCount(entries, getChess) {
+@@ -722,7 +721,7 @@ export function badgeCount(entries, getChess) {
   * Entry button (lobby / room / briefing).
   * @param {{ from: 'lobby'|'room'|'briefing', size?: string, variant?: string, class?: string, label?: string }} props
   */
@@ -139895,7 +139898,7 @@ index c98ab8f..3783eb9 100644
    useData('local'); // the official preset icon (re-render once the local-art manifest arrives)
    const entries = useStore((s) => s.entries, Object.is, loadoutStore);
    const notOwned = useStore((s) => s.notOwned, Object.is, loadoutStore);
-@@ -732,7 +731,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
+@@ -733,7 +732,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
    // 0.2.0 自选编队: how many DIY slots the player filled
    const nDiy = diyCount(diy);
    return html`<button type="button" class=${cx('btn', `btn--${variant}`, `btn--${size}`, 'lo-entry', cls)} data-testid="loadout-open"
@@ -140521,10 +140524,10 @@ index 0000000..08b12f7
 +  };
 +}
 diff --git a/public/js/ui/detailPanel.js b/public/js/ui/detailPanel.js
-index 32b887b..d7ccdbc 100644
+index 215b725..a22f6f5 100644
 --- a/public/js/ui/detailPanel.js
 +++ b/public/js/ui/detailPanel.js
-@@ -40,6 +40,8 @@ import { abilityRows } from './abilityLines.js';
+@@ -43,6 +43,8 @@ import { abilityRows } from './abilityLines.js';
  import { data } from '../data.js';
  import { attackRangeGrid } from '../../../shared/loadoutRecord.js';
  import { SKILL_SUMMON_START_DEPLOY } from '../../../shared/constants.js';
@@ -140533,7 +140536,7 @@ index 32b887b..d7ccdbc 100644
  import { moduleBadge, fullTraitText } from './loadoutModel.js';
  import { t, tc, N_ } from '../../../shared/i18n.js';
  import { audio } from '../audio.js';
-@@ -474,6 +476,10 @@ export function ChessDetail({ chess, piece, unit, snapHp, editable, onSell, bond
+@@ -495,6 +497,10 @@ export function ChessDetail({ chess, piece, unit, snapHp, editable, onSell, bond
   */
  export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null }) {
    const m = data.get('assets');
@@ -140544,7 +140547,7 @@ index 32b887b..d7ccdbc 100644
    return html`
      <div class="dhead dhead--item">
        <div class=${cx('dhead__icon', item.isGolden && 'is-golden')}><${Img} src=${itemIconUrl(m, item)} fallback=${html`<${GIcon} name="bolt" />`} /></div>
-@@ -484,8 +490,9 @@ export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null }
+@@ -505,8 +511,9 @@ export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null }
          ${item.flavor ? html`<span class="dhead__flavor">${item.flavor}</span>` : null}
        </div>
      </div>
@@ -140556,7 +140559,7 @@ index 32b887b..d7ccdbc 100644
      ${!item.canGiveBond && item.giveBondId ? html`<${MorphGrantLine} item=${item} off=${offBonds} />` : null}
      ${item.note ? html`<p class="dhint dhint--rule"><${Icon} name="info" />${item.note}</p>` : null}
      ${item.itemType === 'MAGIC'
-@@ -551,6 +558,7 @@ function EnemyDetail({ enemy, snapHp, count, live = null }) {
+@@ -572,6 +579,7 @@ function EnemyDetail({ enemy, snapHp, count, live = null }) {
   * @param {boolean} [startDeploy] the sim's switch (tests pass both values)
   */
  export function summonDeployHint(token, startDeploy = SKILL_SUMMON_START_DEPLOY) {
@@ -140564,18 +140567,21 @@ index 32b887b..d7ccdbc 100644
    if (!token || token.kind !== 'summon' || token.placeable !== true) return null;
    const talent = Object.values(token.variants || {}).some((v) => (v?.sources || []).includes('talent'));
    if (talent) return t('作战开始时在摆放的位置部署');
-@@ -581,8 +589,9 @@ function tokenOwnerId(piece, pieces) {
-   return owner && owner.kind === 'chess' ? owner.id : null;
+@@ -653,11 +661,12 @@ function MapCharDetail({ token, snapHp, live, m }) {
+     <//>` : null}`;
  }
  
 -export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live = null }) {
 +export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live = null, researchStage = null }) {
    const m = data.get('assets');
+   // a band map character (外勤医疗's Touch / 预备干员-医疗, tokens.json kind 'mapChar') is an operator of the mode, not a
+   // summon: no owner variants — its stats, skill, talents and 特性 are on the record (GitHub #260, PR #278)
+   if (token?.kind === 'mapChar') return MapCharDetail({ token, snapHp, live, m });
 +  const research = rhineDevice(token.tokenId);
    // the owner's variant: its stats, talents and token skill (a golden owner's summon is stronger)
    const v0 = tokenVariantFor(token, ownerId);
    const s = v0?.stats || token.stats || {};
-@@ -595,32 +604,29 @@ export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live
+@@ -670,32 +679,29 @@ export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live
    const talents = (v0?.talents || []).filter((t) => t && t.name && t.desc);
    const skill = v0?.skill && v0.skill.desc && !/^skcom_withdraw/.test(String(v0.skill.skillId || '')) ? v0.skill : null;
    const hint = piece ? summonDeployHint(token) : null;
@@ -140617,7 +140623,7 @@ index 32b887b..d7ccdbc 100644
  function TerrainDetail({ terrain }) {
    return html`
      <div class="dhead">
-@@ -703,7 +709,7 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
+@@ -781,7 +787,7 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
      if (dr) return { type: 'chess', chess: dr, piece: own?.piece || null, unitId: u.id, unitItems: Array.isArray(u.items) ? u.items : null, standIn: null, diy: pick };
      if (c) return { type: 'chess', chess: c, piece: own?.piece || null, unitId: u.id, unitItems: Array.isArray(u.items) ? u.items : null, standIn: si };
      const t = data.lookup('tokens', u.defId) || diyToken(u.defId);
@@ -140626,7 +140632,7 @@ index 32b887b..d7ccdbc 100644
      const en = data.lookup('enemies', u.defId);
      return en ? { type: 'enemy', enemy: en, unitId: u.id } : null;
    }
-@@ -759,7 +765,7 @@ export function DetailPanel({ detail, editable, snapHp, onClose, onSell, onDestr
+@@ -837,7 +843,7 @@ export function DetailPanel({ detail, editable, snapHp, onClose, onSell, onDestr
          standIn=${detail.standIn || null} diy=${detail.diy || null} />` : null}
        ${detail.type === 'item' ? html`<${ItemDetail} item=${detail.item} piece=${detail.piece} editable=${editable} onDestroy=${destroyIt} offBonds=${offBonds} />` : null}
        ${detail.type === 'enemy' ? html`<${EnemyDetail} enemy=${detail.enemy} snapHp=${snapHp} count=${detail.count} live=${liveNow} />` : null}
@@ -140914,7 +140920,7 @@ index 1f3d5cc..e4c96c0 100644
        const sp = normalizeSp(pub.sp, pub.players);
        const first = !sp || sp.pickedCount === 0;
 diff --git a/public/js/ui/gameLogic/placement.js b/public/js/ui/gameLogic/placement.js
-index 222a2e3..326a009 100644
+index e166fef..3f43985 100644
 --- a/public/js/ui/gameLogic/placement.js
 +++ b/public/js/ui/gameLogic/placement.js
 @@ -1,3 +1,4 @@
@@ -140982,9 +140988,9 @@ index 222a2e3..326a009 100644
    if (target.area === 'hand') {
      const idx = target.idx;
      if (!Number.isInteger(idx) || idx < 0 || idx >= GEO.HAND_SIZE) return no('BAD_TILE', t('无法放置在该位置'));
-@@ -460,7 +482,9 @@ export function dropIntent(ctx, uid, target) {
-       && itemAttaches(ctx.getItem(ctx.pieces.get(uid)?.piece?.id)) && !equipMerges(ctx, uid);
-     return { t: 'g.equip', fields: { itemUid: uid, targetUid: occ.piece.uid }, confirmReplace: full };
+@@ -475,7 +497,9 @@ export function dropIntent(ctx, uid, target) {
+     // both slots used: the replace dialog picks the equipped item to destroy (g.equip replaceUid) — see equipReplaces
+     return { t: 'g.equip', fields: { itemUid: uid, targetUid: occ.piece.uid }, confirmReplace: equipReplaces(ctx, uid, occ.piece) };
    }
 -  const to = target.area === 'hand' ? { area: 'hand', idx: target.idx } : { area: 'board', row: target.row, col: target.col };
 +  const research = isRhineDevice(ctx.pieces.get(uid)?.piece?.id);
@@ -141755,10 +141761,10 @@ index 0f20766..a05668f 100644
    return { registry, lobby, network };
  }
 diff --git a/server/index.js b/server/index.js
-index b2ba50d..4d88b9a 100644
+index 440d266..619d75f 100644
 --- a/server/index.js
 +++ b/server/index.js
-@@ -55,6 +55,7 @@ export {
+@@ -57,6 +57,7 @@ export {
   *                     close: () => Promise<void> }>}
   */
  export async function startServer(opts = {}) {
@@ -142194,7 +142200,7 @@ index b95e5bb..6b9b40e 100644
      this._pubTimer = null;
      this._lastPubAt = -Infinity;
 diff --git a/server/match/PlayerState.js b/server/match/PlayerState.js
-index 5088a52..0660898 100644
+index aace612..5cbadf6 100644
 --- a/server/match/PlayerState.js
 +++ b/server/match/PlayerState.js
 @@ -1,3 +1,7 @@
@@ -142205,7 +142211,7 @@ index 5088a52..0660898 100644
  // server/match/PlayerState.js — authoritative per-player state + every prep intent handler (DESIGN §6.2).
  //
  // Handlers validate → mutate → recompute bonds → mark the private view dirty. They never throw on bad input; they
-@@ -185,6 +189,8 @@ export class PlayerState {
+@@ -186,6 +190,8 @@ export class PlayerState {
      this._tempDue = new Map();
      /** @type {Map<string, any>} 'r,c' → piece */
      this.board = new Map();
@@ -142214,7 +142220,7 @@ index 5088a52..0660898 100644
      /** persistent bond layers */
      this.layers = {};
      /** computed bond states */
-@@ -198,6 +204,16 @@ export class PlayerState {
+@@ -199,6 +205,16 @@ export class PlayerState {
      this.bondCountBonus = {};
      /** EffectRef list: { id, key, name, desc, iconKind, iconId, counter?, battle, params, data } */
      this.effects = [];
@@ -142272,7 +142278,7 @@ index ee78a66..4ea49aa 100644
            const loss = lp0 - ps.lp;
            if (loss < 0) fail(`${ps.playerId}: LP rose in settle ${lp0} → ${ps.lp}`);
 diff --git a/server/match/bot.js b/server/match/bot.js
-index 1408cb7..b9b7ead 100644
+index 4c6456f..46d69f0 100644
 --- a/server/match/bot.js
 +++ b/server/match/bot.js
 @@ -82,9 +82,10 @@ import { ASPD_MIN } from '../sim/constants.js';
@@ -142363,10 +142369,10 @@ index 1408cb7..b9b7ead 100644
      if (!p || p.kind !== 'token') continue;
      for (let n = p.count || 1; n > 0; n--) {
        yield;
-@@ -1786,6 +1813,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
-   const list = byVal(deployed);
-   if (consume) return list[0] || owned[0] || null;
-   const free = (p) => (p.items || []).length < gd.equipPerChess;
+@@ -1789,6 +1816,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
+   // a consumable on a full carrier destroys one of its items (the replace rule, GitHub #263): a carrier with a free slot
+   // first — the effect is the same on anyone
+   if (consume) return list.find(free) || owned.find(free) || list[0] || owned[0] || null;
 +  const rhineKey = itemKey(item.id);
 +  if (rhineKey === RE.terminal.key || rhineKey === RE.mainframe.key) {
 +    const partner = rhineKey === RE.terminal.key ? RE.mainframe.key : RE.terminal.key;
@@ -142379,7 +142385,7 @@ index 1408cb7..b9b7ead 100644
    if (rec.requiresBondId) {
      const member = list.find((p) => free(p) && (chessRec(m, p.id, ps)?.bonds || []).includes(rec.requiresBondId));
      if (member) return member;
-@@ -1829,7 +1865,7 @@ function useArt(m, ps, item, ctx) {
+@@ -1832,7 +1868,7 @@ function useArt(m, ps, item, ctx) {
    if (key) { const [r, c] = parseKey(key); tryDo(() => ps.useArt(item.uid, r, c)); }
  }
  
@@ -142679,10 +142685,10 @@ index 0000000..bc28e27
 +
 +export const createDamageBoard = (matchId) => new DamageBoard(matchId);
 diff --git a/server/match/effectsMeta.js b/server/match/effectsMeta.js
-index df1bdc8..16f2057 100644
+index 5ef5403..c67ae8b 100644
 --- a/server/match/effectsMeta.js
 +++ b/server/match/effectsMeta.js
-@@ -41,6 +41,7 @@ import { boardOrder, parseKey, tileKey } from './board.js';
+@@ -43,6 +43,7 @@ import { boardOrder, parseKey, tileKey } from './board.js';
  import { pieceBonds as bondsOfPiece } from './bondsMeta.js';
  import { registerAllMeta } from '../sim/content/index.js';
  import { registerBuiltins } from './builtinMeta.js';
@@ -142690,7 +142696,7 @@ index df1bdc8..16f2057 100644
  import { msg, dn } from '../../shared/i18n.js';
  
  export const HOOKS = Object.freeze([
-@@ -170,7 +171,7 @@ export class EffectDispatcher {
+@@ -172,7 +173,7 @@ export class EffectDispatcher {
      if (!fn) return;
      const ctx = makeCtx(this.m, ps, source, hook, ev);
      for (let i = 0; i < repeat; i++) {
@@ -142699,7 +142705,7 @@ index df1bdc8..16f2057 100644
      }
    }
  
-@@ -272,7 +273,7 @@ export class EffectDispatcher {
+@@ -278,7 +279,7 @@ export class EffectDispatcher {
    _garrisonHooks(h, g) {
      if (typeof h.garrisonHooks === 'function') {
        try {
@@ -142708,7 +142714,7 @@ index df1bdc8..16f2057 100644
          if (Array.isArray(list) && list.length) return list;
        } catch (e) { this._report(`garrison:${g.effectKey}`, 'garrisonHooks', e); }
      }
-@@ -369,7 +370,7 @@ export class EffectDispatcher {
+@@ -387,7 +388,7 @@ export class EffectDispatcher {
      this.depth++;
      try {
        const ctx = makeCtx(this.m, ps, { ...source, key }, hook, ev);
@@ -142717,7 +142723,7 @@ index df1bdc8..16f2057 100644
      } finally {
        this.depth--;
      }
-@@ -461,12 +462,12 @@ export function makeCtx(m, ps, source, hook, ev = null) {
+@@ -487,12 +488,12 @@ export function makeCtx(m, ps, source, hook, ev = null) {
      board: () => boardOrder(ps.board).map(({ r, c, piece }) => ps.pieceView(piece, [r, c])),
      hand: () => ps.hand.map(view),
      temp: () => ps.temp.map(view),
@@ -142732,7 +142738,7 @@ index df1bdc8..16f2057 100644
        return v;
      },
      /**
-@@ -600,7 +601,7 @@ export function makeCtx(m, ps, source, hook, ev = null) {
+@@ -626,7 +627,7 @@ export function makeCtx(m, ps, source, hook, ev = null) {
      },
      destroyPiece: (uid) => {
        const l = ps.find(uid);
@@ -142847,7 +142853,7 @@ index 7b9e04a..1f46d8f 100644
    const sorted = alive.slice().sort((a, b) => a.seat - b.seat);
    const groups = [];
 diff --git a/server/match/gamedata.js b/server/match/gamedata.js
-index 237306d..c6f8eba 100644
+index 7608cde..64884b7 100644
 --- a/server/match/gamedata.js
 +++ b/server/match/gamedata.js
 @@ -13,6 +13,7 @@
@@ -142883,7 +142889,7 @@ index 237306d..c6f8eba 100644
      this.economy = this.config.economy && typeof this.config.economy === 'object' ? this.config.economy : {};
      const chess = this.raw.chess && typeof this.raw.chess === 'object' ? this.raw.chess : {};
      this._chess = chess;
-@@ -462,10 +465,7 @@ export class GameData {
+@@ -468,10 +471,7 @@ export class GameData {
      };
    }
    bans(difficulty) {
@@ -142941,7 +142947,7 @@ index df2c67b..1322549 100644
          fail(`${id}: piece of unknown kind ${p.kind}`);
        }
 diff --git a/server/match/match/bossRounds.js b/server/match/match/bossRounds.js
-index e411c78..941cfb3 100644
+index 74d659a..444ca60 100644
 --- a/server/match/match/bossRounds.js
 +++ b/server/match/match/bossRounds.js
 @@ -1,3 +1,4 @@
@@ -142957,16 +142963,16 @@ index e411c78..941cfb3 100644
          return ev.input && typeof ev.input === 'object' ? ev.input : input;
        });
        const fieldId = `b${i + 1}`;
-@@ -99,7 +101,7 @@ export class MatchBoss {
-         spawns: this._sanitizeSpawns(spawns),
+@@ -100,7 +102,7 @@ export class MatchBoss {
          routes: wave.routes,
          sharedBoss: this.bossPool,
--        flags: { layerGainsEnabled: false, ...this.gd.dp },
-+        flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: false, ...this.gd.dp },
+         // the round's enemy effects for the leaders' mid-fight summons (server/sim/content/bosses.js summonMods)
+-        flags: { layerGainsEnabled: false, ...this.gd.dp, enemyScale: this.gd.enemyScale(this.round) },
++        flags: { operatorFixesEnabled: this.operatorsEnabled, layerGainsEnabled: false, ...this.gd.dp, enemyScale: this.gd.enemyScale(this.round) },
          fieldId,
          enemyOverrides: wave.overrides,
          waveId: wave.templateId,
-@@ -108,9 +110,9 @@ export class MatchBoss {
+@@ -109,9 +111,9 @@ export class MatchBoss {
        if (this.clientCombat) return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), opts: bopts, battle: null, live: true };
        const battle = this.newBattle(bopts);
        try {
@@ -142978,7 +142984,7 @@ index e411c78..941cfb3 100644
        } catch (e) { this.reportError('boss leak hook', e); }
        return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), battle, live: true };
      });
-@@ -146,8 +148,8 @@ export class MatchBoss {
+@@ -147,8 +149,8 @@ export class MatchBoss {
          f.credit = new CreditPool(pool);
          f.battle = this._specBattle(f.spec, { sharedBoss: f.credit });
          try {
@@ -142989,7 +142995,7 @@ index e411c78..941cfb3 100644
          } catch (e) { this.reportError('boss leak hook', e); }
        }
        this._watchBossFields(recs);
-@@ -221,13 +223,13 @@ export class MatchBoss {
+@@ -222,13 +224,13 @@ export class MatchBoss {
        if (n <= f.lpAcked) return;
        const d = n - f.lpAcked;
        f.lpAcked = n;
@@ -143005,7 +143011,7 @@ index e411c78..941cfb3 100644
    }
  
    /** The server runs a boss field in real time (no client left): credits only what exceeds the client's reports. */
-@@ -383,16 +385,18 @@ export class MatchBoss {
+@@ -384,16 +386,18 @@ export class MatchBoss {
      ps.dirty();
    }
  
@@ -143028,7 +143034,7 @@ index e411c78..941cfb3 100644
      this.teamLp = Math.max(0, this.teamLp - n);
      if (this._bossLazyPublic()) { this._bossPublic(); return; }
      this._syncTeamLp();
-@@ -468,6 +472,7 @@ export class MatchBoss {
+@@ -469,6 +473,7 @@ export class MatchBoss {
  
    /** Every boss field is over: stats, bounties, then the Hidden Core or RESULT. */
    _finishFinal(hidden, resultOf) {
@@ -143036,7 +143042,7 @@ index e411c78..941cfb3 100644
      if (this.phase !== (hidden ? PHASE.HIDDEN_CORE : PHASE.FINAL_ASSAULT)) return;
      this._stopClientCombat();
      for (const f of this.fields) {
-@@ -491,6 +496,9 @@ export class MatchBoss {
+@@ -492,6 +497,9 @@ export class MatchBoss {
      // the end condition the server registered first decides (client-side combat: _endFinal — pool 0 → victory, team LP 0
      // → defeat); a boss field's final result may never turn a defeat into a victory (user playtest #6 item 5)
      const victory = this._finalEnding ? this._finalEnding === 'cleared' : this.bossPool.hp <= 0;
@@ -143046,7 +143052,7 @@ index e411c78..941cfb3 100644
      this._syncTeamLp();
      this.deadline = 0;
      this.overtimeAt = 0;
-@@ -498,7 +506,7 @@ export class MatchBoss {
+@@ -499,7 +507,7 @@ export class MatchBoss {
      this.runner = null;
      if (!hidden) {
        const eligible = victory && !!this.hiddenBossId && hiddenEligible(this.gd, { layerSum: this.hiddenLayerSum, teamLp: this.teamLp });
@@ -143055,7 +143061,7 @@ index e411c78..941cfb3 100644
          if (eligible) {
            this.hiddenReached = true;
            this.bossPool = null;
-@@ -509,7 +517,7 @@ export class MatchBoss {
+@@ -510,7 +518,7 @@ export class MatchBoss {
          }
        });
      } else {
@@ -143498,7 +143504,7 @@ index 7c254e7..c3e4ad9 100644
      if (this.ended || this.disposed) return;
      this.ended = true;
 diff --git a/server/match/match/unitePhase.js b/server/match/match/unitePhase.js
-index 4f1093a..86e328f 100644
+index 31bbeda..b63bb61 100644
 --- a/server/match/match/unitePhase.js
 +++ b/server/match/match/unitePhase.js
 @@ -1,3 +1,5 @@
@@ -143507,7 +143513,7 @@ index 4f1093a..86e328f 100644
  // server/match/match/unitePhase.js — Match methods: 联防 glue (the rules: server/match/unite.js) — the UNITE phase in
  // both modes (the 联防 field from the helpers' carried state and the leakers' enemies), its end, and the leakers' live
  // counts (_uniteLeft, user playtest #6 item 7; _uniteTick in the server-run mode).
-@@ -58,7 +60,7 @@ export class MatchUnite {
+@@ -59,7 +61,7 @@ export class MatchUnite {
        spawns: this._sanitizeSpawns(wave.spawns),
        routes: wave.routes,
        sharedBoss: null,
@@ -146959,7 +146965,7 @@ index dd247cb..aa03fe1 100644
  export const isCoreBond = (id) => coreBondIds().has(id);
  
 diff --git a/server/sim/content/tokens.js b/server/sim/content/tokens.js
-index c2df016..81a327e 100644
+index 9322368..9800fb6 100644
 --- a/server/sim/content/tokens.js
 +++ b/server/sim/content/tokens.js
 @@ -1,3 +1,4 @@
@@ -146967,7 +146973,7 @@ index c2df016..81a327e 100644
  // server/sim/content/tokens.js — summons / tokens (data/tokens.json), the 炎 bond summon “炎佑” and band map characters.
  //
  // Kits: `kits[tokenId] = (bb, raw, def) => Kit` (content/index.js resolves token kits here). bb = the token's skill
-@@ -1578,7 +1579,7 @@ const RAW_KITS = {
+@@ -1585,7 +1586,7 @@ const RAW_KITS = {
    [TOKEN_IDS.touch]: touchKit,
  };
  /** tokenId → kit fn; kits built here carry `fromTokens: true` (deploy limits only police those). */
@@ -147063,10 +147069,10 @@ index 0000000..5c41524
 + return {ok:true,unitId:token.id,tile:r*COLS+c};
 +}
 diff --git a/server/sim/damage.js b/server/sim/damage.js
-index d6f170f..486db3f 100644
+index 72e95d9..2bea26f 100644
 --- a/server/sim/damage.js
 +++ b/server/sim/damage.js
-@@ -519,6 +519,23 @@ export function reduceElement(target, amount, el = null) {
+@@ -523,6 +523,23 @@ export function reduceElement(target, amount, el = null) {
    return removed;
  }
  
@@ -147090,7 +147096,7 @@ index d6f170f..486db3f 100644
  /**
   * Heal pipeline. Returns the HP actually restored. `noHeal` stops heals from others (`self` heals pass); `healFree` (禁疗,
   * PRTS 异常效果 HEAL_FREE "受到的治疗量变为0") stops the unit's own too — except an HP-regeneration attribute (`regen`:
-@@ -536,9 +553,11 @@ export function heal(battle, source, target, amount, opts = {}) {
+@@ -540,9 +557,11 @@ export function heal(battle, source, target, amount, opts = {}) {
    if (!target || !target.alive || target.removed || !target.deployed || target.bossPool) return 0;
    const self = source === target || !!opts.self;
    const through = !!(source && source.profile && typeof source.profile.healThrough === 'function' && source.profile.healThrough(source, target));
@@ -148863,7 +148869,7 @@ index 1b201a5..374cad7 100644
          n++;
 diff --git a/test/content/makoto.test.js b/test/content/makoto.test.js
 new file mode 100644
-index 0000000..7c14b2f
+index 0000000..4aabb57
 --- /dev/null
 +++ b/test/content/makoto.test.js
 @@ -0,0 +1,104 @@
@@ -148952,7 +148958,7 @@ index 0000000..7c14b2f
 +  const {h,u}=setup(1);h.b.emit('dollSwitch',{unit:u,done:false});h.run(22);
 +  const hits=h.hooksOf('damaged').filter(c=>c.dmg.tags?.includes('makotoAllOut'));
 +  assert.equal(hits.length,1);
-+  assert.equal(hits[0].dmg.amount,u.s.atk*4.3);
++  assert.equal(hits[0].dmg.amount,u.s.atk*4.5, 'full-potential talent multiplier from official 0.2.1 builder');
 +  const second=setup(1);second.h.b.emit('dollSwitch',{unit:second.u,done:false});second.h.run(1.1);
 +  second.h.b.dealDamage(null,second.u,{amount:1e7,type:'true'});second.h.run(22);
 +  assert.equal(second.h.hooksOf('damaged').filter(c=>c.dmg.tags?.includes('makotoAllOut')).length,0);
@@ -148973,7 +148979,7 @@ index 0000000..7c14b2f
 +});
 diff --git a/test/content/narant.test.js b/test/content/narant.test.js
 new file mode 100644
-index 0000000..c675d7e
+index 0000000..b0f4f46
 --- /dev/null
 +++ b/test/content/narant.test.js
 @@ -0,0 +1,63 @@
@@ -149015,9 +149021,9 @@ index 0000000..c675d7e
 + for(const [cid,mods]of Object.entries(choices)){assert.deepEqual((cards[cid].modules??[]).map(m=>m.uniEquipId),mods);
 + const none=ds.getChess(cid,{moduleId:'none'});for(const mod of mods){const d=ds.getChess(cid,{moduleId:mod});assert.ok(d.stats.atk>none.stats.atk);assert.equal(d.raw.module.active,true);}if(mods.length)assert.equal(none.raw.module.active,false);}
 +});
-+test('Narant X: steals twice near her and caps ATK/DEF at 300/240; none uses 250/200',()=>{
-+ for(const [mod,cap]of [['uniequip_002_narant',300],['none',250]]){const {h,u,e}=setup(true,mod);u.skill.rule='NEVER';e.base.atk=10000;e.markDirty();h.b.dealDamage(u,e,{amount:1,type:'phys',isAttack:true});assert.equal(u.findBuff('narant:steal').mods.atkFlat,mod==='none'?25:50);
-+ for(let i=0;i<20;i++)h.b.dealDamage(u,e,{amount:1,type:'phys',isAttack:true});assert.equal(u.findBuff('narant:steal').mods.atkFlat,cap);clean(h);}
++test('full-potential Narant X steals twice nearby and caps ATK/DEF at 324/252; none uses 270/210',()=>{
++ for(const [mod,cap,defCap]of [['uniequip_002_narant',324,252],['none',270,210]]){const {h,u,e}=setup(true,mod);u.skill.rule='NEVER';e.base.atk=10000;e.markDirty();h.b.dealDamage(u,e,{amount:1,type:'phys',isAttack:true});assert.equal(u.findBuff('narant:steal').mods.atkFlat,mod==='none'?27:54);
++ for(let i=0;i<20;i++)h.b.dealDamage(u,e,{amount:1,type:'phys',isAttack:true});assert.equal(u.findBuff('narant:steal').mods.atkFlat,cap);assert.equal(u.findBuff('narant:steal').mods.defFlat,defCap);clean(h);}
 +});
 +test('Narant Y: after six seconds without damage gains 15% ATK; taking damage clears it',()=>{
 + const {h,u}=setup(true,'uniequip_003_narant',0,false);h.run(6.2);assert.equal(u.findBuff('narant:unhurt').mods.atkPct,.15);h.b.dealDamage(null,u,{amount:1,type:'true'});h.run(.2);assert.equal(u.findBuff('narant:unhurt'),null);clean(h);
@@ -151121,7 +151127,7 @@ index 0000000..792a660
 +  done(h);
 +});
 diff --git a/test/data.test.js b/test/data.test.js
-index c4f27b5..cb7b9c3 100644
+index a96fad1..b2001a5 100644
 --- a/test/data.test.js
 +++ b/test/data.test.js
 @@ -74,12 +74,12 @@ test('numbers: every stats/bb/enemyScale object holds only finite numbers (no nu
@@ -151141,7 +151147,7 @@ index c4f27b5..cb7b9c3 100644
    assert.equal(normalChess.filter((c) => c.isDiy).length, 4);
    assert.equal(normalChess.filter((c) => c.isHidden).length, 17);
  });
-@@ -127,9 +127,9 @@ test('chess: every non-DIY chess has stats, range, classification and a resolvab
+@@ -128,9 +128,9 @@ test('chess: every non-DIY chess has stats, range, classification and a resolvab
    assert.equal(chess.chess_char_1_01_a.targetPriority, 'fly');
  });
  
@@ -151154,7 +151160,7 @@ index c4f27b5..cb7b9c3 100644
    const modes = new Set(['BOARD', 'BOARD_AND_DECK', 'BOARD_ALL_CHESS']);
    for (const b of Object.values(bonds)) {
      assert.ok(modes.has(b.countMode), `${b.bondId}: countMode ${b.countMode}`);
-@@ -152,18 +152,18 @@ test('bonds: 23 bonds with valid members, thresholds and effects', () => {
+@@ -153,18 +153,18 @@ test('bonds: 23 bonds with valid members, thresholds and effects', () => {
    for (const c of normalChess) for (const b of c.bonds) assert.ok(bonds[b].members.includes(c.chessId), `${c.chessId} not in ${b}.members`);
  });
  
@@ -151178,7 +151184,7 @@ index c4f27b5..cb7b9c3 100644
    assert.equal(Object.values(items).filter((i) => i.itemType === 'MAGIC').length, 3);
    for (const it of Object.values(items)) {
      assert.ok(effects[it.effectId], `${it.id}: effect ${it.effectId}`);
-@@ -426,7 +426,7 @@ test('chess/tokens: talent tokens resolve and every token variant says where it
+@@ -427,7 +427,7 @@ test('chess/tokens: talent tokens resolve and every token variant says where it
      assert.equal(t.placeable, t.displayType !== 'HIDDEN' && made, `${t.tokenId} (${t.name}): placeable`);
    }
    assert.deepEqual(Object.values(tokens).filter((t) => t.placeable).map((t) => t.name).sort(),
@@ -151187,7 +151193,7 @@ index c4f27b5..cb7b9c3 100644
    assert.equal(tokens.enemy_9012_acloon.stats.deployLimit, tokens.enemy_9012_acloon.deployLimit);
  });
  
-@@ -594,7 +594,7 @@ test('tokens: owner loadout variants (bySkill per non-default owner skill, byMod
+@@ -595,7 +595,7 @@ test('tokens: owner loadout variants (bySkill per non-default owner skill, byMod
          assert.ok(Array.isArray(b.sources) && b.sources.every((x) => allowed.has(x)), `${t.tokenId}@${owner}: bySkill sources`);
          assert.ok(b.count === null || isInt(b.count), `${t.tokenId}@${owner}: bySkill count`);
        }
@@ -151345,7 +151351,7 @@ index 8641f67..f154b38 100644
    const prev = {
      version: 1, hash: 'a', generator: 'x', stats: { files: 3 },
 diff --git a/test/i18n-data.test.js b/test/i18n-data.test.js
-index 2a4b924..45b8411 100644
+index a7cd29d..a518e98 100644
 --- a/test/i18n-data.test.js
 +++ b/test/i18n-data.test.js
 @@ -13,7 +13,11 @@ import { createDataStore } from '../public/js/data.js';
@@ -151416,10 +151422,10 @@ index a13df84..93adee3 100644
    for (const pid of both.players) {
      const b = both.battle.getPlayer(pid).bonds.arcaneShip;
 diff --git a/test/match/bot-smarter.test.js b/test/match/bot-smarter.test.js
-index 533cd58..ad8523d 100644
+index 0d52a6e..7204650 100644
 --- a/test/match/bot-smarter.test.js
 +++ b/test/match/bot-smarter.test.js
-@@ -249,7 +249,6 @@ test('坎诺特 (利滚利: leftover funds are kept, +1 at ≥ 5): with a full b
+@@ -254,7 +254,6 @@ test('坎诺特 (利滚利: leftover funds are kept, +1 at ≥ 5): with a full b
      }
      m.dispose();
    }
@@ -155445,7 +155451,7 @@ index 0000000..fc5047f
 + });
 +});
 diff --git a/test/render/unitview.test.js b/test/render/unitview.test.js
-index 7f4aed4..5d21413 100644
+index 26e426b..14c9b6c 100644
 --- a/test/render/unitview.test.js
 +++ b/test/render/unitview.test.js
 @@ -10,6 +10,8 @@ import path from 'node:path';
@@ -156624,10 +156630,10 @@ index 66421fb..9f3f1d0 100644
        if (c.profession === 'TANK' && s.skillType === 'MANUAL' && s.trigger.rawRule !== 'CUSTOM_RANGE_SEARCH_ENEMY') assert.equal(s.trigger.rule, 'TAKE_DAMAGE', `${c.chessId} ${s.skillId}`);
      }
 diff --git a/test/sim/loadout.test.js b/test/sim/loadout.test.js
-index b4fec8d..2b438d1 100644
+index 8c4e942..c96a239 100644
 --- a/test/sim/loadout.test.js
 +++ b/test/sim/loadout.test.js
-@@ -293,8 +293,8 @@ test('harness battle with injected kits: non-default skill via the view uses the
+@@ -295,8 +295,8 @@ test('harness battle with injected kits: non-default skill via the view uses the
  
  test('tools/kit-coverage: every visible chess and each selectable skill, defaults hand-authored', { skip }, () => {
    const rep = kitCoverage();
@@ -157666,7 +157672,7 @@ index 0000000..85a2adb
 +  });
 +}
 diff --git a/test/ui/gameLogic.test.js b/test/ui/gameLogic.test.js
-index 9a870a3..e8e39f2 100644
+index 7a383f7..d2704cf 100644
 --- a/test/ui/gameLogic.test.js
 +++ b/test/ui/gameLogic.test.js
 @@ -7,14 +7,7 @@ import assert from 'node:assert/strict';
@@ -157685,7 +157691,7 @@ index 9a870a3..e8e39f2 100644
  import { pairPlayers } from '../../server/match/finalAssault.js';
  import { PHASE, GEO } from '../../shared/constants.js';
  import { setLang, setMessages } from '../../shared/i18n.js';
-@@ -529,7 +522,23 @@ describe('drafts', () => {
+@@ -530,7 +523,23 @@ describe('drafts', () => {
      const sp2 = normalizeSp({ cards: [{}, {}], order: ['b', 'a'], turn: 0, picks: [{ playerId: 'b', idx: 1 }, { playerId: 'x', idx: 9 }] }, players);
      assert.equal(sp2.turnPid, 'b'); assert.equal(sp2.cards[1].takenBy, 'b'); assert.equal(sp2.pickOf.has('x'), false);
      assert.equal(normalizeSp(null), null);
@@ -159833,7 +159839,7 @@ index 0000000..14eb8a2
 +  return manifest;
 +}
 diff --git a/tools/build-data.mjs b/tools/build-data.mjs
-index 6ed26c4..ff7a643 100644
+index b7be410..3a0e7b1 100644
 --- a/tools/build-data.mjs
 +++ b/tools/build-data.mjs
 @@ -43,6 +43,7 @@ import { extendedGrid } from '../shared/loadoutRecord.js';
@@ -159853,7 +159859,7 @@ index 6ed26c4..ff7a643 100644
  } catch (e) {
    console.error(`build-data: ${e.message}`);
    process.exit(2);
-@@ -3951,7 +3952,8 @@ async function main() {
+@@ -4010,7 +4011,8 @@ async function main() {
    }
  }
  

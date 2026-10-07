@@ -2,23 +2,28 @@
 
 为朋友小服整理的独立 Mod 工具包，基于 [Stronghold Protocol](https://github.com/sganggs/Stronghold-Protocol)。采用可重放补丁与数据生成器：保留干净上游，构建单独运行目录，再交给 Docker Compose。适配版本见 [upstream.lock.json](upstream.lock.json)。
 
-莱茵生命、收藏品、新干员和伤害统计来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
+莱茵生命、收藏品、两个干员包、伤害统计、恭喜发财和定向甄选来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
 
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
 | 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
-| 莱茵生命 | 科研装置、莱茵干员、盟约和装备 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) |
+| 莱茵生命 | 科研装置、莱茵干员、盟约和装备，新增五阶谬因（二技能自动适配） | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) |
 | 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
 | 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |
+| 恭喜发财 | 每席位随机不同五阶开局，照常消耗共享卡池份数 | [RiZhiZhaoYi](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) |
+| 额外干员包 | 望、赤刃明霄陈、凯尔希·思衡托、维什戴尔；不重复丰川祥子 | [Lunac1a](https://github.com/Lunac1a/Stronghold-Protocol) |
+| 定向甄选 | 晋升奖励优先主要盟约，转职装备增加抽取权重 | [Strinova-xinghui](https://github.com/Strinova-xinghui/Stronghold-Protocol) |
 
 游戏本体来自 [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。本仓库主要补充独立房间开关、+4 回合、多资料集联机适配、朋友服配置、界面整合与 Docker 部署流程。[完整来源、引用提交与移植范围](notices/SOURCES.md) 可供核对；引用不代表来源作者参与或认可本整合版。
 
-2026-10-07 已适配官方 **0.2.0**（补位、自选编队、多语言、快捷键等），同步莱茵 `v0.1.3-rhine.3` 的装置产层与伊芙利特继承规则，详见 [更新说明](docs/MOD-UPDATES.md)。四人房和五个独立开关保留；其他来源暂无新的玩法提交。
+2026-10-07 已适配官方 **0.2.0**（补位、自选编队、多语言、快捷键等），同步莱茵 `v0.1.3-rhine.3` 的装置产层与伊芙利特继承规则，详见 [更新说明](docs/MOD-UPDATES.md)。四人房和八个独立开关保留；新增上述三项可选拓展。
 
-所有拓展默认关闭，可自由组合。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
+谬因随莱茵生命开启，二技能为固定朝向的周期直线法伤，中继器增攻、友军穿抗；友军波束折射仍简化，三技能暂未开放。
 
-服务器演算，最多 4 人合作；原版/莱茵 × 新干员关闭/开启四套资料隔离。
+所有拓展默认关闭，可自由组合。所有八项均有圆圈叹号按钮，点击打开介绍，非房主也能阅读；说明按钮不会切换开关。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
+
+服务器演算，最多 4 人合作；原版/莱茵 × 新干员包关闭/开启 × 额外干员包关闭/开启，共八套资料隔离。
 
 ## 首次部署
 
@@ -26,7 +31,7 @@
 
 建议优先交给 Agent 完成部署。可以使用 DSH、WorkBuddy、OpenCode 等能读仓库并执行命令的 Agent。把仓库链接与下面这段话交给它，提供目标电脑或服务器的实际环境即可；这些工具不是本项目的运行依赖。
 
-> 请部署这个仓库的 Mod 版。先阅读 AGENTS.md、README.md 和 docs/DEPLOYMENT.md，按 upstream.lock.json 固定版本，在独立目录构建并验证，保留五个默认关闭的拓展开关。云服务器优先 Docker Compose；本地开服请按 docs/LOCAL-LAUNCHER.md 使用上游统一启动入口，必须启动带 Mod 的构建目录。保护已有服务和活跃房间，部署后验证多人同步与重连，最后给我可用地址。
+> 请部署这个仓库的 Mod 版。先阅读 AGENTS.md、README.md 和 docs/DEPLOYMENT.md，按 upstream.lock.json 固定版本，在独立目录构建并验证，保留八个默认关闭的拓展开关。云服务器优先 Docker Compose；本地开服请按 docs/LOCAL-LAUNCHER.md 使用上游统一启动入口，必须启动带 Mod 的构建目录。保护已有服务和活跃房间，部署后验证多人同步与重连，最后给我可用地址。
 
 上游整合包和本地统一启动入口的接入说明见 [本地开服与 Agent 适配指引](docs/LOCAL-LAUNCHER.md)。当前工具包默认仍用 Docker 构建（Windows 可用 WSL），不宣称提供原生 Windows 一键 Mod 安装器，也不自动兼容未经验证的最新上游。
 

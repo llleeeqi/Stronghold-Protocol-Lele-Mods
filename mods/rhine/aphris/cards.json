@@ -1,0 +1,819 @@
+{
+  "chess": {
+    "chess_rhine_aphris_a": {
+      "chessId": "chess_rhine_aphris_a",
+      "baseId": "chess_rhine_aphris_a",
+      "goldenId": "chess_rhine_aphris_b",
+      "isGolden": false,
+      "tier": 5,
+      "identifier": 129,
+      "isHidden": false,
+      "isDiy": false,
+      "visible": true,
+      "kitBaseId": "chess_rhine_aphris_a",
+      "chessType": "PRESET",
+      "shopSortId": 24,
+      "charId": "char_4229_aphris",
+      "name": "谬因",
+      "appellation": "Aphrissa",
+      "rarity": 6,
+      "profession": "CASTER",
+      "subProfessionId": "blastcaster",
+      "subProfessionName": "轰击术师",
+      "position": "RANGED",
+      "nationId": "columbia",
+      "bonds": [
+        "rhineShip"
+      ],
+      "garrisonIds": [],
+      "price": 4,
+      "sellPrice": 1,
+      "upgradeNum": 3,
+      "upgradeChessId": "chess_rhine_aphris_b",
+      "status": {
+        "phase": 2,
+        "level": 1,
+        "skillLevel": 4,
+        "equipLevel": 0
+      },
+      "stats": {
+        "maxHp": 1261,
+        "atk": 727,
+        "def": 107,
+        "res": 20,
+        "cost": 34,
+        "blockCnt": 1,
+        "bat": 2.9,
+        "aspd": 100,
+        "respawnTime": 70,
+        "spRecovery": 1,
+        "hpRecoveryPerSec": 0,
+        "moveSpeed": 1,
+        "tauntLevel": 0,
+        "massLevel": 0,
+        "deployLimit": 1,
+        "deckStack": 0
+      },
+      "immunities": {
+        "stun": false,
+        "silence": false,
+        "sleep": false,
+        "frozen": false,
+        "levitate": false
+      },
+      "rangeId": "5-1",
+      "rangeGrid": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "dmgType": "arts",
+      "attackKind": "ranged",
+      "projectile": "bolt",
+      "canHitFly": true,
+      "targetPriority": null,
+      "trait": {
+        "desc": "攻击造成超远距离的群体法术伤害",
+        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
+        "bb": {},
+        "bbStr": {},
+        "rangeGrid": null
+      },
+      "skill": {
+        "skillId": "skchr_aphris_2",
+        "iconId": "skchr_aphris_2",
+        "name": "临界瞬爆",
+        "level": 4,
+        "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力90%的法术伤害，光束可被我方干员改变方向",
+        "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>90%</>的法术伤害，光束可被我方干员改变方向",
+        "skillType": "MANUAL",
+        "durationType": "NONE",
+        "duration": 8,
+        "spType": "INCREASE_WITH_TIME",
+        "spCost": 22,
+        "initSp": 10,
+        "maxChargeTime": 1,
+        "increment": 1,
+        "bb": {
+          "atk_scale": 0.9,
+          "interval": 0.5
+        },
+        "bbStr": {},
+        "rangeId": null,
+        "rangeGrid": null,
+        "prefabId": "skchr_aphris_2",
+        "trigger": {
+          "rule": "DEFAULT",
+          "rawRule": "DEFAULT",
+          "customRangeGrid": null
+        },
+        "index": 1,
+        "overrideTokenKey": null
+      },
+      "talents": [
+        {
+          "index": 0,
+          "name": "链路协议",
+          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "bb": {
+            "cnt": 1,
+            "atk": 0.25
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": "token_10070_aphris_pc",
+          "hidden": false,
+          "fromModule": false
+        },
+        {
+          "index": 1,
+          "name": "取样优化",
+          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "bb": {
+            "magic_resist_penetrate_fixed": 10
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": null,
+          "hidden": false,
+          "fromModule": false
+        }
+      ],
+      "tokens": [
+        "token_10070_aphris_pc"
+      ],
+      "module": {
+        "id": "uniequip_002_aphris",
+        "name": "第三相态",
+        "type": "BLA-Y",
+        "level": 0,
+        "active": false
+      },
+      "assets": {
+        "avatar": "char_4229_aphris",
+        "portrait": "char_4229_aphris_1",
+        "spine": "char_4229_aphris",
+        "skillIcon": "skchr_aphris_1",
+        "subProfIcon": "sub_blastcaster_icon"
+      },
+      "skills": [
+        {
+          "skillId": "skchr_aphris_2",
+          "iconId": "skchr_aphris_2",
+          "name": "临界瞬爆",
+          "level": 4,
+          "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力90%的法术伤害，光束可被我方干员改变方向",
+          "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>90%</>的法术伤害，光束可被我方干员改变方向",
+          "skillType": "MANUAL",
+          "durationType": "NONE",
+          "duration": 8,
+          "spType": "INCREASE_WITH_TIME",
+          "spCost": 22,
+          "initSp": 10,
+          "maxChargeTime": 1,
+          "increment": 1,
+          "bb": {
+            "atk_scale": 0.9,
+            "interval": 0.5
+          },
+          "bbStr": {},
+          "rangeId": null,
+          "rangeGrid": null,
+          "prefabId": "skchr_aphris_2",
+          "trigger": {
+            "rule": "DEFAULT",
+            "rawRule": "DEFAULT",
+            "customRangeGrid": null
+          },
+          "index": 1,
+          "overrideTokenKey": null,
+          "isDefault": true
+        }
+      ],
+      "availableSkillIndices": [
+        1
+      ],
+      "extension": {
+        "id": "rhine-aphris",
+        "source": "SrC2O4/Stronghold-Protocol",
+        "sourceRevision": "c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88",
+        "supportedSkills": [
+          "skchr_aphris_2"
+        ]
+      }
+    },
+    "chess_rhine_aphris_b": {
+      "chessId": "chess_rhine_aphris_b",
+      "baseId": "chess_rhine_aphris_a",
+      "goldenId": "chess_rhine_aphris_b",
+      "isGolden": true,
+      "tier": 5,
+      "identifier": 262,
+      "isHidden": false,
+      "isDiy": false,
+      "visible": false,
+      "kitBaseId": "chess_rhine_aphris_a",
+      "chessType": "PRESET",
+      "shopSortId": 24,
+      "charId": "char_4229_aphris",
+      "name": "谬因",
+      "appellation": "Aphrissa",
+      "rarity": 6,
+      "profession": "CASTER",
+      "subProfessionId": "blastcaster",
+      "subProfessionName": "轰击术师",
+      "position": "RANGED",
+      "nationId": "columbia",
+      "bonds": [
+        "rhineShip"
+      ],
+      "garrisonIds": [],
+      "price": 4,
+      "sellPrice": 1,
+      "upgradeNum": 0,
+      "upgradeChessId": null,
+      "status": {
+        "phase": 2,
+        "level": 60,
+        "skillLevel": 7,
+        "equipLevel": 1
+      },
+      "stats": {
+        "maxHp": 1646,
+        "atk": 871,
+        "def": 121,
+        "res": 20,
+        "cost": 26,
+        "blockCnt": 1,
+        "bat": 2.9,
+        "aspd": 100,
+        "respawnTime": 70,
+        "spRecovery": 1,
+        "hpRecoveryPerSec": 0,
+        "moveSpeed": 1,
+        "tauntLevel": 0,
+        "massLevel": 0,
+        "deployLimit": 1,
+        "deckStack": 0
+      },
+      "immunities": {
+        "stun": false,
+        "silence": false,
+        "sleep": false,
+        "frozen": false,
+        "levitate": false
+      },
+      "rangeId": "5-1",
+      "rangeGrid": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "dmgType": "arts",
+      "attackKind": "ranged",
+      "projectile": "bolt",
+      "canHitFly": true,
+      "targetPriority": null,
+      "trait": {
+        "desc": "攻击造成超远距离的群体法术伤害",
+        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
+        "bb": {},
+        "bbStr": {},
+        "rangeGrid": null,
+        "moduleDesc": "部署费用减少",
+        "moduleDescRaw": "部署费用<@ba.kw>减少</>"
+      },
+      "skill": {
+        "skillId": "skchr_aphris_2",
+        "iconId": "skchr_aphris_2",
+        "name": "临界瞬爆",
+        "level": 7,
+        "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力120%的法术伤害，光束可被我方干员改变方向",
+        "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>120%</>的法术伤害，光束可被我方干员改变方向",
+        "skillType": "MANUAL",
+        "durationType": "NONE",
+        "duration": 8,
+        "spType": "INCREASE_WITH_TIME",
+        "spCost": 20,
+        "initSp": 15,
+        "maxChargeTime": 1,
+        "increment": 1,
+        "bb": {
+          "atk_scale": 1.2,
+          "interval": 0.5
+        },
+        "bbStr": {},
+        "rangeId": null,
+        "rangeGrid": null,
+        "prefabId": "skchr_aphris_2",
+        "trigger": {
+          "rule": "DEFAULT",
+          "rawRule": "DEFAULT",
+          "customRangeGrid": null
+        },
+        "index": 1,
+        "overrideTokenKey": null
+      },
+      "talents": [
+        {
+          "index": 0,
+          "name": "链路协议",
+          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "bb": {
+            "cnt": 1,
+            "atk": 0.25
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": "token_10070_aphris_pc",
+          "hidden": false,
+          "fromModule": false
+        },
+        {
+          "index": 1,
+          "name": "取样优化",
+          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "bb": {
+            "magic_resist_penetrate_fixed": 10
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": null,
+          "hidden": false,
+          "fromModule": false
+        }
+      ],
+      "tokens": [
+        "token_10070_aphris_pc"
+      ],
+      "module": {
+        "id": "uniequip_002_aphris",
+        "name": "第三相态",
+        "type": "BLA-Y",
+        "level": 1,
+        "active": true
+      },
+      "assets": {
+        "avatar": "char_4229_aphris_2",
+        "portrait": "char_4229_aphris_2",
+        "spine": "char_4229_aphris",
+        "skillIcon": "skchr_aphris_1",
+        "subProfIcon": "sub_blastcaster_icon"
+      },
+      "skills": [
+        {
+          "skillId": "skchr_aphris_2",
+          "iconId": "skchr_aphris_2",
+          "name": "临界瞬爆",
+          "level": 7,
+          "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力120%的法术伤害，光束可被我方干员改变方向",
+          "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>120%</>的法术伤害，光束可被我方干员改变方向",
+          "skillType": "MANUAL",
+          "durationType": "NONE",
+          "duration": 8,
+          "spType": "INCREASE_WITH_TIME",
+          "spCost": 20,
+          "initSp": 15,
+          "maxChargeTime": 1,
+          "increment": 1,
+          "bb": {
+            "atk_scale": 1.2,
+            "interval": 0.5
+          },
+          "bbStr": {},
+          "rangeId": null,
+          "rangeGrid": null,
+          "prefabId": "skchr_aphris_2",
+          "trigger": {
+            "rule": "DEFAULT",
+            "rawRule": "DEFAULT",
+            "customRangeGrid": null
+          },
+          "index": 1,
+          "overrideTokenKey": null,
+          "isDefault": true
+        }
+      ],
+      "statsBase": {
+        "maxHp": 1526,
+        "atk": 826,
+        "def": 121,
+        "res": 20,
+        "cost": 34,
+        "blockCnt": 1,
+        "bat": 2.9,
+        "aspd": 100,
+        "respawnTime": 70,
+        "spRecovery": 1,
+        "hpRecoveryPerSec": 0,
+        "moveSpeed": 1,
+        "tauntLevel": 0,
+        "massLevel": 0,
+        "deployLimit": 1,
+        "deckStack": 0
+      },
+      "traitBase": {
+        "desc": "攻击造成超远距离的群体法术伤害",
+        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
+        "bb": {},
+        "bbStr": {},
+        "rangeGrid": null
+      },
+      "talentsBase": [
+        {
+          "index": 0,
+          "name": "链路协议",
+          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
+          "bb": {
+            "cnt": 1,
+            "atk": 0.25
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": "token_10070_aphris_pc",
+          "hidden": false,
+          "fromModule": false
+        },
+        {
+          "index": 1,
+          "name": "取样优化",
+          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
+          "bb": {
+            "magic_resist_penetrate_fixed": 10
+          },
+          "bbStr": {},
+          "rangeGrid": null,
+          "tokenKey": null,
+          "hidden": false,
+          "fromModule": false
+        }
+      ],
+      "modules": [
+        {
+          "uniEquipId": "uniequip_002_aphris",
+          "name": "第三相态",
+          "typeName": "BLA-Y",
+          "typeIcon": "bla-y",
+          "icon": "uniequip_002_aphris",
+          "isDefault": true,
+          "level": 1,
+          "attr": {
+            "cost": -8,
+            "maxHp": 120,
+            "atk": 45
+          },
+          "traitOverride": {
+            "desc": "攻击造成超远距离的群体法术伤害",
+            "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
+            "bb": {},
+            "bbStr": {},
+            "rangeGrid": null,
+            "moduleDesc": "部署费用减少",
+            "moduleDescRaw": "部署费用<@ba.kw>减少</>"
+          },
+          "talentChanges": []
+        }
+      ],
+      "availableSkillIndices": [
+        1
+      ],
+      "extension": {
+        "id": "rhine-aphris",
+        "source": "SrC2O4/Stronghold-Protocol",
+        "sourceRevision": "c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88",
+        "supportedSkills": [
+          "skchr_aphris_2"
+        ]
+      }
+    }
+  },
+  "tokens": {
+    "token_10070_aphris_pc": {
+      "tokenId": "token_10070_aphris_pc",
+      "kind": "summon",
+      "name": "中继器",
+      "appellation": "Repeater",
+      "desc": "不会受到攻击，可部署在地面或高台位",
+      "descRaw": "不会受到攻击，可部署在地面或高台位",
+      "profession": "TOKEN",
+      "subProfessionId": "notchar1",
+      "position": "ALL",
+      "displayType": null,
+      "placeable": true,
+      "ownerRange": false,
+      "owners": [
+        "chess_rhine_aphris_a",
+        "chess_rhine_aphris_b"
+      ],
+      "stats": {
+        "maxHp": 500,
+        "atk": 0,
+        "def": 0,
+        "res": 0,
+        "cost": 3,
+        "blockCnt": 0,
+        "bat": 1,
+        "aspd": 100,
+        "respawnTime": 30,
+        "spRecovery": 1,
+        "hpRecoveryPerSec": 0,
+        "moveSpeed": 1,
+        "tauntLevel": 0,
+        "massLevel": 0,
+        "deployLimit": 1,
+        "deckStack": 0
+      },
+      "rangeGrid": [
+        [
+          0,
+          0
+        ]
+      ],
+      "dmgType": "phys",
+      "attackKind": "ranged",
+      "projectile": "arrow",
+      "canHitFly": true,
+      "skill": null,
+      "deployLimit": 1,
+      "count": 1,
+      "abnormal": [],
+      "variants": {
+        "chess_rhine_aphris_a": {
+          "phase": 2,
+          "level": 1,
+          "stats": {
+            "maxHp": 500,
+            "atk": 0,
+            "def": 0,
+            "res": 0,
+            "cost": 3,
+            "blockCnt": 0,
+            "bat": 1,
+            "aspd": 100,
+            "respawnTime": 30,
+            "spRecovery": 1,
+            "hpRecoveryPerSec": 0,
+            "moveSpeed": 1,
+            "tauntLevel": 0,
+            "massLevel": 0,
+            "deployLimit": 1,
+            "deckStack": 0
+          },
+          "immunities": {
+            "stun": false,
+            "silence": false,
+            "sleep": false,
+            "frozen": false,
+            "levitate": false
+          },
+          "rangeGrid": [
+            [
+              0,
+              0
+            ]
+          ],
+          "trait": {
+            "desc": "不会受到攻击，可部署在地面或高台位",
+            "descRaw": "不会受到攻击，可部署在地面或高台位",
+            "bb": {},
+            "bbStr": {}
+          },
+          "dmgType": "phys",
+          "attackKind": "ranged",
+          "projectile": "arrow",
+          "canHitFly": true,
+          "targetPriority": null,
+          "skill": null,
+          "talents": [
+            {
+              "index": 0,
+              "name": "转向",
+              "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
+              "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
+              "bb": {
+                "duration": 25
+              },
+              "bbStr": {},
+              "rangeGrid": null,
+              "tokenKey": null,
+              "hidden": false,
+              "fromModule": false
+            }
+          ],
+          "count": 1,
+          "sources": [
+            "talent",
+            "display"
+          ],
+          "bySkill": {
+            "1": {
+              "skill": null,
+              "count": 1,
+              "sources": [
+                "talent",
+                "display"
+              ]
+            },
+            "2": {
+              "skill": null,
+              "count": 1,
+              "sources": [
+                "talent",
+                "display"
+              ]
+            }
+          }
+        },
+        "chess_rhine_aphris_b": {
+          "phase": 2,
+          "level": 60,
+          "stats": {
+            "maxHp": 500,
+            "atk": 0,
+            "def": 0,
+            "res": 0,
+            "cost": 3,
+            "blockCnt": 0,
+            "bat": 1,
+            "aspd": 100,
+            "respawnTime": 30,
+            "spRecovery": 1,
+            "hpRecoveryPerSec": 0,
+            "moveSpeed": 1,
+            "tauntLevel": 0,
+            "massLevel": 0,
+            "deployLimit": 1,
+            "deckStack": 0
+          },
+          "immunities": {
+            "stun": false,
+            "silence": false,
+            "sleep": false,
+            "frozen": false,
+            "levitate": false
+          },
+          "rangeGrid": [
+            [
+              0,
+              0
+            ]
+          ],
+          "trait": {
+            "desc": "不会受到攻击，可部署在地面或高台位",
+            "descRaw": "不会受到攻击，可部署在地面或高台位",
+            "bb": {},
+            "bbStr": {}
+          },
+          "dmgType": "phys",
+          "attackKind": "ranged",
+          "projectile": "arrow",
+          "canHitFly": true,
+          "targetPriority": null,
+          "skill": null,
+          "talents": [
+            {
+              "index": 0,
+              "name": "转向",
+              "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
+              "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
+              "bb": {
+                "duration": 25
+              },
+              "bbStr": {},
+              "rangeGrid": null,
+              "tokenKey": null,
+              "hidden": false,
+              "fromModule": false
+            }
+          ],
+          "count": 1,
+          "sources": [
+            "talent",
+            "display"
+          ],
+          "bySkill": {
+            "1": {
+              "skill": null,
+              "count": 1,
+              "sources": [
+                "talent",
+                "display"
+              ]
+            },
+            "2": {
+              "skill": null,
+              "count": 1,
+              "sources": [
+                "talent",
+                "display"
+              ]
+            }
+          },
+          "byModule": {
+            "none": {
+              "stats": {
+                "maxHp": 500,
+                "atk": 0,
+                "def": 0,
+                "res": 0,
+                "cost": 3,
+                "blockCnt": 0,
+                "bat": 1,
+                "aspd": 100,
+                "respawnTime": 30,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "trait": {
+                "desc": "不会受到攻击，可部署在地面或高台位",
+                "descRaw": "不会受到攻击，可部署在地面或高台位",
+                "bb": {},
+                "bbStr": {}
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "转向",
+                  "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
+                  "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
+                  "bb": {
+                    "duration": 25
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ]
+            }
+          }
+        }
+      },
+      "assets": {
+        "avatar": "token_10070_aphris_pc",
+        "spine": "token_10070_aphris_pc"
+      }
+    }
+  }
+}

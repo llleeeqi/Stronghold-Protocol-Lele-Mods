@@ -46,3 +46,13 @@
 莱茵来源固定为 `12d418cc6efc7b19d3ddc418d902ed07e526c2a2`：选择性移植 v0.1.3-rhine.3 的梅尔有效装置工作产层（普通 +1、精锐 +2）、每层装置攻击 4、伊芙利特继承最高单台有效装置基础攻击 100% / 150%、溯光星源资金特质莱茵归属与客户端产层校验。来源后续 Windows 配置保留/便携升级脚本不在本轮移植范围。收藏品、新干员与统计仍使用表中固定玩法提交。
 
 0.2.0 把方法拆到独立模块，本工具包迁移了对应调用和资料切换屏障；代码补丁统一为 `patches/modpack-code.patch`，数据仍由独立生成器产生，五项开关默认关闭。
+
+## 2026-10-07：三个可选拓展与全部 Mod 说明
+
+- `lucky`：[来源 RiZhiZhaoYi/Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol)，固定提交 `941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21`。
+- `recruits`：[来源 Lunac1a/Stronghold-Protocol](https://github.com/Lunac1a/Stronghold-Protocol)，固定提交 `c8141334266fd1d5971ed996d62ac59addb92b5d`。
+- `targeted`：[来源 Strinova-xinghui/Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol)，固定提交 `dcea3f7c97216bd638aaa90fbb74e1a905c2904b`。
+
+恭喜发财选择性移植每席位不同五阶开局，保留共享卡池份数。额外干员选择性移植四名，排除丰川祥子重复实现及来源强制保留盟约的全局规则；开放望、陈、维什戴尔三技能与凯尔希二技能。来源机制资料哈希保留于派生源码 docs/custom-operators-provenance.json。定向甄选移植规则、奖励与装备筛选，但增加默认关闭房间开关，保留官方 DIY 私池。全部八项的点击说明、多资料集联机适配及服务器手动落子兼容由本仓库整合。来源代码继续按 GPL-3.0-or-later 及原署名保留，资源归各权利人。
+
+谬因选择性取自 [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol)，固定提交 `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88`，GPL-3.0-or-later。保留专用技能适配与工具函数，只加入五阶普通/精锐二技能；按朋友版约定从来源协防归入莱茵生命。修正直线覆盖范围和中继器 25 秒生命周期，未开放三技能及完整友军折射。

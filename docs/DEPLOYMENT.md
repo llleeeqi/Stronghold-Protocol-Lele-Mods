@@ -7,8 +7,8 @@ stage.sh 在 `state/stages/NAME/source` 中：
 1. 获取固定干净上游并克隆候选。
 2. 应用 patches/modpack-code.patch，安装锁文件依赖；新版上游模块保留。
 3. 生成莱茵及完整原版快照，再仅生成 +4 回合数据，不复制 UI 覆盖文件。
-4. 刷新莱茵科研数据，再生成 vanilla-extra / rhine-extra。
-5. 校验/下载原版、莱茵、新干员和收藏品资源，执行测试。
+4. 刷新莱茵科研数据，追加莱茵谬因，再生成原四套及各自 -custom 的八套资料。
+5. 校验/下载原版、莱茵（含谬因）、两个干员包和收藏品资源，执行测试。
 6. 记录 UPSTREAM_REVISION / MODKIT_REVISION，全部成功才写 READY。
 
 失败保留 build.log，不改变线上。重新构建使用新阶段名，可复用已下载文件。构建默认最多 768 MiB，调整方式：`BUILD_MEMORY=1g bash scripts/stage.sh ...`。运行配置由 .env 读取，构建 BUILD_MEMORY 通过 shell 环境传入。
@@ -29,9 +29,9 @@ git ls-remote https://github.com/sganggs/Stronghold-Protocol.git HEAD
 bash scripts/stage.sh --revision FULL_40_CHARACTER_SHA --name update-002
 ```
 
-核对默认关闭、32 种组合、多人资料载入、准备清除、开局锁定、收藏品与莱茵共存、新干员技能和重连。成功后更新 upstream.lock.json revision，提交补丁适配及验证结果。
+核对默认关闭、256 种组合、多人资料载入、准备清除、开局锁定、收藏品与莱茵共存、新干员技能和重连。成功后更新 upstream.lock.json revision，提交补丁适配及验证结果。
 
-0.2.0 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含五项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；五项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
+0.2.0 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含八项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；八项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
 
 ## 切换与回退
 

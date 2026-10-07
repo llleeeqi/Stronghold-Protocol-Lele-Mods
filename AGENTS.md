@@ -12,7 +12,7 @@
 
 - upstream.lock.json 固定完整上游提交，保持干净 checkout 不变。
 - patches/modpack-code.patch 是适配固定 0.2.0 的完整代码补丁；mods/rhine/generate-rounds.mjs 仅生成 +4 数据，不覆盖上游 UI。
-- mods/party 是新干员数据生成器；莱茵、收藏品、干员、统计仍由五个独立默认关闭开关控制。
+- mods/party 和 mods/recruits 是两个独立干员包生成器；全部拓展由八个独立默认关闭开关控制。
 - 朋友服资源限制随 modpack-code.patch 适配到 server/http/；compose.yml 是部署默认值。
 - state/、.env 为本机私有状态。凭据、SSH 信息、会话令牌、真实主机配置和日志留在本机。
 
@@ -21,7 +21,7 @@
 1. 复制 .env.example 为 .env，确定 PORT，执行 `bash scripts/stage.sh --name NAME`。
 2. 可用 `--source /abs/upstream` 指定已有干净 checkout：HEAD 等于指定 revision，tracked 文件无修改。
 3. 可用 `--assets-from /abs/runtime` 复用资源和下载缓存，脚本仍验证/补全。
-4. 记录候选目录和测试输出；检查五个开关、四个资料集、房主权限、准备清除、开局锁定、服务器演算、多人及重连。
+4. 记录候选目录和测试输出；检查八个开关、八个资料集、房主权限、准备清除、开局锁定、服务器演算、多人及重连。
 5. 已授权部署且 healthz rooms=0/matches=0 时执行 `bash scripts/activate.sh NAME`。有等待室或对局时保留候选，空闲后继续。stage.sh 永远不重启游戏。
 6. 从公网验证页面、WebSocket、多人和重连，用 status.sh 检查健康与占用。最终给用户可用链接。
 

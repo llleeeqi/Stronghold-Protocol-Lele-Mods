@@ -38,8 +38,8 @@ exec > >(tee "$stage_dir/build.log") 2>&1
 printf '%s\n' "$revision" > "$stage_dir/UPSTREAM_REVISION"
 git clone --shared "$source_dir" "$stage_dir/source"
 cd "$stage_dir/source"
-git apply --check "$repo_dir/mods/rhine/rhine-code.patch"
-git apply "$repo_dir/mods/rhine/rhine-code.patch"
+git apply --check "$repo_dir/patches/modpack-code.patch"
+git apply "$repo_dir/patches/modpack-code.patch"
 if [[ -n "$assets_from" ]]; then
   assets_from=$(realpath "$assets_from")
   for dir in public/assets public/fonts .cache; do
@@ -53,16 +53,7 @@ build=(docker run --rm --user "$(id -u):$(id -g)" --memory "$build_memory" -e HO
   --mount "type=bind,src=$source_dir,dst=/baseline,readonly"
   --mount "type=bind,src=$repo_dir,dst=/mod,readonly"
   -w /stage/source node:22-alpine)
-"${build[@]}" sh -c 'npm ci --omit=dev && node /mod/mods/rhine/generate-data.mjs /stage/source /baseline && node /mod/mods/rhine/long-session-build.mjs /stage/source/data /stage/rounds/data'
-cp -a "$stage_dir/rounds/data/." data/
-for file in public/js/screens/lobby.js public/js/screens/room.js server/lobby.js shared/protocol.js; do cp "$stage_dir/rounds/overlay/$file" "$file"; done
-git apply --check "$repo_dir/mods/party/party-code.patch"
-git apply "$repo_dir/mods/party/party-code.patch"
-git apply --check "$repo_dir/patches/friends-profile.patch"
-git apply "$repo_dir/patches/friends-profile.patch"
-git apply --check "$repo_dir/patches/source-updates.patch"
-git apply "$repo_dir/patches/source-updates.patch"
-"${build[@]}" sh -c 'node /mod/mods/rhine/refresh-data.mjs /stage/source && node /mod/mods/party/generate-data.mjs /stage/source && node tools/fetch-assets.mjs && node tools/fetch-rhine-assets.mjs && node tools/fetch-custom-assets.mjs && node tools/fetch-relic-icons.mjs && node --test test/party-mods.test.js test/match/party-runtime.test.js test/ui/data-profile.test.js test/content/relics.test.js test/content/makoto.test.js test/content/narant.test.js test/content/extra6.test.js test/ui/damage-board.test.js test/content/rhine.test.js test/content/rhine_equipment.test.js test/content/rhine_fx.test.js test/rhineResearch_shared.test.js test/rhine_data.test.js test/rhine_equipment_data.test.js test/render/rhineDevices.test.js test/match/rhine_equipment_bot.test.js test/content/egir-unite-down.test.js test/match/elite-acquisition.test.js test/match/feedback1-meta.test.js'
+"${build[@]}" sh -c 'npm ci --omit=dev && node /mod/mods/rhine/generate-data.mjs /stage/source /baseline && node /mod/mods/rhine/generate-rounds.mjs /stage/source && node /mod/mods/rhine/refresh-data.mjs /stage/source && node /mod/mods/party/generate-data.mjs /stage/source && node tools/fetch-assets.mjs && node tools/fetch-rhine-assets.mjs && node tools/fetch-custom-assets.mjs && node tools/fetch-relic-icons.mjs && node --test test/party-mods.test.js test/match/party-runtime.test.js test/ui/data-profile.test.js test/content/relics.test.js test/content/makoto.test.js test/content/narant.test.js test/content/extra6.test.js test/ui/damage-board.test.js test/content/rhine.test.js test/content/rhine_equipment.test.js test/content/rhine_fx.test.js test/rhineResearch_shared.test.js test/rhine_data.test.js test/rhine_equipment_data.test.js test/render/rhineDevices.test.js test/match/rhine_equipment_bot.test.js test/content/egir-unite-down.test.js test/match/elite-acquisition.test.js test/match/feedback1-meta.test.js test/match/rhine-client-layers.test.js test/ui/standin-ui.test.js test/ui/diy-ui.test.js test/i18n-data.test.js test/fetch-assets-shrink.test.js test/diy.test.js test/match/diy-shop.test.js test/version.test.js'
 git -C "$repo_dir" rev-parse HEAD > "$stage_dir/MODKIT_REVISION" 2>/dev/null || printf 'working-copy\n' > "$stage_dir/MODKIT_REVISION"
 chmod -R a+rX "$stage_dir/source"
 touch "$stage_dir/READY"

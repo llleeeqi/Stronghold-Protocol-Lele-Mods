@@ -6,7 +6,7 @@
 
 本仓库是 Mod 构建工具包，不是整合好的游戏本体。`stage.sh` 生成的 `state/stages/NAME/source` 才是带 Mod 的游戏目录。上游整合包可以用于原版游玩，但直接运行它不会加载本工具包的拓展。
 
-上游统一开服入口包括 `scripts/start-windows.bat`、`scripts/start.sh` 和共用的 `scripts/launch.mjs`：检查环境、准备资源、启动 Node 服务并打开浏览器。该入口已存在于本工具包当前固定上游版本；它不是独立渲染客户端，也不会自动安装本仓库的补丁。
+上游统一开服入口包括 `scripts/start-windows.bat`、`scripts/start.sh` 和共用的 `scripts/launch.mjs`：检查环境、准备资源、启动 Node 服务并打开浏览器。当前固定版本为官方 0.2.0，以上入口继续保留；它不是独立渲染客户端，也不会自动安装本仓库的补丁。
 
 优先保留这个入口，接入已生成的 Mod 目录，不另写一套游戏服务器。官方整合包或其他外部启动器的最新版仍需单独检查，不能仅凭“能打开页面”判定 Mod 兼容。
 

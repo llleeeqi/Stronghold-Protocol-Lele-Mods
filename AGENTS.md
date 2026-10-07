@@ -11,9 +11,9 @@
 ## 目录规则
 
 - upstream.lock.json 固定完整上游提交，保持干净 checkout 不变。
-- mods/rhine 是莱茵补丁；long-session-build.mjs 独立生成 +4 规则。
-- mods/party 是收藏品、新干员、伤害统计适配补丁及数据生成器。
-- patches/friends-profile.patch 是朋友服资源限制；compose.yml 是部署默认值。
+- patches/modpack-code.patch 是适配固定 0.2.0 的完整代码补丁；mods/rhine/generate-rounds.mjs 仅生成 +4 数据，不覆盖上游 UI。
+- mods/party 是新干员数据生成器；莱茵、收藏品、干员、统计仍由五个独立默认关闭开关控制。
+- 朋友服资源限制随 modpack-code.patch 适配到 server/http/；compose.yml 是部署默认值。
 - state/、.env 为本机私有状态。凭据、SSH 信息、会话令牌、真实主机配置和日志留在本机。
 
 ## 执行流程

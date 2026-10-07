@@ -5,9 +5,9 @@
 stage.sh 在 `state/stages/NAME/source` 中：
 
 1. 获取固定干净上游并克隆候选。
-2. 应用莱茵补丁、安装锁文件依赖，生成莱茵及原版快照。
-3. 生成原版/+4 回合数据，复制四个联机适配文件。
-4. 应用 party、朋友服及 source-updates 增量补丁；刷新莱茵科研数据，再生成 vanilla-extra / rhine-extra。
+2. 应用 patches/modpack-code.patch，安装锁文件依赖；新版上游模块保留。
+3. 生成莱茵及完整原版快照，再仅生成 +4 回合数据，不复制 UI 覆盖文件。
+4. 刷新莱茵科研数据，再生成 vanilla-extra / rhine-extra。
 5. 校验/下载原版、莱茵、新干员和收藏品资源，执行测试。
 6. 记录 UPSTREAM_REVISION / MODKIT_REVISION，全部成功才写 READY。
 
@@ -31,7 +31,7 @@ bash scripts/stage.sh --revision FULL_40_CHARACTER_SHA --name update-002
 
 核对默认关闭、32 种组合、多人资料载入、准备清除、开局锁定、收藏品与莱茵共存、新干员技能和重连。成功后更新 upstream.lock.json revision，提交补丁适配及验证结果。
 
-导出 party 补丁的基线是“上游 + 莱茵代码 + 已生成的 +4 覆盖文件”，排除 data/，由生成器重建数据。派生 source 的 git diff HEAD 包含所有 Mod，不能直接当作 party 专用补丁。
+0.2.0 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含五项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；五项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
 
 ## 切换与回退
 
@@ -58,4 +58,4 @@ bash scripts/status.sh
 
 旧阶段保留作回退，确认不再需要后只清理明确指定的目录。公网链接使用 .env 的 PORT，配置反代时检查 WebSocket。
 
-科研增量补丁的导出基线为此前完整稳定 Mod 源码（含朋友服配置），排除 data/，由 refresh-data.mjs 和 party 生成器重建资料集。不要把整个来源 fork 覆盖到候选目录。
+科研来源只选择性移植玩法与校验改动，保留来源署名，不把来源 fork 的 Windows 更新器或服务器配置覆盖到候选目录。

@@ -11,5 +11,5 @@ const errors=validateRhineData(files);
 if(errors.length)throw new Error(JSON.stringify(errors));
 for(const n of names)fs.writeFileSync(path.join(source,'data',n+'.json'),JSON.stringify(files[n]));
 const vanilla=path.join(source,'data/vanilla');fs.mkdirSync(vanilla,{recursive:true});
-for(const e of fs.readdirSync(path.join(baseline,'data'),{withFileTypes:true}))if(e.isFile()&&e.name.endsWith('.json'))fs.copyFileSync(path.join(baseline,'data',e.name),path.join(vanilla,e.name));
-console.log('Rhine generated from current upstream; vanilla copied from clean current upstream.');
+fs.cpSync(path.join(baseline,'data'), vanilla, {recursive:true});
+console.log('Rhine generated from pinned upstream; complete vanilla snapshot copied.');

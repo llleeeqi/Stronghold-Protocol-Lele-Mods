@@ -7,7 +7,7 @@
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
 | 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
-| 莱茵生命 | 科研装置、莱茵干员、盟约和装备，新增五阶谬因（二技能自动适配） | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) |
+| 莱茵生命 | 科研装置、莱茵干员、盟约和装备，新增五阶谬因（二技能自动适配） | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
 | 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
 | 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |

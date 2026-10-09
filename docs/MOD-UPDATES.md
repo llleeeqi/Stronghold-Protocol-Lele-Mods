@@ -1,3 +1,29 @@
+# 2026-10-09：官方 0.2.2 与拓展来源复核
+
+官方固定提交 `62eb113419123d9a3a63606107bbf85230c5dd2f`。同步潜能／练度、日语语音、浏览器本地最近30局统计、AI后选设置、推拉失衡与整帧战斗修复。服务器仍不存长期战绩；四人、服务器演算、等待室切换与重连保留。
+
+- **更多阵营**（旧界面名称“莱茵生命”）：来自 [YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)，采用提交 `1d20c21a3a18519ab2965d15bc8e952c0e51ad99`。莱茵生命加入星源与多萝西，生态维持仪兼顾减速、治疗与突破护盾，能量装置重做，9人解锁激光钻机；卡兹戴尔10名成员，3人亡魂、6人众魂炮含友伤、9人取消友伤。谬因来自 [SrC2O4/Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol)，仍归入莱茵生命开关。维什戴尔在两个干员包同时开启时只进入卡兹戴尔资料集一次。
+- **定向甄选**：来自 [Strinova-xinghui/Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol)，采用提交 `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba`。只给第一位主要盟约 ×2.6 权重，后两位随机；第6回合起转职装备 ×2.6。当前装备等级无候选时保持等级并随机，不采用来源降级 fallback；不带欠债、抽奖、控制台或全局回合/Boss节奏。
+
+## 其他拓展来源检查
+
+下表区分“工具包实际移植的固定提交”和 2026-10-09 检查到的来源仓库 HEAD。检查到较新的分支提交不代表整包复制；只移植与朋友服兼容的独立玩法。
+
+| 拓展 | 来源项目 | 实际移植提交 | 检查到的最新 HEAD 与处理 |
+|---|---|---|---|
+| 收藏品 | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `17691f155a8fe062d85aecfeec2abe50f0359009` | `cd46ac8bd79b34c9b20ff4c3c0fb62d1c25ab01b`。新分支增加鸭梨手机、时间机器、木棍等 6 件收藏品和超限模拟抽奖，包含全队降难、反转扣血、敌人转移、遮蔽界面数字等跨回合／全局效果；这轮保留已适配的 39 件，不把整套核心和 UI 改动带进朋友服。 |
+| 新干员包 | [remember-4 / Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | `97887cac3abc474f4933ac620ecbd043974c6f3d` | `97887cac3abc474f4933ac620ecbd043974c6f3d`，当前分支与采用提交一致。 |
+| 伤害统计 | [Stardust-minus / Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol) | `9bb6b2d833978c0aa9ef1713ef188d6c1588169f` | `9f6b6d5441934c01fcc4e9e7f7f0130281e0239b`。分支继续同步本体并增加语音设置和实验性联机内容；本服保留实际扣血排行与最近两轮，不引入额外房间容量或长期记录。 |
+| 恭喜发财 | [RiZhiZhaoYi / Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) | `941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21` | `c54aeb2455714720b1e9a2698a2ad515b5dfbdba`。新分支合并上游 0.2.1 并保留随机五阶开局；本体已独立更新到 0.2.2，沿用四人共享牌库适配。 |
+| 额外干员包 | [Lunac1a / Stronghold-Protocol](https://github.com/Lunac1a/Stronghold-Protocol) | `c8141334266fd1d5971ed996d62ac59addb92b5d` | `c8141334266fd1d5971ed996d62ac59addb92b5d`，当前分支与采用提交一致。 |
+| 谬因 | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88`，当前分支与采用提交一致。 |
+| 定向甄选 | [Strinova-xinghui / Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol) | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba` | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba`，当前分支与采用提交一致。 |
+| 更多阵营 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99`，已采用该分支的装置重做及卡兹戴尔内容；没有更晚的玩法提交。 |
+
+所有 8 项的玩法和来源也列在 [拓展说明](MODS.md)、[README](../README.md) 和 [来源署名表](../notices/SOURCES.md)。收藏品与统计分支的其他改动已检查，但因横跨难度／战斗流程或实验联机，未作为本轮稳定小服更新合入。
+
+本轮整合包专项回归 **757 项通过、0 项失败**；额外 full-potential 检查 4 项通过，2 项因缺少原始游戏缓存跳过。覆盖更多阵营、资料集隔离、等待室切换、断线重连、定向权重及 0.2.2 兼容修复。
+
 # 2026-10-08：官方 0.2.1 兼容更新
 
 固定官方提交 `c2a2ef778cf728ff29b953b9842b2a39b1e9cbea`，保留八项默认关闭的独立拓展、四人和服务器演算。同步满潜能资料、保留本回合地形的联防、跨半场突袭、消耗装备替换、Touch/凋亡及战斗加载消息修复。

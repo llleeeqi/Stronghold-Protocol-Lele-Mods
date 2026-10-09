@@ -1,22 +1,22 @@
 {
   "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
-  "revision": "c2a2ef778cf728ff29b953b9842b2a39b1e9cbea",
+  "revision": "62eb113419123d9a3a63606107bbf85230c5dd2f",
   "modpack_source_revision": "73720faf9beee30d718e472245bf8d8c3ff72273",
   "mods": {
-    "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/12d418cc6efc7b19d3ddc418d902ed07e526c2a2",
+    "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/1d20c21a3a18519ab2965d15bc8e952c0e51ad99",
     "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/17691f155a8fe062d85aecfeec2abe50f0359009",
     "operators": "https://github.com/remember-4/Stronghold-Protocol-Rem/tree/97887cac3abc474f4933ac620ecbd043974c6f3d",
     "damage": "https://github.com/Stardust-minus/Stronghold-Protocol/tree/9bb6b2d833978c0aa9ef1713ef188d6c1588169f",
     "lucky": "https://github.com/RiZhiZhaoYi/Stronghold-Protocol/tree/941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21",
     "recruits": "https://github.com/Lunac1a/Stronghold-Protocol/tree/c8141334266fd1d5971ed996d62ac59addb92b5d",
-    "targeted": "https://github.com/Strinova-xinghui/Stronghold-Protocol/tree/dcea3f7c97216bd638aaa90fbb74e1a905c2904b",
+    "targeted": "https://github.com/Strinova-xinghui/Stronghold-Protocol/tree/e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba",
     "rhine_aphris": "https://github.com/SrC2O4/Stronghold-Protocol/tree/c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88"
   },
   "mod_updates": {
     "rhine_base_revision": "cd09d57771f1d3ded43e3330ee47ace2de338130",
-    "rhine_gameplay_revision": "12d418cc6efc7b19d3ddc418d902ed07e526c2a2",
+    "rhine_gameplay_revision": "1d20c21a3a18519ab2965d15bc8e952c0e51ad99",
     "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
     "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-    "scope": "Official 0.2.1 full-potential data, terrain-preserving unite, cross-half raid and pending battle messages; selective Rhine.3 and eight optional Mods retained. Official update ZIPs must not overwrite Mod builds."
+    "scope": "Official 0.2.2; selective Rhine device rework and Kazdel faction, four seats, eight default-off options, first-slot targeted weight 2.6; retains native fixes and isolates vanilla. No source six-seat, debt, lottery or pacing changes."
   }
 }

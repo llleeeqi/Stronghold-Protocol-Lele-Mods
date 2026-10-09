@@ -1,6 +1,7 @@
 name: lele-stronghold
 services:
   game:
+    container_name: stronghold-game
     image: node:22-alpine
     working_dir: /app
     user: "1000:1000"

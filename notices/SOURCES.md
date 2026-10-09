@@ -1,35 +1,35 @@
 # 来源与署名
 
-感谢原作者及各 fork 的贡献者。莱茵生命、收藏品、新干员与伤害统计是从下面的项目选择性移植并适配，不是本仓库从零原创。作者列使用 GitHub 账号；原项目其他贡献者的署名和版权声明同样保留。
+本仓库做选择性移植、四人兼容、可选开关与部署封装。玩法、原代码及创意归原贡献者；感谢下面所有项目作者及贡献者，引用不代表作者参与或认可本整合版。
 
-## 引用项目与版本
+## 实际引用版本与最近检查的来源版本
 
-这里记录实际引用的固定提交，不表示持续跟随来源仓库最新版。机器可读记录见 [upstream.lock.json](../upstream.lock.json)。
+“实际移植提交”用于重建当前功能；“最近检查 HEAD”记录截至 2026-10-09 对来源仓库默认分支的核对点，不表示整仓移植。差异与取舍见 [更新记录](../docs/MOD-UPDATES.md)。
 
-| 内容 | 来源仓库 | 作者账号 | 引用提交 |
-|---|---|---|---|
-| 游戏本体、规则、服务端、浏览器客户端及统一启动入口 | [Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | [sganggs](https://github.com/sganggs) | [c2a2ef778cf728ff29b953b9842b2a39b1e9cbea](https://github.com/sganggs/Stronghold-Protocol/commit/c2a2ef778cf728ff29b953b9842b2a39b1e9cbea) |
-| 莱茵生命扩展 | [Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | [YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA) | [12d418cc6efc7b19d3ddc418d902ed07e526c2a2](https://github.com/YUYUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/commit/12d418cc6efc7b19d3ddc418d902ed07e526c2a2) |
-| 收藏品玩法 | [Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | [UNDFFIO](https://github.com/UNDFFIO) | [17691f155a8fe062d85aecfeec2abe50f0359009](https://github.com/UNDFFIO/Stronghold-Protocol-dlc/commit/17691f155a8fe062d85aecfeec2abe50f0359009) |
-| 新干员包 | [Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | [remember-4](https://github.com/remember-4) | [97887cac3abc474f4933ac620ecbd043974c6f3d](https://github.com/remember-4/Stronghold-Protocol-Rem/commit/97887cac3abc474f4933ac620ecbd043974c6f3d) |
-| 伤害统计 | [Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol) | [Stardust-minus](https://github.com/Stardust-minus) | [9bb6b2d833978c0aa9ef1713ef188d6c1588169f](https://github.com/Stardust-minus/Stronghold-Protocol/commit/9bb6b2d833978c0aa9ef1713ef188d6c1588169f) |
+| 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-09） |
+|---|---|---|
+| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `62eb113419123d9a3a63606107bbf85230c5dd2f` | `62eb113419123d9a3a63606107bbf85230c5dd2f` |
+| 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` |
+| 谬因二技能（本整合归入莱茵生命） | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` |
+| 收藏品玩法（39 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `17691f155a8fe062d85aecfeec2abe50f0359009` | `cd46ac8bd79b34c9b20ff4c3c0fb62d1c25ab01b` |
+| 新干员包 | [remember-4 / Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | `97887cac3abc474f4933ac620ecbd043974c6f3d` | `97887cac3abc474f4933ac620ecbd043974c6f3d` |
+| 伤害统计（当前与上一轮） | [Stardust-minus / Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol) | `9bb6b2d833978c0aa9ef1713ef188d6c1588169f` | `9f6b6d5441934c01fcc4e9e7f7f0130281e0239b` |
+| 恭喜发财 | [RiZhiZhaoYi / Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) | `941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21` | `c54aeb2455714720b1e9a2698a2ad515b5dfbdba` |
+| 额外干员包 | [Lunac1a / Stronghold-Protocol](https://github.com/Lunac1a/Stronghold-Protocol) | `c8141334266fd1d5971ed996d62ac59addb92b5d` | `c8141334266fd1d5971ed996d62ac59addb92b5d` |
+| 定向甄选 | [Strinova-xinghui / Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol) | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba` | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba` |
+| 额外4回合及整合适配 | [llleeeqi / Stronghold-Protocol-Lele-Mods](https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods)，基于上游回合系统 | 本仓库实现 | 不适用 |
 
-## 移植范围与本仓库改动
+## 移植边界与许可
 
-- **莱茵生命**：科研装置、莱茵干员、盟约与装备等来自莱茵扩展；本仓库将其适配到固定上游、4 人房间和可选资料集。数据生成器主要位于 `mods/rhine/`，0.2.1 代码统一收录于 `patches/modpack-code.patch`。
-- **收藏品**：收藏品内容及相关玩法来自 UNDFFIO 的 dlc 项目；本仓库将其整合为默认关闭的房间选项，并兼容莱茵及服务器演算。
-- **新干员**：结城理、娜仁图亚、予愿安洁莉娜、丰川祥子及相应实现来自 remember-4 的 Rem 项目；选择性移植干员、技能与模组，不包含该来源的全局拥有属性加成和敌人禁用规则。
-- **伤害统计**：统计实现与面板基础来自 Stardust-minus 的 fork；本仓库适配现有服务器演算、联防、Boss 与重连，仅保留本轮/上一轮，不新增永久战绩。
-- 上述三项 party 拓展主要位于 `patches/modpack-code.patch` 与 `mods/party/generate-data.mjs`；它们是整合后的代码补丁与生成器，不是原仓库完整镜像。
-- **本仓库新增与整合工作**：额外 4 回合规则、独立房间开关、等待室同步、多资料集隔离、勾选框与多列界面、朋友服资源配置，以及固定版本构建、Docker Compose、更新和回退流程。统一本地启动入口本身来自上游，本仓库补充其 Mod 接入指导。
+更多阵营选择性移植装置重做、阵营、干员、装备与美术下载计划，保留四人，不合并来源六人规则。维什戴尔在两个包同时开启时只使用卡兹戴尔版本。定向甄选只移植第一位奖励与装备权重，保留卡池与装备等级；不带欠债、抽奖、控制台及来源节奏。Rem 包不带全局拥有加成或禁怪；统计只保留当前/上一轮。所有拓展默认关闭，等待室可切换。
 
-仓库与部署工具由 [llleeeqi](https://github.com/llleeeqi) 维护。对原代码的修改与整合不改变来源署名；引用不代表原作者参与、授权背书或认可本整合版。
+代码 GPL-3.0-or-later，保留作者、LICENSE、NOTICE 和第三方声明。《明日方舟》的角色、美术、音频和官方数据归对应权利人，代码许可不扩大到素材。见 [LICENSE](../LICENSE)、[上游声明](UPSTREAM-NOTICE.md)、[莱茵声明](RHINE-NOTICE.md)、[第三方声明](RHINE-THIRD-PARTY-NOTICES.md)。
 
-## 许可与素材权属
+## 2026-10-09 更新
 
-代码采用 GPL-3.0-or-later，保留原项目 LICENSE、NOTICE 和第三方许可。游戏角色、美术、音频、Spine、官方数据及其他第三方内容仍归相应权利人，代码许可不扩大到这些内容。
+实际同步本体0.2.2、更多阵营与定向甄选，完整范围见 [MOD-UPDATES.md](../docs/MOD-UPDATES.md)。其他来源已检查，保留表中实际引用提交。八项点击说明均有来源作者与项目链接。
 
-详见 [上游声明](UPSTREAM-NOTICE.md)、[莱茵声明](RHINE-NOTICE.md)、[莱茵第三方声明](RHINE-THIRD-PARTY-NOTICES.md) 与 [LICENSE](../LICENSE)。再发布构建或继续移植时须保留相关声明，并同步记录新增来源。
+## 历史移植记录
 
 ## 2026-10-06 选择性同步
 

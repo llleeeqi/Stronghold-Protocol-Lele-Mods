@@ -9,5 +9,7 @@ mkdir -p "$check_dir"
 git clone --shared "$source_dir" "$check_dir/source"
 git -C "$check_dir/source" apply --check "$repo_dir/patches/modpack-code.patch"
 git -C "$check_dir/source" apply "$repo_dir/patches/modpack-code.patch"
+mkdir -p "$check_dir/source/public/art"
+cp -a "$repo_dir/mods/assets/public/art/." "$check_dir/source/public/art/"
 docker run --rm --user "$(id -u):$(id -g)" --mount "type=bind,src=$check_dir,dst=/check" --mount "type=bind,src=$source_dir,dst=/baseline,readonly" --mount "type=bind,src=$repo_dir,dst=/mod,readonly" -w /check/source node:22-alpine sh -c 'node /mod/mods/rhine/generate-data.mjs /check/source /baseline && node /mod/mods/rhine/generate-rounds.mjs /check/source && node /mod/mods/rhine/refresh-data.mjs /check/source && node /mod/mods/rhine/aphris/generate-data.mjs /check/source && node /mod/mods/party/generate-data.mjs /check/source && node /mod/mods/recruits/generate-data.mjs /check/source'
 echo "Patches apply cleanly: $check_dir/source. This is not a deployable READY build."

@@ -11,8 +11,8 @@
 ## 目录规则
 
 - upstream.lock.json 固定完整上游提交，保持干净 checkout 不变。
-- patches/modpack-code.patch 是适配固定 0.2.1 的完整代码补丁；mods/rhine/generate-rounds.mjs 仅生成 +4 数据，不覆盖上游 UI。
-- mods/party 和 mods/recruits 是两个独立干员包生成器；全部拓展由八个独立默认关闭开关控制。
+- patches/modpack-code.patch 是适配固定 0.2.2 的完整代码补丁；mods/rhine/generate-rounds.mjs 仅生成 +4 数据，不覆盖上游 UI。
+- mods/party 和 mods/recruits 是两个独立干员包生成器；全部拓展由八个独立默认关闭开关控制；“莱茵生命”资料开关现显示为“更多阵营”，同时包含卡兹戴尔。
 - 朋友服资源限制随 modpack-code.patch 适配到 server/http/；compose.yml 是部署默认值。
 - state/、.env 为本机私有状态。凭据、SSH 信息、会话令牌、真实主机配置和日志留在本机。
 

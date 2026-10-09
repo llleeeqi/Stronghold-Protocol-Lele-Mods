@@ -1,8 +1,8 @@
 # Third-party notices（第三方组件声明）
 
-Stronghold Protocol's own code is licensed under **GPL-3.0-or-later** (see [LICENSE](../LICENSE) and [NOTICE.md](../NOTICE.md)).
-The components below are **not** part of that grant: each stays under its own licence, reproduced below or included
-at the stated path in the release bundle. Nothing here is committed to the repository except `tools/local-extract/aklz4.py`; the client libraries are
+Stronghold Protocol's own code is licensed under **GPL-3.0-or-later** (see [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md)).
+The components below are **not** part of that grant: each stays under its own licence, reproduced at the end of this
+file. Nothing here is committed to the repository except `tools/local-extract/aklz4.py`; the client libraries are
 installed by npm and copied into `public/vendor/` by `tools/vendor.mjs` (postinstall), and the release bundle carries
 them (with `node_modules/`, which keeps each package's own licence file).
 
@@ -12,38 +12,22 @@ them (with `node_modules/`, which keeps each package's own licence file).
 
 | Component | Version | Licence | Where it is used | In the repository | In the release bundle |
 |---|---|---|---|---|---|
-| [Node.js](https://nodejs.org/) | 24.x (exact version: bundled `runtime/node/node.exe --version`) | MIT for Node.js itself; bundled components retain their respective licences | Windows x64 portable server runtime — `runtime/node/node.exe` | no (official distribution) | yes, in the Rhine Windows x64 portable bundle; full official notices at `runtime/node/LICENSE` |
 | [PixiJS](https://github.com/pixijs/pixijs) | 7.4.2 | MIT | browser renderer — `public/vendor/pixi.min.js` | no (npm) | yes |
 | [pixi-spine](https://github.com/pixijs/spine) | 4.0.6 | MIT banner; contains the **Spine Runtimes**, under the **Spine Runtimes License Agreement** (package licence "SEE SPINE-LICENSE") | Spine model playback — `public/vendor/pixi-spine.js` | no (npm) | yes |
 | [Preact](https://github.com/preactjs/preact) | 10.29.8 | MIT | UI — `public/vendor/preact.module.js`, `hooks.module.js` | no (npm) | yes |
 | [htm](https://github.com/developit/htm) | 3.1.1 | Apache-2.0 | UI templates — `public/vendor/htm.module.js` | no (npm) | yes |
 | [three.js](https://github.com/mrdoob/three.js) | 0.186.1 | MIT | official 3D board — `public/vendor/three.core.js`, `three.module.js` | no (npm) | yes |
 | [ws](https://github.com/websockets/ws) | 8.22.0 | MIT | WebSocket server (`server/`) | no (npm) | yes (`node_modules/`) |
-| [puppeteer-core](https://github.com/puppeteer/puppeteer) | 25.12.0 | Apache-2.0 | optional browser tests (dev dependency) | no (npm) | yes in the Rhine Windows bundle, with development dependencies and their licences; no browser executable is bundled |
+| [Node.js](https://nodejs.org/) | v22.23.3 (pinned in `scripts/make-windows-bundle.mjs`) | MIT | the portable `node\node.exe` (**Windows portable package only** — the integration bundle in [Releases(https://github.com/sganggs/Stronghold-Protocol/releases/latest) ships no `node.exe`) | no (downloaded from nodejs.org at package time, sha256 verified) | **Windows portable package only** (`node\node.exe`, with `node\LICENSE-node.txt`) |
+| [puppeteer-core](https://github.com/puppeteer/puppeteer) | 25.12.0 | Apache-2.0 | optional browser tests (dev dependency) | no (npm) | no |
 | [Ark-Unpacker](https://github.com/isHarryh/Ark-Unpacker) LZ4AK decoder | — | BSD-3-Clause | `tools/local-extract/aklz4.py` (optional local extraction) | **yes** — keeps its notice; full text also in `tools/local-extract/LICENSE-Ark-Unpacker.txt` | yes |
 | [UnityPy](https://github.com/K0lb3/UnityPy) (via MooncellWiki/UnityPy), [lz4](https://github.com/python-lz4/python-lz4), [Pillow](https://github.com/python-pillow/Pillow) | see `tools/local-extract/requirements.txt` | MIT / BSD-3-Clause / MIT-CMU | optional local extraction; installed by pip into `.venv-extract` only when the host opts in | no | no |
-
-### Node.js runtime in the Rhine portable bundle
-
-The Rhine Windows x64 portable bundle includes the unmodified official Node.js 24 executable and the complete
-`LICENSE` from that same official distribution under `runtime/node/`. The licence begins with the Node.js
-contributors' copyright notice and MIT terms, and includes the notices for its bundled dependencies; those parts
-must not be reduced to an MIT-only label or replaced with this project's GPL. Official source and release
-information: [nodejs/node](https://github.com/nodejs/node), [Node.js downloads](https://nodejs.org/dist/).
-
-莱茵便携包附带 Node.js 官方运行时；Node.js 本身及其内置组件的完整版权、许可和免责文字保留在
-`runtime/node/LICENSE`。再分发该运行时时请一并保留该文件。其他 npm 依赖的许可证仍随
-`node_modules/` 各包保留，项目自身的 GPL 源码和许可文件也随整合包提供。源码仓库不收录
-`runtime/node/` 二进制；完整包包含运行时不改变游戏素材、数据及标识在 [NOTICE.md](../NOTICE.md)
-中的权属说明，也不表示 Node.js 项目对本同人扩展的认可。
-
-### Spine Runtimes
 
 The Spine Runtimes License requires, among other things, that redistributions include its licence and copyright notice
 (reproduced below) and that "each user of the Products must obtain their own Spine Editor license" unless the
 integration is covered by the Spine Editor License Agreement — read it before redistributing. To allow the combination
 at all, this project grants an additional permission under GPL-3.0 section 7 for linking with the Spine Runtimes (see
-[NOTICE.md](../NOTICE.md)).
+[NOTICE.md](NOTICE.md)).
 
 ## Fonts
 
@@ -58,14 +42,27 @@ at all, this project grants an additional permission under GPL-3.0 section 7 for
 All names, characters, artwork, Spine models, UI graphics, music, sound effects and game data of *Arknights* /
 「卫戍协议：盟约」 are © Shanghai Hypergryph Network Technology Co., Ltd. (上海鹰角网络科技有限公司) and its licensors
 (Yostar and others). They are **not** licensed under the GPL and this project grants no rights to them; see
-[NOTICE.md](../NOTICE.md) for the non-commercial terms. Community mirrors used by `tools/fetch-assets.mjs` /
+[NOTICE.md](NOTICE.md) for the non-commercial terms. Community mirrors used by `tools/fetch-assets.mjs` /
 `tools/build-data.mjs`: [Kengxxiao/ArknightsGameData](https://github.com/Kengxxiao/ArknightsGameData),
 [yuanyan3060/ArknightsGameResource](https://github.com/yuanyan3060/ArknightsGameResource),
 [fexli/ArknightsResource](https://github.com/fexli/ArknightsResource),
 [isHarryh/Ark-Models](https://github.com/isHarryh/Ark-Models),
 [ArknightsAssets/ArknightsAssets2](https://github.com/ArknightsAssets/ArknightsAssets2) — thanks to their maintainers.
+The English game texts (`data/i18n/en.json`, `tools/build-i18n.mjs`) come from the official EN client tables mirrored by
+[ArknightsAssets/ArknightsGamedata](https://github.com/ArknightsAssets/ArknightsGamedata) (`en/gamedata`, the default
+source) and [Kengxxiao/ArknightsGameData_YoStar](https://github.com/Kengxxiao/ArknightsGameData_YoStar) (`en_US`,
+`--source yostar`); same terms as the rest of the game data.
 Quotations of PRTS Wiki, BWIKI, NGA, 巴哈姆特 and other community pages in `docs/` stay under the terms of their
 sources (the wikis' texts are CC BY-NC-SA).
+
+## Translations
+
+The English UI strings (`public/i18n/en.json`) and the fallback game-text translations (`tools/i18n/fallback-pr70.json`)
+are based on GitHub PR #70 (branch `en-translation`) by **@YuriRestia**, reused with credit and released with the project
+under GPL-3.0-or-later (docs/I18N.md). PR #70 named ak-spa-database.pages.dev and arknights.wiki.gg as references: texts
+it took from ak-spa-database.pages.dev (no licence) are excluded; arknights.wiki.gg is CC BY-SA 4.0, which may be combined
+into a GPL-3.0 work (the one-way compatibility Creative Commons declared) — thanks to its contributors. Official game
+terms and names in those files remain © Hypergryph / Yostar.
 
 ---
 
@@ -204,6 +201,38 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
+
+### Node.js — MIT
+
+The Windows portable package (`scripts/make-windows-bundle.mjs`) redistributes the official Node.js binary
+(`node\node.exe`). The integration bundle in Releases does **not** contain it — this row applies to the portable
+package only. Its complete licence file, taken verbatim from the same official archive, ships next to the binary as
+`node\LICENSE-node.txt`; the core MIT grant is reproduced here for convenience.
+
+```text
+Copyright Node.js contributors. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+```
+
+The official archive also carries notices for the software bundled inside Node.js (V8, OpenSSL, npm, …); those are
+included in the same `LICENSE-node.txt`.
 
 ### Ark-Unpacker (tools/local-extract/aklz4.py) — BSD-3-Clause
 

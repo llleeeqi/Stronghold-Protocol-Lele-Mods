@@ -6,12 +6,12 @@
 
 Copyright (C) 2026 Stronghold-Protocol contributors
 
-本项目自己编写的源代码与文档文字（`server/`、`shared/`、`public/` 下的 JS / CSS / HTML、`tools/`、`scripts/`、`test/`、`docs/` 等）以 **GNU 通用公共许可证第 3 版或（由你选择）任何更新版本**（GPL-3.0-or-later）发布，全文见 [LICENSE](LICENSE)。你可以在该许可证的条件下使用、修改和再分发这些代码。
+本项目自己编写的源代码与文档文字（`server/`、`shared/`、`public/` 下的 JS / CSS / HTML、`tools/`、`scripts/`、`test/`、`docs/` 等）以 **GNU 通用公共许可证第 3 版或（由你选择）任何更新版本**（GPL-3.0-or-later）发布，全文见 [LICENSE](../LICENSE)。你可以在该许可证的条件下使用、修改和再分发这些代码。
 
 例外：
 
 - `tools/local-extract/aklz4.py` 来自 [isHarryh/Ark-Unpacker](https://github.com/isHarryh/Ark-Unpacker)，保持 BSD-3-Clause 许可（见 `tools/local-extract/LICENSE-Ark-Unpacker.txt`）。
-- 通过 npm 安装的第三方库（PixiJS、pixi-spine、Preact、htm、three.js、ws 等）和字体各自保留原许可证，见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。
+- 通过 npm 安装的第三方库（PixiJS、pixi-spine、Preact、htm、three.js、ws 等）和字体各自保留原许可证，见 [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md)。
 
 **英文翻译致谢**：界面英文文本 `public/i18n/en.json` 与游戏文本的补充译文 `tools/i18n/fallback-pr70.json` 以 GitHub PR #70（分支 `en-translation`）中 **@YuriRestia** 的翻译为基础，经项目所有者决定（2026-10-05）署名沿用，随本项目一同以 GPL-3.0-or-later 发布；PR #70 中取自 ak-spa-database.pages.dev（未声明许可）的文本未被采用。英文游戏文本 `data/i18n/en.json` 本身是官方英文服数据（见第 2 节）。
 
@@ -45,7 +45,7 @@ Copyright (C) 2026 Stronghold-Protocol contributors
   - 植入广告；
   - 与本项目挂钩的打赏、赞助或众筹；
   - 打包进任何收费产品或服务。
-- 再分发完整包时，请保留本声明、[LICENSE](LICENSE) 和 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)，并同样注明非官方、非商业。
+- 再分发完整包时，请保留本声明、[LICENSE](../LICENSE) 和 [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md)，并同样注明非官方、非商业。
 - GPL 本身允许商业使用**代码**，上述限制针对的是不属于本项目的游戏素材与数据。
 
 ## 4. 权利人通知与删除

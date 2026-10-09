@@ -2,28 +2,32 @@
 
 为朋友小服整理的独立 Mod 工具包，基于 [Stronghold Protocol](https://github.com/sganggs/Stronghold-Protocol)。采用可重放补丁与数据生成器：保留干净上游，构建单独运行目录，再交给 Docker Compose。适配版本见 [upstream.lock.json](upstream.lock.json)。
 
-莱茵生命、收藏品、两个干员包、伤害统计、恭喜发财和定向甄选来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
+更多阵营、收藏品、两个干员包、伤害统计、恭喜发财和定向甄选来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
 
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
 | 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
-| 莱茵生命 | 科研装置、莱茵干员、盟约和装备，新增五阶谬因（二技能自动适配） | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
+| 更多阵营 | 莱茵生命：生态治疗/减速/护盾、能量充能、九人激光钻机；卡兹戴尔：10名成员、亡魂与众魂炮；保留谬因 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
 | 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
 | 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |
 | 恭喜发财 | 每席位随机不同五阶开局，照常消耗共享卡池份数 | [RiZhiZhaoYi](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) |
-| 额外干员包 | 望、赤刃明霄陈、凯尔希·思衡托、维什戴尔；不重复丰川祥子 | [Lunac1a](https://github.com/Lunac1a/Stronghold-Protocol) |
-| 定向甄选 | 晋升奖励优先主要盟约，转职装备增加抽取权重 | [Strinova-xinghui](https://github.com/Strinova-xinghui/Stronghold-Protocol) |
+| 额外干员包 | 望、赤刃明霄陈、凯尔希·思衡托、维什戴尔；不重复丰川祥子，同时开启更多阵营时采用卡兹戴尔维什戴尔 | [Lunac1a](https://github.com/Lunac1a/Stronghold-Protocol) |
+| 定向甄选 | 晋升奖励仅第一位向主要盟约加权 ×2.6，后两位随机；第6回合起转职装备加权 ×2.6 | [Strinova-xinghui](https://github.com/Strinova-xinghui/Stronghold-Protocol) |
 
 游戏本体来自 [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。本仓库主要补充独立房间开关、+4 回合、多资料集联机适配、朋友服配置、界面整合与 Docker 部署流程。[完整来源、引用提交与移植范围](notices/SOURCES.md) 可供核对；引用不代表来源作者参与或认可本整合版。
 
-2026-10-07 已适配官方 **0.2.1**（满潜能、保留地形的联防、跨半场突袭及战斗加载消息修复），同步莱茵 `v0.1.3-rhine.3` 的装置产层与伊芙利特继承规则，详见 [更新说明](docs/MOD-UPDATES.md)。四人房和八个独立开关保留；新增上述三项可选拓展。
+2026-10-09 已适配官方 **0.2.2**：潜能／练度设置、日语语音、浏览器本地最近30局统计及本体战斗修复。同步更多阵营来源的装置重做与卡兹戴尔，以及定向甄选权重调整；其他拓展来源也逐项核对，并记录采用版本与未移植的上游改动，详见 [更新说明](docs/MOD-UPDATES.md)。四人房与八项默认关闭开关保持。所有介绍同时列明来源项目、作者和选择性移植范围。
+
+更多阵营的玩法与适配边界见 [更多阵营说明](docs/MORE-FACTIONS.md)；全部拓展的来源项目、作者和固定提交见 [来源与署名](notices/SOURCES.md)。
 
 谬因随莱茵生命开启，二技能为固定朝向的周期直线法伤，中继器增攻、友军穿抗；友军波束折射仍简化，三技能暂未开放。
 
 所有拓展默认关闭，可自由组合。所有八项均有圆圈叹号按钮，点击打开介绍，非房主也能阅读；说明按钮不会切换开关。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
 
-服务器演算，最多 4 人合作；原版/莱茵 × 新干员包关闭/开启 × 额外干员包关闭/开启，共八套资料隔离。
+“更多阵营”仍沿用 `rhineEnabled` 与 `rhine*` 资料集标识，旧房间协议和 Agent 脚本无需改名。
+
+服务器演算，最多 4 人合作；原版/更多阵营 × 新干员包 × 额外干员包，共八套资料隔离。莱茵资料集标识仍叫 `rhine`，保留现有配置兼容。
 
 ## 首次部署
 

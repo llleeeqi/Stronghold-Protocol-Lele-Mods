@@ -3160,16 +3160,18 @@ index dfcdd24..27ef695 100644
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1118,6 +1155,12 @@ function MatchScreen() {
+@@ -1118,6 +1155,14 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
++  const rangeLookups = useMemo(() => ({ getChess: ownChess, getToken: gd.token, getItem: gd.item,
++    chessRecord: (rec) => deployedRecord(rec, live.current.priv, ownChess, gd.backups) }), [ownChess, gd.token, gd.item, gd.backups]);
 +  const selRangeKey = selEntry && selEntry.area === 'board' ? `${selEntry.piece.uid}:${selEntry.row},${selEntry.col}:${pieceDir(selEntry.piece)}:${researchRange(selEntry.piece)?.radius ?? ''}` : '';
 +  useEffect(() => {
 +    if (!view || !selRangeKey) return undefined;
-+    showRange(view, previewGrid(lookups, selEntry.piece), selEntry.row, selEntry.col, pieceDir(selEntry.piece), SEL_RANGE, researchRange(selEntry.piece)?.radius);
++    showRange(view, previewGrid(rangeLookups, selEntry.piece), selEntry.row, selEntry.col, pieceDir(selEntry.piece), SEL_RANGE, researchRange(selEntry.piece)?.radius);
 +    return () => showRange(view, null, 0, 0, null, SEL_RANGE);
-+  }, [view, selRangeKey]);
++  }, [view, selRangeKey, rangeLookups]);
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
    // item 8 — at some aspect ratios a bench unit's 出售 sat under the left card); the underframe is drawn above every
    // panel anyway (css z-index), this keeps it visible too

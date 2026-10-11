@@ -1,6 +1,6 @@
 {
   "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
-  "revision": "62eb113419123d9a3a63606107bbf85230c5dd2f",
+  "revision": "bc50cac01ff447eff3ab6c35f69d934bbc23b48f",
   "modpack_source_revision": "73720faf9beee30d718e472245bf8d8c3ff72273",
   "mods": {
     "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/1d20c21a3a18519ab2965d15bc8e952c0e51ad99",
@@ -17,6 +17,6 @@
     "rhine_gameplay_revision": "1d20c21a3a18519ab2965d15bc8e952c0e51ad99",
     "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
     "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-    "scope": "Official 0.2.2; selective Rhine device rework and Kazdel faction, four seats, eight default-off options, first-slot targeted weight 2.6; retains native fixes and isolates vanilla. No source six-seat, debt, lottery or pacing changes."
+    "scope": "Official 0.2.4; selective Rhine device rework and Kazdel faction, four seats, eight default-off options, first-slot targeted weight 2.6; retains native fixes and isolates vanilla. No source six-seat, debt, lottery or pacing changes."
   }
 }

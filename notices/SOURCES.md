@@ -1,3 +1,5 @@
+> 2026-10-11：本体固定版本更新到官方 0.2.4；拓展来源的采用提交保持不变，本轮仅做新版兼容。
+
 # 来源与署名
 
 本仓库做选择性移植、四人兼容、可选开关与部署封装。玩法、原代码及创意归原贡献者；感谢下面所有项目作者及贡献者，引用不代表作者参与或认可本整合版。
@@ -8,7 +10,7 @@
 
 | 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-09） |
 |---|---|---|
-| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `62eb113419123d9a3a63606107bbf85230c5dd2f` | `62eb113419123d9a3a63606107bbf85230c5dd2f` |
+| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `bc50cac01ff447eff3ab6c35f69d934bbc23b48f` | `bc50cac01ff447eff3ab6c35f69d934bbc23b48f` |
 | 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` |
 | 谬因二技能（本整合归入莱茵生命） | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` |
 | 收藏品玩法（39 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `17691f155a8fe062d85aecfeec2abe50f0359009` | `cd46ac8bd79b34c9b20ff4c3c0fb62d1c25ab01b` |

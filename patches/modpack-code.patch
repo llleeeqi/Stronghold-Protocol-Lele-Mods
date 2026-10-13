@@ -317,7 +317,7 @@ index 0000000..413c142
 +更新方法：先应用莱茵补丁并生成原版/莱茵数据，再运行 +4 回合生成器，覆盖 data 及四个 overlay 文件；随后 git apply --check mods/party/party-code.patch 验证后应用补丁，运行 generate-data.mjs 生成额外干员的两个独立数据目录。最后应用 friends-profile.patch，增量下载干员模型与收藏品图标。
 +任何补丁冲突都停止暂存构建；测试通过并确认无对局后才切换 Compose 挂载。reapply.sh 不会改动线上或自动重启。
 diff --git a/docs/PLAYING.md b/docs/PLAYING.md
-index da9b875..396d430 100644
+index 29e2e6a..e75f396 100644
 --- a/docs/PLAYING.md
 +++ b/docs/PLAYING.md
 @@ -1,6 +1,6 @@
@@ -1682,7 +1682,7 @@ index 0000000..c4eb77a
 +    });
 +}
 diff --git a/public/js/main.js b/public/js/main.js
-index f40b654..d87f861 100644
+index 5278287..b93f2b9 100644
 --- a/public/js/main.js
 +++ b/public/js/main.js
 @@ -33,12 +33,13 @@
@@ -1808,10 +1808,10 @@ index f40b654..d87f861 100644
      <${ToastHost} />
      <${UiHosts} />
 diff --git a/public/js/render/app.js b/public/js/render/app.js
-index a8cb77f..58bb175 100644
+index 44d9793..6a52bc5 100644
 --- a/public/js/render/app.js
 +++ b/public/js/render/app.js
-@@ -129,7 +129,7 @@ import { loadThree, loadBoardPack, loadScenePack, webgl2Available, boardArtListe
+@@ -141,7 +141,7 @@ import { loadThree, loadBoardPack, loadScenePack, webgl2Available, boardArtListe
  import { BoardScene } from './board3d/scene.js';
  import { unionAreas } from './board3d/layout.js';
  import { layoutPen, penSignature } from './pen.js';
@@ -1820,7 +1820,7 @@ index a8cb77f..58bb175 100644
  import { pickOnTile, pickBattle, hitTiles } from './pick.js';
  import { promotionsOf } from './promote.js';
  import { ensurePixi } from './app/pixi.js';
-@@ -676,7 +676,7 @@ export async function createFieldView(host, options = {}) {
+@@ -700,7 +700,7 @@ export async function createFieldView(host, options = {}) {
      }
      if (kind === 'token') {
        const rec = data.token(piece.id);
@@ -1829,15 +1829,15 @@ index a8cb77f..58bb175 100644
      }
      const chess = data.chess(piece.id);
      // 0.2.0 补位: a piece of a chess the player does not own (m.private.standIns) is its stand-in's model, in the hand,
-@@ -804,6 +804,7 @@ export async function createFieldView(host, options = {}) {
-         }
+@@ -841,6 +841,7 @@ export async function createFieldView(host, options = {}) {
+         if (was && e.area === 'board' && (was.area !== 'board' || was.row !== e.row || was.col !== e.col) && !(dragState && dragState.key === key)) landPiece(v, 'board');
        }
        v._home = w;
 +      if (info.researchStage != null) v.setResearchStage?.(info.researchStage);
        v.dimmed = false;
        if (info.kind === 'item' && v.setIcon) v.setIcon(info.icon); // an icon the manifest named late (onAssets)
        if (v.setCount) v.setCount(e.piece.kind === 'token' ? e.piece.count : 0);
-@@ -1078,10 +1079,16 @@ export async function createFieldView(host, options = {}) {
+@@ -1162,10 +1163,16 @@ export async function createFieldView(host, options = {}) {
     */
    function drawHighlight(list, style, group) {
      const key = hlKey(style, group);
@@ -1855,7 +1855,7 @@ index a8cb77f..58bb175 100644
      tiles.setHighlights(t, style, key, { stripes: range && key !== 'rangeStand' && !board3d });
    }
    function clearHl(group) {
-@@ -1225,6 +1232,8 @@ export async function createFieldView(host, options = {}) {
+@@ -1309,6 +1316,8 @@ export async function createFieldView(host, options = {}) {
      if (destroyed) return;
      const ev = evPayload(e);
      if (mode === 'battle') {
@@ -1864,7 +1864,7 @@ index a8cb77f..58bb175 100644
        const v = battleUnitAt(ev.x, ev.y);
        if (v) {
          const info = infos.get(v.id) || v.info;
-@@ -1350,6 +1359,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1435,6 +1444,7 @@ export async function createFieldView(host, options = {}) {
      tiles.setBattleRect(rect);
      board3d?.setBattleRect(rect);
      for (const u of Array.isArray(meta.units) ? meta.units : []) addInfo(u);
@@ -1872,7 +1872,7 @@ index a8cb77f..58bb175 100644
      return true;
    }
  
-@@ -1521,7 +1531,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1606,7 +1616,7 @@ export async function createFieldView(host, options = {}) {
          const late = form !== undefined ? LATE.get(e) || 0 : 0;
          if (form !== undefined) {
            const inf = infos.get(e[4].id);
@@ -1881,7 +1881,7 @@ index a8cb77f..58bb175 100644
            const x = late > 0 ? { ...e[4], late, ...(Number(e[4].dur) > 0 ? { dur: Math.max(0, Number(e[4].dur) - late) } : {}) } : e[4];
            views.get(e[4].id)?.setForm?.(form, x);
          }
-@@ -1584,6 +1594,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1669,6 +1679,7 @@ export async function createFieldView(host, options = {}) {
      slideAt = interp.nextSnapT(renderT);
      if (slideAt > renderT) interp.forEachUpcoming(renderT, slideAt, startSlide);
      interp.sample(renderT, sample);
@@ -1934,7 +1934,7 @@ index 3e2d983..f70a4d6 100644
      // name are already the stand-in's) — the detail card and the view's data lookups (attack interval, splash FX) follow it
      standInFor: typeof u.standInFor === 'string' && u.standInFor ? u.standInFor : undefined,
 diff --git a/public/js/render/app/tune.js b/public/js/render/app/tune.js
-index e0fe5e0..2865ec1 100644
+index bca87a0..7da2d90 100644
 --- a/public/js/render/app/tune.js
 +++ b/public/js/render/app/tune.js
 @@ -11,7 +11,7 @@ const BOARD3D_RETRY_MS = [1200, 4000, 12000];
@@ -2708,10 +2708,10 @@ index 68c2b90..dee3d93 100644
  
    _buildDevices() {
 diff --git a/public/js/render/units.js b/public/js/render/units.js
-index adf55a3..942a28d 100644
+index a375e04..cc81328 100644
 --- a/public/js/render/units.js
 +++ b/public/js/render/units.js
-@@ -66,11 +66,16 @@
+@@ -78,11 +78,16 @@
  // ground point, i.e. on the pointer (render/app.js).
  
  import { UF, ANIM } from '../../../shared/constants.js';
@@ -2729,7 +2729,7 @@ index adf55a3..942a28d 100644
  const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
  const DIRS = ['UP', 'RIGHT', 'DOWN', 'LEFT'];
  /** Deploy direction of an ally from a UnitInfo / piece: `dir` (any case), else the legacy `facing` sign. */
-@@ -353,6 +358,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
+@@ -370,6 +375,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
    idle, deploy: idle, die, attack: attack ? Object.freeze({ begin: null, loop: attack, end: null }) : null, attackDown: null, skill: null,
  });
  export const FORMS = Object.freeze({
@@ -2747,7 +2747,7 @@ index adf55a3..942a28d 100644
    char_1023_ghost2: Object.freeze({
      doll: Object.freeze({ change: 'Start_B', end: 'Die_B', leave: 'Start_2', roles: dollRoles('Idle_B', 'Die_B_2') }),
    }),
-@@ -488,6 +504,7 @@ export class UnitView {
+@@ -587,6 +603,7 @@ export class UnitView {
      this.modelKY = this.isEnemy ? enemyModelScaleY(def) : 1;
      this.mirrorX = this.isEnemy && !!(def && def.mirrorX);
      this.isToken = info.kind === 'token';
@@ -2755,7 +2755,7 @@ index adf55a3..942a28d 100644
      this.golden = !!info.golden;
      this.tier = clamp(Number(info.tier) || 1, 1, 6);
      this.x = Number(info.x) || 0; this.y = Number(info.y) || 0; this.z = 0;
-@@ -506,7 +523,7 @@ export class UnitView {
+@@ -605,7 +622,7 @@ export class UnitView {
      this.facing = this.dir === 'LEFT' ? -1 : 1;
      this.visFacing = this.isEnemy ? -1 : this.facing;
      this.hp = Number(info.maxHp) || 1; this.maxHp = Number(info.maxHp) || 1; this.ghostHp = this.hp;
@@ -2764,7 +2764,7 @@ index adf55a3..942a28d 100644
      this.ammo = null;             // [rounds left, rounds in the magazine] while an ammo skill runs (sync; b.snap `ammo`)
      this.wolves = null;           // [狼影 left, the talent's maximum] of a 狼群 (sync; b.snap `wolves`)
      this.coins = null;            // [balance, cap] of 琳琅诗怀雅's skill purse, including zero
-@@ -561,6 +578,7 @@ export class UnitView {
+@@ -661,6 +678,7 @@ export class UnitView {
      this.fallback = new P.Sprite(P.Texture.EMPTY);
      this.fallback.anchor.set(0.5, 1);
      this.body.addChild(this.fallback);
@@ -2772,7 +2772,7 @@ index adf55a3..942a28d 100644
      this.actor = null;
      this.spineReady = false;
      this._modelDirty = false;            // died / stood up since the last frame: update() checks Front ⇄ Back (_syncModel)
-@@ -594,19 +612,25 @@ export class UnitView {
+@@ -695,19 +713,25 @@ export class UnitView {
    // the first frame it is actually visible: never for a unit whose Spine model is ready before that, and never as
    // an image-less placeholder that the avatar replaces a moment later (the placeholder only shows when the avatar
    // is missing or still loading after PIC_WAIT_MS).
@@ -2806,7 +2806,7 @@ index adf55a3..942a28d 100644
    }
  
    /** Put the right diamond on the fallback sprite (called while the fallback is visible). */
-@@ -616,12 +640,15 @@ export class UnitView {
+@@ -717,12 +741,15 @@ export class UnitView {
      let want = pic.state === 'img' ? 'img' : 'placeholder';
      if (pic.state === 'wait' && nowMs() - pic.t0 < PIC_WAIT_MS) want = null;
      if (!want || pic.shown === want) return;
@@ -2823,7 +2823,7 @@ index adf55a3..942a28d 100644
      const a = this.ctx.assets;
      if (!a || !a.spineEntry || !a.spine) return;
      const id = this.info.spine || this.info.defId;
-@@ -644,7 +671,7 @@ export class UnitView {
+@@ -745,7 +772,7 @@ export class UnitView {
     */
    retryAssets() {
      if (this.destroyed) return;
@@ -2832,7 +2832,7 @@ index adf55a3..942a28d 100644
      if (this.actor) return;
      if (!this._spineBusy) { this._retryAt = 0; this._loadSpine(true); return; }
      if (this._spineHidden && !this._stuckAt && !globalThis.document?.hidden) this._stuckAt = nowMs() + SPINE_STUCK_MS;
-@@ -675,7 +702,7 @@ export class UnitView {
+@@ -776,7 +803,7 @@ export class UnitView {
          actor.setSkillIndex(this.skillIndex ?? undefined);
          actor.setRunMode(this.moveFast);
          // enemies play their attack clip once per attack, then walk on (GitHub #58: the sim stands them for that clip)
@@ -2841,7 +2841,7 @@ index adf55a3..942a28d 100644
        } catch (err) {
          console.warn('[render] spine build failed', id, err?.message || err);
          this._releaseEntry(entry);
-@@ -722,8 +749,16 @@ export class UnitView {
+@@ -826,8 +853,16 @@ export class UnitView {
      });
    }
  
@@ -2859,7 +2859,7 @@ index adf55a3..942a28d 100644
    }
  
    /**
-@@ -737,7 +772,7 @@ export class UnitView {
+@@ -841,7 +876,7 @@ export class UnitView {
    setForm(kind, fx = null) {
      const k = typeof kind === 'string' ? kind : null;
      if (k === this.form) return;
@@ -2868,7 +2868,7 @@ index adf55a3..942a28d 100644
      const prev = this._formSpec();
      this.form = k;
      this.info.form = k;
-@@ -835,6 +870,7 @@ export class UnitView {
+@@ -940,6 +975,7 @@ export class UnitView {
    /** Apply an interpolated sample (render/interp.js); `t` = the render clock's game time (ring countdowns). */
    sync(s, t) {
      if (!s) return;
@@ -2876,7 +2876,7 @@ index adf55a3..942a28d 100644
      if (Number.isFinite(t)) this.gameT = t;
      // the element gauge shown (b.snap `elem`): element, fill 0..1, cooldown end (game s) and length
      this.el = typeof s.el === 'string' ? s.el : null;
-@@ -1223,7 +1259,10 @@ export class UnitView {
+@@ -1367,7 +1403,10 @@ export class UnitView {
      if (lungeK) { const q = cam.project(this.x + lx, this.y + ly, this.z + this.hover + this.lift, LG_P); bx = q.x; by = q.y; }
      this.root.position.set(bx, by);
      this.root.alpha = alpha;
@@ -2887,7 +2887,7 @@ index adf55a3..942a28d 100644
      // off-screen: nothing to animate or draw (bounds / hit-testing still follow `screen`)
      if (this._cull(bx, by, s, dt)) return;
      const flip = (this.isEnemy ? (ENEMY_MODEL_FACES_LEFT ? -this.visFacing : this.visFacing) : this.visFacing) * (this.mirrorX ? -1 : 1);
-@@ -1246,7 +1285,7 @@ export class UnitView {
+@@ -1390,7 +1429,7 @@ export class UnitView {
        this.fallback.visible = this.swapT < 1;
        const sc = s * UNIT.modelScale * this.modelK;
        const flashK = this.flash > 0 ? this.flash : 0;
@@ -2896,7 +2896,7 @@ index adf55a3..942a28d 100644
        if (this.down) tint = DOWN_LOOK.tint;
        else if (this.flags & UF.FROZEN) tint = 0x9fd4ff;
        else if (this.flags & UF.COLD) tint = 0xcfe6ff;
-@@ -1290,14 +1329,16 @@ export class UnitView {
+@@ -1431,14 +1470,16 @@ export class UnitView {
        const bob = this.alive ? Math.sin(t * 2.4 + this.bob) * s * 0.03 : 0;
        this.fallback.scale.set(size / 160);
        this.fallback.position.set(0, -s * 0.08 + bob);
@@ -2915,7 +2915,7 @@ index adf55a3..942a28d 100644
      if (wedge && this.alive) {
        if (!this.facingArrow) {
          this.facingArrow = new P.Sprite(fxAtlas().tex.chevron);
-@@ -1332,7 +1373,7 @@ export class UnitView {
+@@ -1473,7 +1514,7 @@ export class UnitView {
      // keep the original short-circuit: many views never build an actor (prep chips, diamonds, tests), so the model
      // only counts when a spine is actually shown
      const actor = spineShown ? this.actor : null;
@@ -2924,7 +2924,7 @@ index adf55a3..942a28d 100644
        isEnemy: this.isEnemy, isBoss: this.isBoss, spineShown,
        bounds: actor && actor.entry ? actor.entry.bounds : null,
        modelK: this.modelK, modelKY: this.modelKY,
-@@ -1395,6 +1436,7 @@ export class UnitView {
+@@ -1536,6 +1577,7 @@ export class UnitView {
      const shielded = showHp && (this.flags & UF.SHIELD);
      this.shieldBar.visible = !!shielded;
      if (shielded) { this.shieldBar.position.set(x0, cy - bh / 2 - 1); this.shieldBar.width = bw; this.shieldBar.height = Math.max(1.5, bh * 0.35); }
@@ -2932,7 +2932,7 @@ index adf55a3..942a28d 100644
      // SP — or, while an ammo skill runs, its magazine: yellow cells, one per round, emptying from the right (b.snap `ammo`;
      // the SP bar's own fraction, ammoLeft / ammoMax, is the same width). Without an `ammo` row the bar is the plain SP bar.
      const ammo = !this.isEnemy ? this.ammo : null;
-@@ -1407,10 +1449,10 @@ export class UnitView {
+@@ -1548,10 +1590,10 @@ export class UnitView {
        const active = !!(this.flags & UF.SKILL);
        const k = ammo ? ammo[0] / ammo[1] : clamp(this.sp / this.spMax, 0, 1);
        ready = !active && k >= 0.999;
@@ -2945,8 +2945,8 @@ index adf55a3..942a28d 100644
        this._spY = sy;
      }
      this._updateAmmoCuts(showSp && !!ammo, ammo, x0, sy, bw, spH);
-@@ -1449,7 +1491,8 @@ export class UnitView {
-     const rowsTop = cy + bh / 2 + (showSp ? spH + 1.5 : 0);
+@@ -1592,7 +1634,8 @@ export class UnitView {
+     rowsTop += this._updateAmmoCount(showSp && !!ammo && this.ctx.settings?.ammoCount === true, x0 + bw / 2, rowsTop, s);
      const wolfH = this._updateWolfPips(showBars && !this.isEnemy && !!this.wolves, x0, rowsTop, s);
      const coinH = this._updateCoins(showBars && !this.isEnemy && !!this.coins, x0, rowsTop + wolfH, s);
 -    this._updateElementBar(showBars && !!this.el, x0, bw, rowsTop + wolfH + coinH + 1, spH, s, t);
@@ -2955,7 +2955,7 @@ index adf55a3..942a28d 100644
      this._updateDownRing(!prep && !!this.down && !this.alive, x, this.screen.y - DOWN_LOOK.height * s, s, t);
      // blocked marker at the feet (enemies held by a blocker)
      const blocked = !prep && this.alive && this.isEnemy && (this.flags & UF.BLOCKED);
-@@ -1559,6 +1602,26 @@ export class UnitView {
+@@ -1725,6 +1768,26 @@ export class UnitView {
     * The share of the element bar drawn (0..1): the remaining 元素值 (1 − fill), or during a 爆发冷却 the part of the
     * cooldown already run (the bar refills to full, PRTS 元素 "元素条显示缓慢恢复至上限"). 0 without a gauge.
     */
@@ -2983,7 +2983,7 @@ index adf55a3..942a28d 100644
      if (!this.el) return 0;
      if (this.elementCooling()) return clamp(1 - (this.elUntil - this.gameT) / this.elDur, 0, 1);
 diff --git a/public/js/screens/bandDraft.js b/public/js/screens/bandDraft.js
-index 46d9e79..a6cc573 100644
+index 62874c7..3a5a0db 100644
 --- a/public/js/screens/bandDraft.js
 +++ b/public/js/screens/bandDraft.js
 @@ -19,16 +19,17 @@
@@ -3019,10 +3019,10 @@ index 7c5b084..ecb94a0 100644
          <div class="brief-boss brackets">
            <${MicroLabel} tone="gold">${t('ENEMY LEADER // 敌方领袖')}</${MicroLabel}>
 diff --git a/public/js/screens/game.js b/public/js/screens/game.js
-index 4e1bdae..d34068e 100644
+index a6a5972..d192e6f 100644
 --- a/public/js/screens/game.js
 +++ b/public/js/screens/game.js
-@@ -80,6 +80,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
+@@ -84,6 +84,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
  import { Ticker } from '../ui/ticker.js';
  import { EmoteWheel } from '../ui/emotes.js';
  import { EffectsList } from '../ui/effectsList.js';
@@ -3033,7 +3033,7 @@ index 4e1bdae..d34068e 100644
  import { CombatHud } from '../ui/combatHud.js';
  import { SettingsModal, settingsStore } from '../ui/settings.js';
  import { ExitModal, AwayOverlay, awayStore } from '../ui/matchChrome.js';
-@@ -151,6 +155,8 @@ export function GameScreen() {
+@@ -155,6 +159,8 @@ export function GameScreen() {
  const inBattleCard = (d) => d?.kind === 'unit' || (d?.kind === 'device' && d.device?.unitId != null);
  
  function MatchScreen() {
@@ -3042,7 +3042,7 @@ index 4e1bdae..d34068e 100644
    useDocClass('sp-in-match');
    const pub = useStore((s) => s.match.public);
    const priv = useStore((s) => s.match.private);
-@@ -195,6 +201,9 @@ function MatchScreen() {
+@@ -199,6 +205,9 @@ function MatchScreen() {
    const [facing, setFacing] = useState(null);            // direction step: { uid, piece, row, col, grid, name }
    const [sel, setSel] = useState(null);                  // tapped own piece: { uid }
    const [selBusy, setSelBusy] = useState(false);
@@ -3052,7 +3052,7 @@ index 4e1bdae..d34068e 100644
    const [holdSeq, setHoldSeq] = useState(0);             // bumped when a held piece is released (re-apply the prep state)
    const [hud, setHud] = useState(null);
    const [banner, setBanner] = useState(null);
-@@ -251,7 +260,7 @@ function MatchScreen() {
+@@ -255,7 +264,7 @@ function MatchScreen() {
    const leaker = phase === PHASE.UNITE && Array.isArray(pub?.unite?.leakers) && pub.unite.leakers.includes(myId);
    const localLeft = leaker && uniteLocal ? (uniteLocal[myId] ?? 0) : undefined;
    const liveLpNow = liveLp(lpBaseRef.current, {
@@ -3061,7 +3061,7 @@ index 4e1bdae..d34068e 100644
      leaks: ownLeaks(localLeaks, meP?.pendingLp), cap: gd.config?.lpCapPerRound,
      uniteLeft: leaker ? uniteRemaining(localLeft, meP?.uniteLeft) : null,
    });
-@@ -291,7 +300,9 @@ function MatchScreen() {
+@@ -295,7 +304,9 @@ function MatchScreen() {
      getChess: (id) => { const c = gd.chess(id); return ownDiyRecord(c, priv, { chess: data.get('chess'), backups: data.get('backups') }) || c; },
      getToken: gd.token, getItem: gd.item, getEffect: gd.effect, backups: gd.backups,
    }), [priv, pub?.stageId, editable, gd.ready, deployField]);
@@ -3072,7 +3072,7 @@ index 4e1bdae..d34068e 100644
  
    // ---- camera: every request goes through setCam, which remembers it for the pen's way back -----------------------
    // the own prep board: the normal board, or — in the prep of a boss round — the player's half of the boss field
-@@ -935,6 +946,7 @@ function MatchScreen() {
+@@ -950,6 +961,7 @@ function MatchScreen() {
        moveOff?.(); moveOff = null;
        setDrag(null);
        view.highlightTiles(null, null);
@@ -3080,7 +3080,7 @@ index 4e1bdae..d34068e 100644
      };
      /** Open the direction wheel for a legal board drop (the piece stays on the tile meanwhile). */
      const openFacing = (entry, t) => {
-@@ -959,12 +971,20 @@ function MatchScreen() {
+@@ -974,12 +986,20 @@ function MatchScreen() {
          view.highlightTiles(null, null);
          view.highlightTiles(legal, 'legal');
          ptr.released = false; ptr.tile = null;
@@ -3102,7 +3102,7 @@ index 4e1bdae..d34068e 100644
        view.on('pieceDrop', async (e) => {
          endDrag();
          const L = live.current;
-@@ -998,13 +1018,30 @@ function MatchScreen() {
+@@ -1013,13 +1033,30 @@ function MatchScreen() {
          const reason = dropFailureReason(L.placeCtx, e.uid, tile);
          if (reason) refuse(reason);
        }),
@@ -3134,7 +3134,7 @@ index 4e1bdae..d34068e 100644
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1155,6 +1192,14 @@ function MatchScreen() {
+@@ -1170,6 +1207,14 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
@@ -3149,7 +3149,7 @@ index 4e1bdae..d34068e 100644
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
    // item 8 — at some aspect ratios a bench unit's 出售 sat under the left card); the underframe is drawn above every
    // panel anyway (css z-index), this keeps it visible too
-@@ -1260,6 +1305,7 @@ function MatchScreen() {
+@@ -1275,6 +1320,7 @@ function MatchScreen() {
        }
        if (act === 'escape') {
          if (L.emoteOpen) setEmoteOpen(false);
@@ -3157,7 +3157,7 @@ index 4e1bdae..d34068e 100644
          else if (L.pen && !L.detail) togglePenRef.current(false);
          else if (L.bondOpen) setBondOpen(null);
          else if (L.detail) setDetail(null);
-@@ -1333,6 +1379,8 @@ function MatchScreen() {
+@@ -1348,6 +1394,8 @@ function MatchScreen() {
      field, layers, layer, who: watchWho, bondLayers: battleState?.bondLayers || null,
    });
    const stripFid = strip.fieldId;
@@ -3166,7 +3166,7 @@ index 4e1bdae..d34068e 100644
    const liveLayers = (combat || settleMode) && battleState?.bondLayers ? battleState.bondLayers : null;
    // the observing pill names the player whose bonds the strip shows (the same teammate as the strip's "👁 name" tag)
    const observingName = cc && combat && watchedFid ? (!strip.self && stripFid === watchedFid ? strip.name : (players.find((p) => p.fieldId === watchedFid || ownFieldId(p.playerId) === watchedFid)?.name || t('队友'))) : null;
-@@ -1431,6 +1479,10 @@ function MatchScreen() {
+@@ -1446,6 +1494,10 @@ function MatchScreen() {
    return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', collapsed && 'is-collapsed', (sp || hasPersonalChoice) && 'has-sp', pen && 'is-pen', readyWhy && 'has-readywhy')}
        data-camera=${pen ? 'pen' : camKind}>
      <div class="gm__field" ref=${hostRef} onContextMenu=${(e) => e.preventDefault()}></div>
@@ -3177,7 +3177,7 @@ index 4e1bdae..d34068e 100644
      ${viewKind === 'loading' ? html`<div class="gm__loading"><${Spinner} label="LOADING FIELD" /></div>` : null}
      <div class="gm__vignette" aria-hidden="true"></div>
      ${tempNotice ? html`<${TempRowNotice} view=${view} count=${temp.count} items=${temp.items} label=${!drag && !facing}
-@@ -1467,8 +1519,18 @@ function MatchScreen() {
+@@ -1482,8 +1534,18 @@ function MatchScreen() {
          self=${Number.isFinite(priv?.lp) ? { lp: priv.lp, pending: liveLpNow.pending, unite: liveLpNow.unite, left: liveLpNow.left } : null}
          observe=${cc ? { canObserve: (p) => observeTarget(p, pub, myId, { observing: watchingOther, ownDone: localDone }), observing: watchingOther, onBack: backHome } : null} />
  
@@ -3198,7 +3198,7 @@ index 4e1bdae..d34068e 100644
        ${watchingOther && !combat ? html`<div class="gm__watching" role="status">
          <${GIcon} name="eye" /><span>${tParts('正在查看 {name} 的阵地（只读）', { name: html`<b>${watchedName}</b>` })}</span>
          ${spectator ? null : html`<${Button} size="sm" variant="primary" icon="back" onClick=${() => watchPlayer({ playerId: myId })}>${t('返回自己')}<//>`}
-@@ -1491,15 +1553,17 @@ function MatchScreen() {
+@@ -1506,15 +1568,17 @@ function MatchScreen() {
          client=${cc ? { progress, observing: observingName ? { name: observingName } : null, onBack: alive ? backHome : null, layers, layer, onLayer: setLayer } : null} />` : null}
  
        ${showDeadPill(alive, phase) ? (spectator
@@ -3221,7 +3221,7 @@ index 4e1bdae..d34068e 100644
          <${FullscreenButton} class="gm__gear gm__fs" />
        </div>
  
-@@ -1535,12 +1599,13 @@ function MatchScreen() {
+@@ -1550,12 +1614,13 @@ function MatchScreen() {
  
      ${banner ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
        tone=${banner.tone} duration=${banner.duration || 1500} onDone=${() => setBanner(null)} />` : null}
@@ -4388,15 +4388,15 @@ index 137f592..900c139 100644
  
  /** Boss HP fraction 0..1 (null when unknown). */
 diff --git a/public/js/ui/gameLogic/phases.js b/public/js/ui/gameLogic/phases.js
-index 1f3d5cc..e4c96c0 100644
+index 33a3208..c22ec84 100644
 --- a/public/js/ui/gameLogic/phases.js
 +++ b/public/js/ui/gameLogic/phases.js
 @@ -1,3 +1,4 @@
 +import { RELIC_CHOICE_SECONDS } from '../../../../shared/relics.js';
- // ui/gameLogic/phases.js — phase families, banners, the round's result box and 战斗结束 sound, countdowns. Re-exported
- // from ../gameLogic.js.
+ // ui/gameLogic/phases.js — phase families, banners, the round's result box and 战斗结束 sound, countdowns, the round
+ // start's deploy replay. Re-exported from ../gameLogic.js.
  
-@@ -214,6 +215,7 @@ export function phaseTotalSeconds(pub, config, myId = null) {
+@@ -249,6 +250,7 @@ export function phaseTotalSeconds(pub, config, myId = null) {
      // one countdown: the current turn's (m.public.draft.turnSeconds = Match.BAND_TURN_SECONDS; user playtest #4 item 4)
      case PHASE.BAND_DRAFT: return num(pub.draft?.turnSeconds) ?? num(timers.bandTurn) ?? 30;
      case PHASE.BATTLE_CHECK: return num(timers.battleCheck) ?? 3;
@@ -5123,10 +5123,10 @@ index 7beccb5..8b2417a 100644
  // ---------------------------------------------------------------------------------------------------
  // Index getters
 diff --git a/server/http/config.js b/server/http/config.js
-index 3d1bd12..59c6cef 100644
+index 113c444..81936ff 100644
 --- a/server/http/config.js
 +++ b/server/http/config.js
-@@ -17,7 +17,7 @@ export const noopLog = { info() {}, warn() {}, error() {}, debug() {} };
+@@ -19,7 +19,7 @@ export const noopLog = { info() {}, warn() {}, error() {}, debug() {} };
  
  /** startServer() options handed on to net.js Network / lobby.js Lobby (an absent one keeps that module's default). */
  const NET_OPTION_KEYS = ['reconnectWindowMs', 'heartbeatMs', 'helloTimeoutMs', 'ratePerSec', 'rateBurst', 'maxConnections', 'abuseDropsPerSec',
@@ -5136,20 +5136,20 @@ index 3d1bd12..59c6cef 100644
  
  /**
 diff --git a/server/http/files.js b/server/http/files.js
-index c15de0e..fead6a4 100644
+index a9ed003..20f49d9 100644
 --- a/server/http/files.js
 +++ b/server/http/files.js
-@@ -61,7 +61,7 @@ export const COMPRESSIBLE = new Set([
+@@ -67,7 +67,7 @@ const TEXT_LIKE = new Set(['.html', '.htm', '.js', '.mjs', '.css', '.json', '.ma
  
  const GZIP_MIN_BYTES = 512;
- const GZIP_CACHE_MAX_FILE = 8 << 20;      // larger files are gzip-streamed on the fly
--const GZIP_CACHE_MAX_TOTAL = 96 << 20;
-+const GZIP_CACHE_MAX_TOTAL = (process.env.SP_FRIENDS === '1' ? 16 : 96) << 20;
- // Asset URLs carry no content hash yet, and tools/fetch-assets.mjs / tools/vendor.mjs can rewrite files in
- // place (atlas + png + skel must stay consistent), so "long" is one day; revalidation after that is a cheap 304.
- const LONG_CACHE = 'public, max-age=86400';          // 1 day
+ const GZIP_CACHE_MAX_FILE = 8 << 20;      // larger files are compressed as a stream on the fly
+-const GZIP_CACHE_MAX_TOTAL = 96 << 20;    // both encodings together
++const GZIP_CACHE_MAX_TOTAL = (process.env.SP_FRIENDS === '1' ? 16 : 96) << 20;    // both encodings together
+ /**
+  * Brotli quality of the on-the-fly compression: faster than gzip-6 and smaller — measured on this repository against
+  * gzip-6: .skel −27 %, data/*.json −26 %, vendor −14 %, public/js and server/sim −5 %, .atlas −7 %. Quality 11 would gain
 diff --git a/server/http/websocket.js b/server/http/websocket.js
-index 0f20766..3b54479 100644
+index 5957a06..ac5453e 100644
 --- a/server/http/websocket.js
 +++ b/server/http/websocket.js
 @@ -9,8 +9,10 @@
@@ -5164,7 +5164,7 @@ index 0f20766..3b54479 100644
  
  /** Inbound WebSocket frame limit (DESIGN §8). */
  export const WS_MAX_PAYLOAD = 64 * 1024;
-@@ -23,9 +25,12 @@ export const WS_MAX_PAYLOAD = 64 * 1024;
+@@ -55,9 +57,12 @@ export function narrowDeflateOffer(header) {
   */
  export function createSessionStack(opts, { data, log }) {
    const netOptions = netOptionsFrom(opts);
@@ -5180,11 +5180,11 @@ index 0f20766..3b54479 100644
    return { registry, lobby, network };
  }
 diff --git a/server/index.js b/server/index.js
-index 2543c3d..c2ef139 100644
+index 9d2f994..905ba20 100644
 --- a/server/index.js
 +++ b/server/index.js
-@@ -57,6 +57,7 @@ export {
-  *                     close: () => Promise<void> }>}
+@@ -69,6 +69,7 @@ export {
+  *                     views: ReturnType<typeof createManifestViews> | null, close: () => Promise<void> }>}
   */
  export async function startServer(opts = {}) {
 +  if (process.env.SP_FRIENDS === '1') opts = { maxRooms: 4, maxRoomsPerAddr: 4, maxMatchesPerAddr: 4, maxConnections: 24, maxConnectionsPerAddr: 24, maxSessions: 64, soloReconnectWindowMs: 30 * 60_000, hardBufferBytes: 2 << 20, ...opts };
@@ -10436,7 +10436,7 @@ index 804a0ac..8db8254 100644
              }
            },
 diff --git a/server/sim/content/kits/ops/op-wisdel.js b/server/sim/content/kits/ops/op-wisdel.js
-index 0122020..843947a 100644
+index ed6da45..9ed5a67 100644
 --- a/server/sim/content/kits/ops/op-wisdel.js
 +++ b/server/sim/content/kits/ops/op-wisdel.js
 @@ -62,6 +62,7 @@ import { absoluteRangeKeys, sortEnemyTargets } from '../../../targeting.js';
@@ -10447,15 +10447,15 @@ index 0122020..843947a 100644
  
  const S1 = 'skchr_wisdel_1';
  const S2 = 'skchr_wisdel_2';
-@@ -135,12 +136,13 @@ function shocks({ count, atkScale, shockScale, radius, prob, stun, mainScale, bo
- 
- /** The free deployable tile of her range a shadow takes (PRTS: nearest to her > lower row > left column), or null. */
+@@ -137,12 +138,13 @@ function shocks({ count, atkScale, shockScale, radius, prob, stun, mainScale, bo
+  *  Deployable = on a board of this field (Battle.onFieldBoard): a teammate's half counts, a boss field's hand /
+  *  临时整备区 rows and an empty half do not (#557, PR #558). */
  function shadowTile(battle, host) {
 -  let best = null, bd = Infinity;
 +  let best = null, bd = Infinity, order = null;
    for (const k of host.rangeKeys ?? []) {
      const r = Math.floor(k / COLS), c = k % COLS;
-     if (!battle.grid.inRect(r, c) || !battle.grid.canStand(r, c, { ranged: true }) || battle.isReservedTile(r, c)) continue;
+     if (!battle.grid.inRect(r, c) || !battle.onFieldBoard(r, c) || !battle.grid.canStand(r, c, { ranged: true }) || battle.isReservedTile(r, c)) continue;
      const d = hypot(r - host.tileR, c - host.tileC);
 -    if (d < bd - 1e-9 || (Math.abs(d - bd) <= 1e-9 && (r < best[0] || (r === best[0] && c < best[1])))) { bd = d; best = [r, c]; }
 +    const next = localOrder(r - host.tileR, c - host.tileC, host.dir);
@@ -10463,7 +10463,7 @@ index 0122020..843947a 100644
    }
    return best;
  }
-@@ -198,6 +200,20 @@ function shadowKit(host) {
+@@ -200,6 +202,20 @@ function shadowKit(host) {
    };
  }
  
@@ -19845,7 +19845,7 @@ index 4822789..abf8bf9 100644
      const loaded = [];
      let fail = true;
 diff --git a/test/render/boardart.test.js b/test/render/boardart.test.js
-index a4530dc..e521efe 100644
+index 3a03224..8ee7753 100644
 --- a/test/render/boardart.test.js
 +++ b/test/render/boardart.test.js
 @@ -12,11 +12,11 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
@@ -22653,7 +22653,7 @@ index 0fe147f..2a3e20e 100644
  });
  
 diff --git a/test/ui/gameLogic.test.js b/test/ui/gameLogic.test.js
-index 3516af4..0c4fa8f 100644
+index 302c05e..f2dbbd3 100644
 --- a/test/ui/gameLogic.test.js
 +++ b/test/ui/gameLogic.test.js
 @@ -581,7 +581,23 @@ describe('drafts', () => {
@@ -22775,7 +22775,7 @@ index f0afdd5..2ea09ca 100644
 +  }
 +});
 diff --git a/test/ui/loadout.e2e.test.js b/test/ui/loadout.e2e.test.js
-index 4736b5f..904b887 100644
+index 9cc9195..48efe0e 100644
 --- a/test/ui/loadout.e2e.test.js
 +++ b/test/ui/loadout.e2e.test.js
 @@ -21,6 +21,7 @@ const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Conte

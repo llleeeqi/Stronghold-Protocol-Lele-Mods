@@ -31,7 +31,7 @@ bash scripts/stage.sh --revision FULL_40_CHARACTER_SHA --name update-002
 
 核对默认关闭、256 种组合、多人资料载入、准备清除、开局锁定、收藏品与莱茵共存、新干员技能和重连。成功后更新 upstream.lock.json revision，提交补丁适配及验证结果。
 
-0.2.5 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含八项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；八项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
+0.2.6 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含八项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；八项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
 
 ## 切换与回退
 
@@ -64,4 +64,4 @@ bash scripts/status.sh
 
 常规更新可使用 `SP_STAGE_CHECKS=update bash scripts/stage.sh ...`，执行关键拓展、联机、库存与界面兼容检查。默认 `full` 保留完整检查；GitHub CI 仍执行完整检查。任一模式失败都不会生成 READY。
 
-0.2.5 官方场景可从官方 full / update ZIP 提取 `public/assets/local/scene/`，并仅合并 `data/local-assets.json` 中的 `scene/` 分组，保留现有 Mod 索引。不要覆盖 ZIP 的代码或其他资料。后续 `--assets-from` 会复用素材和本地素材索引。
+0.2.6 官方场景可从官方 full / update ZIP 提取 `public/assets/local/scene/`，并仅合并 `data/local-assets.json` 中的 `scene/` 分组，保留现有 Mod 索引。不要覆盖 ZIP 的代码或其他资料。后续 `--assets-from` 会复用素材和本地素材索引。

@@ -45,6 +45,10 @@ if [[ -n "$assets_from" ]]; then
   for dir in public/assets public/fonts .cache; do
     if [[ -d "$assets_from/$dir" ]]; then mkdir -p "$(dirname "$dir")"; cp -a "$assets_from/$dir" "$dir"; fi
   done
+  if [[ -f "$assets_from/data/local-assets.json" ]]; then
+    mkdir -p data
+    cp -a "$assets_from/data/local-assets.json" data/local-assets.json
+  fi
 fi
 if [[ -d "$repo_dir/mods/assets/public/art" ]]; then
   mkdir -p "$stage_dir/source/public/art"

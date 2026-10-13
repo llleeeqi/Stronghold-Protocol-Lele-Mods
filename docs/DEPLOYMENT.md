@@ -63,3 +63,5 @@ bash scripts/status.sh
 复用旧运行目录时，stage.sh 会刷新音频／语音／模型索引，现有素材文件仍增量复用，避免新版本新增干员素材被旧索引遗漏。保留上游素材清单防缩减检查，不使用 --allow-shrink 绕过。
 
 常规更新可使用 `SP_STAGE_CHECKS=update bash scripts/stage.sh ...`，执行关键拓展、联机、库存与界面兼容检查。默认 `full` 保留完整检查；GitHub CI 仍执行完整检查。任一模式失败都不会生成 READY。
+
+0.2.5 官方场景可从官方 full / update ZIP 提取 `public/assets/local/scene/`，并仅合并 `data/local-assets.json` 中的 `scene/` 分组，保留现有 Mod 索引。不要覆盖 ZIP 的代码或其他资料。后续 `--assets-from` 会复用素材和本地素材索引。

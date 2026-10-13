@@ -1,3 +1,7 @@
+# 2026-10-13：官方 0.2.5 兼容同步
+
+官方固定提交 `cf7a9400270d5aa79b2e601e405dab782e25f120`，来源 [sganggs/Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol/releases/tag/v0.2.5)。保留官方干员设置防陈旧同步、晋升自选库存、装备领取、伤害数字、血条高度、Boss 随机配对及 AI 阵营选择修复，接回现有拓展技能、科研装置与定向甄选。八项拓展仍默认关闭，四人和 +4 回合规则不变。各拓展来源提交未变，完整署名见 notices/SOURCES.md。官方场景需对应素材；缺素材时仍使用棋盘。
+
 # 2026-10-11：官方 0.2.4 兼容同步
 
 官方固定提交 `bc50cac01ff447eff3ab6c35f69d934bbc23b48f`，同步自 [sganggs/Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。包含 0.2.3 和 0.2.4 的本体更新：联机共享干员库存翻倍、共享装备库存、配置重抽投票、身份握手与重连、PWA 和界面调整、复活落点与多项战斗修复。上游修复与整合包的自定义技能、科研装置、收藏品结算共同保留；没有启用历史实验 AI。

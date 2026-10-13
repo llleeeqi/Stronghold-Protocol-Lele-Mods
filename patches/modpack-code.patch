@@ -1,5 +1,5 @@
 diff --git a/.gitignore b/.gitignore
-index 37a6479..22bd5af 100644
+index f09e5f3..65719a2 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,7 @@
@@ -10,7 +10,7 @@ index 37a6479..22bd5af 100644
  # a local npm cache (npm_config_cache=./.npm-cache, npm ci --cache .npm-cache — GitHub #258)
  .npm-cache/
  # copied from node_modules by tools/vendor.mjs (postinstall); never commit third-party builds
-@@ -14,6 +16,9 @@ public/fonts/
+@@ -17,6 +19,9 @@ public/fonts/
  data/local-assets.json
  # download caches, upstream tables, ledgers, reports, setup state
  .cache/
@@ -317,7 +317,7 @@ index 0000000..413c142
 +更新方法：先应用莱茵补丁并生成原版/莱茵数据，再运行 +4 回合生成器，覆盖 data 及四个 overlay 文件；随后 git apply --check mods/party/party-code.patch 验证后应用补丁，运行 generate-data.mjs 生成额外干员的两个独立数据目录。最后应用 friends-profile.patch，增量下载干员模型与收藏品图标。
 +任何补丁冲突都停止暂存构建；测试通过并确认无对局后才切换 Compose 挂载。reapply.sh 不会改动线上或自动重启。
 diff --git a/docs/PLAYING.md b/docs/PLAYING.md
-index c779af2..e7b0647 100644
+index da9b875..396d430 100644
 --- a/docs/PLAYING.md
 +++ b/docs/PLAYING.md
 @@ -1,6 +1,6 @@
@@ -665,10 +665,10 @@ index 0000000..2c890f7
 +  ]
 +}
 diff --git a/public/css/components.css b/public/css/components.css
-index a1f8d4f..0d34d65 100644
+index 5ff01d4..f386865 100644
 --- a/public/css/components.css
 +++ b/public/css/components.css
-@@ -1081,3 +1081,11 @@
+@@ -1090,3 +1090,11 @@
    --bk-c: var(--red-premium);
  }
  .crash__box h2 { font-size: calc(.3 * var(--t)); }
@@ -860,7 +860,7 @@ index 414df25..fccc262 100644
 +.gm__relic-wait { position: absolute; left: 50%; bottom: .55rem; transform: translateX(-50%); display: flex; align-items: center; gap: .08rem; padding: .12rem .2rem; border: 1px solid var(--mint-700); background: var(--bg-glass); color: var(--mint-400); font-size: max(.17rem, 10px); white-space: nowrap; }
 +.gm__relic-wait .icon { width: .2rem; height: .2rem; }
 diff --git a/public/css/screens/game.css b/public/css/screens/game.css
-index 190970d..30abda0 100644
+index 515bb2e..a769a69 100644
 --- a/public/css/screens/game.css
 +++ b/public/css/screens/game.css
 @@ -1,3 +1,4 @@
@@ -1313,10 +1313,10 @@ index fb4db19..31086f5 100644
      /** Already-loaded image element or null (sync). */
      imageNow(u) { const e = images.get(str(u) || ''); return e && e.done ? e.value : null; },
 diff --git a/public/js/battle/runner.js b/public/js/battle/runner.js
-index 35965d6..4a7f7ab 100644
+index 373f196..7fa6bc6 100644
 --- a/public/js/battle/runner.js
 +++ b/public/js/battle/runner.js
-@@ -72,6 +72,7 @@ import { net as appNet } from '../net.js';
+@@ -73,6 +73,7 @@ import { net as appNet } from '../net.js';
  import { store as appStore } from '../store.js';
  import { unitStatsEntry, fxForm } from '../../../shared/protocol.js';
  import { spectateEffects } from './observe.js';
@@ -1324,7 +1324,7 @@ index 35965d6..4a7f7ab 100644
  import { recordError, setBattleSource } from '../diag.js';
  
  const TICK = 1 / 30;
-@@ -143,9 +144,9 @@ function deepFreeze(root) {
+@@ -144,9 +145,9 @@ function deepFreeze(root) {
   * Browser sim loader: the /sim/ modules + the data files (own frozen copies — the server's data is frozen too, so a
   * content bug that writes into a record fails identically on both sides).
   */
@@ -1337,7 +1337,7 @@ index 35965d6..4a7f7ab 100644
    ]);
    const fetchOnce = async (n) => {
      try {
-@@ -160,8 +161,7 @@ export async function loadBrowserSim({ base = '/sim/', dataBase = '/data/', fetc
+@@ -161,8 +162,7 @@ export async function loadBrowserSim({ base = '/sim/', dataBase = '/data/', fetc
    if (missing.length) throw new Error(`simulation data unavailable: ${missing.join(', ')}`);
    const raw = {};
    SIM_DATA_FILES.forEach((n, i) => { raw[n] = deepFreeze(files[i]); });
@@ -1347,7 +1347,7 @@ index 35965d6..4a7f7ab 100644
    return { spec, ds: new simdata.DataSource(raw, null) };
  }
  
-@@ -190,7 +190,7 @@ export function createBattleRunner(deps) {
+@@ -191,7 +191,7 @@ export function createBattleRunner(deps) {
    const setIv = deps.setInterval || ((fn, ms) => globalThis.setInterval(fn, ms));
    const clearIv = deps.clearInterval || ((h) => globalThis.clearInterval(h));
    const doc = deps.doc !== undefined ? deps.doc : (typeof document !== 'undefined' ? document : null);
@@ -1356,7 +1356,7 @@ index 35965d6..4a7f7ab 100644
    const logger = deps.logger || SIM_LOGGER;
  
    const listeners = new Map();
-@@ -207,9 +207,15 @@ export function createBattleRunner(deps) {
+@@ -208,9 +208,15 @@ export function createBattleRunner(deps) {
    /** @type {Map<string, any>} battleId → entry of a b.start still being prepared (prepare(); `battle` null until built) */
    const pending = new Map();
    let cur = null;              // entry on screen
@@ -1375,7 +1375,7 @@ index 35965d6..4a7f7ab 100644
    let rafH = null;
    let ivH = null;
    let lastPool = null;
-@@ -226,11 +232,20 @@ export function createBattleRunner(deps) {
+@@ -227,11 +233,20 @@ export function createBattleRunner(deps) {
    const clock = () => (pausedAt != null ? pausedAt : now());
    const bossLike = (e) => e.kind === 'boss' || e.kind === 'hidden';
  
@@ -1400,7 +1400,7 @@ index 35965d6..4a7f7ab 100644
    }
  
    /** Counted leaks so far of every normal field simulated here: { [fieldId]: n } (user playtest #3 item 2). */
-@@ -454,13 +469,13 @@ export function createBattleRunner(deps) {
+@@ -455,13 +470,13 @@ export function createBattleRunner(deps) {
        msg.bossDmg = pool && Number.isFinite(pool.cum) ? pool.cum : 0;
        if (pool && pool.byPlayer) {
          const by = {};
@@ -1417,7 +1417,7 @@ index 35965d6..4a7f7ab 100644
      }
      try { net.send('b.progress', msg); } catch { /* offline */ }
    }
-@@ -621,11 +636,15 @@ export function createBattleRunner(deps) {
+@@ -622,11 +637,15 @@ export function createBattleRunner(deps) {
  
    async function onStart(msg) {
      if (!msg || typeof msg !== 'object' || !msg.spec || typeof msg.battleId !== 'string') return;
@@ -1434,7 +1434,7 @@ index 35965d6..4a7f7ab 100644
        existing.seq = seq;
        const was = existing.authoritative;
        existing.authoritative = !!msg.authoritative && !existing.resultSent;
-@@ -653,6 +672,7 @@ export function createBattleRunner(deps) {
+@@ -654,6 +673,7 @@ export function createBattleRunner(deps) {
        else { publishState(); schedule(); }
        return;
      }
@@ -1442,7 +1442,7 @@ index 35965d6..4a7f7ab 100644
      const e = {
        battleId: msg.battleId, fieldId: msg.fieldId || msg.spec.fieldId, kind: msg.kind || msg.spec.kind, spec: msg.spec,
        // built by prepare(); `seq` = its latest b.start, `elapsed` = the field clock to start from, `endReason` = the first
-@@ -662,6 +682,8 @@ export function createBattleRunner(deps) {
+@@ -663,6 +683,8 @@ export function createBattleRunner(deps) {
        members: (msg.spec.players || []).map((p) => p && p.playerId).filter(Boolean),
        t0: null, lastProgressAt: -Infinity, done: false, resultSent: false,
        result: null, delivery: null,
@@ -1451,7 +1451,7 @@ index 35965d6..4a7f7ab 100644
        // counted leaks so far (normal fields; noteLeaks) and the Battle state they were counted at; 联防 fields: each
        // leaker's enemies still standing (noteUniteLeft)
        leaks: 0, leakMark: '', left: null,
-@@ -686,10 +708,10 @@ export function createBattleRunner(deps) {
+@@ -687,10 +709,10 @@ export function createBattleRunner(deps) {
     * authority (it must finish and report) or the server already ended it (switching back shows the end).
     */
    async function prepare(e) {
@@ -1464,7 +1464,7 @@ index 35965d6..4a7f7ab 100644
          console.warn('[runner] simulation unavailable', err);
          recordError('runner', err, 'simulation unavailable');
          return;
-@@ -776,6 +798,7 @@ export function createBattleRunner(deps) {
+@@ -777,6 +799,7 @@ export function createBattleRunner(deps) {
  
    /** Drop every battle (a new round's prep, the match ended, the player left). */
    function clear() {
@@ -1472,7 +1472,7 @@ index 35965d6..4a7f7ab 100644
      ++startSeq;
      loading = null;
      for (const e of entries.values()) {
-@@ -805,6 +828,11 @@ export function createBattleRunner(deps) {
+@@ -806,6 +829,11 @@ export function createBattleRunner(deps) {
    if (store && typeof store.subscribe === 'function') {
      offs.push(store.subscribe((s) => {
        const pub = s && s.match && s.match.public ? s.match.public : null;
@@ -1484,7 +1484,7 @@ index 35965d6..4a7f7ab 100644
        // solo pause (DESIGN §14): the local battle clocks follow m.public.paused
        setPaused(!!(pub && pub.paused));
        const phase = pub ? pub.phase : null;
-@@ -814,7 +842,7 @@ export function createBattleRunner(deps) {
+@@ -815,7 +843,7 @@ export function createBattleRunner(deps) {
          if (entries.size || pending.size) clear();
        }
        // warm the simulation up as soon as a match runs (the first b.start then starts at once)
@@ -1493,7 +1493,7 @@ index 35965d6..4a7f7ab 100644
      }));
    }
    if (doc && typeof doc.addEventListener === 'function') {
-@@ -829,6 +857,17 @@ export function createBattleRunner(deps) {
+@@ -830,6 +858,17 @@ export function createBattleRunner(deps) {
        return () => listeners.get(type)?.delete(fn);
      },
      state,
@@ -1511,7 +1511,7 @@ index 35965d6..4a7f7ab 100644
      /**
       * The battle on screen as a report attaches it (diag.js): its b.start fields and its game time; null without one.
       * @returns {{ battleId: string, fieldId: string, kind: string, spec: object, time: number|null }|null}
-@@ -840,7 +879,7 @@ export function createBattleRunner(deps) {
+@@ -841,7 +880,7 @@ export function createBattleRunner(deps) {
        return { battleId: e.battleId, fieldId: e.fieldId, kind: e.kind, spec: e.spec, time };
      },
      stats() {
@@ -1682,7 +1682,7 @@ index 0000000..c4eb77a
 +    });
 +}
 diff --git a/public/js/main.js b/public/js/main.js
-index 4002509..7c5f062 100644
+index f40b654..d87f861 100644
 --- a/public/js/main.js
 +++ b/public/js/main.js
 @@ -33,12 +33,13 @@
@@ -1766,9 +1766,9 @@ index 4002509..7c5f062 100644
 +  });
 +  net.on('m.damage', msg => store.patch('match', {damage: payload(msg)}));
    net.on('m.private', (msg) => { matchAt = Date.now(); store.patch('match', { private: payload(msg) }); });
-   net.on('m.field', (msg) => store.patch('match', { field: payload(msg) }));
-   net.on('m.result', (msg) => {
-@@ -261,7 +283,7 @@ function wireNet() {
+   net.on('m.layer', (msg) => {
+     const s = store.get();
+@@ -265,7 +287,7 @@ function wireNet() {
    store.subscribe((s, prev) => {
      if (s.session.entered && !prev.session.entered) schedulePendingJoin();
      // in a room (co-op or solo, also a resumed one) a match is near: its data starts downloading
@@ -1777,7 +1777,7 @@ index 4002509..7c5f062 100644
    });
  }
  
-@@ -273,9 +295,7 @@ function wireNet() {
+@@ -277,9 +299,7 @@ function wireNet() {
   * data store shares each file's promise).
   */
  function warmGameData() {
@@ -1788,7 +1788,7 @@ index 4002509..7c5f062 100644
  }
  
  // ---- UI chrome (the connection banner lives in ui/connBanner.js) -----------------------------------
-@@ -293,12 +313,17 @@ function ScreenCrashed({ error, reset }) {
+@@ -297,12 +317,17 @@ function ScreenCrashed({ error, reset }) {
  
  function App() {
    const route = useStore(selectRoute);
@@ -1808,10 +1808,10 @@ index 4002509..7c5f062 100644
      <${ToastHost} />
      <${UiHosts} />
 diff --git a/public/js/render/app.js b/public/js/render/app.js
-index d457dbd..057fa4a 100644
+index a8cb77f..58bb175 100644
 --- a/public/js/render/app.js
 +++ b/public/js/render/app.js
-@@ -129,7 +129,7 @@ import { loadThree, loadBoardPack, webgl2Available, boardArtListed } from './boa
+@@ -129,7 +129,7 @@ import { loadThree, loadBoardPack, loadScenePack, webgl2Available, boardArtListe
  import { BoardScene } from './board3d/scene.js';
  import { unionAreas } from './board3d/layout.js';
  import { layoutPen, penSignature } from './pen.js';
@@ -1820,7 +1820,7 @@ index d457dbd..057fa4a 100644
  import { pickOnTile, pickBattle, hitTiles } from './pick.js';
  import { promotionsOf } from './promote.js';
  import { ensurePixi } from './app/pixi.js';
-@@ -667,7 +667,7 @@ export async function createFieldView(host, options = {}) {
+@@ -676,7 +676,7 @@ export async function createFieldView(host, options = {}) {
      }
      if (kind === 'token') {
        const rec = data.token(piece.id);
@@ -1829,7 +1829,7 @@ index d457dbd..057fa4a 100644
      }
      const chess = data.chess(piece.id);
      // 0.2.0 补位: a piece of a chess the player does not own (m.private.standIns) is its stand-in's model, in the hand,
-@@ -795,6 +795,7 @@ export async function createFieldView(host, options = {}) {
+@@ -804,6 +804,7 @@ export async function createFieldView(host, options = {}) {
          }
        }
        v._home = w;
@@ -1837,7 +1837,7 @@ index d457dbd..057fa4a 100644
        v.dimmed = false;
        if (info.kind === 'item' && v.setIcon) v.setIcon(info.icon); // an icon the manifest named late (onAssets)
        if (v.setCount) v.setCount(e.piece.kind === 'token' ? e.piece.count : 0);
-@@ -1057,10 +1058,16 @@ export async function createFieldView(host, options = {}) {
+@@ -1078,10 +1079,16 @@ export async function createFieldView(host, options = {}) {
     */
    function drawHighlight(list, style, group) {
      const key = hlKey(style, group);
@@ -1855,7 +1855,7 @@ index d457dbd..057fa4a 100644
      tiles.setHighlights(t, style, key, { stripes: range && key !== 'rangeStand' && !board3d });
    }
    function clearHl(group) {
-@@ -1204,6 +1211,8 @@ export async function createFieldView(host, options = {}) {
+@@ -1225,6 +1232,8 @@ export async function createFieldView(host, options = {}) {
      if (destroyed) return;
      const ev = evPayload(e);
      if (mode === 'battle') {
@@ -1864,7 +1864,7 @@ index d457dbd..057fa4a 100644
        const v = battleUnitAt(ev.x, ev.y);
        if (v) {
          const info = infos.get(v.id) || v.info;
-@@ -1322,6 +1331,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1350,6 +1359,7 @@ export async function createFieldView(host, options = {}) {
      tiles.setBattleRect(rect);
      board3d?.setBattleRect(rect);
      for (const u of Array.isArray(meta.units) ? meta.units : []) addInfo(u);
@@ -1872,7 +1872,7 @@ index d457dbd..057fa4a 100644
      return true;
    }
  
-@@ -1493,7 +1503,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1521,7 +1531,7 @@ export async function createFieldView(host, options = {}) {
          const late = form !== undefined ? LATE.get(e) || 0 : 0;
          if (form !== undefined) {
            const inf = infos.get(e[4].id);
@@ -1881,7 +1881,7 @@ index d457dbd..057fa4a 100644
            const x = late > 0 ? { ...e[4], late, ...(Number(e[4].dur) > 0 ? { dur: Math.max(0, Number(e[4].dur) - late) } : {}) } : e[4];
            views.get(e[4].id)?.setForm?.(form, x);
          }
-@@ -1556,6 +1566,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1584,6 +1594,7 @@ export async function createFieldView(host, options = {}) {
      slideAt = interp.nextSnapT(renderT);
      if (slideAt > renderT) interp.forEachUpcoming(renderT, slideAt, startSlide);
      interp.sample(renderT, sample);
@@ -2075,7 +2075,7 @@ index 6b14f9a..70e0fac 100644
    let spec = FX_KINDS[k];
    if (!spec) {
 diff --git a/public/js/render/fx/simfx.js b/public/js/render/fx/simfx.js
-index 4319e8d..ceaa8ac 100644
+index 01fdca4..0857981 100644
 --- a/public/js/render/fx/simfx.js
 +++ b/public/js/render/fx/simfx.js
 @@ -1,6 +1,13 @@
@@ -2205,7 +2205,7 @@ index 4319e8d..ceaa8ac 100644
      const chest = (v, out = this._p) => (v ? this._chest(v, out) : cam.project(at.x, at.y, at.z + 0.5, out));
      const p = chest(at.v);
 diff --git a/public/js/render/fx/system.js b/public/js/render/fx/system.js
-index b57aa18..1fabd0c 100644
+index 98b8a33..1c2fa12 100644
 --- a/public/js/render/fx/system.js
 +++ b/public/js/render/fx/system.js
 @@ -13,6 +13,7 @@ import { FxRings } from './rings.js';
@@ -2281,9 +2281,9 @@ index b57aa18..1fabd0c 100644
  }
  
 -const FX_PARTS = [FxParticles, FxProjectiles, FxBeams, FxLocks, FxNumbers, FxRings, FxArrivals, FxSim, FxZones];
--const FX_METHOD_ORDER = ["quality","load","maxParticles","rich","_room","_ts","_groundZ","particle","_o","_freeParticle","_updateParticles","_proj","_onGround","_chest","_bodyPt","burst","attack","_takeProj","_dressProj","_releaseProj","_updateProjs","_shotPoint","_stepShot","_stepBoomerang","_stepMortar","_mote","_puff","_muzzle","_impact","_catch","mortar","_landed","_beam","_updateBeams","_flame","_freeFlame","_updateFlames","_lock","_touchLocks","_nearestLock","_releaseLock","_freeLock","_updateLocks","damage","_slash","heal","number","_growFits","_numSlotPx","_layoutNums","_layoutNumsOnce","_sizeNum","_fadeNum","_takeNum","_releaseNum","_updateNums","ring","_updateRings","skill","_aura","_updateAuras","deploy","promote","death","crateBreak","_viewOf","_where","_point","simFx","explosion","smoke","streak","strike","numberAt","_updateLabels","zone","_freeZone","_updateZones","tileFlash","_updateTileFlashes","flashScreen","snowfall","leak","pop","_updatePops"];
+-const FX_METHOD_ORDER = ["quality","load","maxParticles","rich","_room","_ts","_groundZ","particle","_o","_freeParticle","_updateParticles","_proj","_onGround","_chest","_bodyPt","burst","attack","_takeProj","_dressProj","_releaseProj","_updateProjs","_shotPoint","_stepShot","_stepBoomerang","_stepMortar","_mote","_puff","_muzzle","_impact","_catch","mortar","_landed","_beam","_updateBeams","_flame","_freeFlame","_updateFlames","_lock","_touchLocks","_nearestLock","_releaseLock","_freeLock","_updateLocks","damage","_slash","heal","officialNumber","number","_growFits","_numSlotPx","_layoutNums","_layoutNumsOnce","_sizeNum","_fadeNum","_takeNum","_releaseNum","_updateNums","ring","_updateRings","skill","_aura","_updateAuras","deploy","promote","death","crateBreak","_viewOf","_where","_point","simFx","explosion","smoke","streak","strike","numberAt","_updateLabels","zone","_freeZone","_updateZones","tileFlash","_updateTileFlashes","flashScreen","snowfall","leak","pop","_updatePops"];
 +const FX_PARTS = [FxParticles, FxProjectiles, FxBeams, FxLocks, FxNumbers, FxRings, FxArrivals, FxSim, FxZones, FxKazdel];
-+const FX_METHOD_ORDER = ["quality","load","maxParticles","rich","_room","_ts","_groundZ","particle","_o","_freeParticle","_updateParticles","_proj","_onGround","_chest","_bodyPt","burst","attack","_takeProj","_dressProj","_releaseProj","_updateProjs","_shotPoint","_stepShot","_stepBoomerang","_stepMortar","_mote","_puff","_muzzle","_impact","_catch","mortar","_landed","_beam","_updateBeams","_flame","_freeFlame","_updateFlames","_lock","_touchLocks","_nearestLock","_releaseLock","_freeLock","_updateLocks","damage","_slash","heal","number","_growFits","_numSlotPx","_layoutNums","_layoutNumsOnce","_sizeNum","_fadeNum","_takeNum","_releaseNum","_updateNums","ring","_updateRings","skill","_aura","_updateAuras","deploy","promote","death","crateBreak","_viewOf","_where","_point","simFx","_wangPiece","_dropWangPiece","explosion","smoke","streak","strike","numberAt","_updateLabels","zone","_freeZone","_updateZones","researchArea","tileFlash","_updateTileFlashes","flashScreen","snowfall","leak","pop","_updatePops"];
++const FX_METHOD_ORDER = ["quality","load","maxParticles","rich","_room","_ts","_groundZ","particle","_o","_freeParticle","_updateParticles","_proj","_onGround","_chest","_bodyPt","burst","attack","_takeProj","_dressProj","_releaseProj","_updateProjs","_shotPoint","_stepShot","_stepBoomerang","_stepMortar","_mote","_puff","_muzzle","_impact","_catch","mortar","_landed","_beam","_updateBeams","_flame","_freeFlame","_updateFlames","_lock","_touchLocks","_nearestLock","_releaseLock","_freeLock","_updateLocks","damage","_slash","heal","officialNumber","number","_growFits","_numSlotPx","_layoutNums","_layoutNumsOnce","_sizeNum","_fadeNum","_takeNum","_releaseNum","_updateNums","ring","_updateRings","skill","_aura","_updateAuras","deploy","promote","death","crateBreak","_viewOf","_where","_point","simFx","_wangPiece","_dropWangPiece","explosion","smoke","streak","strike","numberAt","_updateLabels","zone","_freeZone","_updateZones","researchArea","tileFlash","_updateTileFlashes","flashScreen","snowfall","leak","pop","_updatePops"];
  
 -for (const key of FX_METHOD_ORDER) {
 +for (const key of [...FX_METHOD_ORDER, 'syncKazdel', '_updateKazdel', 'kazdelFx']) {
@@ -2708,7 +2708,7 @@ index 68c2b90..dee3d93 100644
  
    _buildDevices() {
 diff --git a/public/js/render/units.js b/public/js/render/units.js
-index ae4834b..6d5953c 100644
+index adf55a3..942a28d 100644
 --- a/public/js/render/units.js
 +++ b/public/js/render/units.js
 @@ -66,11 +66,16 @@
@@ -2729,7 +2729,7 @@ index ae4834b..6d5953c 100644
  const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
  const DIRS = ['UP', 'RIGHT', 'DOWN', 'LEFT'];
  /** Deploy direction of an ally from a UnitInfo / piece: `dir` (any case), else the legacy `facing` sign. */
-@@ -321,6 +326,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
+@@ -353,6 +358,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
    idle, deploy: idle, die, attack: attack ? Object.freeze({ begin: null, loop: attack, end: null }) : null, attackDown: null, skill: null,
  });
  export const FORMS = Object.freeze({
@@ -2747,7 +2747,7 @@ index ae4834b..6d5953c 100644
    char_1023_ghost2: Object.freeze({
      doll: Object.freeze({ change: 'Start_B', end: 'Die_B', leave: 'Start_2', roles: dollRoles('Idle_B', 'Die_B_2') }),
    }),
-@@ -456,6 +472,7 @@ export class UnitView {
+@@ -488,6 +504,7 @@ export class UnitView {
      this.modelKY = this.isEnemy ? enemyModelScaleY(def) : 1;
      this.mirrorX = this.isEnemy && !!(def && def.mirrorX);
      this.isToken = info.kind === 'token';
@@ -2755,7 +2755,7 @@ index ae4834b..6d5953c 100644
      this.golden = !!info.golden;
      this.tier = clamp(Number(info.tier) || 1, 1, 6);
      this.x = Number(info.x) || 0; this.y = Number(info.y) || 0; this.z = 0;
-@@ -474,7 +491,7 @@ export class UnitView {
+@@ -506,7 +523,7 @@ export class UnitView {
      this.facing = this.dir === 'LEFT' ? -1 : 1;
      this.visFacing = this.isEnemy ? -1 : this.facing;
      this.hp = Number(info.maxHp) || 1; this.maxHp = Number(info.maxHp) || 1; this.ghostHp = this.hp;
@@ -2764,7 +2764,7 @@ index ae4834b..6d5953c 100644
      this.ammo = null;             // [rounds left, rounds in the magazine] while an ammo skill runs (sync; b.snap `ammo`)
      this.wolves = null;           // [狼影 left, the talent's maximum] of a 狼群 (sync; b.snap `wolves`)
      this.coins = null;            // [balance, cap] of 琳琅诗怀雅's skill purse, including zero
-@@ -529,6 +546,7 @@ export class UnitView {
+@@ -561,6 +578,7 @@ export class UnitView {
      this.fallback = new P.Sprite(P.Texture.EMPTY);
      this.fallback.anchor.set(0.5, 1);
      this.body.addChild(this.fallback);
@@ -2772,7 +2772,7 @@ index ae4834b..6d5953c 100644
      this.actor = null;
      this.spineReady = false;
      this._modelDirty = false;            // died / stood up since the last frame: update() checks Front ⇄ Back (_syncModel)
-@@ -562,19 +580,25 @@ export class UnitView {
+@@ -594,19 +612,25 @@ export class UnitView {
    // the first frame it is actually visible: never for a unit whose Spine model is ready before that, and never as
    // an image-less placeholder that the avatar replaces a moment later (the placeholder only shows when the avatar
    // is missing or still loading after PIC_WAIT_MS).
@@ -2806,7 +2806,7 @@ index ae4834b..6d5953c 100644
    }
  
    /** Put the right diamond on the fallback sprite (called while the fallback is visible). */
-@@ -584,12 +608,15 @@ export class UnitView {
+@@ -616,12 +640,15 @@ export class UnitView {
      let want = pic.state === 'img' ? 'img' : 'placeholder';
      if (pic.state === 'wait' && nowMs() - pic.t0 < PIC_WAIT_MS) want = null;
      if (!want || pic.shown === want) return;
@@ -2823,7 +2823,7 @@ index ae4834b..6d5953c 100644
      const a = this.ctx.assets;
      if (!a || !a.spineEntry || !a.spine) return;
      const id = this.info.spine || this.info.defId;
-@@ -612,7 +639,7 @@ export class UnitView {
+@@ -644,7 +671,7 @@ export class UnitView {
     */
    retryAssets() {
      if (this.destroyed) return;
@@ -2832,7 +2832,7 @@ index ae4834b..6d5953c 100644
      if (this.actor) return;
      if (!this._spineBusy) { this._retryAt = 0; this._loadSpine(true); return; }
      if (this._spineHidden && !this._stuckAt && !globalThis.document?.hidden) this._stuckAt = nowMs() + SPINE_STUCK_MS;
-@@ -643,7 +670,7 @@ export class UnitView {
+@@ -675,7 +702,7 @@ export class UnitView {
          actor.setSkillIndex(this.skillIndex ?? undefined);
          actor.setRunMode(this.moveFast);
          // enemies play their attack clip once per attack, then walk on (GitHub #58: the sim stands them for that clip)
@@ -2841,7 +2841,7 @@ index ae4834b..6d5953c 100644
        } catch (err) {
          console.warn('[render] spine build failed', id, err?.message || err);
          this._releaseEntry(entry);
-@@ -690,8 +717,16 @@ export class UnitView {
+@@ -722,8 +749,16 @@ export class UnitView {
      });
    }
  
@@ -2859,7 +2859,7 @@ index ae4834b..6d5953c 100644
    }
  
    /**
-@@ -705,7 +740,7 @@ export class UnitView {
+@@ -737,7 +772,7 @@ export class UnitView {
    setForm(kind, fx = null) {
      const k = typeof kind === 'string' ? kind : null;
      if (k === this.form) return;
@@ -2868,7 +2868,7 @@ index ae4834b..6d5953c 100644
      const prev = this._formSpec();
      this.form = k;
      this.info.form = k;
-@@ -803,6 +838,7 @@ export class UnitView {
+@@ -835,6 +870,7 @@ export class UnitView {
    /** Apply an interpolated sample (render/interp.js); `t` = the render clock's game time (ring countdowns). */
    sync(s, t) {
      if (!s) return;
@@ -2876,7 +2876,7 @@ index ae4834b..6d5953c 100644
      if (Number.isFinite(t)) this.gameT = t;
      // the element gauge shown (b.snap `elem`): element, fill 0..1, cooldown end (game s) and length
      this.el = typeof s.el === 'string' ? s.el : null;
-@@ -1191,7 +1227,10 @@ export class UnitView {
+@@ -1223,7 +1259,10 @@ export class UnitView {
      if (lungeK) { const q = cam.project(this.x + lx, this.y + ly, this.z + this.hover + this.lift, LG_P); bx = q.x; by = q.y; }
      this.root.position.set(bx, by);
      this.root.alpha = alpha;
@@ -2887,7 +2887,7 @@ index ae4834b..6d5953c 100644
      // off-screen: nothing to animate or draw (bounds / hit-testing still follow `screen`)
      if (this._cull(bx, by, s, dt)) return;
      const flip = (this.isEnemy ? (ENEMY_MODEL_FACES_LEFT ? -this.visFacing : this.visFacing) : this.visFacing) * (this.mirrorX ? -1 : 1);
-@@ -1214,7 +1253,7 @@ export class UnitView {
+@@ -1246,7 +1285,7 @@ export class UnitView {
        this.fallback.visible = this.swapT < 1;
        const sc = s * UNIT.modelScale * this.modelK;
        const flashK = this.flash > 0 ? this.flash : 0;
@@ -2896,7 +2896,7 @@ index ae4834b..6d5953c 100644
        if (this.down) tint = DOWN_LOOK.tint;
        else if (this.flags & UF.FROZEN) tint = 0x9fd4ff;
        else if (this.flags & UF.COLD) tint = 0xcfe6ff;
-@@ -1258,14 +1297,16 @@ export class UnitView {
+@@ -1290,14 +1329,16 @@ export class UnitView {
        const bob = this.alive ? Math.sin(t * 2.4 + this.bob) * s * 0.03 : 0;
        this.fallback.scale.set(size / 160);
        this.fallback.position.set(0, -s * 0.08 + bob);
@@ -2915,16 +2915,16 @@ index ae4834b..6d5953c 100644
      if (wedge && this.alive) {
        if (!this.facingArrow) {
          this.facingArrow = new P.Sprite(fxAtlas().tex.chevron);
-@@ -1299,7 +1340,7 @@ export class UnitView {
- 
-     // head height: operators/tokens are uniform chibis; enemies vary (setup-pose bounds, when known; else the chibi
-     // headroom × their official model factor)
--    let headTiles = UNIT.headroom;
-+    let headTiles = this.researchActor?.look.head ?? UNIT.headroom;
-     if (this.isEnemy && spineShown && this.actor.entry.bounds) headTiles = clamp(this.actor.height * UNIT.modelScale * this.modelK * this.modelKY * 0.92, 0.55, this.isBoss ? 3.2 : 2.2);
-     else if (this.isEnemy && this.isBoss) headTiles = 2.2;
-     else if (this.isEnemy && spineShown) headTiles = clamp(UNIT.headroom * this.modelK * this.modelKY, 0.55, 2.2);
-@@ -1362,6 +1403,7 @@ export class UnitView {
+@@ -1332,7 +1373,7 @@ export class UnitView {
+     // keep the original short-circuit: many views never build an actor (prep chips, diamonds, tests), so the model
+     // only counts when a spine is actually shown
+     const actor = spineShown ? this.actor : null;
+-    const headTiles = this._headTiles = headTilesForUnit({
++    const headTiles = this._headTiles = this.researchActor?.look.head ?? headTilesForUnit({
+       isEnemy: this.isEnemy, isBoss: this.isBoss, spineShown,
+       bounds: actor && actor.entry ? actor.entry.bounds : null,
+       modelK: this.modelK, modelKY: this.modelKY,
+@@ -1395,6 +1436,7 @@ export class UnitView {
      const shielded = showHp && (this.flags & UF.SHIELD);
      this.shieldBar.visible = !!shielded;
      if (shielded) { this.shieldBar.position.set(x0, cy - bh / 2 - 1); this.shieldBar.width = bw; this.shieldBar.height = Math.max(1.5, bh * 0.35); }
@@ -2932,7 +2932,7 @@ index ae4834b..6d5953c 100644
      // SP — or, while an ammo skill runs, its magazine: yellow cells, one per round, emptying from the right (b.snap `ammo`;
      // the SP bar's own fraction, ammoLeft / ammoMax, is the same width). Without an `ammo` row the bar is the plain SP bar.
      const ammo = !this.isEnemy ? this.ammo : null;
-@@ -1374,10 +1416,10 @@ export class UnitView {
+@@ -1407,10 +1449,10 @@ export class UnitView {
        const active = !!(this.flags & UF.SKILL);
        const k = ammo ? ammo[0] / ammo[1] : clamp(this.sp / this.spMax, 0, 1);
        ready = !active && k >= 0.999;
@@ -2945,7 +2945,7 @@ index ae4834b..6d5953c 100644
        this._spY = sy;
      }
      this._updateAmmoCuts(showSp && !!ammo, ammo, x0, sy, bw, spH);
-@@ -1416,7 +1458,8 @@ export class UnitView {
+@@ -1449,7 +1491,8 @@ export class UnitView {
      const rowsTop = cy + bh / 2 + (showSp ? spH + 1.5 : 0);
      const wolfH = this._updateWolfPips(showBars && !this.isEnemy && !!this.wolves, x0, rowsTop, s);
      const coinH = this._updateCoins(showBars && !this.isEnemy && !!this.coins, x0, rowsTop + wolfH, s);
@@ -2955,7 +2955,7 @@ index ae4834b..6d5953c 100644
      this._updateDownRing(!prep && !!this.down && !this.alive, x, this.screen.y - DOWN_LOOK.height * s, s, t);
      // blocked marker at the feet (enemies held by a blocker)
      const blocked = !prep && this.alive && this.isEnemy && (this.flags & UF.BLOCKED);
-@@ -1526,6 +1569,26 @@ export class UnitView {
+@@ -1559,6 +1602,26 @@ export class UnitView {
     * The share of the element bar drawn (0..1): the remaining 元素值 (1 − fill), or during a 爆发冷却 the part of the
     * cooldown already run (the bar refills to full, PRTS 元素 "元素条显示缓慢恢复至上限"). 0 without a gauge.
     */
@@ -3019,7 +3019,7 @@ index 7c5b084..ecb94a0 100644
          <div class="brief-boss brackets">
            <${MicroLabel} tone="gold">${t('ENEMY LEADER // 敌方领袖')}</${MicroLabel}>
 diff --git a/public/js/screens/game.js b/public/js/screens/game.js
-index 165eb51..6bddfe5 100644
+index 4e1bdae..d34068e 100644
 --- a/public/js/screens/game.js
 +++ b/public/js/screens/game.js
 @@ -80,6 +80,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
@@ -3042,7 +3042,7 @@ index 165eb51..6bddfe5 100644
    useDocClass('sp-in-match');
    const pub = useStore((s) => s.match.public);
    const priv = useStore((s) => s.match.private);
-@@ -191,6 +197,9 @@ function MatchScreen() {
+@@ -195,6 +201,9 @@ function MatchScreen() {
    const [facing, setFacing] = useState(null);            // direction step: { uid, piece, row, col, grid, name }
    const [sel, setSel] = useState(null);                  // tapped own piece: { uid }
    const [selBusy, setSelBusy] = useState(false);
@@ -3052,7 +3052,7 @@ index 165eb51..6bddfe5 100644
    const [holdSeq, setHoldSeq] = useState(0);             // bumped when a held piece is released (re-apply the prep state)
    const [hud, setHud] = useState(null);
    const [banner, setBanner] = useState(null);
-@@ -247,7 +256,7 @@ function MatchScreen() {
+@@ -251,7 +260,7 @@ function MatchScreen() {
    const leaker = phase === PHASE.UNITE && Array.isArray(pub?.unite?.leakers) && pub.unite.leakers.includes(myId);
    const localLeft = leaker && uniteLocal ? (uniteLocal[myId] ?? 0) : undefined;
    const liveLpNow = liveLp(lpBaseRef.current, {
@@ -3061,7 +3061,7 @@ index 165eb51..6bddfe5 100644
      leaks: ownLeaks(localLeaks, meP?.pendingLp), cap: gd.config?.lpCapPerRound,
      uniteLeft: leaker ? uniteRemaining(localLeft, meP?.uniteLeft) : null,
    });
-@@ -287,7 +296,9 @@ function MatchScreen() {
+@@ -291,7 +300,9 @@ function MatchScreen() {
      getChess: (id) => { const c = gd.chess(id); return ownDiyRecord(c, priv, { chess: data.get('chess'), backups: data.get('backups') }) || c; },
      getToken: gd.token, getItem: gd.item, getEffect: gd.effect, backups: gd.backups,
    }), [priv, pub?.stageId, editable, gd.ready, deployField]);
@@ -3072,7 +3072,7 @@ index 165eb51..6bddfe5 100644
  
    // ---- camera: every request goes through setCam, which remembers it for the pen's way back -----------------------
    // the own prep board: the normal board, or — in the prep of a boss round — the player's half of the boss field
-@@ -929,6 +940,7 @@ function MatchScreen() {
+@@ -935,6 +946,7 @@ function MatchScreen() {
        moveOff?.(); moveOff = null;
        setDrag(null);
        view.highlightTiles(null, null);
@@ -3080,7 +3080,7 @@ index 165eb51..6bddfe5 100644
      };
      /** Open the direction wheel for a legal board drop (the piece stays on the tile meanwhile). */
      const openFacing = (entry, t) => {
-@@ -953,12 +965,20 @@ function MatchScreen() {
+@@ -959,12 +971,20 @@ function MatchScreen() {
          view.highlightTiles(null, null);
          view.highlightTiles(legal, 'legal');
          ptr.released = false; ptr.tile = null;
@@ -3102,7 +3102,7 @@ index 165eb51..6bddfe5 100644
        view.on('pieceDrop', async (e) => {
          endDrag();
          const L = live.current;
-@@ -992,13 +1012,30 @@ function MatchScreen() {
+@@ -998,13 +1018,30 @@ function MatchScreen() {
          const reason = dropFailureReason(L.placeCtx, e.uid, tile);
          if (reason) refuse(reason);
        }),
@@ -3123,18 +3123,18 @@ index 165eb51..6bddfe5 100644
          // an enemy of the preview pen (research 09 §2.2 "Intel": tap it for its detail card)
          const penKey = previewEnemyKey(e);
          if (penKey) { setDetail({ kind: 'enemy', id: penKey }); return; }
--        if (e.unitId != null || e.unit) { setDetail({ kind: 'unit', unit: e.unit || null, unitId: e.unitId, uid: e.uid }); return; }
+-        if (e.unitId != null || e.unit) { setDetail({ kind: 'unit', unit: e.unit || null, unitId: e.unitId, uid: e.uid, prepMapChar: e.prepMapChar === true }); return; }
 +        if (e.unitId != null || e.unit) {
 +          const L=live.current,state=battleRunner?.state();
 +          if(e.button!==2&&L.manualWang?.armed&&L.manualWang.kind==='kalts.move'&&e.unit?.ownerId===L.myId&&e.uid!==L.manualWang.uid){setManualWang(m=>m?{...m,targetUid:e.uid,targetName:e.unit.name||'友方干员'}:null);setDetail(null);return;}
 +          const canAct=!L.watchingOther&&(L.field?.live&&!L.field.local||!state?.watch&&state?.members?.includes(L.myId)&&(state.authoritative&&state.kind==='normal'||state.kind==='unite'));
 +          if(e.button!==2&&canAct&&e.unit?.ownerId===L.myId&&/^chess_custom_6_wang_[ab]$/.test(e.unit?.defId||''))setManualWang({uid:e.uid,name:e.unit.name||'望',armed:false});
-+          setDetail({ kind: 'unit', unit: e.unit || null, unitId: e.unitId, uid: e.uid });return;
++          setDetail({ kind: 'unit', unit: e.unit || null, unitId: e.unitId, uid: e.uid, prepMapChar: e.prepMapChar === true });return;
 +        }
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1149,6 +1186,14 @@ function MatchScreen() {
+@@ -1155,6 +1192,14 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
@@ -3149,7 +3149,7 @@ index 165eb51..6bddfe5 100644
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
    // item 8 — at some aspect ratios a bench unit's 出售 sat under the left card); the underframe is drawn above every
    // panel anyway (css z-index), this keeps it visible too
-@@ -1254,6 +1299,7 @@ function MatchScreen() {
+@@ -1260,6 +1305,7 @@ function MatchScreen() {
        }
        if (act === 'escape') {
          if (L.emoteOpen) setEmoteOpen(false);
@@ -3157,7 +3157,7 @@ index 165eb51..6bddfe5 100644
          else if (L.pen && !L.detail) togglePenRef.current(false);
          else if (L.bondOpen) setBondOpen(null);
          else if (L.detail) setDetail(null);
-@@ -1327,6 +1373,8 @@ function MatchScreen() {
+@@ -1333,6 +1379,8 @@ function MatchScreen() {
      field, layers, layer, who: watchWho, bondLayers: battleState?.bondLayers || null,
    });
    const stripFid = strip.fieldId;
@@ -3166,7 +3166,7 @@ index 165eb51..6bddfe5 100644
    const liveLayers = (combat || settleMode) && battleState?.bondLayers ? battleState.bondLayers : null;
    // the observing pill names the player whose bonds the strip shows (the same teammate as the strip's "👁 name" tag)
    const observingName = cc && combat && watchedFid ? (!strip.self && stripFid === watchedFid ? strip.name : (players.find((p) => p.fieldId === watchedFid || ownFieldId(p.playerId) === watchedFid)?.name || t('队友'))) : null;
-@@ -1425,6 +1473,10 @@ function MatchScreen() {
+@@ -1431,6 +1479,10 @@ function MatchScreen() {
    return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', collapsed && 'is-collapsed', (sp || hasPersonalChoice) && 'has-sp', pen && 'is-pen', readyWhy && 'has-readywhy')}
        data-camera=${pen ? 'pen' : camKind}>
      <div class="gm__field" ref=${hostRef} onContextMenu=${(e) => e.preventDefault()}></div>
@@ -3177,7 +3177,7 @@ index 165eb51..6bddfe5 100644
      ${viewKind === 'loading' ? html`<div class="gm__loading"><${Spinner} label="LOADING FIELD" /></div>` : null}
      <div class="gm__vignette" aria-hidden="true"></div>
      ${tempNotice ? html`<${TempRowNotice} view=${view} count=${temp.count} items=${temp.items} label=${!drag && !facing}
-@@ -1461,8 +1513,18 @@ function MatchScreen() {
+@@ -1467,8 +1519,18 @@ function MatchScreen() {
          self=${Number.isFinite(priv?.lp) ? { lp: priv.lp, pending: liveLpNow.pending, unite: liveLpNow.unite, left: liveLpNow.left } : null}
          observe=${cc ? { canObserve: (p) => observeTarget(p, pub, myId, { observing: watchingOther, ownDone: localDone }), observing: watchingOther, onBack: backHome } : null} />
  
@@ -3198,7 +3198,7 @@ index 165eb51..6bddfe5 100644
        ${watchingOther && !combat ? html`<div class="gm__watching" role="status">
          <${GIcon} name="eye" /><span>${tParts('正在查看 {name} 的阵地（只读）', { name: html`<b>${watchedName}</b>` })}</span>
          ${spectator ? null : html`<${Button} size="sm" variant="primary" icon="back" onClick=${() => watchPlayer({ playerId: myId })}>${t('返回自己')}<//>`}
-@@ -1485,15 +1547,17 @@ function MatchScreen() {
+@@ -1491,15 +1553,17 @@ function MatchScreen() {
          client=${cc ? { progress, observing: observingName ? { name: observingName } : null, onBack: alive ? backHome : null, layers, layer, onLayer: setLayer } : null} />` : null}
  
        ${showDeadPill(alive, phase) ? (spectator
@@ -3221,7 +3221,7 @@ index 165eb51..6bddfe5 100644
          <${FullscreenButton} class="gm__gear gm__fs" />
        </div>
  
-@@ -1529,12 +1593,13 @@ function MatchScreen() {
+@@ -1535,12 +1599,13 @@ function MatchScreen() {
  
      ${banner ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
        tone=${banner.tone} duration=${banner.duration || 1500} onDone=${() => setBanner(null)} />` : null}
@@ -3237,7 +3237,7 @@ index 165eb51..6bddfe5 100644
      ${paused ? html`<${PausedOverlay} canResume=${solo} busy=${pauseBusy} onResume=${() => togglePause(false)} onExit=${() => setExitOpen(true)} />` : null}
  
 diff --git a/public/js/screens/loadout.js b/public/js/screens/loadout.js
-index be44e06..a59ef36 100644
+index fff787a..5ca3c48 100644
 --- a/public/js/screens/loadout.js
 +++ b/public/js/screens/loadout.js
 @@ -290,7 +290,8 @@ export function ModuleInfo({ m, golden, opt, potential = null }) {
@@ -3250,7 +3250,7 @@ index be44e06..a59ef36 100644
      <div class="lo-minfo__row">
        <span class="lo-minfo__k">${t('属性')}</span>
        <span class="lo-minfo__v lo-attrs">${rows.length ? rows.map((r) => html`<span key=${r.key} class=${cx('lo-attr', r.positive ? 'is-up' : 'is-down')}>${r.label}<b class="num">${r.text}</b></span>`) : html`<span class="t-dim">${t('无属性加成')}</span>`}</span>
-@@ -463,7 +464,8 @@ export function DataMissing({ files }) {
+@@ -477,7 +478,8 @@ export function DataMissing({ files }) {
  
  /** The overlay screen. */
  function LoadoutScreen({ st }) {
@@ -3260,7 +3260,7 @@ index be44e06..a59ef36 100644
    const phase = useStore((s) => s.match?.public?.phase || null);
    const inMatch = useStore((s) => !!s.room?.inMatch);
    // co-op briefing (INFO_CHECK, 25 s): the overlay covers the briefing's own countdown, so it shows the time left — the
-@@ -472,7 +474,7 @@ function LoadoutScreen({ st }) {
+@@ -486,7 +488,7 @@ function LoadoutScreen({ st }) {
    const m = data.get('assets');
    const getChess = (id) => data.lookup('chess', id);
    const getBond = (id) => data.lookup('bonds', id);
@@ -3269,7 +3269,7 @@ index be44e06..a59ef36 100644
    const bonds = useMemo(() => {
      const used = new Set(roster.flatMap((c) => c.bonds || []));
      return (data.list('bonds') || []).filter((b) => b && used.has(b.bondId))
-@@ -785,7 +787,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
+@@ -803,7 +805,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
   * Entry button (lobby / room / briefing).
   * @param {{ from: 'lobby'|'room'|'briefing', size?: string, variant?: string, class?: string, label?: string }} props
   */
@@ -3278,7 +3278,7 @@ index be44e06..a59ef36 100644
    useData('local'); // the official preset icon (re-render once the local-art manifest arrives)
    const entries = useStore((s) => s.entries, Object.is, loadoutStore);
    const ops = useStore((s) => s.ops, Object.is, loadoutStore);
-@@ -798,7 +800,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
+@@ -816,7 +818,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
    // 0.2.0 自选编队: how many DIY slots the player filled
    const nDiy = diyCount(diy);
    return html`<button type="button" class=${cx('btn', `btn--${variant}`, `btn--${size}`, 'lo-entry', cls)} data-testid="loadout-open"
@@ -3717,10 +3717,10 @@ index fcb0083..ffa16c1 100644
        ${myDone && !observing ? html`<div class="chud__msg chud__wait" role="status"><${Icon} name="hourglass" /><span>${t('作战结束，等待队友完成作战')}</span></div>
          <${ProgressList} list=${client.progress} />` : null}
 diff --git a/public/js/ui/components.js b/public/js/ui/components.js
-index ec4d57a..d7a7ff7 100644
+index 9c425f5..e4bc2bf 100644
 --- a/public/js/ui/components.js
 +++ b/public/js/ui/components.js
-@@ -702,7 +702,12 @@ export function Spinner({ size = 'md', label, tone = 'mint', class: cls }) {
+@@ -725,7 +725,12 @@ export function Spinner({ size = 'md', label, tone = 'mint', class: cls }) {
  
  // ---- Avatar frame ------------------------------------------------------------------------------
  
@@ -3734,7 +3734,7 @@ index ec4d57a..d7a7ff7 100644
  /**
   * Square avatar frame with bracket corners. Falls back to a glyph (first letter / robot).
   * @param {{ name?: string, src?: string, size?: 'sm'|'md'|'lg'|'xl', seat?: number, host?: boolean, bot?: boolean,
-@@ -711,7 +716,7 @@ const SEAT_HUES = [162, 196, 38, 280];
+@@ -734,7 +739,7 @@ const SEAT_HUES = [162, 196, 38, 280];
  export function AvatarFrame({ name = '', src, size = 'md', seat = 0, host, bot, self, ready, offline, dead, empty, class: cls }) {
    const [badSrc, setBadSrc] = useState(null);
    const imgOk = !!src && badSrc !== src;
@@ -4185,7 +4185,7 @@ index c688a1d..b54dcf4 100644
  }
  
 diff --git a/public/js/ui/fallbackField.js b/public/js/ui/fallbackField.js
-index 925a5ec..8d2c188 100644
+index 8f7d852..63cbe7b 100644
 --- a/public/js/ui/fallbackField.js
 +++ b/public/js/ui/fallbackField.js
 @@ -22,6 +22,8 @@
@@ -4197,7 +4197,7 @@ index 925a5ec..8d2c188 100644
  import { chessAvatarUrl, itemIconUrl, tokenAvatarUrl, enemyIconUrl } from './assetUrls.js';
  import { tileKey, hasFlag, UF, penPlacement, PEN, fieldTile, ownStandIn, ownDiyRecord } from './gameLogic.js';
  import { t } from '../../../shared/i18n.js';
-@@ -197,7 +199,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -221,7 +223,7 @@ export function createFallbackView(host, opts = {}) {
      if (d.moved) {
        const t = targetAt(e.clientX, e.clientY);
        st.hoverTarget = t;
@@ -4206,7 +4206,7 @@ index 925a5ec..8d2c188 100644
        schedule();
      }
    }
-@@ -249,18 +251,19 @@ export function createFallbackView(host, opts = {}) {
+@@ -273,18 +275,19 @@ export function createFallbackView(host, opts = {}) {
      const px = (x - st.rect.c0 + 0.5) * L.tile;
      const py = (st.rect.r1 - y + 0.5) * L.tile;
      const enemy = info.side === 'enemy';
@@ -4228,7 +4228,7 @@ index 925a5ec..8d2c188 100644
      </div>`;
    }
  
-@@ -319,7 +322,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -343,7 +346,7 @@ export function createFallbackView(host, opts = {}) {
          const p = tilePos(L, row, col);
          const k = tileKey(row, col);
          let hl = st.highlight.get(k);
@@ -4237,7 +4237,7 @@ index 925a5ec..8d2c188 100644
          const hov = st.hoverTarget?.area === 'board' && st.hoverTarget.row === row && st.hoverTarget.col === col ? dropState(st.hoverTarget) : null;
          tiles.push(html`<div key=${k} class=${cx('ff-tile', `ff-tile--${tileClass(row, col)}`, hl && `is-${hl}`, hov && `is-hover-${hov}`)}
            data-drop="board" data-row=${row} data-col=${col}
-@@ -384,7 +387,14 @@ export function createFallbackView(host, opts = {}) {
+@@ -410,7 +413,14 @@ export function createFallbackView(host, opts = {}) {
      if (st.camera === 'pen') { render(html`${penView()}<div class="ff-badge">SIMPLIFIED VIEW</div>`, root); return; }
      render(html`<div class=${cx('ff-board', `ff-board--${st.mode}`, `ff-cam--${st.camera}`)} style=${`left:${L.left}px;top:${L.top}px;width:${L.bw}px;height:${L.bh}px;--tile:${L.tile}px`}>
        ${st.mode === 'prep' ? html`<div class="ff-hand-label" style=${`top:${(L.rows + 0.18) * L.tile}px`}><span>${t('整备区')}</span><i></i></div>` : null}
@@ -4253,7 +4253,7 @@ index 925a5ec..8d2c188 100644
      </div>${ghost}
      <div class="ff-badge">SIMPLIFIED VIEW</div>`, root);
      if (st.floats.length) schedule();
-@@ -430,7 +440,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -456,7 +466,7 @@ export function createFallbackView(host, opts = {}) {
        if (field?.rect && Number.isFinite(field.rect.r0)) st.rect = { ...field.rect };
        for (const u of Array.isArray(field?.units) ? field.units : []) if (u && u.id != null) {
          st.units.set(u.id, u);
@@ -4262,16 +4262,16 @@ index 925a5ec..8d2c188 100644
        }
        schedule();
      },
-@@ -455,7 +465,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -481,7 +491,7 @@ export function createFallbackView(host, opts = {}) {
          if (!Array.isArray(e)) continue;
          if (e[0] === 'spawn' && e[1] && e[1].id != null) {
            st.units.set(e[1].id, e[1]);
 -          if (!st.snapUnits.has(e[1].id)) st.snapUnits.set(e[1].id, [e[1].id, e[1].x, e[1].y, e[1].maxHp, e[1].maxHp, 0, 0, 0, 6]);
 +          if (!st.snapUnits.has(e[1].id)) st.snapUnits.set(e[1].id, [e[1].id, e[1].x, e[1].y, e[1].maxHp, e[1].maxHp, e[1].sp || 0, e[1].spMax || 0, 0, 6]);
-         } else if ((e[0] === 'dmg' || e[0] === 'heal') && st.settings.damageNumbers && st.floats.length < 60) {
-           const amount = Math.round(Number(e[2]) || 0);
-           if (amount <= 0) continue;
-@@ -475,7 +485,7 @@ export function createFallbackView(host, opts = {}) {
+         } else if (st.floats.length < 60) {
+           const spec = fallbackFloat(e, st.settings);
+           if (spec) st.floats.push({ key: `${now}:${Math.random()}`, id: spec.id, text: spec.text, type: spec.type, at: now });
+@@ -499,7 +509,7 @@ export function createFallbackView(host, opts = {}) {
            const col = Array.isArray(t) ? t[1] : t?.col;
            if (Number.isInteger(row) && Number.isInteger(col)) set.add(tileKey(row, col));
          }
@@ -4281,7 +4281,7 @@ index 925a5ec..8d2c188 100644
          return;
        }
 diff --git a/public/js/ui/gameActions.js b/public/js/ui/gameActions.js
-index f8e39be..3dd4bad 100644
+index a4afb7f..76bead7 100644
 --- a/public/js/ui/gameActions.js
 +++ b/public/js/ui/gameActions.js
 @@ -9,7 +9,7 @@ import { audio } from '../audio.js';
@@ -4293,7 +4293,7 @@ index f8e39be..3dd4bad 100644
    'g.band': 'confirm', 'g.bandSkip': 'back', 'g.infoReady': 'ready', 'g.emote': 'emote', 'g.destroy': 'back',
  };
  
-@@ -67,6 +67,7 @@ export const actions = {
+@@ -89,6 +89,7 @@ export const actions = {
    art: (itemUid, row, col, dir) => act('g.art', dir ? { itemUid, row, col, dir } : { itemUid, row, col }),
    destroy: (uid) => act('g.destroy', { uid }),
    reward: (idx) => act('g.reward', { idx }),
@@ -4302,7 +4302,7 @@ index f8e39be..3dd4bad 100644
    ready: (ready) => act('g.ready', { ready }, { sfx: ready ? 'ready' : 'back' }),
    emote: (id) => act('g.emote', { id }, { quiet: true }),
 diff --git a/public/js/ui/gameComponents.js b/public/js/ui/gameComponents.js
-index b531e98..e2a3812 100644
+index 166dd2d..1b3bb12 100644
 --- a/public/js/ui/gameComponents.js
 +++ b/public/js/ui/gameComponents.js
 @@ -2,13 +2,11 @@
@@ -4334,7 +4334,7 @@ index b531e98..e2a3812 100644
  }
  
  /** A 自选 operator's summon record (data/backups.json `tokens`, 0.2.0), or null. */
-@@ -260,7 +258,7 @@ export function PlayerAvatar({ player, size = 'md', self = false, class: cls })
+@@ -261,7 +259,7 @@ export function PlayerAvatar({ player, size = 'md', self = false, class: cls })
    const glyph = [...(player?.name || '').trim()][0] || '?';
    const dead = player?.alive === false || player?.status === 'dead';
    const left = player?.status === 'left';
@@ -4466,10 +4466,10 @@ index 342f78a..169a085 100644
  }
  
 diff --git a/public/js/ui/hud.js b/public/js/ui/hud.js
-index f72e72e..679c8e3 100644
+index 59ffb71..544a05e 100644
 --- a/public/js/ui/hud.js
 +++ b/public/js/ui/hud.js
-@@ -197,14 +197,14 @@ export function uniteRemaining(local, server) {
+@@ -199,14 +199,14 @@ export function uniteRemaining(local, server) {
   * @param {{ phase: string, round: any, lp: any, statsLeaks?: any, leaks?: any, cap?: number, alive?: boolean, uniteLeft?: number|null }} s
   * @returns {{ base: { round: any, lp: number, statsLeaks: number|null } | null, pending: number, shown: number|null, unite: boolean, left: number|null }}
   */
@@ -4519,7 +4519,7 @@ index 0000000..f2e3114
 +  </aside>`;
 +}
 diff --git a/public/js/ui/loadoutSync.js b/public/js/ui/loadoutSync.js
-index b7cd0aa..4ee18f6 100644
+index 35d6b85..536dc57 100644
 --- a/public/js/ui/loadoutSync.js
 +++ b/public/js/ui/loadoutSync.js
 @@ -16,8 +16,8 @@
@@ -4593,7 +4593,7 @@ index b7cd0aa..4ee18f6 100644
    const T = timers || { setTimeout: (fn, ms) => globalThis.setTimeout(fn, ms), clearTimeout: (id) => globalThis.clearTimeout(id) };
    // (`lockedText` is a msgid: the toast is translated when it shows — docs/I18N.md)
    const tell = notify || ((text) => toast(t(text), 'warn'));
-@@ -173,6 +177,7 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
+@@ -174,6 +178,7 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
    let lastSent = null;    // JSON of the last payload the server accepted (on this session)
    let edited = false;     // an edit is waiting to be sent (a lock refusal is then worth telling the player)
    let disposed = false;
@@ -4601,21 +4601,23 @@ index b7cd0aa..4ee18f6 100644
  
    const setState = (sync) => { if (target.get()[stateKey] !== sync) target.set({ [stateKey]: sync }); };
  
-@@ -189,9 +194,11 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
-   async function flush() {
+@@ -191,11 +196,11 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
      if (disposed) return;
      if (net.status !== 'online') { setState('idle'); return; } // the next welcome resends
+     const preparing = revision;
 +    const snapshot = cache.snapshot();
 +    const generation = snapshot.generation;
      try {
 -      const payload = await prepare();
--      if (disposed) return;
+-      // a newer edit or welcome happened while prepare awaited chess/backups: do not send, and do not touch the
+-      // sync state that newer flush owns (an older skill must not overwrite a restore-defaults)
+-      if (disposed || preparing !== revision) return;
 +      const payload = await prepare(snapshot);
-+      if (disposed || generation !== cache.generation) return;
++      if (disposed || preparing !== revision || generation !== cache.generation) return;
        // never sanitise against missing data: every entry would be dropped and the server's copy cleared
        if (payload == null) { setState('error'); return; }
        const json = JSON.stringify(payload);
-@@ -237,6 +244,19 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
+@@ -242,6 +247,19 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
    });
    // a match leaving INFO_CHECK locks the loadout; a new match (the room back in LOBBY / a new INFO_CHECK) accepts it again
    const offRoom = net.on('room.state', (msg) => { if (msg && !msg.inMatch && target.get()[stateKey] === 'locked') { lastSent = null; schedule(); } });
@@ -4635,7 +4637,7 @@ index b7cd0aa..4ee18f6 100644
  
    return {
      flush,
-@@ -246,6 +266,7 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
+@@ -251,6 +269,7 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
        offWelcome?.();
        offStore?.();
        offRoom?.();
@@ -4643,7 +4645,7 @@ index b7cd0aa..4ee18f6 100644
      },
    };
  }
-@@ -256,28 +277,28 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
+@@ -261,28 +280,28 @@ function installPrefSync({ net, timers, target, notify, key, stateKey, msgType,
   *   timers?: { setTimeout: Function, clearTimeout: Function }, target?: ReturnType<typeof createStore> }} deps
   * @returns {{ flush: () => Promise<void>, dispose: () => void }}
   */
@@ -5544,7 +5546,7 @@ index 0537b9c..5fe2a7e 100644
        notOwned: session.notOwned || null,
        diy: session.diy || null,
 diff --git a/server/match/Match.js b/server/match/Match.js
-index bbc4971..da23cdd 100644
+index 3e12fc2..7d913f4 100644
 --- a/server/match/Match.js
 +++ b/server/match/Match.js
 @@ -1,3 +1,4 @@
@@ -5646,7 +5648,7 @@ index bbc4971..da23cdd 100644
      this._pubTimer = null;
      this._lastPubAt = -Infinity;
 diff --git a/server/match/PlayerState.js b/server/match/PlayerState.js
-index f80173a..78f75f8 100644
+index 1445a49..bab8ee6 100644
 --- a/server/match/PlayerState.js
 +++ b/server/match/PlayerState.js
 @@ -1,3 +1,7 @@
@@ -5657,8 +5659,8 @@ index f80173a..78f75f8 100644
  // server/match/PlayerState.js — authoritative per-player state + every prep intent handler (DESIGN §6.2).
  //
  // Handlers validate → mutate → recompute bonds → mark the private view dirty. They never throw on bad input; they
-@@ -119,7 +123,7 @@
- //                 DIY draws (diyRollEntries), the pick of a piece (diyPickOf)
+@@ -120,7 +124,7 @@
+ //                 DIY draws (diyRollEntries) and the reward / grant draws (diyStockEntries), the pick of a piece (diyPickOf)
  //   common.js     HAND_SIZE, TEMP_SIZE, MAX_OFFER_SLOTS, OK, fail
  
 -import { FIELD } from './board.js';
@@ -5666,7 +5668,7 @@ index f80173a..78f75f8 100644
  import { computeBonds } from './bondsMeta.js';
  import { HAND_SIZE, TEMP_SIZE } from './player/common.js';
  import { PlayerBasics } from './player/basics.js';
-@@ -132,6 +136,8 @@ import { PlayerPrep } from './player/prep.js';
+@@ -133,6 +137,8 @@ import { PlayerPrep } from './player/prep.js';
  import { PlayerRound } from './player/round.js';
  import { PlayerViews } from './player/views.js';
  import { PlayerDiy, DiyStock } from './player/diy.js';
@@ -5675,7 +5677,7 @@ index f80173a..78f75f8 100644
  
  export class PlayerState {
    /**
-@@ -194,6 +200,8 @@ export class PlayerState {
+@@ -195,6 +201,8 @@ export class PlayerState {
      this._tempDue = new Map();
      /** @type {Map<string, any>} 'r,c' → piece */
      this.board = new Map();
@@ -5684,7 +5686,7 @@ index f80173a..78f75f8 100644
      /** persistent bond layers */
      this.layers = {};
      /** computed bond states */
-@@ -207,6 +215,16 @@ export class PlayerState {
+@@ -208,6 +216,16 @@ export class PlayerState {
      this.bondCountBonus = {};
      /** EffectRef list: { id, key, name, desc, iconKind, iconId, counter?, battle, params, data } */
      this.effects = [];
@@ -5701,7 +5703,7 @@ index f80173a..78f75f8 100644
      /** active bounties: { id, card, roundsLeft, chooser } */
      this.bounties = [];
      /**
-@@ -244,7 +262,7 @@ export class PlayerState {
+@@ -245,7 +263,7 @@ export class PlayerState {
  }
  
  // the method modules, in this order (a name defined twice is an error, never a silent override)
@@ -5726,7 +5728,7 @@ index 3ec4eab..ba4f1b8 100644
  //   opts.seed        uint32                     master seed for all match randomness
  //   opts.data        frozen game data (server/data.js getData()); may lack keys while data is generated
 diff --git a/server/match/audit.js b/server/match/audit.js
-index 7b3dd45..2f873ff 100644
+index 602ceae..f0bf129 100644
 --- a/server/match/audit.js
 +++ b/server/match/audit.js
 @@ -418,17 +418,17 @@ export function attachAudit(m, { invariants = true, limit = 200 } = {}) {
@@ -5751,7 +5753,7 @@ index 7b3dd45..2f873ff 100644
            const loss = lp0 - ps.lp;
            if (loss < 0) fail(`${ps.playerId}: LP rose in settle ${lp0} → ${ps.lp}`);
 diff --git a/server/match/bot.js b/server/match/bot.js
-index 2caa40e..6e12aa4 100644
+index 4d02f57..a2bef3e 100644
 --- a/server/match/bot.js
 +++ b/server/match/bot.js
 @@ -83,9 +83,11 @@ import { ASPD_MIN } from '../sim/constants.js';
@@ -5767,7 +5769,7 @@ index 2caa40e..6e12aa4 100644
  import { HOVER_KEYS } from '../sim/content/enemies.js';
  import { attackRangeGrid, loadoutRecord, resolveRecordLoadout } from '../../shared/loadoutRecord.js';
  
-@@ -211,7 +213,7 @@ export function bountyKillChance(m, ps, card) {
+@@ -221,7 +223,7 @@ export function bountyKillChance(m, ps, card) {
    const tileTime = Math.max(0.4, Math.min(6, 1 / (speed * 0.5)));
    const units = [];
    for (const [k, p] of ps.board) {
@@ -5776,7 +5778,7 @@ index 2caa40e..6e12aa4 100644
      if (!rec) continue;
      const [r, c] = parseKey(k);
      const u = unitOf(rec, k, r, c, pieceDir(p), model);
-@@ -224,9 +226,14 @@ export function bountyKillChance(m, ps, card) {
+@@ -234,9 +236,14 @@ export function bountyKillChance(m, ps, card) {
      let t = tileTime;
      if (!fly && !held && units.some((u) => u.block > 0 && u.key === k)) { t += LAYOUT_PARAMS.hold; held = true; }
      let dps = 0;
@@ -5792,7 +5794,7 @@ index 2caa40e..6e12aa4 100644
    return 1 - Math.exp(-exp / (BOUNTY_KILL * hp));
  }
  
-@@ -525,6 +532,9 @@ function lineupScore(m, ps, set, ctx) {
+@@ -538,6 +545,9 @@ function lineupScore(m, ps, set, ctx) {
      const w = bond && bond.isCore ? 14 : 9;
      v += b.tier * w + Math.min(12, (b.layers || 0) * 0.1) + (id === ctx.focus ? 6 : 0);
    }
@@ -5802,7 +5804,7 @@ index 2caa40e..6e12aa4 100644
    let blockers = 0;
    let air = 0;
    let healers = 0;
-@@ -668,12 +678,12 @@ export function fieldModel(m, ps = null) {
+@@ -681,12 +691,12 @@ export function fieldModel(m, ps = null) {
    const toBoard = boss
      ? ([r, c]) => boardTileOf(boss.side === 'R' ? 'bossR' : 'bossL', r, c)
      : (p) => p;
@@ -5817,7 +5819,7 @@ index 2caa40e..6e12aa4 100644
    };
    const routes = wave && Array.isArray(wave.routes) ? wave.routes : [];
    const spawns = wave && Array.isArray(wave.spawns) ? wave.spawns : [];
-@@ -703,11 +713,16 @@ export function fieldModel(m, ps = null) {
+@@ -716,11 +726,16 @@ export function fieldModel(m, ps = null) {
        }
        // the leader counts like LEADER_WEIGHT tough enemies: its huge pool makes damage on it worth a lot everywhere
        const hp = isLeader ? LEADER_HP : ((e && e.stats && e.stats.maxHp) || 1000) * ((s.mods && s.mods.hpMul) || 1);
@@ -5835,7 +5837,7 @@ index 2caa40e..6e12aa4 100644
        per.set(key, a);
      }
      for (const a of per.values()) {
-@@ -719,11 +734,11 @@ export function fieldModel(m, ps = null) {
+@@ -732,11 +747,11 @@ export function fieldModel(m, ps = null) {
        const cnt = a.boss ? 1 : a.n;
        const dwell = a.boss ? BOSS_DWELL : 0;
        if (rt.motion === 'FLY') {
@@ -5849,7 +5851,7 @@ index 2caa40e..6e12aa4 100644
        }
      }
    }
-@@ -826,6 +841,45 @@ function dpsVs(rec, def, res) {
+@@ -839,6 +854,45 @@ function dpsVs(rec, def, res) {
    return rec.attackKind === 'none' ? d * 0.4 : d;
  }
  
@@ -5895,7 +5897,7 @@ index 2caa40e..6e12aa4 100644
  /**
   * The record a chess fights with for range purposes: its range grid replaced by the one it is deployed with under the
   * player's loadout — a passive 攻击范围扩大 skill, a module's range or 攻击距离 (shared/loadoutRecord.js attackRangeGrid:
-@@ -858,7 +912,7 @@ export function effDps(model, rec) {
+@@ -871,7 +925,7 @@ export function effDps(model, rec) {
    if (!rec) return 0;
    if (!model || !Array.isArray(model.armor) || !model.armor.length) return dpsOf(rec);
    // (a 自选 record — one DIY slot id, each player's own operator — is cached per operator and skill)
@@ -5904,7 +5906,7 @@ index 2caa40e..6e12aa4 100644
    const cache = model.dps instanceof Map ? model.dps : null;
    if (cache && cache.has(id)) return cache.get(id);
    let v = 0;
-@@ -894,24 +948,29 @@ class Layout {
+@@ -907,24 +961,29 @@ class Layout {
      const p = this.p;
      const cover = new Map(); // key → { g: dps on ground, a: dps on air }
      const healCover = new Map();
@@ -5935,7 +5937,7 @@ index 2caa40e..6e12aa4 100644
          if (!rt.fly && blockAt.has(k)) {
            // a blocker right behind another one mostly holds what slipped past; a separate line holds again
            const fresh = i - lastBlock >= p.spread;
-@@ -921,6 +980,10 @@ class Layout {
+@@ -934,6 +993,10 @@ class Layout {
          const c = cover.get(k);
          if (c) exp += t * (rt.fly ? c.a : c.g);
        }
@@ -5946,7 +5948,7 @@ index 2caa40e..6e12aa4 100644
        total += rt.n * (1 - Math.exp(-exp / (p.kill * rt.hp)));
      }
      // ranged units standing on a road block and get hit: a small penalty per road tile they occupy
-@@ -931,10 +994,11 @@ class Layout {
+@@ -944,10 +1007,11 @@ class Layout {
  
  function unitOf(rec, key, r, c, dir = 'RIGHT', model = null) {
    const block = isBlocker(rec) ? Math.max(1, rec.stats?.blockCnt ?? 1) : 0;
@@ -5960,7 +5962,7 @@ index 2caa40e..6e12aa4 100644
    };
  }
  
-@@ -962,8 +1026,16 @@ export function* planLayoutSteps(m, ps, pieces, params = LAYOUT_PARAMS, { occupi
+@@ -975,8 +1039,16 @@ export function* planLayoutSteps(m, ps, pieces, params = LAYOUT_PARAMS, { occupi
    const model = fieldModel(m, ps);
    const map = ps.deployMap();
    const pgd = ps.gd || m.gd;
@@ -5978,7 +5980,7 @@ index 2caa40e..6e12aa4 100644
    const rank = (p) => { const r = rec(p); return isBlocker(r) ? 0 : isHealer(r) ? 2 : 1; };
    const order = pieces.slice().sort((a, b) => rank(a) - rank(b) || dpsOf(rec(b)) - dpsOf(rec(a)) || a.uid - b.uid);
    const taken = new Set(occupied);
-@@ -1096,7 +1168,7 @@ export function* createRehearsalSteps(m, ps, chosen, plans) {
+@@ -1109,7 +1181,7 @@ export function* createRehearsalSteps(m, ps, chosen, plans) {
          seed: deriveSeed(m.seed, `rehearse:${m.round}:${ps.seat}`), kind: 'normal', modeId: m.modeId, round: m.round,
          stageId: m.stageId, rect: { ...GEO.NORMAL_RECT }, timeLimit: wave.timeLimit, players: [ps.battleInput({ side: 'L', colOffset: 0 })],
          spawns: m._sanitizeSpawns(spawns, ps.playerId), routes: wave.routes, sharedBoss: null,
@@ -5987,7 +5989,7 @@ index 2caa40e..6e12aa4 100644
        }));
      } catch (e) {
        failed = true;
-@@ -1189,6 +1261,27 @@ function canUseItem(m, ps, item) {
+@@ -1202,6 +1274,27 @@ function canUseItem(m, ps, item) {
    return true;
  }
  
@@ -6015,7 +6017,7 @@ index 2caa40e..6e12aa4 100644
  function context(m, ps) {
    const owned = ownedBonds(m, ps);
    const model = fieldModel(m, ps);
-@@ -1314,7 +1407,7 @@ function takeOffers(m, ps) {
+@@ -1327,7 +1420,7 @@ function takeOffers(m, ps) {
      let bestS = -Infinity;
      offer.slots.forEach((s, i) => {
        if (s.sold) return;
@@ -6024,7 +6026,7 @@ index 2caa40e..6e12aa4 100644
        if (sc > bestS) { bestS = sc; best = i; }
      });
      if (best < 0) break;
-@@ -1525,7 +1618,7 @@ function* buyLoopSteps(m, ps, { fillOnly = false, maxRefreshes = 0 } = {}) {
+@@ -1538,7 +1631,7 @@ function* buyLoopSteps(m, ps, { fillOnly = false, maxRefreshes = 0 } = {}) {
          if (ps.funds - price < reserve && !ps.completesItemMerge(s.id)) return;
          const carriers = [...ps.board.values()].filter((p) => p.kind === 'chess' && (p.items || []).length < gd.equipPerChess).length;
          if (!carriers) return;
@@ -6033,7 +6035,7 @@ index 2caa40e..6e12aa4 100644
        }
        if (sc > bestS) { bestS = sc; best = i; bestMerges = s.kind === 'chess' && ps.completesChessMerge(s.id); }
      });
-@@ -1636,6 +1729,7 @@ function* applyPlanSteps(m, ps, chosen, target) {
+@@ -1649,6 +1742,7 @@ function* applyPlanSteps(m, ps, chosen, target) {
  function liftTokens(ps) {
    for (const p of [...ps.board.values()]) {
      if (p.kind !== 'token') continue;
@@ -6041,7 +6043,7 @@ index 2caa40e..6e12aa4 100644
      const stack = ps.hand.findIndex((x) => x && x.kind === 'token' && x.ownerUid === p.ownerUid && x.id === p.id);
      const idx = stack >= 0 ? stack : freeSlot(ps.hand);
      if (idx >= 0) tryDo(() => ps.move(p.uid, { area: 'hand', idx }));
-@@ -1686,7 +1780,11 @@ const SUMMON_TRIES = 4;
+@@ -1699,7 +1793,11 @@ const SUMMON_TRIES = 4;
   * legality: a refused tile is excluded and the next best one tried (SUMMON_TRIES).
   */
  function* placeTokensSteps(m, ps) {
@@ -6054,7 +6056,7 @@ index 2caa40e..6e12aa4 100644
      if (!p || p.kind !== 'token') continue;
      for (let n = p.count || 1; n > 0; n--) {
        yield;
-@@ -1805,6 +1903,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
+@@ -1818,6 +1916,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
    // a consumable on a full carrier destroys one of its items (the replace rule, GitHub #263): a carrier with a free slot
    // first — the effect is the same on anyone
    if (consume) return list.find(free) || owned.find(free) || list[0] || owned[0] || null;
@@ -6070,7 +6072,7 @@ index 2caa40e..6e12aa4 100644
    if (rec.requiresBondId) {
      const member = list.find((p) => free(p) && (chessRec(m, p.id, ps)?.bonds || []).includes(rec.requiresBondId));
      if (member) return member;
-@@ -1851,7 +1958,7 @@ function useArt(m, ps, item, ctx) {
+@@ -1864,7 +1971,7 @@ function useArt(m, ps, item, ctx) {
    if (key) { const [r, c] = parseKey(key); tryDo(() => ps.useArt(item.uid, r, c)); }
  }
  
@@ -6370,7 +6372,7 @@ index 0000000..bc28e27
 +
 +export const createDamageBoard = (matchId) => new DamageBoard(matchId);
 diff --git a/server/match/effectsMeta.js b/server/match/effectsMeta.js
-index c26e39c..e347dcf 100644
+index ed646c9..23624f4 100644
 --- a/server/match/effectsMeta.js
 +++ b/server/match/effectsMeta.js
 @@ -43,6 +43,7 @@ import { boardOrder, parseKey, tileKey } from './board.js';
@@ -6408,7 +6410,7 @@ index c26e39c..e347dcf 100644
      } finally {
        this.depth--;
      }
-@@ -489,12 +490,12 @@ export function makeCtx(m, ps, source, hook, ev = null) {
+@@ -490,12 +491,12 @@ export function makeCtx(m, ps, source, hook, ev = null) {
      board: () => boardOrder(ps.board).map(({ r, c, piece }) => ps.pieceView(piece, [r, c])),
      hand: () => ps.hand.map(view),
      temp: () => ps.temp.map(view),
@@ -6423,7 +6425,7 @@ index c26e39c..e347dcf 100644
        return v;
      },
      /**
-@@ -628,7 +629,7 @@ export function makeCtx(m, ps, source, hook, ev = null) {
+@@ -630,7 +631,7 @@ export function makeCtx(m, ps, source, hook, ev = null) {
      },
      destroyPiece: (uid) => {
        const l = ps.find(uid);
@@ -6513,32 +6515,8 @@ index b9248c2..9e7458a 100644
    }
    const round = Number(spec && spec.round) || 0;
    return {
-diff --git a/server/match/finalAssault.js b/server/match/finalAssault.js
-index 7b9e04a..1f46d8f 100644
---- a/server/match/finalAssault.js
-+++ b/server/match/finalAssault.js
-@@ -3,8 +3,8 @@
- //
- //   * Merged LP: teamLp = Σ LP of the alive players at the start of the Final Assault (no cap); the Hidden Core
- //     continues with what is left.
--//   * Pairing: alive players by seat → (1,2), (3,4); an odd player is alone on its own field with the `_s` template
--//     (solo modes always use `_s`). Field ids 'b1', 'b2'. In a pair the first player is the LEFT side, the second the
-+//   * Pairing: alive players by seat → (1,2), (3,4), (5); an odd player is alone on its own field with the `_s` template
-+//     (solo modes always use `_s`). Field ids 'b1', 'b2', 'b3'. In a pair the first player is the LEFT side, the second the
- //     RIGHT side (the sim mirrors the right side: board col c → field col 20 − c with the piece direction RIGHT ↔
- //     LEFT, UP / DOWN unchanged (DESIGN §3, research 09 §1.2 ConvertChessPositionInfoToBossMap); board rows 9–12 →
- //     boss rows 2–5, sim/constants BOSS_ROW_OFFSET). `bossFieldPlacement` gives that mapping for UIs / tools.
-@@ -55,7 +55,7 @@ export function bossFieldPlacement(side, row, col, dir = 'RIGHT') {
-   return side === 'R' ? { row: r, col: COLS - 1 - col, dir: mirrorDir(d) } : { row: r, col, dir: d };
- }
- 
--/** Pair alive players by seat: [[a, b], [c, d]] / [[a, b], [c]] / [[a]]. */
-+/** Pair alive players by seat, keeping an odd final player: [[a, b], [c, d], [e]]. */
- export function pairPlayers(alive) {
-   const sorted = alive.slice().sort((a, b) => a.seat - b.seat);
-   const groups = [];
 diff --git a/server/match/gamedata.js b/server/match/gamedata.js
-index fe2ebd3..85cc2ec 100644
+index c5380d9..1a55a30 100644
 --- a/server/match/gamedata.js
 +++ b/server/match/gamedata.js
 @@ -13,6 +13,7 @@
@@ -6574,7 +6552,7 @@ index fe2ebd3..85cc2ec 100644
      this.economy = this.config.economy && typeof this.config.economy === 'object' ? this.config.economy : {};
      const chess = this.raw.chess && typeof this.raw.chess === 'object' ? this.raw.chess : {};
      this._chess = chess;
-@@ -478,10 +481,7 @@ export class GameData {
+@@ -485,10 +488,7 @@ export class GameData {
      };
    }
    bans(difficulty) {
@@ -6587,7 +6565,7 @@ index fe2ebd3..85cc2ec 100644
    get bandDraft() {
      const b = this.config.bandDraft && typeof this.config.bandDraft === 'object' ? this.config.bandDraft : {};
 diff --git a/server/match/invariants.js b/server/match/invariants.js
-index 026d094..ab420a9 100644
+index abf0684..ed6167a 100644
 --- a/server/match/invariants.js
 +++ b/server/match/invariants.js
 @@ -26,6 +26,7 @@
@@ -6632,7 +6610,7 @@ index 026d094..ab420a9 100644
          fail(`${id}: piece of unknown kind ${p.kind}`);
        }
 diff --git a/server/match/match/bossRounds.js b/server/match/match/bossRounds.js
-index e0bc924..aa69f5f 100644
+index bb5d12e..0b2a3a4 100644
 --- a/server/match/match/bossRounds.js
 +++ b/server/match/match/bossRounds.js
 @@ -1,3 +1,4 @@
@@ -6640,7 +6618,7 @@ index e0bc924..aa69f5f 100644
  // server/match/match/bossRounds.js — Match methods: the Final Assault / Hidden Core (the rules:
  // server/match/finalAssault.js) — the boss fields and the shared pool; client-side boss fields (plausibility budgets on
  // the field clock, cumulative credits, handovers, the boss clock, the end: pool 0 → victory, team LP 0 → defeat);
-@@ -84,6 +85,7 @@ export class MatchBoss {
+@@ -85,6 +86,7 @@ export class MatchBoss {
          // `side` + `routes`: the player's half of a pair field (spawn-list edits for one player, e.g. 鸭爵's swap)
          const ev = { input, kind: hidden ? 'hidden' : 'boss', round: this.round, spawns, routes: wave.routes, side: g.length > 1 ? (j === 0 ? 'L' : 'R') : null };
          this.dispatch(ps, 'onBattleStart', ev);
@@ -6648,7 +6626,7 @@ index e0bc924..aa69f5f 100644
          return ev.input && typeof ev.input === 'object' ? ev.input : input;
        });
        const fieldId = `b${i + 1}`;
-@@ -100,7 +102,7 @@ export class MatchBoss {
+@@ -101,7 +103,7 @@ export class MatchBoss {
          routes: wave.routes,
          sharedBoss: this.bossPool,
          // the round's enemy effects for the leaders' mid-fight summons (server/sim/content/bosses.js summonMods)
@@ -6657,7 +6635,7 @@ index e0bc924..aa69f5f 100644
          fieldId,
          enemyOverrides: wave.overrides,
          waveId: wave.templateId,
-@@ -109,9 +111,9 @@ export class MatchBoss {
+@@ -110,9 +112,9 @@ export class MatchBoss {
        if (this.clientCombat) return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), opts: bopts, battle: null, live: true };
        const battle = this.newBattle(bopts);
        try {
@@ -6669,7 +6647,7 @@ index e0bc924..aa69f5f 100644
        } catch (e) { this.reportError('boss leak hook', e); }
        return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), battle, live: true };
      });
-@@ -152,8 +154,8 @@ export class MatchBoss {
+@@ -153,8 +155,8 @@ export class MatchBoss {
          f.credit = new CreditPool(pool);
          f.battle = this._specBattle(f.spec, { sharedBoss: f.credit });
          try {
@@ -6680,7 +6658,7 @@ index e0bc924..aa69f5f 100644
          } catch (e) { this.reportError('boss leak hook', e); }
        }
        this._watchBossFields(recs);
-@@ -227,13 +229,13 @@ export class MatchBoss {
+@@ -228,13 +230,13 @@ export class MatchBoss {
        if (n <= f.lpAcked) return;
        const d = n - f.lpAcked;
        f.lpAcked = n;
@@ -6696,7 +6674,7 @@ index e0bc924..aa69f5f 100644
    }
  
    /**
-@@ -422,16 +424,18 @@ export class MatchBoss {
+@@ -423,16 +425,18 @@ export class MatchBoss {
      ps.dirty();
    }
  
@@ -6719,7 +6697,7 @@ index e0bc924..aa69f5f 100644
      this.teamLp = Math.max(0, this.teamLp - n);
      if (this._bossLazyPublic()) { this._bossPublic(); return; }
      this._syncTeamLp();
-@@ -507,6 +511,7 @@ export class MatchBoss {
+@@ -508,6 +512,7 @@ export class MatchBoss {
  
    /** Every boss field is over: stats, bounties, then the Hidden Core or RESULT. */
    _finishFinal(hidden, resultOf) {
@@ -6727,7 +6705,7 @@ index e0bc924..aa69f5f 100644
      if (this.phase !== (hidden ? PHASE.HIDDEN_CORE : PHASE.FINAL_ASSAULT)) return;
      this._stopClientCombat();
      // the end condition the server registered first decides (client-side combat: _endFinal — pool 0 → victory, team LP 0
-@@ -537,6 +542,9 @@ export class MatchBoss {
+@@ -538,6 +543,9 @@ export class MatchBoss {
          if (pp && ps) this.dispatch(ps, 'onBattleResult', { result: pp, lpLoss: 0, perfect: !!pp.perfect, boss: true });
        }
      }
@@ -6737,7 +6715,7 @@ index e0bc924..aa69f5f 100644
      this._syncTeamLp();
      this.deadline = 0;
      this.overtimeAt = 0;
-@@ -544,7 +552,7 @@ export class MatchBoss {
+@@ -545,7 +553,7 @@ export class MatchBoss {
      this.runner = null;
      if (!hidden) {
        const eligible = victory && !!this.hiddenBossId && hiddenEligible(this.gd, { layerSum: this.hiddenLayerSum, teamLp: this.teamLp });
@@ -6746,7 +6724,7 @@ index e0bc924..aa69f5f 100644
          if (eligible) {
            this.hiddenReached = true;
            this.bossPool = null;
-@@ -555,7 +563,7 @@ export class MatchBoss {
+@@ -556,7 +564,7 @@ export class MatchBoss {
          }
        });
      } else {
@@ -6830,7 +6808,7 @@ index 69d82b3..674aba5 100644
          const ps = this.players.get(pid);
          const gains = pp && pp.layerGains && typeof pp.layerGains === 'object' ? pp.layerGains : null;
 diff --git a/server/match/match/infra.js b/server/match/match/infra.js
-index 660fe34..7f448d9 100644
+index 1a92fbb..7c5ff9e 100644
 --- a/server/match/match/infra.js
 +++ b/server/match/match/infra.js
 @@ -1,3 +1,6 @@
@@ -6941,10 +6919,10 @@ index 72501d7..934700d 100644
  // (every clock and deadline shifted by the pause), the drop at the battle phase's end, and the field clocks' "now".
  // Installed on Match.prototype by server/match/Match.js (a method container: never instantiated; `this` is the match).
 diff --git a/server/match/match/phases.js b/server/match/match/phases.js
-index 29cb76c..cd49c05 100644
+index 172cb81..83728b4 100644
 --- a/server/match/match/phases.js
 +++ b/server/match/match/phases.js
-@@ -11,8 +11,32 @@ import { botPickBand } from '../bot.js';
+@@ -12,8 +12,32 @@ import { botPickBand } from '../bot.js';
  import { OK, fail, DELAYS, BAND_TURN_SECONDS } from './common.js';
  
  export class MatchPhases {
@@ -7220,7 +7198,7 @@ index c7fa6c1..d9ff9d1 100644
        // leaked enemies re-enter with the stats they had: the round template's stat overrides apply again
        enemyOverrides: this.wave && this.wave.overrides ? this.wave.overrides : {},
 diff --git a/server/match/match/views.js b/server/match/match/views.js
-index 8016655..055375d 100644
+index 6539f41..0318644 100644
 --- a/server/match/match/views.js
 +++ b/server/match/match/views.js
 @@ -1,3 +1,6 @@
@@ -7269,7 +7247,7 @@ index 8016655..055375d 100644
        stageId: this.stageId,
        setupRevision: this.setupRevision,
        rerollVote: this.setupVote ? {
-@@ -94,11 +106,12 @@ export class MatchViews {
+@@ -95,11 +107,12 @@ export class MatchViews {
        players: this.order.map((ps) => ({
          playerId: ps.playerId,
          seat: ps.seat,
@@ -7283,7 +7261,7 @@ index 8016655..055375d 100644
          bandId: ps.bandId,
          shopLevel: ps.shop.level,
          boardCount: ps.deployCount,
-@@ -211,7 +224,7 @@ export class MatchViews {
+@@ -212,7 +225,7 @@ export class MatchViews {
      // 联防: a leaker's enemies still standing on the 联防 field (uncapped), the loss capped like settle()
      const left = this._uniteLeft(ps);
      if (left != null) {
@@ -7292,7 +7270,7 @@ index 8016655..055375d 100644
        return loss > 0 ? { uniteLeft: left, pendingLp: loss } : { uniteLeft: left };
      }
      let n = 0;
-@@ -221,7 +234,7 @@ export class MatchViews {
+@@ -222,7 +235,7 @@ export class MatchViews {
        if (f && f.cc) n = f.done && f.result ? counted(f.result.perPlayer && f.result.perPlayer[ps.playerId]) : Number(f.progress && f.progress.leaks) || 0;
        else if (f && f.battle) { try { n = battleProgress(f.battle).leaks; } catch { n = 0; } }
      }
@@ -7340,7 +7318,7 @@ index 3fa5e35..b0cde2c 100644
        return;
      }
 diff --git a/server/match/player/acquire.js b/server/match/player/acquire.js
-index e3c61e2..6e68da1 100644
+index e4b458f..74b2e65 100644
 --- a/server/match/player/acquire.js
 +++ b/server/match/player/acquire.js
 @@ -1,3 +1,4 @@
@@ -7396,7 +7374,7 @@ index e3c61e2..6e68da1 100644
    /** Normal copies of a base chess currently owned (board/hand/temp). */
    countCopies(baseId) {
      let n = 0;
-@@ -226,9 +268,25 @@ export class PlayerAcquire {
+@@ -229,9 +271,25 @@ export class PlayerAcquire {
      if (!list) {
        list = [];
        const fresh = (id) => !list.includes(id);
@@ -7406,25 +7384,25 @@ index e3c61e2..6e68da1 100644
        for (let i = 0; i < ro.count; i++) {
 +        const rule = plan ? plan[i] : null;
          let id = null;
--        for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyRollEntries() });
+-        for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyStockEntries() });
 +        if (rule && rule.mode === 'weight') {
 +          // 加权模式：不限定，只把该盟约的候选权重提高（柔和）
 +          const boost = new Map([[rule.bond, rule.mult]]);
-+          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyRollEntries(), bondBoost: boost });
++          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyStockEntries(), bondBoost: boost });
 +        } else if (rule) {
 +          // 筛选模式（默认）：该位置必须是该盟约的干员
 +          const filter = (x) => fresh(x) && this._chessHasBond(x, rule.bond);
-+          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter, extra: this.diyRollEntries() });
++          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter, extra: this.diyStockEntries() });
 +        } else {
-+          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyRollEntries() });
++          for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyStockEntries() });
 +        }
 +        // 定向没抽到（该盟约在本等级无可用干员/池子空）→ 退回纯随机，保证 offer 张数不缩水
-+        if (!id && rule) for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyRollEntries() });
++        if (!id && rule) for (let tt = t; tt >= 1 && !id; tt--) id = this.m.pool.roll(this.m.rngShop, { tier: tt, filter: fresh, extra: this.diyStockEntries() });
          if (id) list.push(id);
        }
      }
 diff --git a/server/match/player/economy.js b/server/match/player/economy.js
-index 75638b1..5adbd00 100644
+index d2fd062..cd2c6d0 100644
 --- a/server/match/player/economy.js
 +++ b/server/match/player/economy.js
 @@ -1,3 +1,4 @@
@@ -7432,7 +7410,7 @@ index 75638b1..5adbd00 100644
  // server/match/player/economy.js — PlayerState methods: the economy — funds, spending (onSpend), prep-side bond layer
  // gains (clamped by layerGainRoom), the shop (onPrice prices, copy-weighted rolls from the shared pool plus the player's
  // own 自选 stock — player/diy.js —, freeze) and its intents: g.buy, g.refresh, g.freeze, g.levelUp, g.sell.
-@@ -67,7 +68,20 @@ export class PlayerEconomy {
+@@ -71,7 +72,20 @@ export class PlayerEconomy {
    }
  
    _rollItemSlot() {
@@ -7837,10 +7815,10 @@ index 5172eee..08c8106 100644
        // DESIGN §16: the effective operator loadout ({ [baseChessId]: { skill, module } }; chess not listed use defaults)
        loadout: this.loadout,
 diff --git a/server/match/pool.js b/server/match/pool.js
-index 9d07ceb..ed92241 100644
+index 29849d6..4af3a2d 100644
 --- a/server/match/pool.js
 +++ b/server/match/pool.js
-@@ -120,11 +120,27 @@ export class SharedPool {
+@@ -122,11 +122,27 @@ export class SharedPool {
     */
    roll(rng, opts = {}) {
      const el = this._eligible(opts);
@@ -7870,7 +7848,7 @@ index 9d07ceb..ed92241 100644
      return el[el.length - 1][0];
    }
  
-@@ -146,7 +162,9 @@ export class SharedPool {
+@@ -148,7 +164,9 @@ export class SharedPool {
     * Item roll for the shop's item slot: tier by the chess tier shares at this level, uniform item within the tier,
     * falling back to lower tiers when a tier has no item. Returns an item id or null.
     */
@@ -7881,7 +7859,7 @@ index 9d07ceb..ed92241 100644
      const shares = this.tierShares(maxTier);
      const tiers = Object.keys(shares).map(Number).sort((a, b) => a - b);
      let tier = null;
-@@ -157,13 +175,62 @@ export class SharedPool {
+@@ -159,13 +177,62 @@ export class SharedPool {
      } else {
        tier = 1 + Math.floor(rng() * Math.max(1, maxTier));
      }
@@ -8107,7 +8085,7 @@ index f76ee13..33f72ba 100644
    }
  
 diff --git a/server/sim/ai.js b/server/sim/ai.js
-index 5ef660f..cc31f3e 100644
+index 7317828..965dda4 100644
 --- a/server/sim/ai.js
 +++ b/server/sim/ai.js
 @@ -36,7 +36,7 @@
@@ -8135,7 +8113,7 @@ index 5ef660f..cc31f3e 100644
    }
    performAttack(b, u, prof, targets);
    u.atkCd = Math.max(u.atkCd, u.s.interval);
-@@ -205,7 +205,14 @@ export function performAttack(b, u, prof, targets, opts = null) {
+@@ -215,7 +215,14 @@ export function performAttack(b, u, prof, targets, opts = null) {
      const ctx = { attacker: u, targets, isSkill, profile: prof };
      b.emit('beforeAttack', ctx);
      targets = (ctx.targets || []).filter((t) => t && t.alive);
@@ -8151,7 +8129,7 @@ index 5ef660f..cc31f3e 100644
    }
    u.lastAttackAt = b.time;
    u.stats.attacks++;
-@@ -221,6 +228,13 @@ export function performAttack(b, u, prof, targets, opts = null) {
+@@ -231,6 +238,13 @@ export function performAttack(b, u, prof, targets, opts = null) {
    const vis = prof._fortressMelee ? 'none' : (prof.projectile || 'none');
    // 秘术师: the stored energies leave with this attack, at its main target (professions.js installMystic)
    const energy = !isHeal && prof.releaseEnergy ? prof.releaseEnergy(b, u) : 0;
@@ -8165,8 +8143,8 @@ index 5ef660f..cc31f3e 100644
    for (let i = 0; i < targets.length; i++) {
      const t = targets[i];
      b._ev(['atk', u.id, t.id, vis]);
-@@ -228,7 +242,7 @@ export function performAttack(b, u, prof, targets, opts = null) {
-     const info = { isSkill, index: i, attackId, energy: i === 0 ? energy : 0 };
+@@ -239,7 +253,7 @@ export function performAttack(b, u, prof, targets, opts = null) {
+     const info = { isSkill, index: i, attackId, fortressMelee: !!prof._fortressMelee, energy: i === 0 ? energy : 0 };
      const foe = t.side === 'enemy' || b.isAllyTarget(t);
      if (ranged && foe && prof.projectile === 'boomerang') {
 -      throwBoomerang(b, u, prof, t, info);
@@ -8174,7 +8152,7 @@ index 5ef660f..cc31f3e 100644
      } else if (ranged && foe) {
        const speed = PROJECTILE_SPEEDS[prof.projectile] ?? PROJECTILE_SPEED;
        // projectiles land even if the shooter died meanwhile (damage is credited to it)
-@@ -269,6 +283,7 @@ function throwBoomerang(b, u, prof, t, info) {
+@@ -280,6 +294,7 @@ function throwBoomerang(b, u, prof, t, info) {
        onHit: (r) => {
          if (!home() || !(u.trait.boomerangsOut > 0)) return;
          u.trait.boomerangsOut--;
@@ -8182,7 +8160,7 @@ index 5ef660f..cc31f3e 100644
          if (b._hooks.boomerangCaught) b.emit('boomerangCaught', { unit: u, attackId: info.attackId ?? 0, isSkill: !!info.isSkill, x: r.x, y: r.y });
        } });
    };
-@@ -288,8 +303,8 @@ function throwBoomerang(b, u, prof, t, info) {
+@@ -299,8 +314,8 @@ function throwBoomerang(b, u, prof, t, info) {
  
  /** Apply one attack hit (called on impact for projectiles). `target` may be null (splash on a dead target's spot). */
  export function resolveHit(b, u, prof, target, info, x, y) {
@@ -8193,7 +8171,7 @@ index 5ef660f..cc31f3e 100644
    let dealtTotal = 0;
    const baseType = prof.dmgType === 'heal' || prof.dmgType === 'none' ? 'phys' : prof.dmgType;
    const skillMul = prof.skillDmgMul ?? 1;
-@@ -359,7 +374,7 @@ export function resolveHit(b, u, prof, target, info, x, y) {
+@@ -386,7 +401,7 @@ export function resolveHit(b, u, prof, target, info, x, y) {
      }
      if (prof.chain.sluggish && target.alive) b.applyStatus(target, 'sluggish', { duration: prof.chain.sluggish, source: u });
    }
@@ -8202,7 +8180,7 @@ index 5ef660f..cc31f3e 100644
    if (prof.afterHit) b._safe(() => prof.afterHit(b, u, target, hctx), 'profile.afterHit', u);
    if (prof.skillOnHit && u.skill) {
      const fn = prof.skillOnHit;
-@@ -385,6 +400,7 @@ export function chainHealNext(b, healer, prev, seen) {
+@@ -412,6 +427,7 @@ export function chainHealNext(b, healer, prev, seen) {
    let best = null;
    for (const a of b.allyUnits) {
      if (!a.alive || !a.deployed || a.hidden || a.kind === 'device' || seen.has(a.id)) continue;
@@ -8268,7 +8246,7 @@ index 6095990..3fb537a 100644
  
    reduceElement(target, amount, element = null) { return reduceElement(target, amount, element); }
 diff --git a/server/sim/battle/deploy.js b/server/sim/battle/deploy.js
-index d859660..4b576fe 100644
+index 12962e7..89ffcf8 100644
 --- a/server/sim/battle/deploy.js
 +++ b/server/sim/battle/deploy.js
 @@ -6,6 +6,7 @@
@@ -8294,7 +8272,7 @@ index d859660..4b576fe 100644
      const first = u.deploySeq === 0;
      u.alive = true;
      u.deployed = true;
-@@ -75,10 +79,12 @@ export class BattleDeploy {
+@@ -79,10 +83,12 @@ export class BattleDeploy {
    }
  
    /** Mark `unit` dead (hp reached 0). Fires `kill` then `death`. */
@@ -8309,7 +8287,7 @@ index d859660..4b576fe 100644
      // a nested kill/retreat inside the handlers already removed it: a later handler's hp write must not stick
      if (!unit.alive) { if (!unit.bossPool) unit.hp = 0; return; }
      if (unit.hp > 0 && !unit.bossPool) { // revived by a kill handler (clamped: a handler may write any number)
-@@ -86,7 +92,7 @@ export class BattleDeploy {
+@@ -90,7 +96,7 @@ export class BattleDeploy {
        return;
      }
      unit.hp = 0; // NaN / negative writes from handlers
@@ -8318,7 +8296,7 @@ index d859660..4b576fe 100644
    }
  
    /**
-@@ -100,7 +106,7 @@ export class BattleDeploy {
+@@ -104,7 +110,7 @@ export class BattleDeploy {
      this._remove(unit, reason, null, permanent, dying);
    }
  
@@ -8327,7 +8305,7 @@ index d859660..4b576fe 100644
      this._cutAttackStand(unit);
      unit.alive = false;
      unit.removeReason = reason;
-@@ -157,7 +163,7 @@ export class BattleDeploy {
+@@ -161,7 +167,7 @@ export class BattleDeploy {
      }
      // the reason ('killed' | 'retreat' | 'expired' | …) lets the client keep the knock-down sound for real knock-outs
      if (reason !== 'leak') this._ev(['die', unit.id, reason]);
@@ -8336,7 +8314,7 @@ index d859660..4b576fe 100644
      if (unit.removed) this._toRelease.push(unit);
    }
  
-@@ -207,7 +213,7 @@ export class BattleDeploy {
+@@ -211,7 +217,7 @@ export class BattleDeploy {
      }
      const k = at ? at[0] * COLS + at[1] : unit.homeR * COLS + unit.homeC;
      const occ = this._occ[k];
@@ -8345,7 +8323,7 @@ index d859660..4b576fe 100644
      if (at && this.downOn(at[0], at[1], unit)) return false;
      const ps = this.getPlayer(unit.ownerId);
      const cost = unit.base.cost;
-@@ -239,7 +245,7 @@ export class BattleDeploy {
+@@ -243,7 +249,7 @@ export class BattleDeploy {
        if (!ps || ps.dp + 1e-9 < cost) continue;
        const [r, c] = this.restTile(u);
        const occ = this._occ[r * COLS + c];
@@ -8457,7 +8435,7 @@ index a4acd26..97c3a53 100644
  
    _handlerError(label, owner, e, internal = false) {
 diff --git a/server/sim/battle/lifecycle.js b/server/sim/battle/lifecycle.js
-index d58476e..aeffa5d 100644
+index 7afdc66..274d09b 100644
 --- a/server/sim/battle/lifecycle.js
 +++ b/server/sim/battle/lifecycle.js
 @@ -1,3 +1,5 @@
@@ -8485,7 +8463,7 @@ index d58476e..aeffa5d 100644
      for (const u of this.allyUnits) {
        if (u.kind === 'op' && u.alive && u.carry && u.carry.down === true) {
          this._safe(() => { u.hp = 0; this.retreat(u, { reason: FORCED_EXIT }); }, 'forcedExit', u);
-@@ -59,6 +66,10 @@ export class BattleLifecycle {
+@@ -68,6 +75,10 @@ export class BattleLifecycle {
    }
  
    step() {
@@ -8496,7 +8474,7 @@ index d58476e..aeffa5d 100644
      if (this.finished || this._stepping) return; // re-entrant step() from a hook is a no-op
      // forceEnd() requested while stepping (content hook, repeated engine errors) is deferred to the end of the
      // current phase: the remaining phases are skipped and the result is built once, so nothing mutates it later.
-@@ -66,6 +77,12 @@ export class BattleLifecycle {
+@@ -75,6 +86,12 @@ export class BattleLifecycle {
      try {
        if (!this.started) this._phase('start', () => this.start());
        const dt = this.dt;
@@ -8510,7 +8488,7 @@ index d58476e..aeffa5d 100644
        this._phase('spawns', () => this._processSpawns());
        this._phase('dp', () => {
 diff --git a/server/sim/battle/queries.js b/server/sim/battle/queries.js
-index 2d08fc6..bf5af45 100644
+index c7c5878..1808131 100644
 --- a/server/sim/battle/queries.js
 +++ b/server/sim/battle/queries.js
 @@ -1,3 +1,6 @@
@@ -8520,7 +8498,7 @@ index 2d08fc6..bf5af45 100644
  // server/sim/battle/queries.js — Battle methods: queries: the per-tick enemy tile index, enemies / allies by tile keys,
  // grid, radius and selectability, the ally targets (allies our attacks select like enemies), players, and the range
  // rebuild of an ally (current, base and extra range keys).
-@@ -112,7 +115,10 @@ export class BattleQueries {
+@@ -113,7 +116,10 @@ export class BattleQueries {
      for (const a of this.allyUnits) {
        if (!a.alive || !a.deployed || a.hidden || a.kind === 'device') continue;
        if (!set.has(a.tileR * COLS + a.tileC)) continue;
@@ -8629,11 +8607,11 @@ index 0874490..a43eb3c 100644
            const p = Math.min(1, v);
            const d = dodge[k];
 diff --git a/server/sim/content/bands/battle.js b/server/sim/content/bands/battle.js
-index a1c46ca..866a7f8 100644
+index 56a83fb..9395b0a 100644
 --- a/server/sim/content/bands/battle.js
 +++ b/server/sim/content/bands/battle.js
-@@ -38,12 +38,10 @@
- //                                               combat start on its stage slot (tokens.spawnMapChar)
+@@ -39,12 +39,10 @@
+ //                                               aggroSeq precedes ordinary initial operators; deploySeq stays the runtime spawn
  // Prep-only bands (economy / shop / grants / layers at prep end or round start) live in bands/meta.js.
  
 -import {
@@ -8647,7 +8625,7 @@ index a1c46ca..866a7f8 100644
  
  export const AMEDIC_BAND = 'band_amedic';
  /**
-@@ -82,6 +80,16 @@ const BY_KEY = {
+@@ -83,6 +81,16 @@ const BY_KEY = {
        used++;
        fxOn(battle, 'revive', u, keyOf(bandId), bandId, { left: max - used });
      }, { priority: PRIO_BAND_REVIVE });
@@ -8665,10 +8643,10 @@ index a1c46ca..866a7f8 100644
  
    // 克莱门莎 崇高牺牲: PRTS requires the 阿戈尔 bond to be active.
 diff --git a/server/sim/content/bonds/core.js b/server/sim/content/bonds/core.js
-index a2892f4..60b4c51 100644
+index 8b12c71..765fad0 100644
 --- a/server/sim/content/bonds/core.js
 +++ b/server/sim/content/bonds/core.js
-@@ -534,7 +534,8 @@ function installEgir(battle, pid, bb, members) {
+@@ -538,7 +538,8 @@ function installEgir(battle, pid, bb, members) {
    });
    battle.on('death', (c) => {
      const u = c.unit;
@@ -8766,7 +8744,7 @@ index 7ae3f22..d64c2f8 100644
        try { const k = tk(bb, raw, def); if (k) return k; } catch (e) { battle._handlerError(`tokenKit:${def.id}`, unit, e); }
      }
 diff --git a/server/sim/content/items/battle.js b/server/sim/content/items/battle.js
-index a6daf97..5bfff96 100644
+index 6c5dd94..598115d 100644
 --- a/server/sim/content/items/battle.js
 +++ b/server/sim/content/items/battle.js
 @@ -42,11 +42,9 @@
@@ -8809,7 +8787,7 @@ index a6daf97..5bfff96 100644
  // =====================================================================================================================
  // Scope: everything an item behaviour registers, removable at once
  
-@@ -391,6 +408,20 @@ function onAttackEnemies(S, u, fn) {
+@@ -400,6 +417,20 @@ function onDamageEnemies(S, u, fn) {
  
  /** Generic buff-key behaviours (shared by several items). */
  const BY_BUFF = {
@@ -8830,7 +8808,7 @@ index a6daf97..5bfff96 100644
    // 源石溶剂: the text's "每秒流失 damage 点生命值" is officially 每秒受到 damage 点真实伤害 (PRTS 盟约记录 修正 "并非流失", 备注
    // "造成无来源真实持续环境伤害"; the `periodic_damage` template — also 狂暴宿主 "自身每秒受到N无来源真实伤害"): a damage instance,
    // not a 流失 — shields, damage-taken modifiers and the target-side `hit` effects apply, and it is a "受到伤害" for 受击回复
-@@ -848,6 +879,10 @@ const SHIELD_KEY = 'item:shield_drone';
+@@ -858,6 +889,10 @@ const SHIELD_KEY = 'item:shield_drone';
   */
  export function weaknessRetype(dmg, source, target) {
    if (!dmg || !target || !target.s || (dmg.type !== 'phys' && dmg.type !== 'arts')) return;
@@ -8841,7 +8819,7 @@ index a6daf97..5bfff96 100644
    const ph = mitigated(dmg.amount, 'phys', target, source, dmg);
    const ar = mitigated(dmg.amount, 'arts', target, source, dmg);
    const best = ar > ph + 1e-9 ? 'arts' : ph > ar + 1e-9 ? 'phys' : dmg.type;
-@@ -896,6 +931,7 @@ export function installItem(battle, u, itemId, { lent = false } = {}) {
+@@ -906,6 +941,7 @@ export function installItem(battle, u, itemId, { lent = false } = {}) {
      S.dispose();
      if (grant.timer) grant.timer.cancel();
      if (gm.get(gid) === grant) gm.delete(gid);
@@ -8849,7 +8827,7 @@ index a6daf97..5bfff96 100644
    };
    gm.set(gid, grant);
    try {
-@@ -914,6 +950,7 @@ export function installItem(battle, u, itemId, { lent = false } = {}) {
+@@ -924,6 +960,7 @@ export function installItem(battle, u, itemId, { lent = false } = {}) {
        S.onDispose(() => { hs.own[h.type] = Math.max(0, hs.own[h.type] - 1); hammerRelease(battle, rt, u, hs); });
      }
      if (BY_ITEM[key]) BY_ITEM[key](battle, u, rec, S, grant);
@@ -11518,7 +11496,7 @@ index 0000000..a71c920
 +  try{return fn();}finally{current=previous;}
 +}
 diff --git a/server/sim/content/support/index.js b/server/sim/content/support/index.js
-index dd247cb..aa03fe1 100644
+index fd0c65c..ebab8f0 100644
 --- a/server/sim/content/support/index.js
 +++ b/server/sim/content/support/index.js
 @@ -18,6 +18,7 @@
@@ -11570,7 +11548,7 @@ index dd247cb..aa03fe1 100644
  export const isCoreBond = (id) => coreBondIds().has(id);
  
 diff --git a/server/sim/content/tokens.js b/server/sim/content/tokens.js
-index 442bea2..583d70e 100644
+index bab6d48..b24fad2 100644
 --- a/server/sim/content/tokens.js
 +++ b/server/sim/content/tokens.js
 @@ -1,3 +1,4 @@
@@ -11578,7 +11556,7 @@ index 442bea2..583d70e 100644
  // server/sim/content/tokens.js — summons / tokens (data/tokens.json), the 炎 bond summon “炎佑” and band map characters.
  //
  // Kits: `kits[tokenId] = (bb, raw, def) => Kit` (content/index.js resolves token kits here). bb = the token's skill
-@@ -1619,7 +1620,7 @@ const RAW_KITS = {
+@@ -1621,7 +1622,7 @@ const RAW_KITS = {
    [TOKEN_IDS.touch]: touchKit,
  };
  /** tokenId → kit fn; kits built here carry `fromTokens: true` (deploy limits only police those). */
@@ -11674,10 +11652,10 @@ index 0000000..5c41524
 + return {ok:true,unitId:token.id,tile:r*COLS+c};
 +}
 diff --git a/server/sim/damage.js b/server/sim/damage.js
-index ae99429..a66358a 100644
+index a4b2742..1e13adf 100644
 --- a/server/sim/damage.js
 +++ b/server/sim/damage.js
-@@ -266,9 +266,17 @@ export function absorbShields(battle, target, amount, type = null) {
+@@ -321,9 +321,17 @@ function peekStats(unit) {
  /**
   * Full damage pipeline. Returns the HP actually removed (0 when dodged/cancelled/absorbed).
   */
@@ -11695,15 +11673,15 @@ index ae99429..a66358a 100644
    if (dmg.type === 'element') return applyElement(battle, source, target, dmg);
    // 无来源 (dmg.sourceless, element bursts): hooks see no source — nothing keyed on "damage dealt by X" (ATK-up vs a
    // tag, 伤害提升 items / bonds / modules, reflect, "受到来自…的伤害") can recognise it; `credit` names the unit that still
-@@ -333,6 +341,7 @@ export function dealDamage(battle, source, target, dmgIn) {
+@@ -387,6 +395,7 @@ export function dealDamage(battle, source, target, dmgIn) {
   */
- export function applyHpLoss(battle, source, target, amount, dmg) {
+ export function applyHpLoss(battle, source, target, amount, dmg, mark) {
    if (!target.alive) return 0;
 +  if (kazdelCannonImmune(battle, source, target, dmg)) return 0;
    let dealt = 0;
    const hs = dmg && dmg.sourceless ? null : source; // the source hooks see (无来源: none; `credit` keeps it)
    if (target.bossPool) {
-@@ -374,7 +383,7 @@ export function applyHpLoss(battle, source, target, amount, dmg) {
+@@ -431,7 +440,7 @@ export function applyHpLoss(battle, source, target, amount, dmg, mark) {
    if (battle._hooks.damaged) battle.emit('damaged', { source: hs, target, amount, type: dmg ? dmg.type : 'true', dmg, credit: source });
    if (target.side === 'ally' && target.skill && dmg && !dmg.noSp && dmg.type !== 'element') battle._skills.onDamaged(target);
    const dead = target.bossPool ? target.bossPool.hp <= 0 : target.hp <= 0;
@@ -11712,7 +11690,7 @@ index ae99429..a66358a 100644
    return dealt;
  }
  
-@@ -436,6 +445,7 @@ export function elementIntake(target) {
+@@ -493,6 +502,7 @@ export function elementIntake(target) {
  
  /** Element gauge accumulation + burst. Fires `elementHit` { source, target, dmg } first (mutable amount/mul, cancel). */
  export function applyElement(battle, source, target, dmg) {
@@ -11720,7 +11698,7 @@ index ae99429..a66358a 100644
    const el = dmg.element;
    if (!el || !(el in target.elem)) return 0;
    if (!hasHp(target)) return 0; // a killing blow's rider: the target is dead, nothing fills or bursts (header)
-@@ -565,6 +575,27 @@ export function reduceElement(target, amount, el = null) {
+@@ -622,6 +632,27 @@ export function reduceElement(target, amount, el = null) {
    return removed;
  }
  
@@ -11748,7 +11726,7 @@ index ae99429..a66358a 100644
  /**
   * Heal pipeline. Returns the HP actually restored. `noHeal` stops heals from others (`self` heals pass); `healFree` (禁疗,
   * PRTS 异常效果 HEAL_FREE "受到的治疗量变为0") stops the unit's own too — except an HP-regeneration attribute (`regen`:
-@@ -581,10 +612,13 @@ export function reduceElement(target, amount, el = null) {
+@@ -638,10 +669,13 @@ export function reduceElement(target, amount, el = null) {
  export function heal(battle, source, target, amount, opts = {}) {
    if (!target || !target.alive || target.removed || !target.deployed || target.bossPool) return 0;
    const self = source === target || !!opts.self;
@@ -11764,7 +11742,7 @@ index ae99429..a66358a 100644
    let amt = regen ? amount : amount * (source && source.s ? source.s.healingDealtMul : 1) * target.s.healingTakenMul;
    if (!(amt > 0) || !Number.isFinite(amt)) return 0;
    if (battle._hooks.heal) {
-@@ -608,5 +642,8 @@ export function heal(battle, source, target, amount, opts = {}) {
+@@ -665,5 +699,8 @@ export function heal(battle, source, target, amount, opts = {}) {
      if (source.side === 'ally' && source.ownerId != null) { const pp = battle._pp(source.ownerId); if (pp) pp.healingDone += actual; }
    }
    if (actual >= 0.5 && !opts.silent) battle._ev(['heal', target.id, Math.round(actual)]);
@@ -11876,10 +11854,10 @@ index 0000000..eacd2de
 +  };
 +}
 diff --git a/server/sim/professions.js b/server/sim/professions.js
-index 4544581..3fd9771 100644
+index 14187e3..77f6763 100644
 --- a/server/sim/professions.js
 +++ b/server/sim/professions.js
-@@ -241,6 +241,7 @@ const installDollkeeper = (battle, unit) => {
+@@ -244,6 +244,7 @@ const installDollkeeper = (battle, unit) => {
      unit.form = null;
      if (!unit.alive || !unit.deployed) return;
      startSwitch();
@@ -11887,7 +11865,7 @@ index 4544581..3fd9771 100644
      unit.markDirty();
      unit.hp = unit.s.maxHp;
      battle.fx('swap', at({ form: null }));
-@@ -260,10 +261,12 @@ const installDollkeeper = (battle, unit) => {
+@@ -263,10 +264,12 @@ const installDollkeeper = (battle, unit) => {
      });
      battle.releaseBlocked(unit);
      unit.form = 'doll';
@@ -11901,7 +11879,7 @@ index 4544581..3fd9771 100644
      // `dollSwap` { unit, form }: a switch started — to the 替身 ('doll') or back to the 本体 (null); not fired when she is
      // knocked out as the 替身 (不屈 rolls on both switches: PRTS 盟约记录 "切换<替身>与<本体>时")
      if (battle.hasHook('dollSwap')) battle.emit('dollSwap', { unit, form: 'doll' });
-@@ -530,6 +533,7 @@ export const SUB = Object.freeze({
+@@ -542,6 +545,7 @@ export const SUB = Object.freeze({
    physician: P({ heal: { mode: 'single' } }),
    ringhealer: P({ heal: { mode: 'multi', count: 3 } }),
    chainhealer: P({ heal: { mode: 'chain', count: 3, falloff: 0.25 } }),
@@ -11909,7 +11887,7 @@ index 4544581..3fd9771 100644
    healer: P({ heal: { mode: 'single', farMul: 0.8, nearDist: 2 } }),
    wandermedic: P({ heal: { mode: 'single', elementHealRatio: 0.5 } }),
    incantationmedic: P({ dmgType: 'arts', projectile: 'bolt', heal: null, install: installIncantation }),
-@@ -594,7 +598,7 @@ export const SUB = Object.freeze({
+@@ -606,7 +610,7 @@ export const SUB = Object.freeze({
   */
  const TUNE = {
    fastshot: (tb) => ({ flyScale: num(tb.atk_scale, 1) }),
@@ -11962,7 +11940,7 @@ index a55f038..41114f5 100644
        chess: asMap(unwrap(raw.chess, 'chess'), 'chessId') ?? {},
        enemies: asMap(unwrap(raw.enemies, 'enemies'), 'key') ?? {},
 diff --git a/server/sim/skills.js b/server/sim/skills.js
-index bcc6477..ce997f7 100644
+index f558aad..7daf6cc 100644
 --- a/server/sim/skills.js
 +++ b/server/sim/skills.js
 @@ -265,6 +265,7 @@ export class SkillRuntime {
@@ -11973,7 +11951,7 @@ index bcc6477..ce997f7 100644
      this.active = false;
      this.pending = false;
      this.timeLeft = 0;
-@@ -604,6 +605,7 @@ export class SkillRuntime {
+@@ -609,6 +610,7 @@ export class SkillRuntime {
     * fires — neither when onEnd re-activated the skill (the new cast owns both).
     */
    end(reason = 'end') {
@@ -11981,7 +11959,7 @@ index bcc6477..ce997f7 100644
      if (!this.active || this.kind === 'passive' && reason !== 'death') return;
      const u = this.unit;
      const b = this.battle;
-@@ -613,7 +615,7 @@ export class SkillRuntime {
+@@ -618,7 +620,7 @@ export class SkillRuntime {
      this.ammoLeft = 0;
      this.ammoMax = 0;
      const n = this.activations;
@@ -12088,7 +12066,7 @@ index d9e2b94..30b65b2 100644
      const layerGains = {};
      for (const [k, v] of Object.entries(p.layerGains || {}).slice(0, 40)) if (isKey(k) && fnum(v) > 0) layerGains[k] = Math.min(1e4, fnum(v));
 diff --git a/server/sim/units.js b/server/sim/units.js
-index 39895c5..6aa9b38 100644
+index 5669346..5d4e311 100644
 --- a/server/sim/units.js
 +++ b/server/sim/units.js
 @@ -137,7 +137,7 @@ export class Unit {
@@ -12211,7 +12189,7 @@ index 0000000..0834043
 +  return config;
 +}
 diff --git a/shared/protocol.js b/shared/protocol.js
-index 8cd9967..f916f9a 100644
+index 9f48e6f..0593f19 100644
 --- a/shared/protocol.js
 +++ b/shared/protocol.js
 @@ -29,7 +29,7 @@ const isList = (v, max, item) => Array.isArray(v) && v.length <= max && v.every(
@@ -12288,9 +12266,9 @@ index 8cd9967..f916f9a 100644
    'room.state', 'room.closed',
 -  'm.public', 'm.private', 'm.field', 'm.toast', 'm.ticker', 'm.emote', 'm.result',
 +  'm.damage', 'm.public', 'm.private', 'm.field', 'm.toast', 'm.ticker', 'm.emote', 'm.result',
+   // m.layer { playerId, bondId, add } — own live prep layer gain; ephemeral, never replayed on resync.
+   'm.layer',
    // m.unitStats { seq, round, units: [unitStatsEntry] } — the answer to g.unitStats (the requester only)
-   'm.unitStats',
-   // client-side combat (DESIGN §14): b.start { battleId, fieldId, kind, spec, authoritative, startAt, serverNow, elapsed,
 diff --git a/shared/relics.js b/shared/relics.js
 new file mode 100644
 index 0000000..4605285
@@ -13982,7 +13960,7 @@ index 9ac54d8..2e44010 100644
          assert.equal(h.b.errors.length, 0, `${tag}: ${JSON.stringify(h.b.errors[0])}`);
        }
 diff --git a/test/content/kits_alt_t2.test.js b/test/content/kits_alt_t2.test.js
-index 214021d..9fa1c96 100644
+index 7a569b8..0956950 100644
 --- a/test/content/kits_alt_t2.test.js
 +++ b/test/content/kits_alt_t2.test.js
 @@ -52,7 +52,7 @@ const plain = (id, o = {}) => chessRec({ id, skill: null, ...o });
@@ -16784,7 +16762,7 @@ index 86632d3..39bf39a 100644
  const backups = load('backups');
  const DATA = { chess, backups };
 diff --git a/test/docs-consistency.test.js b/test/docs-consistency.test.js
-index 21a4a5a..7ead3ba 100644
+index 3b245fa..b8cfc5d 100644
 --- a/test/docs-consistency.test.js
 +++ b/test/docs-consistency.test.js
 @@ -35,9 +35,9 @@ import { NET_DEFAULTS } from '../server/net.js';
@@ -16941,7 +16919,7 @@ index 0000000..39b70b3
 +import { fileURLToPath } from 'node:url';
 +getData({ dir: fileURLToPath(new URL('../../data/vanilla/', import.meta.url)), log: { info(){}, warn(){}, error(){} } });
 diff --git a/test/i18n-data.test.js b/test/i18n-data.test.js
-index bc63856..0b183a9 100644
+index 652aff6..2d7b53e 100644
 --- a/test/i18n-data.test.js
 +++ b/test/i18n-data.test.js
 @@ -13,7 +13,11 @@ import { createDataStore } from '../public/js/data.js';
@@ -17222,10 +17200,10 @@ index 408d6a0..5f2686c 100644
    for (const pid of both.players) {
      const b = both.battle.getPlayer(pid).bonds.arcaneShip;
 diff --git a/test/match/bot-smarter.test.js b/test/match/bot-smarter.test.js
-index 5998c87..7a68059 100644
+index 43512d6..4df8999 100644
 --- a/test/match/bot-smarter.test.js
 +++ b/test/match/bot-smarter.test.js
-@@ -355,7 +355,6 @@ test('坎诺特 (利滚利: leftover funds are kept, +1 at ≥ 5): with a full b
+@@ -420,7 +420,6 @@ test('坎诺特 (利滚利: leftover funds are kept, +1 at ≥ 5): with a full b
      }
      m.dispose();
    }
@@ -17479,7 +17457,7 @@ index 0000000..f0d035d
 +  assert.ok(S2C.includes('m.damage'));
 +});
 diff --git a/test/match/diy-shop.test.js b/test/match/diy-shop.test.js
-index 904da8f..dab755b 100644
+index c487a1c..08bc75d 100644
 --- a/test/match/diy-shop.test.js
 +++ b/test/match/diy-shop.test.js
 @@ -1,3 +1,6 @@
@@ -17489,7 +17467,7 @@ index 904da8f..dab755b 100644
  // test/match/diy-shop.test.js — 0.2.0 自选编队 on the server (research 0.2.0 §2; the owner's decisions of 2026-10-05):
  // the picks (room.diy → seats[].diy) are checked leniently, fixed for the match and applied to that player only — the
  // player's data view makes a slotted slot the operator (name, class, bonds from its factions, no 特质, the pick's skill
-@@ -15,7 +18,7 @@ import { DataSource, hasGeneratedData } from '../../server/sim/simdata.js';
+@@ -16,7 +19,7 @@ import { DataSource, hasGeneratedData } from '../../server/sim/simdata.js';
  import { placeClass } from '../../server/match/board.js';
  import { buildResult } from '../../server/match/results.js';
  import { GEO } from '../../shared/constants.js';
@@ -17862,7 +17840,7 @@ index 51b6816..43977e3 100644
    const { m, ps } = prep();
    const hm = give(m, ps, SILENCE);
 diff --git a/test/match/pool.test.js b/test/match/pool.test.js
-index 8fd35fe..29df285 100644
+index 87e4e77..28cab17 100644
 --- a/test/match/pool.test.js
 +++ b/test/match/pool.test.js
 @@ -6,6 +6,8 @@ import { SharedPool, drawDisabledBonds } from '../../server/match/pool.js';
@@ -17917,7 +17895,7 @@ index 8fd35fe..29df285 100644
    for (const id of EFFECT_ONLY) assert.ok(!listed.has(id), `${id} not a shop item`);
    assert.ok(listed.has('chess_item_1_01_e_a'));
    // the shop item slot at every level
-@@ -135,8 +137,8 @@ test('维多利亚 25-layer reward and 洛洛的定制品: the 4 special 维式
+@@ -153,8 +155,8 @@ test('洛洛 and 焰尾 use the measured eight-item and 10/10/3 subsets; exhaust
    m.dispose();
  });
  
@@ -17928,7 +17906,7 @@ index 8fd35fe..29df285 100644
      const gd = new GameData(DATA, modeId);
      for (let seed = 1; seed <= 20; seed++) {
        const { drawn, staticOff, banned } = drawDisabledBonds(gd, createRng(seed));
-@@ -163,10 +165,10 @@ test('per-match disabled bonds: 3 core + 4 add-on (NORMAL+), FUNNY static + 0 +
+@@ -181,10 +183,10 @@ test('per-match disabled bonds: 3 core + 4 add-on (NORMAL+), FUNNY static + 0 +
  test('the match pool excludes banned chess; m.public lists disabled bonds and banned chess', () => {
    const h = makeMatch({ mode: 'coop', difficulty: 'HARD', humans: 1, bots: 1, seed: 3 }).start();
    const pub = h.lastBc('m.public');
@@ -22675,10 +22653,10 @@ index 0fe147f..2a3e20e 100644
  });
  
 diff --git a/test/ui/gameLogic.test.js b/test/ui/gameLogic.test.js
-index b9cbbcc..15504c2 100644
+index 3516af4..0c4fa8f 100644
 --- a/test/ui/gameLogic.test.js
 +++ b/test/ui/gameLogic.test.js
-@@ -582,7 +582,23 @@ describe('drafts', () => {
+@@ -581,7 +581,23 @@ describe('drafts', () => {
      const sp2 = normalizeSp({ cards: [{}, {}], order: ['b', 'a'], turn: 0, picks: [{ playerId: 'b', idx: 1 }, { playerId: 'x', idx: 9 }] }, players);
      assert.equal(sp2.turnPid, 'b'); assert.equal(sp2.cards[1].takenBy, 'b'); assert.equal(sp2.pickOf.has('x'), false);
      assert.equal(normalizeSp(null), null);
@@ -22880,10 +22858,10 @@ index da6bda9..398ff36 100644
    for (let i = 1; i < roster.length; i++) assert.ok(roster[i - 1].tier <= roster[i].tier);
    const t3 = filterRoster(roster, { tier: 3 }, {}, get, getBond);
 diff --git a/test/ui/match-info.e2e.test.js b/test/ui/match-info.e2e.test.js
-index e1767a7..b5fcb69 100644
+index e4721b1..b1e57d3 100644
 --- a/test/ui/match-info.e2e.test.js
 +++ b/test/ui/match-info.e2e.test.js
-@@ -275,7 +275,7 @@ describe('GitHub issue #8 item 1: 本局信息 in the strategy draft (real serve
+@@ -281,7 +281,7 @@ describe('GitHub issue #8 item 1: 本局信息 in the strategy draft (real serve
      for (const p of [a, b]) briefs.set(p, await readInfo(p.page, '.brief__right'));
      const want = await truth(a.page);
      assert.deepEqual(want.off, [], '绝境 switches no bond off');
@@ -22893,7 +22871,7 @@ index e1767a7..b5fcb69 100644
        assert.deepEqual(greyedOf(info), want.greyed, `${p.name}: briefing greyed`);
        assert.deepEqual(info.banned, want.names, `${p.name}: briefing banned`);
 diff --git a/test/ui/match-info.test.js b/test/ui/match-info.test.js
-index d4d1739..8ab5cd5 100644
+index 9e035a4..faa7d77 100644
 --- a/test/ui/match-info.test.js
 +++ b/test/ui/match-info.test.js
 @@ -62,7 +62,8 @@ test('matchInfoModel: the two greyed kinds, the briefing order, banned operators
@@ -22906,7 +22884,7 @@ index d4d1739..8ab5cd5 100644
    assert.equal(m.addon[0].name, '调和');
    assert.equal(m.core.length + m.addon.length, Object.keys(DATA.bonds).length, 'every bond, once');
    assert.ok(m.core.every((b) => b.isCore) && m.addon.every((b) => !b.isCore));
-@@ -160,20 +161,21 @@ test('a real 标准 match (solo and co-op): the mode\'s 10 inactive bonds are "o
+@@ -172,20 +173,21 @@ test('a real 标准 match (solo and co-op): the mode\'s 10 inactive bonds are "o
      assert.equal(pub.modeId, modeId);
      const m = matchInfoModel(pub, SRC(pub.modeId));
      assert.deepEqual([...m.sets.off].sort(), [...OFF_FUNNY].sort(), `${modeId}: 标准模拟's inactiveBondIdList`);
@@ -23103,7 +23081,7 @@ index 0000000..c01fa95
 +}
 +}
 diff --git a/test/ui/playtest3.test.js b/test/ui/playtest3.test.js
-index c94e060..26b18f0 100644
+index 7b465a4..909bb8b 100644
 --- a/test/ui/playtest3.test.js
 +++ b/test/ui/playtest3.test.js
 @@ -492,8 +492,9 @@ describe('9: busy indicators and data loading', () => {
@@ -24235,7 +24213,7 @@ index 0000000..b9137fc
 +  return manifest;
 +}
 diff --git a/tools/build-data.mjs b/tools/build-data.mjs
-index d23ead8..3e67ffb 100644
+index 48fa3fa..ae428eb 100644
 --- a/tools/build-data.mjs
 +++ b/tools/build-data.mjs
 @@ -44,6 +44,7 @@ import { FULL_RANK, atRank, stripPotential } from '../shared/potential.js';

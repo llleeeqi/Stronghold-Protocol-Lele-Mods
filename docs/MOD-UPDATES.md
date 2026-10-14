@@ -1,3 +1,24 @@
+# 2026-10-14：更多阵营更新与全部 Mod 来源复核
+
+更多阵营采用 [YUYUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) `19f8f2d853144c94cd71554c0989d7550ad9de65`，选择性移植新增装备、同构转职、完整技能魂灵、3/6档21格炮击、产层和莱茵科研数值。保留官方0.2.6、四人、八项默认关闭与谬因；不带来源六席、房间默认开启、Boss倍率和跨回合信标规则。完整玩法见 MORE-FACTIONS.md。
+
+伤害统计来源 [Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) 的 `b442d41ec719b7c85ac3b9468604acda9f4eff19` 提供旧浏览器视口兼容修复思路，本包按自身面板实现vh回退与dvh能力检测。其来源最新分支的扩展人数、登录门和AFK制度不属于本包伤害统计范围。
+
+本次检查区分已采用提交与来源最新HEAD：
+
+| 拓展 | 检查到的来源HEAD | 处理 |
+|---|---|---|
+| rhine | `19f8f2d853144c94cd71554c0989d7550ad9de65` | 同步装备、魂灵、炮击、科研机制及素材；不引入六席规则 |
+| relics | `7edfb9662f26a7b8e829f378a069a847b341a583` | 现有39件定义未变；新增收藏品与超限模拟暂未引入 |
+| operators | `97887cac3abc474f4933ac620ecbd043974c6f3d` | 来源HEAD与采用提交一致，无新内容 |
+| damage | `c7521500f506cdf02467bffa9c169a25e1a82cbb` | 移植面板旧浏览器兼容修复；其余独立制度不合入 |
+| lucky | `83bfd9de5f2b28870ea15946796a5abcb0fe87f7` | 保留五阶开局；来源只同步本体/ fullscreen，官方0.2.6已在本包 |
+| recruits | `c8141334266fd1d5971ed996d62ac59addb92b5d` | 来源HEAD与采用提交一致，无新内容 |
+| targeted | `68560faec2187a5ada5757e27b44aa195cbfdfe5` | 保留定向甄选；皮肤、控制台、自选祥子为来源独立系统，未引入 |
+| rhine_aphris | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | 来源HEAD与采用提交一致，无新内容 |
+
+所有来源作者与引用见 notices/SOURCES.md，最新HEAD检查不代表整包复制。
+
 # 2026-10-13：官方 0.2.6 兼容同步
 
 官方固定提交 `488db49f11daf862b67ce26fa4cf89aa6cba2466`，来源 [sganggs/Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol/releases/tag/v0.2.6)。同步音乐按需加载、WebSocket 压缩、哈希素材缓存、Brotli、入场动画与模型裁切/场景高台修复。朋友服压缩缓存仍限制为 16 MiB，保留拓展收藏品选择倒计时和八项默认关闭开关；其他拓展来源提交未变。本轮只适配官方更新。

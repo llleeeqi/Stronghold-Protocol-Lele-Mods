@@ -1,3 +1,5 @@
+> 2026-10-14：更多阵营选择性同步至 `19f8f2d853144c94cd71554c0989d7550ad9de65`，保留四人、默认关闭、谬因与官方0.2.6。伤害统计兼容修复来自 Stardust-minus 的 `b442d41ec719b7c85ac3b9468604acda9f4eff19`，适配本包面板布局。
+
 > 2026-10-13：本体固定版本更新到官方 0.2.6；拓展来源的采用提交保持不变，本轮仅做新版兼容。
 
 # 来源与署名
@@ -11,7 +13,7 @@
 | 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-09） |
 |---|---|---|
 | 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `488db49f11daf862b67ce26fa4cf89aa6cba2466` | `488db49f11daf862b67ce26fa4cf89aa6cba2466` |
-| 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` | `1d20c21a3a18519ab2965d15bc8e952c0e51ad99` |
+| 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `19f8f2d853144c94cd71554c0989d7550ad9de65` | `19f8f2d853144c94cd71554c0989d7550ad9de65` |
 | 谬因二技能（本整合归入莱茵生命） | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` |
 | 收藏品玩法（39 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `17691f155a8fe062d85aecfeec2abe50f0359009` | `cd46ac8bd79b34c9b20ff4c3c0fb62d1c25ab01b` |
 | 新干员包 | [remember-4 / Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | `97887cac3abc474f4933ac620ecbd043974c6f3d` | `97887cac3abc474f4933ac620ecbd043974c6f3d` |

@@ -7,7 +7,7 @@
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
 | 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
-| 更多阵营 | 莱茵生命：生态治疗/减速/护盾、能量充能、九人激光钻机；卡兹戴尔：10名成员、亡魂与众魂炮；保留谬因 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
+| 更多阵营 | 莱茵生命：生态治疗/减速/护盾、能量充能、九人激光钻机；卡兹戴尔：10名成员、完整技能魂灵、21格众魂炮与转职装备；保留谬因 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
 | 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
 | 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |
@@ -17,7 +17,7 @@
 
 游戏本体来自 [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。本仓库主要补充独立房间开关、+4 回合、多资料集联机适配、朋友服配置、界面整合与 Docker 部署流程。[完整来源、引用提交与移植范围](notices/SOURCES.md) 可供核对；引用不代表来源作者参与或认可本整合版。
 
-2026-10-13 已适配官方 **0.2.6**：同步静音免下载音乐、联机消息压缩、素材哈希长期缓存、场景高台与光照修复、干员入场动画及模型裁切修复。保留四人、服务器演算、八项默认关闭拓展和朋友服内存限制。拓展来源固定提交未变，详见 [更新说明](docs/MOD-UPDATES.md)；各介绍列明来源项目、作者和选择性移植范围。
+2026-10-14 已同步更多阵营来源 v0.2.4-rhine.3 的玩法到官方 **0.2.6** 基线：新增舍身刻印、众魂战刃及同构转职，魂灵完整继承原生技能/天赋/模组，卡兹戴尔改为3/6档、21格炮击仅误伤所属玩家。同步莱茵梅尔24/48层预算、多萝西科研攻击与钻机层数真伤，保留谬因、四人及八项默认关闭拓展。其他来源已检查，具体采用与未移植范围见 [更新说明](docs/MOD-UPDATES.md)。
 
 更多阵营的玩法与适配边界见 [更多阵营说明](docs/MORE-FACTIONS.md)；全部拓展的来源项目、作者和固定提交见 [来源与署名](notices/SOURCES.md)。
 

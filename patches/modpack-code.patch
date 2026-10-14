@@ -6131,7 +6131,7 @@ index 602ceae..3695cde 100644
      runInvariants();
      return res;
 diff --git a/server/match/bot.js b/server/match/bot.js
-index 4d02f57..a2bef3e 100644
+index 4d02f57..3d1e5c9 100644
 --- a/server/match/bot.js
 +++ b/server/match/bot.js
 @@ -83,9 +83,11 @@ import { ASPD_MIN } from '../sim/constants.js';
@@ -6167,7 +6167,7 @@ index 4d02f57..a2bef3e 100644
 +  // A drill is one locked target. Credit it conservatively only when this bounty is at least as tough as the wave.
 +  if (hp >= Math.max(...model.routes.map((r) => r.panelMaxHp || r.hp))) {
 +    const duration = route.tiles.length * tileTime + (held ? LAYOUT_PARAMS.hold : 0);
-+    for (const u of units) if (u.laser) exp += rhineLaserExposure(u.vs, duration, hp);
++    for (const u of units) if (u.laser) exp += rhineLaserExposure(u.vs, duration, hp, u.rec._rhineLayers);
 +  }
    return 1 - Math.exp(-exp / (BOUNTY_KILL * hp));
  }
@@ -6255,7 +6255,7 @@ index 4d02f57..a2bef3e 100644
 +    rec.stats.atk = attack * RB.energyPulseScale[stage];
 +    rec.stats.bat = Math.max(RB.energyPulseInterval, RB.energyCharges / chargeRate);
 +  } else {
-+    rec.stats.atk = attack * RB.laserBaseScale; rec.stats.bat = 1; rec._rhineLaser = true;
++    rec.stats.atk = attack * RB.laserBaseScale; rec.stats.bat = 1; rec._rhineLaser = true; rec._rhineLayers = Math.max(0, Number(ps.layers?.[RHINE_BOND]) || 0);
 +    rec.rangeGrid = [];
 +  }
 +  rec._botDpsId = `${piece.id}|${stage}|${rec.stats.atk}|${rec.stats.bat}`;
@@ -6263,13 +6263,13 @@ index 4d02f57..a2bef3e 100644
 +}
 +
 +/** Integrated drill damage for one uninterrupted target, including its own field's post-ramp HP damage. */
-+export function rhineLaserExposure(initialDps, seconds, maxHp = 0) {
++export function rhineLaserExposure(initialDps, seconds, maxHp = 0, layers = 0) {
 +  const duration = Math.max(0, Number(seconds) || 0);
 +  const ramp = Math.min(duration, RB.laserRampSeconds);
 +  const after = Math.max(0, duration - RB.laserRampSeconds);
 +  const rampFactor = 0.5 * RB.laserRampPerSecond * ramp * ramp;
 +  return initialDps * (duration + rampFactor + after * RB.laserRampPerSecond * RB.laserRampSeconds)
-+    + after * Math.max(0, maxHp) * RB.laserTrueHpRatio;
++    + after * Math.max(0, maxHp) * (RB.laserTrueHpRatio + Math.max(0, Number(layers) || 0) * RB.laserTrueHpRatioPerLayer);
 +}
 +
  /**
@@ -6321,7 +6321,7 @@ index 4d02f57..a2bef3e 100644
        }
 +      if (rt === laserTarget) {
 +        const duration = rt.tileTime * rt.tiles.length + (rt.dwell || 0);
-+        for (const u of this.units) if (u.laser) exp += rhineLaserExposure(u.dps, duration, rt.laserMaxHp || rt.hp) / Math.max(1, rt.n);
++        for (const u of this.units) if (u.laser) exp += rhineLaserExposure(u.dps, duration, rt.laserMaxHp || rt.hp, u.rec._rhineLayers) / Math.max(1, rt.n);
 +      }
        total += rt.n * (1 - Math.exp(-exp / (p.kill * rt.hp)));
      }
@@ -20352,6 +20352,831 @@ index 6b8c011..e2fe9b6 100644
  test('droppedEntries: leaves of the old manifest the new one lacks; build fields, additions and shape changes are no drops', () => {
    const prev = {
      version: 1, hash: 'a', generator: 'x', stats: { files: 3 },
+diff --git a/test/fixtures/aphris-cards.json b/test/fixtures/aphris-cards.json
+new file mode 100644
+index 0000000..bc979f3
+--- /dev/null
++++ b/test/fixtures/aphris-cards.json
+@@ -0,0 +1,819 @@
++{
++  "chess": {
++    "chess_rhine_aphris_a": {
++      "chessId": "chess_rhine_aphris_a",
++      "baseId": "chess_rhine_aphris_a",
++      "goldenId": "chess_rhine_aphris_b",
++      "isGolden": false,
++      "tier": 5,
++      "identifier": 129,
++      "isHidden": false,
++      "isDiy": false,
++      "visible": true,
++      "kitBaseId": "chess_rhine_aphris_a",
++      "chessType": "PRESET",
++      "shopSortId": 24,
++      "charId": "char_4229_aphris",
++      "name": "谬因",
++      "appellation": "Aphrissa",
++      "rarity": 6,
++      "profession": "CASTER",
++      "subProfessionId": "blastcaster",
++      "subProfessionName": "轰击术师",
++      "position": "RANGED",
++      "nationId": "columbia",
++      "bonds": [
++        "rhineShip"
++      ],
++      "garrisonIds": [],
++      "price": 4,
++      "sellPrice": 1,
++      "upgradeNum": 3,
++      "upgradeChessId": "chess_rhine_aphris_b",
++      "status": {
++        "phase": 2,
++        "level": 1,
++        "skillLevel": 4,
++        "equipLevel": 0
++      },
++      "stats": {
++        "maxHp": 1261,
++        "atk": 727,
++        "def": 107,
++        "res": 20,
++        "cost": 34,
++        "blockCnt": 1,
++        "bat": 2.9,
++        "aspd": 100,
++        "respawnTime": 70,
++        "spRecovery": 1,
++        "hpRecoveryPerSec": 0,
++        "moveSpeed": 1,
++        "tauntLevel": 0,
++        "massLevel": 0,
++        "deployLimit": 1,
++        "deckStack": 0
++      },
++      "immunities": {
++        "stun": false,
++        "silence": false,
++        "sleep": false,
++        "frozen": false,
++        "levitate": false
++      },
++      "rangeId": "5-1",
++      "rangeGrid": [
++        [
++          0,
++          0
++        ],
++        [
++          0,
++          1
++        ],
++        [
++          0,
++          2
++        ],
++        [
++          0,
++          3
++        ],
++        [
++          0,
++          4
++        ],
++        [
++          0,
++          5
++        ]
++      ],
++      "dmgType": "arts",
++      "attackKind": "ranged",
++      "projectile": "bolt",
++      "canHitFly": true,
++      "targetPriority": null,
++      "trait": {
++        "desc": "攻击造成超远距离的群体法术伤害",
++        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
++        "bb": {},
++        "bbStr": {},
++        "rangeGrid": null
++      },
++      "skill": {
++        "skillId": "skchr_aphris_2",
++        "iconId": "skchr_aphris_2",
++        "name": "临界瞬爆",
++        "level": 4,
++        "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力90%的法术伤害，光束可被我方干员改变方向",
++        "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>90%</>的法术伤害，光束可被我方干员改变方向",
++        "skillType": "MANUAL",
++        "durationType": "NONE",
++        "duration": 8,
++        "spType": "INCREASE_WITH_TIME",
++        "spCost": 22,
++        "initSp": 10,
++        "maxChargeTime": 1,
++        "increment": 1,
++        "bb": {
++          "atk_scale": 0.9,
++          "interval": 0.5
++        },
++        "bbStr": {},
++        "rangeId": null,
++        "rangeGrid": null,
++        "prefabId": "skchr_aphris_2",
++        "trigger": {
++          "rule": "DEFAULT",
++          "rawRule": "DEFAULT",
++          "customRangeGrid": null
++        },
++        "index": 1,
++        "overrideTokenKey": null
++      },
++      "talents": [
++        {
++          "index": 0,
++          "name": "链路协议",
++          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "bb": {
++            "cnt": 1,
++            "atk": 0.25
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": "token_10070_aphris_pc",
++          "hidden": false,
++          "fromModule": false
++        },
++        {
++          "index": 1,
++          "name": "取样优化",
++          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "bb": {
++            "magic_resist_penetrate_fixed": 10
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": null,
++          "hidden": false,
++          "fromModule": false
++        }
++      ],
++      "tokens": [
++        "token_10070_aphris_pc"
++      ],
++      "module": {
++        "id": "uniequip_002_aphris",
++        "name": "第三相态",
++        "type": "BLA-Y",
++        "level": 0,
++        "active": false
++      },
++      "assets": {
++        "avatar": "char_4229_aphris",
++        "portrait": "char_4229_aphris_1",
++        "spine": "char_4229_aphris",
++        "skillIcon": "skchr_aphris_1",
++        "subProfIcon": "sub_blastcaster_icon"
++      },
++      "skills": [
++        {
++          "skillId": "skchr_aphris_2",
++          "iconId": "skchr_aphris_2",
++          "name": "临界瞬爆",
++          "level": 4,
++          "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力90%的法术伤害，光束可被我方干员改变方向",
++          "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>90%</>的法术伤害，光束可被我方干员改变方向",
++          "skillType": "MANUAL",
++          "durationType": "NONE",
++          "duration": 8,
++          "spType": "INCREASE_WITH_TIME",
++          "spCost": 22,
++          "initSp": 10,
++          "maxChargeTime": 1,
++          "increment": 1,
++          "bb": {
++            "atk_scale": 0.9,
++            "interval": 0.5
++          },
++          "bbStr": {},
++          "rangeId": null,
++          "rangeGrid": null,
++          "prefabId": "skchr_aphris_2",
++          "trigger": {
++            "rule": "DEFAULT",
++            "rawRule": "DEFAULT",
++            "customRangeGrid": null
++          },
++          "index": 1,
++          "overrideTokenKey": null,
++          "isDefault": true
++        }
++      ],
++      "availableSkillIndices": [
++        1
++      ],
++      "extension": {
++        "id": "rhine-aphris",
++        "source": "SrC2O4/Stronghold-Protocol",
++        "sourceRevision": "c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88",
++        "supportedSkills": [
++          "skchr_aphris_2"
++        ]
++      }
++    },
++    "chess_rhine_aphris_b": {
++      "chessId": "chess_rhine_aphris_b",
++      "baseId": "chess_rhine_aphris_a",
++      "goldenId": "chess_rhine_aphris_b",
++      "isGolden": true,
++      "tier": 5,
++      "identifier": 262,
++      "isHidden": false,
++      "isDiy": false,
++      "visible": false,
++      "kitBaseId": "chess_rhine_aphris_a",
++      "chessType": "PRESET",
++      "shopSortId": 24,
++      "charId": "char_4229_aphris",
++      "name": "谬因",
++      "appellation": "Aphrissa",
++      "rarity": 6,
++      "profession": "CASTER",
++      "subProfessionId": "blastcaster",
++      "subProfessionName": "轰击术师",
++      "position": "RANGED",
++      "nationId": "columbia",
++      "bonds": [
++        "rhineShip"
++      ],
++      "garrisonIds": [],
++      "price": 4,
++      "sellPrice": 1,
++      "upgradeNum": 0,
++      "upgradeChessId": null,
++      "status": {
++        "phase": 2,
++        "level": 60,
++        "skillLevel": 7,
++        "equipLevel": 1
++      },
++      "stats": {
++        "maxHp": 1646,
++        "atk": 871,
++        "def": 121,
++        "res": 20,
++        "cost": 26,
++        "blockCnt": 1,
++        "bat": 2.9,
++        "aspd": 100,
++        "respawnTime": 70,
++        "spRecovery": 1,
++        "hpRecoveryPerSec": 0,
++        "moveSpeed": 1,
++        "tauntLevel": 0,
++        "massLevel": 0,
++        "deployLimit": 1,
++        "deckStack": 0
++      },
++      "immunities": {
++        "stun": false,
++        "silence": false,
++        "sleep": false,
++        "frozen": false,
++        "levitate": false
++      },
++      "rangeId": "5-1",
++      "rangeGrid": [
++        [
++          0,
++          0
++        ],
++        [
++          0,
++          1
++        ],
++        [
++          0,
++          2
++        ],
++        [
++          0,
++          3
++        ],
++        [
++          0,
++          4
++        ],
++        [
++          0,
++          5
++        ]
++      ],
++      "dmgType": "arts",
++      "attackKind": "ranged",
++      "projectile": "bolt",
++      "canHitFly": true,
++      "targetPriority": null,
++      "trait": {
++        "desc": "攻击造成超远距离的群体法术伤害",
++        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
++        "bb": {},
++        "bbStr": {},
++        "rangeGrid": null,
++        "moduleDesc": "部署费用减少",
++        "moduleDescRaw": "部署费用<@ba.kw>减少</>"
++      },
++      "skill": {
++        "skillId": "skchr_aphris_2",
++        "iconId": "skchr_aphris_2",
++        "name": "临界瞬爆",
++        "level": 7,
++        "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力120%的法术伤害，光束可被我方干员改变方向",
++        "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>120%</>的法术伤害，光束可被我方干员改变方向",
++        "skillType": "MANUAL",
++        "durationType": "NONE",
++        "duration": 8,
++        "spType": "INCREASE_WITH_TIME",
++        "spCost": 20,
++        "initSp": 15,
++        "maxChargeTime": 1,
++        "increment": 1,
++        "bb": {
++          "atk_scale": 1.2,
++          "interval": 0.5
++        },
++        "bbStr": {},
++        "rangeId": null,
++        "rangeGrid": null,
++        "prefabId": "skchr_aphris_2",
++        "trigger": {
++          "rule": "DEFAULT",
++          "rawRule": "DEFAULT",
++          "customRangeGrid": null
++        },
++        "index": 1,
++        "overrideTokenKey": null
++      },
++      "talents": [
++        {
++          "index": 0,
++          "name": "链路协议",
++          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "bb": {
++            "cnt": 1,
++            "atk": 0.25
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": "token_10070_aphris_pc",
++          "hidden": false,
++          "fromModule": false
++        },
++        {
++          "index": 1,
++          "name": "取样优化",
++          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "bb": {
++            "magic_resist_penetrate_fixed": 10
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": null,
++          "hidden": false,
++          "fromModule": false
++        }
++      ],
++      "tokens": [
++        "token_10070_aphris_pc"
++      ],
++      "module": {
++        "id": "uniequip_002_aphris",
++        "name": "第三相态",
++        "type": "BLA-Y",
++        "level": 1,
++        "active": true
++      },
++      "assets": {
++        "avatar": "char_4229_aphris_2",
++        "portrait": "char_4229_aphris_2",
++        "spine": "char_4229_aphris",
++        "skillIcon": "skchr_aphris_1",
++        "subProfIcon": "sub_blastcaster_icon"
++      },
++      "skills": [
++        {
++          "skillId": "skchr_aphris_2",
++          "iconId": "skchr_aphris_2",
++          "name": "临界瞬爆",
++          "level": 7,
++          "desc": "向前发射一道无限长直线的光束，每0.5秒造成攻击力120%的法术伤害，光束可被我方干员改变方向",
++          "descRaw": "向前发射一道无限长直线的光束，每<@ba.vup>0.5</>秒造成攻击力<@ba.vup>120%</>的法术伤害，光束可被我方干员改变方向",
++          "skillType": "MANUAL",
++          "durationType": "NONE",
++          "duration": 8,
++          "spType": "INCREASE_WITH_TIME",
++          "spCost": 20,
++          "initSp": 15,
++          "maxChargeTime": 1,
++          "increment": 1,
++          "bb": {
++            "atk_scale": 1.2,
++            "interval": 0.5
++          },
++          "bbStr": {},
++          "rangeId": null,
++          "rangeGrid": null,
++          "prefabId": "skchr_aphris_2",
++          "trigger": {
++            "rule": "DEFAULT",
++            "rawRule": "DEFAULT",
++            "customRangeGrid": null
++          },
++          "index": 1,
++          "overrideTokenKey": null,
++          "isDefault": true
++        }
++      ],
++      "statsBase": {
++        "maxHp": 1526,
++        "atk": 826,
++        "def": 121,
++        "res": 20,
++        "cost": 34,
++        "blockCnt": 1,
++        "bat": 2.9,
++        "aspd": 100,
++        "respawnTime": 70,
++        "spRecovery": 1,
++        "hpRecoveryPerSec": 0,
++        "moveSpeed": 1,
++        "tauntLevel": 0,
++        "massLevel": 0,
++        "deployLimit": 1,
++        "deckStack": 0
++      },
++      "traitBase": {
++        "desc": "攻击造成超远距离的群体法术伤害",
++        "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
++        "bb": {},
++        "bbStr": {},
++        "rangeGrid": null
++      },
++      "talentsBase": [
++        {
++          "index": 0,
++          "name": "链路协议",
++          "desc": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "descRaw": "可以使用一个持续时间25秒的“中继器”，能改变自身的攻击方向，且使该次攻击距离+2；“中继器”在场时，自身攻击力+25%",
++          "bb": {
++            "cnt": 1,
++            "atk": 0.25
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": "token_10070_aphris_pc",
++          "hidden": false,
++          "fromModule": false
++        },
++        {
++          "index": 1,
++          "name": "取样优化",
++          "desc": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "descRaw": "攻击范围内的友方干员攻击时无视敌方10点法术抗性",
++          "bb": {
++            "magic_resist_penetrate_fixed": 10
++          },
++          "bbStr": {},
++          "rangeGrid": null,
++          "tokenKey": null,
++          "hidden": false,
++          "fromModule": false
++        }
++      ],
++      "modules": [
++        {
++          "uniEquipId": "uniequip_002_aphris",
++          "name": "第三相态",
++          "typeName": "BLA-Y",
++          "typeIcon": "bla-y",
++          "icon": "uniequip_002_aphris",
++          "isDefault": true,
++          "level": 1,
++          "attr": {
++            "cost": -8,
++            "maxHp": 120,
++            "atk": 45
++          },
++          "traitOverride": {
++            "desc": "攻击造成超远距离的群体法术伤害",
++            "descRaw": "攻击造成<@ba.kw>超远距离的群体法术伤害</>",
++            "bb": {},
++            "bbStr": {},
++            "rangeGrid": null,
++            "moduleDesc": "部署费用减少",
++            "moduleDescRaw": "部署费用<@ba.kw>减少</>"
++          },
++          "talentChanges": []
++        }
++      ],
++      "availableSkillIndices": [
++        1
++      ],
++      "extension": {
++        "id": "rhine-aphris",
++        "source": "SrC2O4/Stronghold-Protocol",
++        "sourceRevision": "c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88",
++        "supportedSkills": [
++          "skchr_aphris_2"
++        ]
++      }
++    }
++  },
++  "tokens": {
++    "token_10070_aphris_pc": {
++      "tokenId": "token_10070_aphris_pc",
++      "kind": "summon",
++      "name": "中继器",
++      "appellation": "Repeater",
++      "desc": "不会受到攻击，可部署在地面或高台位",
++      "descRaw": "不会受到攻击，可部署在地面或高台位",
++      "profession": "TOKEN",
++      "subProfessionId": "notchar1",
++      "position": "ALL",
++      "displayType": null,
++      "placeable": true,
++      "ownerRange": false,
++      "owners": [
++        "chess_rhine_aphris_a",
++        "chess_rhine_aphris_b"
++      ],
++      "stats": {
++        "maxHp": 500,
++        "atk": 0,
++        "def": 0,
++        "res": 0,
++        "cost": 3,
++        "blockCnt": 0,
++        "bat": 1,
++        "aspd": 100,
++        "respawnTime": 30,
++        "spRecovery": 1,
++        "hpRecoveryPerSec": 0,
++        "moveSpeed": 1,
++        "tauntLevel": 0,
++        "massLevel": 0,
++        "deployLimit": 1,
++        "deckStack": 0
++      },
++      "rangeGrid": [
++        [
++          0,
++          0
++        ]
++      ],
++      "dmgType": "phys",
++      "attackKind": "ranged",
++      "projectile": "arrow",
++      "canHitFly": true,
++      "skill": null,
++      "deployLimit": 1,
++      "count": 1,
++      "abnormal": [],
++      "variants": {
++        "chess_rhine_aphris_a": {
++          "phase": 2,
++          "level": 1,
++          "stats": {
++            "maxHp": 500,
++            "atk": 0,
++            "def": 0,
++            "res": 0,
++            "cost": 3,
++            "blockCnt": 0,
++            "bat": 1,
++            "aspd": 100,
++            "respawnTime": 30,
++            "spRecovery": 1,
++            "hpRecoveryPerSec": 0,
++            "moveSpeed": 1,
++            "tauntLevel": 0,
++            "massLevel": 0,
++            "deployLimit": 1,
++            "deckStack": 0
++          },
++          "immunities": {
++            "stun": false,
++            "silence": false,
++            "sleep": false,
++            "frozen": false,
++            "levitate": false
++          },
++          "rangeGrid": [
++            [
++              0,
++              0
++            ]
++          ],
++          "trait": {
++            "desc": "不会受到攻击，可部署在地面或高台位",
++            "descRaw": "不会受到攻击，可部署在地面或高台位",
++            "bb": {},
++            "bbStr": {}
++          },
++          "dmgType": "phys",
++          "attackKind": "ranged",
++          "projectile": "arrow",
++          "canHitFly": true,
++          "targetPriority": null,
++          "skill": null,
++          "talents": [
++            {
++              "index": 0,
++              "name": "转向",
++              "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
++              "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
++              "bb": {
++                "duration": 25
++              },
++              "bbStr": {},
++              "rangeGrid": null,
++              "tokenKey": null,
++              "hidden": false,
++              "fromModule": false
++            }
++          ],
++          "count": 1,
++          "sources": [
++            "talent",
++            "display"
++          ],
++          "bySkill": {
++            "1": {
++              "skill": null,
++              "count": 1,
++              "sources": [
++                "talent",
++                "display"
++              ]
++            },
++            "2": {
++              "skill": null,
++              "count": 1,
++              "sources": [
++                "talent",
++                "display"
++              ]
++            }
++          }
++        },
++        "chess_rhine_aphris_b": {
++          "phase": 2,
++          "level": 60,
++          "stats": {
++            "maxHp": 500,
++            "atk": 0,
++            "def": 0,
++            "res": 0,
++            "cost": 3,
++            "blockCnt": 0,
++            "bat": 1,
++            "aspd": 100,
++            "respawnTime": 30,
++            "spRecovery": 1,
++            "hpRecoveryPerSec": 0,
++            "moveSpeed": 1,
++            "tauntLevel": 0,
++            "massLevel": 0,
++            "deployLimit": 1,
++            "deckStack": 0
++          },
++          "immunities": {
++            "stun": false,
++            "silence": false,
++            "sleep": false,
++            "frozen": false,
++            "levitate": false
++          },
++          "rangeGrid": [
++            [
++              0,
++              0
++            ]
++          ],
++          "trait": {
++            "desc": "不会受到攻击，可部署在地面或高台位",
++            "descRaw": "不会受到攻击，可部署在地面或高台位",
++            "bb": {},
++            "bbStr": {}
++          },
++          "dmgType": "phys",
++          "attackKind": "ranged",
++          "projectile": "arrow",
++          "canHitFly": true,
++          "targetPriority": null,
++          "skill": null,
++          "talents": [
++            {
++              "index": 0,
++              "name": "转向",
++              "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
++              "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
++              "bb": {
++                "duration": 25
++              },
++              "bbStr": {},
++              "rangeGrid": null,
++              "tokenKey": null,
++              "hidden": false,
++              "fromModule": false
++            }
++          ],
++          "count": 1,
++          "sources": [
++            "talent",
++            "display"
++          ],
++          "bySkill": {
++            "1": {
++              "skill": null,
++              "count": 1,
++              "sources": [
++                "talent",
++                "display"
++              ]
++            },
++            "2": {
++              "skill": null,
++              "count": 1,
++              "sources": [
++                "talent",
++                "display"
++              ]
++            }
++          },
++          "byModule": {
++            "none": {
++              "stats": {
++                "maxHp": 500,
++                "atk": 0,
++                "def": 0,
++                "res": 0,
++                "cost": 3,
++                "blockCnt": 0,
++                "bat": 1,
++                "aspd": 100,
++                "respawnTime": 30,
++                "spRecovery": 1,
++                "hpRecoveryPerSec": 0,
++                "moveSpeed": 1,
++                "tauntLevel": 0,
++                "massLevel": 0,
++                "deployLimit": 1,
++                "deckStack": 0
++              },
++              "immunities": {
++                "stun": false,
++                "silence": false,
++                "sleep": false,
++                "frozen": false,
++                "levitate": false
++              },
++              "trait": {
++                "desc": "不会受到攻击，可部署在地面或高台位",
++                "descRaw": "不会受到攻击，可部署在地面或高台位",
++                "bb": {},
++                "bbStr": {}
++              },
++              "talents": [
++                {
++                  "index": 0,
++                  "name": "转向",
++                  "desc": "能将谬因的攻击转向，且使该次攻击距离+2",
++                  "descRaw": "能将谬因的攻击转向，且使该次攻击距离+2",
++                  "bb": {
++                    "duration": 25
++                  },
++                  "bbStr": {},
++                  "rangeGrid": null,
++                  "tokenKey": null,
++                  "hidden": false,
++                  "fromModule": false
++                }
++              ]
++            }
++          }
++        }
++      },
++      "assets": {
++        "avatar": "token_10070_aphris_pc",
++        "spine": "token_10070_aphris_pc"
++      }
++    }
++  }
++}
 diff --git a/test/fixtures/kazdel-odda-r13.json b/test/fixtures/kazdel-odda-r13.json
 new file mode 100644
 index 0000000..2112b3f
@@ -21871,10 +22696,10 @@ index 652aff6..2d7b53e 100644
  
 diff --git a/test/kazdel_data.test.js b/test/kazdel_data.test.js
 new file mode 100644
-index 0000000..ee8a1e4
+index 0000000..dbb2e7e
 --- /dev/null
 +++ b/test/kazdel_data.test.js
-@@ -0,0 +1,218 @@
+@@ -0,0 +1,229 @@
 +import { test } from 'node:test';
 +import assert from 'node:assert/strict';
 +import { readFile } from 'node:fs/promises';
@@ -22040,7 +22865,16 @@ index 0000000..ee8a1e4
 +test('Kazdel data: the preserved official snapshot rebuilds the complete expansion tables offline', async () => {
 +  const rebuilt = Object.fromEntries(await Promise.all(names.map(async n => [n, await read(`data/vanilla/${n}`)])));
 +  await applyRhineData(rebuilt); await applyKazdelData(rebuilt, source);
-+  for (const n of names) assert.deepEqual(rebuilt[n], files[n], `${n} from the untouched official snapshot`);
++  // This package applies Aphris separately after the source Rhine/Kazdel builders.
++  const cards = await read('test/fixtures/aphris-cards');
++  for (const [id,c] of Object.entries(cards.chess)) rebuilt.chess[id] = c;
++  for (const [id,c] of Object.entries(cards.tokens)) rebuilt.tokens[id] = rebuilt.tokens[id]
++    ? {...rebuilt.tokens[id], owners:[...new Set([...(rebuilt.tokens[id].owners||[]),...c.owners])], variants:{...rebuilt.tokens[id].variants,...c.variants}} : c;
++  const bond = rebuilt.bonds.rhineShip;
++  for (const c of Object.values(cards.chess).filter(c=>!c.isGolden)) {
++    for (const key of ['members','chessIds','visibleMembers']) if (Array.isArray(bond[key]) && !bond[key].includes(c.chessId)) bond[key].push(c.chessId);
++  }
++  for (const n of names) assert.deepEqual(rebuilt[n], files[n], `${n} from the untouched official snapshot and pinned Aphris addon`);
 +});
 +
 +async function kazdelArtPaths() {
@@ -22064,7 +22898,9 @@ index 0000000..ee8a1e4
 +  return paths;
 +}
 +
-+test('Kazdel data: native portraits, skill/module icons and faction art all have asset mappings', async () => {
++test('Kazdel data: native portraits, skill/module icons and faction art all have asset mappings', {
++  skip: !existsSync(new URL('../public/assets/', import.meta.url)) && 'source-only checks do not run the native art downloader; validated on deployment',
++}, async () => {
 +  const paths = await kazdelArtPaths();
 +  assert.ok(paths.size > 100);
 +});
@@ -24590,7 +25426,7 @@ index 0000000..1411a1a
 +});
 diff --git a/test/match/rhineResearch.test.js b/test/match/rhineResearch.test.js
 new file mode 100644
-index 0000000..ffa4870
+index 0000000..ee64404
 --- /dev/null
 +++ b/test/match/rhineResearch.test.js
 @@ -0,0 +1,572 @@
@@ -24853,7 +25689,7 @@ index 0000000..ffa4870
 +    const tile = [...ps.deployMap()].find(([k]) => !ps.board.has(k) && canPlace(ps.deployMap(), position, ...parseKey(k)));
 +    return give(h.m, ps, id, 'board', parseKey(tile[0]));
 +  };
-+  for (const id of DATA.bonds[RHINE_BOND].visibleMembers.filter(id => !['char_135_halo', 'char_4048_doroth'].includes(DATA.chess[id].charId))) place(id);
++  for (const id of DATA.bonds[RHINE_BOND].visibleMembers.filter(id => !['char_135_halo', 'char_4048_doroth', 'char_4229_aphris'].includes(DATA.chess[id].charId))) place(id);
 +  assert.equal(ps.bonds[RHINE_BOND].count, 8, 'seven real Rhine operators plus Muelsyse harmony');
 +  const recruitId = Object.values(DATA.chess).find(c => c.visible && !c.isGolden && !c.bonds.includes(RHINE_BOND)).chessId;
 +  const recruit = place(recruitId);
@@ -26644,7 +27480,7 @@ index 0000000..12f6f60
 +});
 diff --git a/test/rhine_data.test.js b/test/rhine_data.test.js
 new file mode 100644
-index 0000000..294c7c2
+index 0000000..35341dc
 --- /dev/null
 +++ b/test/rhine_data.test.js
 @@ -0,0 +1,293 @@
@@ -26701,15 +27537,15 @@ index 0000000..294c7c2
 +  const laser = files.tokens.token_rhine_laser;
 +  assert.match(laser.desc, /只有一级/);
 +  assert.match(laser.desc, /最大生命值最高/);
-+  assert.match(laser.desc, /0\.5%/);
-+  assert.match(laser.desc, /本战场分摊/);
++  assert.match(laser.desc, /0\.05%＋每层科研0\.0005个百分点/);
++  assert.match(laser.desc, /完整共享最大生命值/);
 +});
 +test('Rhine data: device production, single-device inheritance and four attack per layer match the approved rules', () => {
 +  assert.equal(files.bonds.rhineShip.bb.atk_per_stack, 4);
 +  assert.match(files.bonds.rhineShip.desc, /每层科研增加4点/);
 +  for (const [suffix, layers, scale] of [['a', 1, 1], ['b', 2, 1.5]]) {
 +    const mayer = files.garrisons[`garrison_rhine_mayer_${suffix}`];
-+    assert.deepEqual(mayer.bb, { device_layers: layers });
++    assert.deepEqual(mayer.bb, { device_layers: layers, max_layer: layers * 24 });
 +    assert.match(mayer.desc, /身前一格.*有效工作/);
 +    assert.match(mayer.desc, /护盾净增加/);
 +    assert.match(mayer.desc, /累计3秒/);
@@ -26920,7 +27756,7 @@ index 0000000..294c7c2
 +    assert.equal(c.tier,4);assert.deepEqual(c.bonds,['rhineShip']);assert.deepEqual(c.tokens,[token]);
 +    assert.equal(c.talents[0].bb.cnt,count);assert.equal(c.talents[0].bb['attack@max_cnt'],2);
 +    assert.ok(c.talents[0].desc.includes(`同时最多部署${count}个`));
-+    assert.equal(g.effectKey,'RHINE_DOROTHY_TRAP_RESEARCH');assert.deepEqual(g.bb,{layer,max_layer:maxLayer});
++    assert.equal(g.effectKey,'RHINE_DOROTHY_ATTACK');assert.deepEqual(g.bb,{atk_per_layer: suffix==='a'?1:2});assert.match(g.desc,/陷阱不再提供科研/);
 +    for(const skillIndex of [0,1,2])for(const moduleId of suffix==='a'?['none']:['none','uniequip_002_doroth']){
 +      const owner=ds.getChess(id,{skillIndex,moduleId}),v=ds.getToken(token,id,{skillIndex,moduleId});
 +      assert.equal(owner.skill.id,`skchr_doroth_${skillIndex+1}`);assert.equal(owner.skill.trigger.rule,'SP_FULL');

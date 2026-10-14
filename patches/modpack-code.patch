@@ -28412,9 +28412,18 @@ index 0fe147f..2a3e20e 100644
  });
  
 diff --git a/test/ui/gameLogic.test.js b/test/ui/gameLogic.test.js
-index 302c05e..f2dbbd3 100644
+index 302c05e..5a72a60 100644
 --- a/test/ui/gameLogic.test.js
 +++ b/test/ui/gameLogic.test.js
+@@ -134,7 +134,7 @@ describe('phases', () => {
+     assert.deepEqual(roundResultBox(0), { title: '作战结束', micro: 'BATTLE OVER', tone: 'mint', sub: '全员无伤！', duration: RESULT_BOX_MS });
+     assert.deepEqual(roundResultBox(4), { title: '作战结束', micro: 'BATTLE OVER', tone: 'red', sub: '生命值减少 −4', duration: RESULT_BOX_MS });
+     assert.equal(roundResultBox(undefined).sub, '全员无伤！', 'an unknown loss reads as no loss');
+-    assert.equal(roundResultBox(-2).sub, '全员无伤！');
++    assert.equal(roundResultBox(-2).sub, '生命值增加 +2');
+     assert.equal(roundResultBox(2.7).sub, '生命值减少 −2');
+     // through t(): the English pack (public/i18n/en.json — no official EN wording in the data, a plain translation)
+     try {
 @@ -581,7 +581,23 @@ describe('drafts', () => {
      const sp2 = normalizeSp({ cards: [{}, {}], order: ['b', 'a'], turn: 0, picks: [{ playerId: 'b', idx: 1 }, { playerId: 'x', idx: 9 }] }, players);
      assert.equal(sp2.turnPid, 'b'); assert.equal(sp2.cards[1].takenBy, 'b'); assert.equal(sp2.pickOf.has('x'), false);

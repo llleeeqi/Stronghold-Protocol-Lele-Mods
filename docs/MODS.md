@@ -14,7 +14,7 @@
 |---|---|---|
 | 额外 4 回合 | 常规模式 14→18 回合、短单人 9→13 回合，Boss 仍在最后一关；默认关闭。 | 本整合包实现，沿用 [sganggs/Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) 的回合系统。 |
 | 更多阵营 | 莱茵生命与卡兹戴尔两组阵营、科研装置、亡魂与众魂炮；谬因按约定归入莱茵生命。 | [YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因二技能来自 [SrC2O4/Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol)。 |
-| 收藏品 | 战后奖励、逆风补给、护盾与本局增益。 | [UNDFFIO/Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc)。 |
+| 收藏品 | 46件战后收藏品：逆风补给、护盾、本局增益、一次复活、敌人转移及治疗屏障。 | [UNDFFIO/Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc)。 |
 | 新干员 | 结城理、娜仁图亚、予愿安洁莉娜与丰川祥子，含技能和模组。 | [remember-4/Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem)。 |
 | 伤害统计 | 显示实际扣血排行，召唤物归属干员，只保存本轮和上一轮。 | [Stardust-minus/Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol)。 |
 | 恭喜发财 | 每个席位随机获得不同五阶开局干员，照常消耗共享牌库。 | [RiZhiZhaoYi/Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol)。 |

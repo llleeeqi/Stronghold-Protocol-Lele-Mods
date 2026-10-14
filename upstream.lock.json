@@ -4,7 +4,7 @@
   "modpack_source_revision": "73720faf9beee30d718e472245bf8d8c3ff72273",
   "mods": {
     "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/19f8f2d853144c94cd71554c0989d7550ad9de65",
-    "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/17691f155a8fe062d85aecfeec2abe50f0359009",
+    "relics": "https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/7edfb9662f26a7b8e829f378a069a847b341a583",
     "operators": "https://github.com/remember-4/Stronghold-Protocol-Rem/tree/97887cac3abc474f4933ac620ecbd043974c6f3d",
     "damage": "https://github.com/Stardust-minus/Stronghold-Protocol/tree/9bb6b2d833978c0aa9ef1713ef188d6c1588169f",
     "lucky": "https://github.com/RiZhiZhaoYi/Stronghold-Protocol/tree/941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21",
@@ -17,8 +17,9 @@
     "rhine_gameplay_revision": "19f8f2d853144c94cd71554c0989d7550ad9de65",
     "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
     "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-    "scope": "Official 0.2.6; Rhine research balance, full native Kazdel soul kits, 3/6 tiers, own-player cannon fire and transfer equipment; four seats, eight default-off options, targeted first-slot weight 2.6. Other source changes audited; no six-seat or ascension rules.",
-    "damage_ui_revision": "b442d41ec719b7c85ac3b9468604acda9f4eff19"
+    "scope": "Official 0.2.6; Rhine research balance, full native Kazdel soul kits, 3/6 tiers, own-player cannon fire and transfer equipment; four seats, eight default-off options, targeted first-slot weight 2.6. Other source changes audited; no six-seat or ascension rules. 46 optional collectibles, including revival and wave redistribution; phone excluded; source ascension/lottery excluded.",
+    "damage_ui_revision": "b442d41ec719b7c85ac3b9468604acda9f4eff19",
+    "relics_revision": "7edfb9662f26a7b8e829f378a069a847b341a583"
   },
   "source_audit": {
     "date": "2026-10-14",

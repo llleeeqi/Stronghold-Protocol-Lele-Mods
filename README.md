@@ -8,7 +8,7 @@
 |---|---|---|
 | 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
 | 更多阵营 | 莱茵生命：生态治疗/减速/护盾、能量充能、九人激光钻机；卡兹戴尔：10名成员、完整技能魂灵、21格众魂炮与转职装备；保留谬因 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
-| 收藏品玩法 | 39 件收藏品，战后三选一，逆风补给与护盾，本局持续增益 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
+| 收藏品玩法 | 46 件收藏品，战后三选一；包含一次复活、敌人转移、治疗屏障与组合减伤，默认关闭 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |
 | 伤害统计 | 实际扣血排行，召唤物归属干员，保存本轮/上一轮，不写战绩 | [Stronghold-Protocol / Stardust-minus](https://github.com/Stardust-minus/Stronghold-Protocol) |
 | 恭喜发财 | 每席位随机不同五阶开局，照常消耗共享卡池份数 | [RiZhiZhaoYi](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) |
@@ -62,6 +62,7 @@ Compose 默认限制 640 MiB、Node heap 384 MiB、1 CPU，只读运行目录、
 - [Agent 操作说明](AGENTS.md)
 - [部署与更新流程](docs/DEPLOYMENT.md)
 - [Mod 分层与开关协议](docs/MODS.md)
+- [46件收藏品与新增玩法](docs/COLLECTIBLES.md)
 - [AI 托管、漏怪与实验结果](docs/AI-STATUS.md)
 - [来源与许可](notices/SOURCES.md)
 

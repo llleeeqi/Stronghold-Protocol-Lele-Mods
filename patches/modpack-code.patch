@@ -54374,10 +54374,18 @@ index 0000000..6b33752
 +  return chess;
 +}
 diff --git a/tools/fetch-assets.mjs b/tools/fetch-assets.mjs
-index dab8f52..b06884b 100644
+index dab8f52..a410ba9 100644
 --- a/tools/fetch-assets.mjs
 +++ b/tools/fetch-assets.mjs
-@@ -68,6 +68,7 @@ import { normalizeProxyPrefix } from './assets/sources.mjs';
+@@ -59,6 +59,7 @@
+ 
+ import { readFile, writeFile, mkdir, rename, readdir, unlink } from 'node:fs/promises';
+ import { existsSync, realpathSync } from 'node:fs';
++import { addKazdelArt } from './assets/kazdel-plan.mjs';
+ import { dirname, join, relative, sep } from 'node:path';
+ import { fileURLToPath, pathToFileURL } from 'node:url';
+ import { Downloader } from './assets/downloader.mjs';
+@@ -68,6 +69,7 @@ import { normalizeProxyPrefix } from './assets/sources.mjs';
  import { loadIndexes } from './assets/cache.mjs';
  import { indexAudio, VOICE_DIRS } from './assets/audio.mjs';
  import { buildPlan, VOICE_OPTIONAL_TREES } from './assets/plan.mjs';
@@ -54385,7 +54393,7 @@ index dab8f52..b06884b 100644
  import {
    processModels, findLocalEnemyModels, findLocalTokenModels, localSpineMeta, loadLocalSpines, LOCAL_ENEMY_SPINES_FILE,
    LOCAL_TOKEN_SPINES_FILE, LOCAL_ENEMY_SPINE_DIR, LOCAL_TOKEN_SPINE_DIR,
-@@ -216,7 +217,8 @@ export function dataExtras(backups, chess) {
+@@ -216,7 +218,8 @@ export function dataExtras(backups, chess) {
   * @returns {{dropped:string[], write:boolean}}
   */
  export function shrinkGuard(prev, next, { allowShrink = false, prune = false } = {}) {
@@ -54395,7 +54403,7 @@ index dab8f52..b06884b 100644
    return { dropped, write: dropped.length === 0 || !!allowShrink || !!prune };
  }
  
-@@ -433,8 +435,8 @@ async function main() {
+@@ -433,8 +436,8 @@ async function main() {
    const localTokenSpines = await syncLocalSpines(opts, 'token');
    const statsTemplate = await statsTemplateJobs(ROOT, { offline: opts.offline || opts.dryRun, log });
    const plan = buildPlan({
@@ -54406,12 +54414,15 @@ index dab8f52..b06884b 100644
      voiceSlots: opts.voiceAll ? null : undefined,
      optionalVoice: opts.optionalVoice,
      extraEnemyIds: Object.keys(dataEnemies || {}),
-@@ -501,7 +503,7 @@ async function main() {
+@@ -501,7 +504,10 @@ async function main() {
      root: ASSETS, spine: spine.entries, sourceOf: (rel) => dl.ledger.files[rel]?.url,
      ...(verifier ? { available: (rel) => dl.accepted.has(rel) } : null),
    });
 -  const body = resolved.value;
 +  const body = addRhineArt(resolved.value);
++  // Local faction art is supplied by the host bundle, outside public/assets.
++  // Preserve it before the ordinary shrink guard; missing files still refuse a shrink.
++  if (['bond.png', 'blade-v2.png', 'sigil-v2.png'].every(f => existsSync(join(ROOT, 'public/art/kazdel', f)))) addKazdelArt(body);
    tidyManifest(body);
    tidyVoiceTrees(body);
    const fontFaces = {};

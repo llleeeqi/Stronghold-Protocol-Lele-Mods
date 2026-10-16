@@ -49,5 +49,6 @@ bash scripts/activate.sh plugins-030
 - [更多阵营玩法](docs/MORE-FACTIONS.md)
 - [46件收藏品](docs/COLLECTIBLES.md)
 - [更新记录](docs/MOD-UPDATES.md)
+- [0.3.0 插件宿主验证记录](docs/TESTING-030.md)
 
-朋友服Compose默认640MiB内存、384MiB Node heap、1CPU、服务器演算、不写永久战绩。限制不是满载保证；活跃内容集会使用上游独立对局宿主。重启不恢复进行中的对局。上游插件工作台沿用本机/LAN访问规则。
+朋友服Compose默认640MiB物理内存、内存加swap总额1280MiB、主进程384MiB／对局子进程256MiB Node heap、1CPU、服务器演算、不写永久战绩。插件闲置缓存缩减；主机须已启用swap。限制不是满载保证；活跃内容集会使用上游独立对局宿主。重启不恢复进行中的对局。上游插件工作台沿用本机/LAN访问规则。

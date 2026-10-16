@@ -19,7 +19,7 @@ services:
       TRUST_PROXY: "0"
       TZ: Asia/Shanghai
     mem_limit: ${MEMORY_LIMIT:-640m}
-    memswap_limit: ${MEMORY_LIMIT:-640m}
+    memswap_limit: ${MEMORY_SWAP_LIMIT:-1280m}
     cpus: ${CPUS:-1.0}
     pids_limit: 64
     read_only: true

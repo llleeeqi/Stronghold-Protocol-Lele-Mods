@@ -352,6 +352,18 @@ index 0d99eef..7de1a99 100644
  
  本文数值来自官方数据表（`data/config.json` 等）与 [research](research/00-INDEX.md)；游戏内左下角 📖「玩法说明」有官方教程图（随素材一起下载；没下载到时显示文字要点）。操作方式见 [README · 操作](../README.md#操作)，键盘快捷键和修改方法见 [§11](#11-快捷键)。
  
+diff --git a/docs/PLUGINS.md b/docs/PLUGINS.md
+index 4c21813..cec0c90 100644
+--- a/docs/PLUGINS.md
++++ b/docs/PLUGINS.md
+@@ -1618,3 +1618,7 @@ which needs a real `node_modules` inside the checkout, as every sandbox test), `
+ a server path refused, preview writes nothing, import writes, a kit pack's script plugin and `noScripts`, a file list,
+ a path-escape name) and the browser test `test/ui/forge-import.e2e.test.js` (`SP_E2E=1`, including a read that starts
+ while a report is on screen and the no-scripts box; a sandbox that cannot open a browser leaves that file unrun).
++
++## Lele friend-server resource profile
++
++With `SP_FRIENDS=1`, the builder retains one recent composition and the room content service retains one unused set, in addition to held rooms. A match host uses a 256 MiB old-generation limit and exits after 30 seconds idle. These limits affect caches and process budgets only; content hashes, validation and held room snapshots are unchanged. The room panel stages choices locally and applies them together; applying has a separate 60-second request timeout and keeps a persistent error on failure.
 diff --git a/docs/RHINE.md b/docs/RHINE.md
 new file mode 100644
 index 0000000..0eb2106
@@ -546,6 +558,18 @@ index 0000000..25abbdd
 +    "https://prts.wiki/w/维什戴尔"
 +  ]
 +}
+diff --git a/docs/history/0.3.0.md b/docs/history/0.3.0.md
+index 68cf4ef..22f9106 100644
+--- a/docs/history/0.3.0.md
++++ b/docs/history/0.3.0.md
+@@ -4027,3 +4027,7 @@ not later, not without the skill's effects; 锡人 S1's zone as the flask's reac
+ time, not outside the skill, the procedural zone without the prefabs; 焰影苇草 S2's carrier strike by owner 'skill';
+ the summon pillar and the arrival bursts against the birth effect, not in a later frame, not without it). Golden:
+ unchanged (client only).
++
++### Lele integration: friend-server resource profile (2026-10-16)
++
++Repeated room-plugin changes exposed the upstream default caches and worker budgets exceeding the small friend-server container. The Lele host limits idle compositions and worker memory under `SP_FRIENDS=1` only; held rooms keep their snapshots. The room panel batches selections, gives plugin application its own bounded wait, and preserves errors and draft selection for retry. See the Lele appendix in `docs/PLUGINS.md` and the modkit deployment guide. Gameplay rules and wire schemas are unchanged.
 diff --git a/docs/rhine-backlog.json b/docs/rhine-backlog.json
 new file mode 100644
 index 0000000..5f9b773
@@ -1325,6 +1349,54 @@ index 0000000..a74fafd
 +  b.kill(body);
 +  return { b, roster, body };
 +}
+diff --git a/public/i18n/en.json b/public/i18n/en.json
+index f1f9cc2..5a99b47 100644
+--- a/public/i18n/en.json
++++ b/public/i18n/en.json
+@@ -1800,5 +1800,6 @@
+   "其余 {n} 个已移到 plugins/_removed/。": "The other {n} {n|was|were} moved to plugins/_removed/.",
+   "已移到 plugins/_removed/：{n} 个插件": "Moved to plugins/_removed/: {n} {n|plugin|plugins}",
+   "选中「{name}」": "Select \"{name}\"",
+-  "符号链接的插件文件夹不能在这里删除。": "A plugin folder that is a symbolic link cannot be deleted here."
++  "符号链接的插件文件夹不能在这里删除。": "A plugin folder that is a symbolic link cannot be deleted here.",
++  "插件未能应用：{reason}。选择已保留，请重试。": "Could not apply plugins: {reason}. Your selection was kept. Please retry."
+ }
+diff --git a/public/i18n/ja.json b/public/i18n/ja.json
+index 77a5f06..4f6dd71 100644
+--- a/public/i18n/ja.json
++++ b/public/i18n/ja.json
+@@ -1806,5 +1806,6 @@
+   "其余 {n} 个已移到 plugins/_removed/。": "残りの {n} 件は plugins/_removed/ に移しました。",
+   "已移到 plugins/_removed/：{n} 个插件": "plugins/_removed/ に移しました：プラグイン {n} 件",
+   "选中「{name}」": "「{name}」を選択",
+-  "符号链接的插件文件夹不能在这里删除。": "シンボリックリンクのプラグインフォルダーはここでは削除できません。"
++  "符号链接的插件文件夹不能在这里删除。": "シンボリックリンクのプラグインフォルダーはここでは削除できません。",
++  "插件未能应用：{reason}。选择已保留，请重试。": "プラグインを適用できませんでした：{reason}。選択内容は保持されています。再試行してください。"
+ }
+diff --git a/public/i18n/ko.json b/public/i18n/ko.json
+index e4fbe91..5534b2f 100644
+--- a/public/i18n/ko.json
++++ b/public/i18n/ko.json
+@@ -1802,5 +1802,6 @@
+   "其余 {n} 个已移到 plugins/_removed/。": "나머지 {n}개는 plugins/_removed/로 옮겼습니다.",
+   "已移到 plugins/_removed/：{n} 个插件": "plugins/_removed/로 옮김: 플러그인 {n}개",
+   "选中「{name}」": "[{name}] 선택",
+-  "符号链接的插件文件夹不能在这里删除。": "심볼릭 링크인 플러그인 폴더는 여기서 삭제할 수 없습니다."
++  "符号链接的插件文件夹不能在这里删除。": "심볼릭 링크인 플러그인 폴더는 여기서 삭제할 수 없습니다.",
++  "插件未能应用：{reason}。选择已保留，请重试。": "플러그인을 적용하지 못했습니다: {reason}. 선택 항목은 유지됩니다. 다시 시도하세요."
+ }
+diff --git a/public/i18n/zh-TW.json b/public/i18n/zh-TW.json
+index 28bafc8..3f88f5d 100644
+--- a/public/i18n/zh-TW.json
++++ b/public/i18n/zh-TW.json
+@@ -1804,5 +1804,6 @@
+   "其余 {n} 个已移到 plugins/_removed/。": "其餘 {n} 個已移到 plugins/_removed/。",
+   "已移到 plugins/_removed/：{n} 个插件": "已移到 plugins/_removed/：{n} 個插件",
+   "选中「{name}」": "選取「{name}」",
+-  "符号链接的插件文件夹不能在这里删除。": "符號連結的插件資料夾不能在這裡刪除。"
++  "符号链接的插件文件夹不能在这里删除。": "符號連結的插件資料夾不能在這裡刪除。",
++  "插件未能应用：{reason}。选择已保留，请重试。": "外掛未能套用：{reason}。選擇已保留，請重試。"
+ }
 diff --git a/public/index.html b/public/index.html
 index 42d4c57..2e48209 100644
 --- a/public/index.html
@@ -3986,7 +4058,7 @@ index 0000000..ef5840a
 +  return () => { unsubscribe(); enabled = false; apply(); observer.disconnect(); style.remove(); };
 +}
 diff --git a/public/js/ui/pluginPanel.js b/public/js/ui/pluginPanel.js
-index 870afcf..2e19a02 100644
+index 870afcf..4c70526 100644
 --- a/public/js/ui/pluginPanel.js
 +++ b/public/js/ui/pluginPanel.js
 @@ -9,7 +9,7 @@
@@ -4006,13 +4078,14 @@ index 870afcf..2e19a02 100644
  import { APP_VERSION } from '../../../shared/constants.js';
  import { html, Modal, Button, Icon } from './components.js';
  import { PluginSettings, settingsSelection } from './pluginSettings.js';
-@@ -100,12 +101,29 @@ function ModePicker({ room, f, busy, onPick }) {
+@@ -100,12 +101,30 @@ function ModePicker({ room, f, busy, onPick }) {
  export function PluginPanel({ open, room, myId, onClose }) {
    const cat = useStore((s) => s, Object.is, catalog);
    const installed = useStore(installedCount);
 -  const [busy, setBusy] = useState(null);
 +  const [requestBusy, setBusy] = useState(null);
 +  const [closing, setClosing] = useState(false);
++  const [applyError, setApplyError] = useState(null);
 +  const busy = requestBusy || (closing ? 'loading' : null);
 +  const loadedContent = useStore(s => s, Object.is, contentSet);
    const inFlight = useRef(false);
@@ -4037,7 +4110,7 @@ index 870afcf..2e19a02 100644
    const recIds = useStore((s) => s.ids, Object.is, uiRecommend);
    const isHost = !!(room && room.hostId != null && room.hostId === myId);
    const recommended = visibleRecommend(room, isHost, recIds);
-@@ -119,18 +137,26 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -119,18 +138,27 @@ export function PluginPanel({ open, room, myId, onClose }) {
    const classOf = (id) => cat.plugins.find((x) => x.id === id)?.class || f.plugins.find((x) => x.id === id)?.class || 'cosmetic';
    const anyContent = f.modded || offered.some((p) => ['content','script','trusted'].includes(p.class));
    /** room.setPlugins with these ids (one request at a time; `what`: the row — or 'reapply' — that shows it busy). */
@@ -4046,11 +4119,13 @@ index 870afcf..2e19a02 100644
      if (inFlight.current || !f.editable) return;
      inFlight.current = true;
      setBusy(what);
++    setApplyError(null);
      try {
 -      await net.request('room.setPlugins', { plugins: settingsSelection(ids, f.plugins, change) });
-+      await net.request('room.setPlugins', { plugins: selection });
+-    } catch (err) { toastError(err); } finally {
++      await net.request('room.setPlugins', { plugins: selection }, { timeout: 60000 });
 +      if (close && alive.current) setClosing(true);
-     } catch (err) { toastError(err); } finally {
++    } catch (err) { if (alive.current) setApplyError(err.message); toastError(err); } finally {
        inFlight.current = false;
        if (alive.current) setBusy(null);
      }
@@ -4067,7 +4142,7 @@ index 870afcf..2e19a02 100644
    // the room's mode (room.setMode, DESIGN §32.6)
    const pickMode = async (modeId) => {
      if (inFlight.current || !f.editable) return;
-@@ -142,17 +168,18 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -142,17 +170,19 @@ export function PluginPanel({ open, room, myId, onClose }) {
      }
    };
    // the same choice again (without a plugin the server no longer offers): the set of the files as they are now
@@ -4084,13 +4159,14 @@ index 870afcf..2e19a02 100644
        </p>
        ${anyContent ? html`<p class="set-hint">${t('改变玩法的插件会改变本房间的数据与规则；这样的对局为非官方对局，不计入统计总览。')}</p>` : null}
 +      ${f.editable ? html`<p class="set-hint" data-testid="plugin-draft-hint">${dirty ? t('选择尚未生效。完成选择后统一加载，所有玩家校验并准备后即可开局。') : t('勾选只暂存选择，完成选择后统一加载。关闭面板也会保存并加载。')}</p>` : null}
++      ${applyError ? html`<p class="set-hint is-warn" role="alert" data-testid="plugin-apply-error">${t('插件未能应用：{reason}。选择已保留，请重试。', { reason: applyError })}</p>` : null}
        <${ContentState} cs=${f.modded ? f.cs : null} />
 -      <${ModePicker} room=${room} f=${f} busy=${busy} onPick=${pickMode} />
 +      <${ModePicker} room=${room} f=${f} busy=${busy || (dirty ? 'draft' : null)} onPick=${pickMode} />
        ${f.inMatch ? html`<p class="set-hint">${t('模拟进行中，插件不能更改')}</p>`
          : f.editable ? null : html`<p class="set-hint">${t('由创建者设置')}</p>`}
        ${installed && cat.status === 'loading' && !rows.length ? html`<p class="set-hint">${t('正在读取插件列表…')}</p>` : null}
-@@ -160,8 +187,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -160,8 +190,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
        ${(!installed || cat.status === 'ready') && !rows.length ? html`<p class="set-hint">${t('本服务器没有可在房间中使用的插件')}</p>` : null}
        ${rows.length ? html`<ul class="plugpanel__list">
          ${rows.map((p) => {
@@ -4101,7 +4177,7 @@ index 870afcf..2e19a02 100644
            const content = ['content','script','trusted'].includes(p.class || classOf(p.id));
            // a gameplay plugin made for other game versions is refused (PLUGIN_INCOMPATIBLE): its switch only turns it off
            const blocked = content && p.compatible === false && !on;
-@@ -178,8 +205,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -178,8 +208,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
                  ${Number.isFinite(p.artBytes) ? html`<span class="num">${sizeText(p.artBytes)}</span>` : null}
                  ${p.missing ? html`<span>${t('本服务器已不再提供')}</span>` : null}
                </div>
@@ -5615,6 +5691,21 @@ index 61e6008..634a4cf 100644
    }
    get bandDraft() {
      const b = this.config.bandDraft && typeof this.config.bandDraft === 'object' ? this.config.bandDraft : {};
+diff --git a/server/match/host/index.js b/server/match/host/index.js
+index df61017..de6121b 100644
+--- a/server/match/host/index.js
++++ b/server/match/host/index.js
+@@ -53,8 +53,8 @@ export const HOST_DEFAULTS = Object.freeze({
+   maxWorkers: 4,
+   heartbeatMs: 1000,
+   watchdogMs: 10_000,
+-  idleMs: 10 * 60_000,
+-  resourceLimits: Object.freeze({ maxOldGenerationSizeMb: 768, maxYoungGenerationSizeMb: 64, stackSizeMb: 4 }),
++  idleMs: process.env.SP_FRIENDS === '1' ? 30_000 : 10 * 60_000,
++  resourceLimits: Object.freeze({ maxOldGenerationSizeMb: process.env.SP_FRIENDS === '1' ? 256 : 768, maxYoungGenerationSizeMb: process.env.SP_FRIENDS === '1' ? 32 : 64, stackSizeMb: 4 }),
+ });
+ 
+ /** An error the lobby turns into a refusal (start). */
 diff --git a/server/match/invariants.js b/server/match/invariants.js
 index 662f2f7..1a2f4a5 100644
 --- a/server/match/invariants.js
@@ -7394,7 +7485,7 @@ index e8258d0..c84a560 100644
        bonds: bondList(gd, ps.bonds).filter((b) => b.active || b.layers > 0),
        stats: {
 diff --git a/server/plugins/contentSet.js b/server/plugins/contentSet.js
-index f9e9974..3f7eb21 100644
+index f9e9974..295425e 100644
 --- a/server/plugins/contentSet.js
 +++ b/server/plugins/contentSet.js
 @@ -8,6 +8,9 @@ import { contentHashOf, canonicalJson, csUrlPart } from '../../shared/plugins/id
@@ -7407,7 +7498,16 @@ index f9e9974..3f7eb21 100644
  import { validateData } from '../../shared/plugins/validate.js';
  import { object, own, clone, problem, RECORD_MAPS, recordId, namespaceCollisions } from '../../shared/plugins/dataUtils.js';
  import { buildRecordOverlay, walkOverlay, getPath, applyRecordOverlay } from '../../shared/i18nData.js';
-@@ -267,8 +270,10 @@ function composeContentSet({ registry, ids = [] }) {
+@@ -19,6 +22,8 @@ import { browserScriptSources } from '../../shared/plugins/scriptLoad.js';
+ import { preflightScripts } from './scriptPreflight.js';
+ import { validateDsl, validatePrepSpec } from '../sim/content/dsl/validate.js';
+ 
++// Friend servers keep only the latest builder result; held rooms own their snapshots separately.
++const COMPOSITION_CACHE_MAX = process.env.SP_FRIENDS === '1' ? 1 : 32;
+ const bases = new WeakMap(), buffers = new WeakMap(), caches = new WeakMap();
+ function baseFor(registry) {
+   if (bases.has(registry)) return bases.get(registry);
+@@ -267,8 +272,10 @@ function composeContentSet({ registry, ids = [] }) {
      if (data === base.data || Object.isFrozen(data)) data = clone(data);
      data.dsl = table;
    }
@@ -7419,6 +7519,28 @@ index f9e9974..3f7eb21 100644
      if (problems.length) return { problems };
      data = { ...data, stages: { ...data.stages } };
      const routes = Object.values(data.waves).flatMap(w => [...(w.routes ?? []), ...(w.extraRoutes ?? [])]);
+@@ -344,7 +351,7 @@ function composeContentSet({ registry, ids = [] }) {
+   bodies.set('index.json', Buffer.from(JSON.stringify(index)));
+   buffers.set(set, bodies); cache.set(cs, set);
+   // [ASSUMED] Keep 32 recently constructed sets per registry. Callers may retain a set and its files indefinitely.
+-  if (cache.size > 32) cache.delete(cache.keys().next().value);
++  if (cache.size > COMPOSITION_CACHE_MAX) cache.delete(cache.keys().next().value);
+   return set;
+ }
+ 
+diff --git a/server/plugins/contentSets.js b/server/plugins/contentSets.js
+index b2b63d6..5604368 100644
+--- a/server/plugins/contentSets.js
++++ b/server/plugins/contentSets.js
+@@ -32,7 +32,7 @@ import { buildContentSet, contentSetFiles } from './contentSet.js';
+ 
+ const noopLog = { info() {}, warn() {}, error() {}, debug() {} };
+ /** Content sets kept that no room holds (their /cs/ files stay servable a while). [ASSUMED] */
+-export const MAX_KEPT = 8;
++export const MAX_KEPT = process.env.SP_FRIENDS === '1' ? 1 : 8;
+ /** Concurrent content sets with gameplay plugins rooms may hold (plugins/config.json limits.maxSets). [ASSUMED] */
+ export const DEFAULT_MAX_SETS = 4;
+ /** Builds remembered by what they were built from (resolve). */
 diff --git a/server/sim/Battle.js b/server/sim/Battle.js
 index e4b6507..2c6dfa3 100644
 --- a/server/sim/Battle.js
@@ -18970,33 +19092,6 @@ index 86632d3..39bf39a 100644
  const chess = load('chess');
  const backups = load('backups');
  const DATA = { chess, backups };
-diff --git a/test/docs-consistency.test.js b/test/docs-consistency.test.js
-index f8359fa..54bef45 100644
---- a/test/docs-consistency.test.js
-+++ b/test/docs-consistency.test.js
-@@ -35,9 +35,9 @@ import { NET_DEFAULTS } from '../server/net.js';
- import { SOLO_RECONNECT_FALLBACK_SEC } from '../server/lobby.js';
- import { moduleTypeIconUrl } from '../public/js/ui/assetUrls.js';
- import { validateC2S } from '../shared/protocol.js';
--import { ERR, PHASE } from '../shared/constants.js';
-+import { ERR, PHASE, SKILL_SUMMON_START_DEPLOY, BOND_LAYER_CAP, BOSS_HIT_LIMIT, layerGainRoom } from '../shared/constants.js';
- import { PROJECTILE_SPEEDS, BOOMERANG_RETURN_SPEED, ELEMENT, ELEMENT_ORDER, DOWN_STATE, BLOCK_RADIUS, FORCED_EXIT, ASPD_MIN, BOSS_POOL_MIN_HP, AUTO_OP_COOLDOWN, ALLY_COLLIDER_RADIUS } from '../server/sim/constants.js';
--import { SKILL_SUMMON_START_DEPLOY, BOND_LAYER_CAP, BOSS_HIT_LIMIT, layerGainRoom } from '../shared/constants.js';
-+
- import * as SIM_CONST from '../server/sim/constants.js';
- import { MULTI_ROUND_BOUNTY_BATTLES } from '../server/match/choices.js';
- import { SELF_BOUND, PART_TRANSFER, BLADE_TRANSFER, DRONE_LINK_BASE } from '../server/sim/content/bosses.js';
-@@ -508,8 +508,8 @@ test('user playtest #6 (DESIGN §20): summons, skill triggers, blocking, push fo
-   // the 机变 card and the card tap (§10 = §18.2 = §20.7)
-   assert.match(sec(10), /a tap anywhere on the card, its confirm strip included, is the card's tap/);
-   assert.match(sec(18), /Each card shows its full effect text \(§20\.7\)/);
--  // README: the test count stays in the right order of magnitude
--  assert.match(README, /约 31\d0 项/);
-+  // The fork reports a dated verification result; its test count grows with the extension.
-+  assert.match(README, /本地全量测试记录：\d+ 项/);
- });
- 
- test('user playtest #6 follow-up: a merge consuming a deployed copy puts the elite on that tile (code + research + META / PLAYING / SIM agree)', () => {
 diff --git a/test/dorothy-tier.test.js b/test/dorothy-tier.test.js
 new file mode 100644
 index 0000000..9c40721

@@ -3,7 +3,7 @@
   "manifest": 2,
   "id": "lele-lucky",
   "name": "恭喜发财",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "app": ">=0.3.0 <0.4.0",
   "api": 1,
   "class": "content",
@@ -11,14 +11,14 @@
     "room"
   ],
   "authors": [
-    "llleeeqi"
+    "RiZhiZhaoYi"
   ],
   "credits": [
-    "RiZhiZhaoYi"
+    "整合适配：llleeeqi"
   ],
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
-  "description": "每个席位随机不同五阶开局，仍使用共享卡池。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "description": "整合适配：llleeeqi。每个席位随机不同五阶开局，仍使用共享卡池。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
   "permissions": [
     "data.patch"
   ],

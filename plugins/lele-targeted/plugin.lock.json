@@ -1,7 +1,7 @@
 {
   "lock": 1,
   "id": "lele-targeted",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
@@ -13,8 +13,8 @@
       "bytes": 324
     },
     "plugin.json": {
-      "sha256": "3982002487b0ec489ec92439cb3a98b2196a5bd73dc62aa68dcf2d4a008da9e4",
-      "bytes": 726
+      "sha256": "f9d035183f137a376275732ae0d5f645f9d57bf3da586caa2085615cb598f3ff",
+      "bytes": 795
     }
   },
   "spine": {}

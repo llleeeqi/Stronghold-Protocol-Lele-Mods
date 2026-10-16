@@ -1,7 +1,7 @@
 {
   "lock": 1,
   "id": "lele-relics",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
@@ -13,8 +13,8 @@
       "bytes": 318
     },
     "plugin.json": {
-      "sha256": "478f904d215e41eebedef27f504a6fb9c17fddfc54aa207255b2636edd5b4f96",
-      "bytes": 701
+      "sha256": "c3e6c9c3a3cecb216874b584823ac7466f7968947a51decb4751a131d4397316",
+      "bytes": 770
     }
   },
   "spine": {}

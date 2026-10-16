@@ -22,6 +22,8 @@ bash scripts/activate.sh plugins-030
 
 已有本仓库0.3.0适配宿主时，可单独安装：`node scripts/install-plugins.mjs /abs/game lele-factions lele-relics`。安装器不覆盖其他插件或服务器配置。游戏默认端口33000；本地开服见 [启动端接入](docs/LOCAL-LAUNCHER.md)。
 
+插件面板的作者署名为各拓展来源作者；本仓库标注为整合适配。额外4回合由本仓库实现。
+
 ## 八个插件
 
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |

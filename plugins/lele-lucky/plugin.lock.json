@@ -1,7 +1,7 @@
 {
   "lock": 1,
   "id": "lele-lucky",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
@@ -13,8 +13,8 @@
       "bytes": 315
     },
     "plugin.json": {
-      "sha256": "ba894176f6ec4ce637cd985d620305a1112ef04804f896154a35d32b7165d074",
-      "bytes": 672
+      "sha256": "61131088f657bba60ee1d89a6a4f4351a7c3e7ef13c26b37089f37011e69208f",
+      "bytes": 741
     }
   },
   "spine": {}

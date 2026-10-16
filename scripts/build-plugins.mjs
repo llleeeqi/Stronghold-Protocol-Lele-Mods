@@ -58,7 +58,7 @@ for(const [key,name,description,authors]of specs){
   changes=diff(original,extendData(structuredClone(original)).data);
  }
  const payload={api:1,feature:key,flag:flagNames[key],changes};
- const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:'0.3.0',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors:['llleeeqi'],credits:authors,license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:description+' 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
+ const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:'0.3.1',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors,credits:authors.length===1&&authors[0]==='llleeeqi'?[]:['整合适配：llleeeqi'],license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:'整合适配：llleeeqi。'+description+' 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
  const patch={patch:1,ops:[{op:'merge',file:'config',path:['economy','leleHost','packages',key],value:payload}]};
  const sources=(sourceKeys[key]||[]).map(k=>`- ${lock.mods[k]}`).join('\n')||'- https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods';
  for(const [rel,v]of Object.entries({'plugin.json':manifest,'data/feature.json':patch}))fs.writeFileSync(path.join(folder,rel),JSON.stringify(v,null,2)+'\n');

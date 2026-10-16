@@ -3,7 +3,7 @@
   "manifest": 2,
   "id": "lele-targeted",
   "name": "定向甄选",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "app": ">=0.3.0 <0.4.0",
   "api": 1,
   "class": "content",
@@ -11,14 +11,14 @@
     "room"
   ],
   "authors": [
-    "llleeeqi"
+    "Strinova-xinghui"
   ],
   "credits": [
-    "Strinova-xinghui"
+    "整合适配：llleeeqi"
   ],
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
-  "description": "晋升奖励第一位向主要盟约加权2.6倍，后两位随机；第6回合起转职装备同样加权。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "description": "整合适配：llleeeqi。晋升奖励第一位向主要盟约加权2.6倍，后两位随机；第6回合起转职装备同样加权。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
   "permissions": [
     "data.patch"
   ],

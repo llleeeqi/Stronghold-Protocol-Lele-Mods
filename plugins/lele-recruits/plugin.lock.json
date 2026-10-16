@@ -1,7 +1,7 @@
 {
   "lock": 1,
   "id": "lele-recruits",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
@@ -13,8 +13,8 @@
       "bytes": 251402
     },
     "plugin.json": {
-      "sha256": "d13fd7c437db629a2b1f545136381e334dd33e67592624a97e4b11fdf6f9448b",
-      "bytes": 730
+      "sha256": "2bc1821731ac11ca2cb8dc7ecdcc2cb6827a1aa7b6505198dc3111f4bfde781a",
+      "bytes": 799
     }
   },
   "spine": {}

@@ -1,7 +1,7 @@
 {
   "lock": 1,
   "id": "lele-rounds",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
@@ -13,8 +13,8 @@
       "bytes": 100116
     },
     "plugin.json": {
-      "sha256": "0e9c754ded2ebdf83c79c5c75091f7b4e3a1ffe3cf08d2210eee5860e473c584",
-      "bytes": 696
+      "sha256": "b217ff0ccda5b88950393e5db1b6e7b52c0819516af78ff7b94bd382f420f940",
+      "bytes": 730
     }
   },
   "spine": {}

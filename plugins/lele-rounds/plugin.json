@@ -3,7 +3,7 @@
   "manifest": 2,
   "id": "lele-rounds",
   "name": "额外 4 回合",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "app": ">=0.3.0 <0.4.0",
   "api": 1,
   "class": "content",
@@ -13,12 +13,10 @@
   "authors": [
     "llleeeqi"
   ],
-  "credits": [
-    "llleeeqi"
-  ],
+  "credits": [],
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
-  "description": "常规14→18，短单人9→13；Boss最后一关，延长模式无额外隐藏关。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "description": "整合适配：llleeeqi。常规14→18，短单人9→13；Boss最后一关，延长模式无额外隐藏关。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
   "permissions": [
     "data.patch"
   ],

@@ -2847,138 +2847,19 @@ index fe266c8..9c9fa12 100644
      <span class="btn__label">${label}</span>
      ${n ? html`<span class="lo-entry__n num" aria-label=${t('{n} 名干员已调整', { n })}>${n}</span>` : null}
 diff --git a/public/js/screens/lobby.js b/public/js/screens/lobby.js
-index 7177752..2936234 100644
+index 7177752..192ddcb 100644
 --- a/public/js/screens/lobby.js
 +++ b/public/js/screens/lobby.js
-@@ -1,3 +1,4 @@
-+import { MOD_OPTIONS, ModCheckbox } from '../ui/modInfo.js';
- // Lobby screen: pick 独立模拟 / 同盟模拟 and a difficulty (标准/险境/绝境/终极), create a room,
- // or join one with a 同盟密钥 (recent codes remembered) — as a player (加入同盟) or in one of its MAX_SPECTATORS
- // spectator seats (观战: room.spectate, also while its match runs; community report #26, a remake feature — the
-@@ -14,6 +15,8 @@
- import { ResumeMatchButton } from '../ui/resumeMatch.js';
- import { useEffect, useRef, useState } from '../../vendor/hooks.module.js';
- import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_COLORS, ROOM_CODE_LEN, MAX_SEATS, MAX_SPECTATORS, modeIdFor, ERR } from '../../../shared/constants.js';
-+import { openingBanCounts } from '../../../shared/openingBans.js';
-+
- import { html, Button, Icon, MicroLabel, Panel, TextField, PingPill, AvatarFrame, Tooltip, Spinner, DifficultyIcon, doctorNo } from '../ui/components.js';
- import { toast, toastError } from '../ui/toasts.js';
- import { GuideButton } from '../ui/guide.js';
-@@ -92,23 +95,35 @@ const MODE_CARDS = [
-  * Text for a difficulty card, preferring data/config.json.
-  * @param {'solo'|'coop'} roomMode
-  * @param {string} difficulty
-- * @returns {{ code: string, desc: string, effects: string[], rounds: number, hidden: boolean, stageNote: string }}
-+ * @param {number|null} [playerCount] occupied human + AI seats; null while a co-op room has not been assembled
-+ * @returns {{ code: string, desc: string, effects: string[], rounds: number, hidden: boolean, stageNote: string,
-+ *   openingBans: { core: number, addon: number }, openingBanNote: string }}
-  */
--export function difficultyInfo(roomMode, difficulty) {
-+export function difficultyInfo(roomMode, difficulty, playerCount = null, doubleRounds = false) {
-   const fallback = MODE_TEXT[roomMode === 'solo' ? 'single' : 'multi'][difficulty] || { code: '', desc: '', effects: [] };
-   // modeIdFor() lower-cases the difficulty: never call it with a value the server did not validate.
--  const m = DIFFICULTIES.includes(difficulty) ? getMode(modeIdFor(roomMode, difficulty)) : null;
-+  const m = DIFFICULTIES.includes(difficulty) ? getMode(modeIdFor(roomMode, difficulty) + (doubleRounds ? '_double' : '')) : null;
-   const effects = Array.isArray(m?.effectDescList)
-     ? m.effectDescList.map((e) => String(e).replace(/^[·•・･\s]+/, '')).filter(Boolean)
-     : fallback.effects.map((e) => t(e));
-   const rounds = Number.isFinite(m?.lastRound) ? m.lastRound : roomMode === 'solo' && difficulty === 'FUNNY' ? 9 : 14;
-+  const knownCount = roomMode === 'solo' ? 1 : Number.isInteger(playerCount) && playerCount > 0 ? playerCount : null;
-+  const configuredBans = getConfig()?.bans;
-+  const openingBans = openingBanCounts(difficulty, knownCount ?? 1, configuredBans);
-+  const largeRoomNotes = knownCount == null ? [].map(count => {
-+    const bans = openingBanCounts(difficulty, count, configuredBans);
-+    return bans.core !== openingBans.core ? `${count} 人（含 AI）时核心 ${bans.core}` : '';
-+  }).filter(Boolean) : [];
-+  const conditional = largeRoomNotes.length ? `；${largeRoomNotes.join('；')}` : '';
-   return {
-     code: typeof m?.code === 'string' ? m.code : fallback.code,
-     desc: typeof m?.desc === 'string' ? m.desc : t(fallback.desc),
-     effects,
-     rounds,
--    hidden: difficulty !== 'FUNNY',
-+    hidden: m ? Number.isInteger(m.hiddenRound) && m.hiddenRound > 0 : difficulty !== 'FUNNY',
-     stageNote: stageNote(Array.isArray(m?.stages) && m.stages.length ? m.stages : STAGE_POOL[difficulty]),
-+    openingBans,
-+    openingBanNote: `开局 BAN：核心 ${openingBans.core} / 附加 ${openingBans.addon}${conditional}`,
-   };
- }
- 
-@@ -220,8 +235,8 @@ function ModeCard({ card, selected, onSelect }) {
-   </button>`;
- }
- 
--function DifficultyCard({ roomMode, difficulty, selected, onSelect }) {
--  const info = difficultyInfo(roomMode, difficulty);
-+function DifficultyCard({ roomMode, difficulty, selected, onSelect, doubleRounds }) {
-+  const info = difficultyInfo(roomMode, difficulty, null, doubleRounds);
-   return html`<button type="button" class=${`diff-card${selected ? ' is-selected' : ''}`}
-       style=${`--d-color:${DIFFICULTY_COLORS[difficulty]}`} onClick=${() => onSelect(difficulty)} aria-pressed=${selected ? 'true' : 'false'}>
-     <span class="diff-card__bar" aria-hidden="true"></span>
-@@ -234,8 +249,8 @@ function DifficultyCard({ roomMode, difficulty, selected, onSelect }) {
-       </span>
-     </span>
-     <span class="diff-card__desc">${info.desc}</span>
--    <span class="diff-card__effects">${info.effects.map((e) => html`<span key=${e}>${e}</span>`)}${info.stageNote ? html`<span key="stage" class="diff-card__stage"><${Icon} name="rook" />${info.stageNote}</span>` : null}</span>
--    <span class="diff-card__check" aria-hidden="true"><${Icon} name="check" /><span>${t('已选定')}</span></span>
-+    <span class="diff-card__effects">${info.effects.map((e) => html`<span key=${e}>${e}</span>`)}<span key="bans" class="diff-card__bans">${info.openingBanNote}</span>${info.stageNote ? html`<span key="stage" class="diff-card__stage"><${Icon} name="rook" />${info.stageNote}</span>` : null}</span>
-+    <span class="diff-card__check" aria-hidden="true"><${Icon} name="check" /><span>已选定</span></span>
-   </button>`;
- }
- 
-@@ -249,6 +264,10 @@ export function LobbyScreen() {
-     const d = loadPref('lobby.difficulty', 'FUNNY');
-     return DIFFICULTIES.includes(d) ? d : 'FUNNY';
-   });
-+  const [partyMods, setPartyMods] = useState({relics:false, operators:false, damage:false, lucky:false, recruits:false, targeted:false});
-+  const [rhineEnabled, setRhineEnabled] = useState(false);
-+  const [doubleRounds, setDoubleRounds] = useState(false);
-+  const [extensionsOpen, setExtensionsOpen] = useState(false);
-   const [code, setCode] = useState('');
-   const [busy, setBusy] = useState(null);
-   const [recent] = useState(recentRooms);
-@@ -272,7 +291,7 @@ export function LobbyScreen() {
-       if (alive.current) setBusy(null);
-     }
-   };
--  const create = () => run('create', () => net.request('room.create', { mode: roomMode, difficulty }));
-+  const create = () => run('create', () => net.request('room.create', { mode: roomMode, difficulty, doubleRounds, rhineEnabled, relicsEnabled: partyMods.relics, operatorsEnabled: partyMods.operators, damageEnabled: partyMods.damage, luckyEnabled: partyMods.lucky, recruitsEnabled: partyMods.recruits, targetedEnabled: partyMods.targeted }));
-   const join = (c = code) => {
-     // `onClick=${join}` hands the click EVENT as the first argument, and a default parameter only applies to
-     // `undefined` — codeArg keeps an event target out of the key and falls back to the input field
-@@ -322,6 +341,7 @@ export function LobbyScreen() {
-       </div>
-       <div class="topbar__right">
-         <${ResumeMatchButton} />
-+        <${Button} variant="secondary" size="sm" class="friend-extensions" onClick=${() => setExtensionsOpen(!extensionsOpen)} aria-expanded=${extensionsOpen}>拓展选项${doubleRounds ? " · +4回合" : ""}<//>
-         <${LoadoutButton} from="lobby" size="sm" class="lobby-loadout" label=${t('干员调配')} />
-         <button type="button" class="me-chip me-chip--btn stats-entry" onClick=${openStats} title=${t('统计数据')} aria-label=${t('统计数据')}>
-           <${AvatarFrame} size="sm" name=${me.name} seat=${0} self=${true} />
-@@ -335,6 +355,13 @@ export function LobbyScreen() {
-     </header>
+@@ -336,6 +336,7 @@ export function LobbyScreen() {
  
      <div class="lobby-body screen__scroll">
-+      ${extensionsOpen ? html`<section class="panel brackets friend-extensions-panel" style="grid-column:1/-1;padding:16px" aria-label="拓展选项">
-+        <div class="section-label">乐勒砳特供 · 拓展选项</div>
-+        <div class="friend-mod-grid">
-+          ${MOD_OPTIONS.map(([id,label,desc])=>html`<${ModCheckbox} key=${id} id=${id} label=${label} desc=${desc} checked=${id==='rounds'?doubleRounds:id==='rhine'?rhineEnabled:partyMods[id]} onChange=${value=>id==='rounds'?setDoubleRounds(value):id==='rhine'?setRhineEnabled(value):setPartyMods({...partyMods,[id]:value})} />`)}
-+        </div>
-+        <p class="t-lo">默认全部关闭，独立选择，可组合开启。房主在等待室也可切换，开局后锁定。</p>
-+      </section>` : null}
        <section class="lobby-left">
++        <p class="t-lo">玩法拓展请创建房间后，在等待室的插件面板中选择。</p>
          <div class="section-label"><span class="section-label__idx num">01</span>${t('模拟方式')}<${MicroLabel}>MODE<//></div>
          <div class="mode-cards">
-@@ -364,7 +391,7 @@ export function LobbyScreen() {
-       <section class="lobby-right">
-         <div class="section-label"><span class="section-label__idx num">02</span>${t('模拟难度')}<${MicroLabel}>DIFFICULTY<//></div>
-         <div class="diff-list">
--          ${DIFFICULTIES.map((d) => html`<${DifficultyCard} key=${d} roomMode=${roomMode} difficulty=${d} selected=${difficulty === d} onSelect=${pickDifficulty} />`)}
-+          ${DIFFICULTIES.map((d) => html`<${DifficultyCard} key=${d} roomMode=${roomMode} difficulty=${d} doubleRounds=${doubleRounds} selected=${difficulty === d} onSelect=${pickDifficulty} />`)}
-         </div>
-         <div class="create-box">
-           <${Tooltip} block=${true} text=${online ? null : t('正在连接服务器…')}>
+           ${MODE_CARDS.map((c) => html`<${ModeCard} key=${c.id} card=${c} selected=${roomMode === c.id} onSelect=${pickMode} />`)}
 diff --git a/public/js/store.js b/public/js/store.js
-index f82dfaa..aa2f6da 100644
+index f82dfaa..71ec016 100644
 --- a/public/js/store.js
 +++ b/public/js/store.js
 @@ -1,3 +1,4 @@
@@ -2995,15 +2876,6 @@ index f82dfaa..aa2f6da 100644
  
  /** Initial app state (exported for tests and resets). */
  export const initialState = Object.freeze({
-@@ -87,7 +88,7 @@ export const initialState = Object.freeze({
-   ticker: [],
-   emotes: [],
-   clock: { offset: 0, rtt: null, synced: false },
--  ui: { pendingJoin: null, restoring: false, buildStale: false },
-+  ui: { pendingJoin: null, restoring: false, buildStale: false, dataProfile: 'rhine', dataGeneration: 0, dataReady: false, dataError: null },
- });
- 
- /** The app-wide store singleton. */
 @@ -224,3 +225,5 @@ export function useStore(selector = identity, isEqual = Object.is, target = stor
  
    return value;
@@ -3306,54 +3178,6 @@ index 0000000..6330821
 +      </li>`;
 +    }) : html`<li class="damage-board__empty"><${Icon} name="sword" /><strong>${score.available ? '本轮尚未造成伤害' : '暂无此视角的战斗记录'}</strong><span>开战后自动记录干员输出</span></li>`}
 +  </ol>`;
-+}
-diff --git a/public/js/ui/dataProfile.js b/public/js/ui/dataProfile.js
-new file mode 100644
-index 0000000..08b12f7
---- /dev/null
-+++ b/public/js/ui/dataProfile.js
-@@ -0,0 +1,42 @@
-+// Room and match preparation share one profile barrier. Older asynchronous loads never unlock a newer profile.
-+import { dataProfileId } from '../data.js';
-+
-+/** A match's fixed profile also works when m.public arrives before the restored room.state. */
-+export function profileFromState(s) {
-+  const pub = s?.match?.public;
-+  const selected = pub && s?.room?.inMatch !== false ? pub : s?.room;
-+  return dataProfileId(selected?.rhineEnabled, selected?.operatorsEnabled, selected?.recruitsEnabled);
-+}
-+
-+export function createDataProfilePreparation({ cache, target, files }) {
-+  let pending = null;
-+  let pendingGeneration = -1;
-+  const update = (patch) => {
-+    const ui = target.get().ui || {};
-+    if (Object.entries(patch).some(([key, value]) => !Object.is(ui[key], value))) target.patch('ui', patch);
-+  };
-+  return function prepare(enabled) {
-+    const id = dataProfileId(enabled);
-+    // Publish the barrier before selectProfile notifies hooks or loadout synchronization.
-+    if (id !== cache.profileId) update({ dataReady: false, dataError: null });
-+    cache.selectProfile(id);
-+    const snapshot = cache.snapshot();
-+    const generation = snapshot.generation;
-+    const base = { dataProfile: id, dataGeneration: generation };
-+    if (snapshot.isReady(files)) {
-+      update({ ...base, dataReady: true, dataError: null });
-+      return Promise.resolve(true);
-+    }
-+    update({ ...base, dataReady: false });
-+    if (pending && pendingGeneration === generation) return pending;
-+    pendingGeneration = generation;
-+    pending = snapshot.loadAll(files).then(() => {
-+      if (generation !== cache.generation || id !== cache.profileId) return false;
-+      const missing = files.filter((name) => snapshot.status(name) === 'missing' && !snapshot.isReady(name));
-+      const ready = snapshot.isReady(files);
-+      update({ ...base, dataReady: ready, dataError: missing.length ? `模拟数据载入失败：${missing.join('、')}` : null });
-+      return ready;
-+    });
-+    return pending;
-+  };
 +}
 diff --git a/public/js/ui/detailPanel.js b/public/js/ui/detailPanel.js
 index 5f06866..e598243 100644
@@ -4161,6 +3985,133 @@ index 0000000..ef5840a
 +  const unsubscribe = store.subscribe(sync);
 +  return () => { unsubscribe(); enabled = false; apply(); observer.disconnect(); style.remove(); };
 +}
+diff --git a/public/js/ui/pluginPanel.js b/public/js/ui/pluginPanel.js
+index 870afcf..2e19a02 100644
+--- a/public/js/ui/pluginPanel.js
++++ b/public/js/ui/pluginPanel.js
+@@ -9,7 +9,7 @@
+ //     authors, size and a 非官方 mark; 「自动」 on one switched on because another needs it; the warnings of the room's set
+ //     (two plugins change the same art — the later one applies; a plugin made for other game versions, still usable:
+ //     art never changes a battle). The host's switch sends room.setPlugins with the plugins it wants (the server adds
+-//     what they require); during a match it is read-only. 「重新应用」 (the host, a room with plugins) sends the same
++//     what they require), once after the host finishes selecting; during a match it is read-only. 「重新应用」 (the host, a room with plugins) sends the same
+ //     choice again: when a plugin's files changed on the server since (the lobby tells the host: an m.toast), that
+ //     makes the set of the files as they are now. A content plugin changes the room's gameplay (unofficial: 改变玩法, its
+ //     match stays out of the statistics overview); one made for other game versions cannot be switched on. With gameplay
+@@ -24,6 +24,7 @@
+ // here. Texts go through t() (docs/I18N.md).
+ 
+ import { useEffect, useRef, useState } from '../../vendor/hooks.module.js';
++import { resolvePluginOrder } from '../../../shared/plugins/order.js';
+ import { APP_VERSION } from '../../../shared/constants.js';
+ import { html, Modal, Button, Icon } from './components.js';
+ import { PluginSettings, settingsSelection } from './pluginSettings.js';
+@@ -100,12 +101,29 @@ function ModePicker({ room, f, busy, onPick }) {
+ export function PluginPanel({ open, room, myId, onClose }) {
+   const cat = useStore((s) => s, Object.is, catalog);
+   const installed = useStore(installedCount);
+-  const [busy, setBusy] = useState(null);
++  const [requestBusy, setBusy] = useState(null);
++  const [closing, setClosing] = useState(false);
++  const busy = requestBusy || (closing ? 'loading' : null);
++  const loadedContent = useStore(s => s, Object.is, contentSet);
+   const inFlight = useRef(false);
+   const alive = useRef(true);
+   // the catalogue — again each time the panel opens (a plugin dropped in meanwhile shows), never on a server without any
+   useEffect(() => { alive.current = true; if (installed) loadCatalog({ force: true }); return () => { alive.current = false; }; }, [installed]);
+   const f = roomPluginFacts(room, myId);
++  // Editing is local: build/download just once when the host finishes selecting.
++  const signature = JSON.stringify(settingsSelection(f.chosen, f.plugins));
++  const [draft, setDraft] = useState(() => settingsSelection(f.chosen, f.plugins));
++  useEffect(() => { setDraft(settingsSelection(f.chosen, f.plugins)); }, [room?.id, room?.hostId, f.inMatch, signature]);
++  const dirty = JSON.stringify(draft) !== signature;
++  const ids = draft.map(p => p.id);
++  const resolved = resolvePluginOrder(ids, id => roomPlugins(cat.plugins).find(p => p.id === id) || null);
++  const selected = new Set(resolved.order || ids);
++  const automatic = new Set(resolved.auto || []);
++  useEffect(() => {
++    if (!closing || requestBusy) return;
++    if (!f.modded || (loadedContent.cs === f.cs && loadedContent.status === 'ready')) onClose();
++    else if (loadedContent.cs === f.cs && loadedContent.status === 'failed') setClosing(false);
++  }, [closing, requestBusy, f.modded, f.cs, loadedContent.cs, loadedContent.status]);
+   const recIds = useStore((s) => s.ids, Object.is, uiRecommend);
+   const isHost = !!(room && room.hostId != null && room.hostId === myId);
+   const recommended = visibleRecommend(room, isHost, recIds);
+@@ -119,18 +137,26 @@ export function PluginPanel({ open, room, myId, onClose }) {
+   const classOf = (id) => cat.plugins.find((x) => x.id === id)?.class || f.plugins.find((x) => x.id === id)?.class || 'cosmetic';
+   const anyContent = f.modded || offered.some((p) => ['content','script','trusted'].includes(p.class));
+   /** room.setPlugins with these ids (one request at a time; `what`: the row — or 'reapply' — that shows it busy). */
+-  const send = async (ids, what, change = null) => {
++  const send = async (selection, what, close = false) => {
+     if (inFlight.current || !f.editable) return;
+     inFlight.current = true;
+     setBusy(what);
+     try {
+-      await net.request('room.setPlugins', { plugins: settingsSelection(ids, f.plugins, change) });
++      await net.request('room.setPlugins', { plugins: selection });
++      if (close && alive.current) setClosing(true);
+     } catch (err) { toastError(err); } finally {
+       inFlight.current = false;
+       if (alive.current) setBusy(null);
+     }
+   };
+-  const toggle = (id, on) => send(nextChoice(f.chosen, id, on, offeredIds), id);
++  const toggle = (id, on) => setDraft(current => settingsSelection(
++    nextChoice(current.map(p => p.id), id, on, offeredIds), [...current, ...f.plugins]));
++  // Escape/backdrop/Done all commit a pending choice; never silently start with the old set.
++  const finish = () => {
++    if (inFlight.current || closing) return;
++    if (dirty && f.editable) return send(draft, 'apply', true);
++    onClose();
++  };
+   // the room's mode (room.setMode, DESIGN §32.6)
+   const pickMode = async (modeId) => {
+     if (inFlight.current || !f.editable) return;
+@@ -142,17 +168,18 @@ export function PluginPanel({ open, room, myId, onClose }) {
+     }
+   };
+   // the same choice again (without a plugin the server no longer offers): the set of the files as they are now
+-  const reapply = () => send(f.chosen.filter((x) => !offeredIds || offeredIds.has(x)), 'reapply');
+-  return html`<${Modal} open=${open} onClose=${onClose} title=${t('插件')} micro="PLUGINS" width="7.4rem"
+-      actions=${html`<${Button} variant="primary" icon="check" onClick=${onClose}>${t('完成')}<//>`}>
++  const reapply = () => send(draft.filter(p => !offeredIds || offeredIds.has(p.id)), 'reapply');
++  return html`<${Modal} open=${open} onClose=${finish} title=${t('插件')} micro="PLUGINS" width="7.4rem"
++      actions=${html`<${Button} variant="primary" icon="check" disabled=${!!busy} loading=${!!busy} data-testid="plugin-apply" onClick=${finish}>${busy ? t('正在启动插件…') : dirty ? t('加载所选插件') : t('完成')}<//>`}>
+     <div class="plugpanel" data-testid="plugin-panel">
+       <p class="plugpanel__lead">
+         <span class=${cx('plugtag plugtag--static', f.count && 'is-modded', f.modded && 'is-unofficial')}>${f.count ? t('插件 ×{n}', { n: f.count }) : t('原版')}</span>
+         ${t('房间的外观插件只改变画面和声音，不影响战斗；插件为非官方制作。')}
+       </p>
+       ${anyContent ? html`<p class="set-hint">${t('改变玩法的插件会改变本房间的数据与规则；这样的对局为非官方对局，不计入统计总览。')}</p>` : null}
++      ${f.editable ? html`<p class="set-hint" data-testid="plugin-draft-hint">${dirty ? t('选择尚未生效。完成选择后统一加载，所有玩家校验并准备后即可开局。') : t('勾选只暂存选择，完成选择后统一加载。关闭面板也会保存并加载。')}</p>` : null}
+       <${ContentState} cs=${f.modded ? f.cs : null} />
+-      <${ModePicker} room=${room} f=${f} busy=${busy} onPick=${pickMode} />
++      <${ModePicker} room=${room} f=${f} busy=${busy || (dirty ? 'draft' : null)} onPick=${pickMode} />
+       ${f.inMatch ? html`<p class="set-hint">${t('模拟进行中，插件不能更改')}</p>`
+         : f.editable ? null : html`<p class="set-hint">${t('由创建者设置')}</p>`}
+       ${installed && cat.status === 'loading' && !rows.length ? html`<p class="set-hint">${t('正在读取插件列表…')}</p>` : null}
+@@ -160,8 +187,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
+       ${(!installed || cat.status === 'ready') && !rows.length ? html`<p class="set-hint">${t('本服务器没有可在房间中使用的插件')}</p>` : null}
+       ${rows.length ? html`<ul class="plugpanel__list">
+         ${rows.map((p) => {
+-          const on = f.on.has(p.id);
+-          const auto = f.auto.has(p.id);
++          const on = f.editable ? selected.has(p.id) : f.on.has(p.id);
++          const auto = f.editable ? automatic.has(p.id) : f.auto.has(p.id);
+           const content = ['content','script','trusted'].includes(p.class || classOf(p.id));
+           // a gameplay plugin made for other game versions is refused (PLUGIN_INCOMPATIBLE): its switch only turns it off
+           const blocked = content && p.compatible === false && !on;
+@@ -178,8 +205,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
+                 ${Number.isFinite(p.artBytes) ? html`<span class="num">${sizeText(p.artBytes)}</span>` : null}
+                 ${p.missing ? html`<span>${t('本服务器已不再提供')}</span>` : null}
+               </div>
+-              ${on && p.settings ? html`<${PluginSettings} definitions=${p.settings} values=${f.plugins.find(x => x.id === p.id)?.settings || {}}
+-                disabled=${!f.editable || !!busy || p.missing} onSave=${settings => send([...new Set([...f.chosen, p.id])], p.id, { id: p.id, settings })} />` : null}
++              ${on && p.settings ? html`<${PluginSettings} definitions=${p.settings} values=${draft.find(x => x.id === p.id)?.settings || f.plugins.find(x => x.id === p.id)?.settings || {}}
++                disabled=${!f.editable || !!busy || p.missing} onSave=${settings => setDraft(current => settingsSelection([...new Set([...current.map(x => x.id), p.id])], [...current, ...f.plugins], { id: p.id, settings }))} />` : null}
+               ${p.compatible === false ? html`<div class="plugrow__warn">${content
+                 ? t('适配 {app}，本服务器是 {version}（改变玩法的插件不能启用）', { app: p.app || '', version: APP_VERSION })
+                 : t('适配 {app}，本服务器是 {version}（外观插件，仍可使用）', { app: p.app || '', version: APP_VERSION })}</div>` : null}
 diff --git a/public/js/ui/relic-digits.ttf b/public/js/ui/relic-digits.ttf
 new file mode 100644
 index 0000000000000000000000000000000000000000..9adc2b004cf6c0c9d0c9104fedae0a5ea04a46c4
@@ -27684,333 +27635,6 @@ index 0000000..dd90add
 +  assert.match(component, /share\.toFixed\(1\)/);
 +  assert.match(component, /aria-label="输出统计"/);
 +});
-diff --git a/test/ui/data-profile.browser.test.js b/test/ui/data-profile.browser.test.js
-new file mode 100644
-index 0000000..1024b40
---- /dev/null
-+++ b/test/ui/data-profile.browser.test.js
-@@ -0,0 +1,83 @@
-+// Opt-in: SP_E2E=1 node --test test/ui/data-profile.browser.test.js
-+// Isolated browser hooks with deferred fetches: no game session or production data is changed.
-+import { test } from 'node:test';
-+import assert from 'node:assert/strict';
-+import { createServer } from 'node:http';
-+import { readFileSync, existsSync } from 'node:fs';
-+import path from 'node:path';
-+import { fileURLToPath } from 'node:url';
-+
-+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-+const CHROME = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-+const enabled = process.env.SP_E2E === '1' && existsSync(CHROME);
-+
-+test('mounted browser data hooks switch profiles, keep old in-flight work isolated and refresh memoized lookups when returning to a cached profile',
-+  { skip: !enabled && 'set SP_E2E=1 (needs Chrome)', timeout: 30000 }, async () => {
-+    const srv = createServer((req, res) => {
-+      if (req.url === '/') { res.setHeader('Content-Type', 'text/html'); res.end('<!doctype html><body><div id="app"></div>'); return; }
-+      const url = new URL(req.url, 'http://localhost');
-+      const file = path.resolve(ROOT, url.pathname.startsWith('/shared/') ? `.${url.pathname}` : `public${url.pathname}`);
-+      if (!file.startsWith(ROOT + path.sep) || !existsSync(file)) { res.statusCode = 404; res.end(); return; }
-+      res.setHeader('Content-Type', file.endsWith('.js') ? 'text/javascript' : 'text/plain');
-+      res.end(readFileSync(file));
-+    });
-+    await new Promise(resolve => srv.listen(0, '127.0.0.1', resolve));
-+    let browser;
-+    try {
-+      const puppeteer = (await import('puppeteer-core')).default;
-+      browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-first-run', '--no-sandbox'] });
-+      const page = await browser.newPage();
-+      const errors = [];
-+      page.on('pageerror', err => errors.push(err.message));
-+      await page.goto(`http://127.0.0.1:${srv.address().port}/`);
-+      await page.evaluate(async () => {
-+        const { data } = await import('/js/data.js');
-+        const { useGameData } = await import('/js/ui/gameComponents.js');
-+        const { render, h } = await import('/vendor/preact.module.js');
-+        const calls = [], waiting = new Map();
-+        globalThis.fetch = url => {
-+          calls.push(url);
-+          return new Promise(resolve => waiting.set(url, resolve));
-+        };
-+        function Panel({ id }) {
-+          const gd = useGameData();
-+          return h('output', { id }, gd.ready ? `${gd.config.profile}:${gd.chess('chess_test_a').tier}:${gd.chess('chess_rhine_a') ? 'extra' : 'original'}` : 'loading');
-+        }
-+        render(h('div', null, h(Panel, { id: 'a' }), h(Panel, { id: 'b' })), document.getElementById('app'));
-+        globalThis.__profileHarness = { data, calls,
-+          finish(prefix, profile, tier) {
-+            for (const [url, resolve] of waiting) {
-+              if (prefix === '/data/' ? url.includes('/vanilla/') : !url.startsWith(prefix)) continue;
-+              const name = url.split('/').pop();
-+              const body = name === 'chess.json' ? {
-+                chess_test_a: { chessId: 'chess_test_a', tier },
-+                ...(profile === 'rhine' ? { chess_rhine_a: { chessId: 'chess_rhine_a', tier: 5 } } : {}),
-+              } : { profile };
-+              resolve({ ok: true, status: 200, json: async () => body });
-+              waiting.delete(url);
-+            }
-+          },
-+        };
-+      });
-+      await page.waitForFunction(() => globalThis.__profileHarness.calls.includes('/data/chess.json'));
-+      await page.evaluate(() => globalThis.__profileHarness.data.selectProfile(false));
-+      await page.waitForFunction(() => globalThis.__profileHarness.calls.includes('/data/vanilla/chess.json'));
-+      await page.evaluate(() => globalThis.__profileHarness.finish('/data/', 'rhine', 3));
-+      assert.deepEqual(await page.$$eval('output', rows => rows.map(row => row.textContent)), ['loading', 'loading']);
-+      await page.evaluate(() => globalThis.__profileHarness.finish('/data/vanilla/', 'vanilla', 2));
-+      await page.waitForFunction(() => document.getElementById('a').textContent === 'vanilla:2:original');
-+      const count = await page.evaluate(() => globalThis.__profileHarness.calls.length);
-+      await page.evaluate(() => globalThis.__profileHarness.data.selectProfile(true));
-+      await page.waitForFunction(() => document.getElementById('a').textContent === 'rhine:3:extra');
-+      assert.deepEqual(await page.$$eval('output', rows => rows.map(row => row.textContent)), ['rhine:3:extra', 'rhine:3:extra']);
-+      const calls = await page.evaluate(() => globalThis.__profileHarness.calls);
-+      assert.equal(calls.length, count, 'the cached profile is reused');
-+      assert.equal(calls.filter(url => url === '/data/chess.json').length, 1, 'two hooks share their download');
-+      assert.equal(calls.filter(url => url === '/data/vanilla/chess.json').length, 1);
-+      assert.equal(calls.filter(url => url === '/data/assets.json').length, 1, 'art is shared across profiles');
-+      assert.deepEqual(errors, []);
-+    } finally {
-+      await browser?.close();
-+      await new Promise(resolve => srv.close(resolve));
-+    }
-+  });
-diff --git a/test/ui/data-profile.test.js b/test/ui/data-profile.test.js
-new file mode 100644
-index 0000000..faa0867
---- /dev/null
-+++ b/test/ui/data-profile.test.js
-@@ -0,0 +1,232 @@
-+import { test } from 'node:test';
-+import assert from 'node:assert/strict';
-+import { readFileSync } from 'node:fs';
-+import { createProfiledDataStore, CORE_DATA_FILES, PROFILE_CHANGE } from '../../public/js/data.js';
-+import { createStore } from '../../public/js/store.js';
-+import { createDataProfilePreparation, profileFromState } from '../../public/js/ui/dataProfile.js';
-+import { RhineToggle, roomProfileReady } from '../../public/js/screens/room.js';
-+import { installLoadoutSync, loadoutStore, loadoutPreferenceKey } from '../../public/js/ui/loadoutSync.js';
-+import { ChoiceView, cardPickable, spTap } from '../../public/js/ui/choiceOverlay.js';
-+import { checkLoadout } from '../../shared/protocol.js';
-+
-+const response = (body) => ({ ok: true, status: 200, json: async () => body });
-+const tick = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
-+const baseId = 'chess_test_a';
-+
-+test('language and raw accessors survive every isolated roster switch', async () => {
-+  const cache = createProfiledDataStore({ retryDelays: [], fetch: async url => {
-+    try { return response(JSON.parse(readFileSync(new URL('../..' + url, import.meta.url), 'utf8'))); }
-+    catch { return { ok: false, status: 404 }; }
-+  } });
-+  assert.equal(await cache.setLocale('en'), 'en');
-+  for (const profile of ['vanilla', 'rhine', 'vanilla-extra', 'rhine-extra']) {
-+    cache.selectProfile(profile);
-+    await cache.load('chess');
-+    assert.equal(cache.locale(), 'en');
-+    const original = cache.lookupRaw('chess', 'chess_char_1_01_a');
-+    const translated = cache.lookup('chess', 'chess_char_1_01_a');
-+    assert.ok(original && translated);
-+    assert.notEqual(translated.name, original.name);
-+    assert.equal(cache.getRaw('chess').chess_char_1_01_a.name, original.name);
-+  }
-+  assert.equal(await cache.setLocale('zh'), 'zh');
-+  assert.equal(cache.lookup('chess', 'chess_char_1_01_a').name, cache.lookupRaw('chess', 'chess_char_1_01_a').name);
-+});
-+const chess = (tier, extra = false) => ({
-+  [baseId]: { chessId: baseId, visible: true, tier, skills: [{ index: 0 }, { index: 1, isDefault: true }] },
-+  ...(extra ? { chess_rhine_a: { chessId: 'chess_rhine_a', tier: 5, visible: true, skills: [{ index: 0 }] } } : {}),
-+});
-+function deferredCache() {
-+  const calls = [];
-+  const resolvers = new Map();
-+  const cache = createProfiledDataStore({ retryDelays: [], fetch(url) {
-+    calls.push(url);
-+    return new Promise((resolve) => resolvers.set(url, resolve));
-+  } });
-+  return { cache, calls, finish: (url, body) => resolvers.get(url)(response(body)) };
-+}
-+function* walk(node) {
-+  if (Array.isArray(node)) { for (const child of node) yield* walk(child); return; }
-+  if (!node || typeof node !== 'object') return;
-+  yield node;
-+  yield* walk(node.props?.children);
-+}
-+function fakeNet() {
-+  const listeners = new Map();
-+  return {
-+    status: 'online', sent: [],
-+    on(name, fn) { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name).add(fn); return () => listeners.get(name).delete(fn); },
-+    emit(name, msg) { for (const fn of listeners.get(name) || []) fn(msg); },
-+    async request(name, fields) { this.sent.push({ t: name, ...fields }); return { t: 'ok' }; },
-+  };
-+}
-+
-+test('profile caches share each in-flight download, retain both rosters and tiers, and keep art on shared URLs', async () => {
-+  const { cache, calls, finish } = deferredCache();
-+  const events = [];
-+  cache.subscribe((name) => events.push(name));
-+  const old = cache.load('chess');
-+  assert.equal(cache.load('chess'), old);
-+  const oldSnapshot = cache.snapshot();
-+  const art = cache.load('assets');
-+  cache.selectProfile(false);
-+  assert.equal(cache.lookup('chess', baseId), null, 'old profile is hidden immediately');
-+  const vanilla = cache.load('chess');
-+  assert.equal(cache.load('assets'), art, 'shared art has one download across profiles');
-+  finish('/data/chess.json', chess(3, true));
-+  await old;
-+  assert.deepEqual(events, [PROFILE_CHANGE], 'old in-flight completion cannot notify the active profile');
-+  assert.equal(cache.lookup('chess', baseId), null);
-+  assert.equal(oldSnapshot.lookup('chess', baseId).tier, 3, 'an async snapshot remains scoped to its captured profile');
-+  finish('/data/vanilla/chess.json', chess(2));
-+  finish('/data/assets.json', { chess: '/assets/chess.webp' });
-+  await Promise.all([vanilla, art]);
-+  assert.equal(cache.lookup('chess', baseId).tier, 2);
-+  assert.equal(cache.lookup('chess', 'chess_rhine_a'), null);
-+  assert.equal(cache.get('assets').chess, '/assets/chess.webp');
-+  const count = calls.length;
-+  cache.selectProfile(true);
-+  assert.equal(cache.lookup('chess', baseId).tier, 3);
-+  assert.equal(cache.lookup('chess', 'chess_rhine_a').tier, 5);
-+  await cache.load('chess');
-+  assert.equal(calls.length, count, 'returning to a loaded profile does not refetch it');
-+  assert.equal(cache.generation, 2);
-+});
-+
-+test('a complete profile barrier waits for every required file and ignores an older generation resolving last', async () => {
-+  const { cache, finish } = deferredCache();
-+  const target = createStore({ ui: {} });
-+  const prepare = createDataProfilePreparation({ cache, target, files: ['chess', 'config'] });
-+  const rhine = prepare(true);
-+  assert.equal(prepare(true), rhine, 'concurrent room/public preparation shares the same barrier');
-+  const vanilla = prepare(false);
-+  finish('/data/vanilla/chess.json', chess(2));
-+  await tick();
-+  assert.equal(target.get().ui.dataReady, false, 'one loaded file cannot enable room controls');
-+  finish('/data/vanilla/config.json', { profile: 'vanilla' });
-+  assert.equal(await vanilla, true);
-+  assert.equal(roomProfileReady({ rhineEnabled: false }, target.get().ui, cache), true);
-+  finish('/data/chess.json', chess(3, true));
-+  finish('/data/config.json', { profile: 'rhine' });
-+  assert.equal(await rhine, false);
-+  assert.equal(target.get().ui.dataProfile, 'vanilla');
-+  assert.equal(target.get().ui.dataReady, true);
-+  assert.equal(roomProfileReady({ rhineEnabled: true }, target.get().ui, cache), false);
-+  assert.equal(await prepare(true), true, 'a complete cached profile can be restored immediately');
-+});
-+
-+test('all 15 core files use the selected endpoint; a missing core file keeps controls blocked while optional art may be absent', async () => {
-+  const calls = [];
-+  const cache = createProfiledDataStore({ profile: false, retryDelays: [], fetch: async (url) => {
-+    calls.push(url);
-+    if (url === '/data/assets.json' || url === '/data/vanilla/waves.json') return { ok: false, status: 404 };
-+    return response({ profile: 'vanilla' });
-+  } });
-+  const target = createStore({ ui: {} });
-+  const prepare = createDataProfilePreparation({ cache, target, files: [...CORE_DATA_FILES, 'assets', 'local'] });
-+  assert.equal(await prepare(false), false);
-+  assert.equal(CORE_DATA_FILES.length, 16);
-+  for (const name of CORE_DATA_FILES) assert.ok(calls.includes(`/data/vanilla/${name}.json`));
-+  assert.ok(calls.includes('/data/local-assets.json'));
-+  assert.equal(cache.isReady('assets'), true, 'missing art retains normal fallback behavior');
-+  assert.equal(target.get().ui.dataReady, false);
-+  assert.match(target.get().ui.dataError, /waves/);
-+});
-+
-+test('match profile wins for direct m.public restore, room profile controls a waiting room, and default is Rhine', () => {
-+  assert.equal(profileFromState({ match: { public: { rhineEnabled: false } } }), 'vanilla');
-+  assert.equal(profileFromState({ room: { inMatch: true, rhineEnabled: true }, match: { public: { rhineEnabled: false } } }), 'vanilla');
-+  assert.equal(profileFromState({ room: { inMatch: false, rhineEnabled: false }, match: { public: { rhineEnabled: true } } }), 'vanilla');
-+  assert.equal(profileFromState({}), 'rhine');
-+});
-+
-+test('room toggle shows both shared states and only lets an online lobby host change them in solo or co-op', () => {
-+  for (const mode of ['solo', 'coop']) {
-+    const selected = [];
-+    const inputs = [...walk(RhineToggle({ room: { mode, rhineEnabled: true }, isHost: true, onPick: value => selected.push(value) }))].filter(n => n.type === 'input');
-+    assert.equal(inputs.length, 1);
-+    assert.equal(inputs[0].props.type, 'checkbox');
-+    assert.equal(inputs[0].props.checked, true);
-+    inputs[0].props.onChange({currentTarget:{checked:false}});
-+    assert.deepEqual(selected, [false]);
-+    for (const context of [{ isHost: false }, { isHost: true, busy: true }, { isHost: true, online: false }, { isHost: true, room: { mode, inMatch: true } }, { isHost: true, room: { mode, phase: 'PREP' } }]) {
-+      const locked = [...walk(RhineToggle({ room: { mode, rhineEnabled: false }, onPick: () => assert.fail('disabled toggle sent a request'), ...context }))].filter(n => n.type === 'input');
-+      assert.ok(locked.every(n => n.props.disabled));
-+      for (const input of locked) input.props.onChange({currentTarget:{checked:true}});
-+    }
-+  }
-+});
-+
-+test('profile-specific saved loadouts restore without contamination and resync against their own chess data', async () => {
-+  const originalStorage = globalThis.localStorage;
-+  const previousState = loadoutStore.get();
-+  const prefs = new Map([['sp.pref.loadout.vanilla', JSON.stringify({ v: 1, entries: { [baseId]: { skill: 0 }, chess_rhine_a: { skill: 1 } } })]]);
-+  globalThis.localStorage = { getItem: (key) => prefs.get(key) ?? null, setItem: (key, value) => prefs.set(key, value) };
-+  const cache = createProfiledDataStore({ retryDelays: [], fetch: async url => response(chess(url.includes('/vanilla/') ? 2 : 3, !url.includes('/vanilla/'))) });
-+  const net = fakeNet();
-+  const timers = { setTimeout: () => 1, clearTimeout: () => {} };
-+  loadoutStore.set({ entries: { [baseId]: { skill: 0 } }, open: true, sel: baseId });
-+  const sync = installLoadoutSync({ net, cache, timers });
-+  try {
-+    await sync.flush();
-+    cache.selectProfile(false);
-+    assert.equal(loadoutStore.get().open, false);
-+    assert.equal(loadoutStore.get().sel, null);
-+    assert.equal(loadoutStore.get().profileId, 'vanilla');
-+    await sync.flush();
-+    assert.deepEqual(net.sent.at(-1).entries, { [baseId]: { skill: 0 } }, 'Rhine-only saved entries are filtered using vanilla records');
-+    assert.equal(checkLoadout(net.sent.at(-1).entries, id => cache.lookup('chess', id)).ok, true);
-+    loadoutStore.set({ entries: {} });
-+    await sync.flush();
-+    cache.selectProfile(true);
-+    assert.deepEqual(loadoutStore.get().entries, { [baseId]: { skill: 0 } }, 'Rhine choices return intact');
-+    await sync.flush();
-+    assert.equal(net.sent.at(-1).t, 'room.loadout');
-+    assert.deepEqual(net.sent.at(-1).entries, { [baseId]: { skill: 0 } });
-+    cache.selectProfile(false);
-+    assert.deepEqual(loadoutStore.get().entries, {}, 'vanilla edits were saved to the vanilla preference');
-+    assert.notEqual(loadoutPreferenceKey('rhine'), loadoutPreferenceKey('vanilla'));
-+  } finally {
-+    sync.dispose();
-+    loadoutStore.set(previousState);
-+    globalThis.localStorage = originalStorage;
-+  }
-+});
-+
-+test('an old loadout await cannot send entries after a profile switch', async () => {
-+  const { cache, finish } = deferredCache();
-+  const net = fakeNet();
-+  const target = createStore({ entries: { [baseId]: { skill: 0 } }, open: false, sync: 'idle' });
-+  const sync = installLoadoutSync({ net, cache, target, timers: { setTimeout: () => 1, clearTimeout: () => {} } });
-+  try {
-+    const old = sync.flush();
-+    cache.selectProfile(false);
-+    const latest = sync.flush();
-+    finish('/data/chess.json', chess(3, true));
-+    await old;
-+    assert.equal(net.sent.length, 0);
-+    finish('/data/vanilla/chess.json', chess(2));
-+    await latest;
-+    assert.equal(net.sent.length, 1);
-+    assert.deepEqual(net.sent[0].entries, { [baseId]: { skill: 0 } });
-+  } finally { sync.dispose(); }
-+});
-+
-+test('nine bounty cards render in a scrollable grid and index eight follows the normal selection and confirmation path', () => {
-+  const tapped = [];
-+  const sp = { family: 'bounty', turnPid: 'p1', pickOf: new Map(), order: ['p1'], cards: Array.from({ length: 9 }, (_, idx) => ({ idx, kind: 'bounty', name: `目标${idx}`, desc: '悬赏任务' })) };
-+  const view = ChoiceView({ pub: { players: [{ playerId: 'p1' }] }, sp, myId: 'p1', solo: false, onTap: idx => tapped.push(idx) });
-+  const grid = [...walk(view)].find(n => n.props?.class?.includes('spov__grid--many'));
-+  assert.ok(grid);
-+  const cards = [...walk(grid)].filter(n => n.type === 'button');
-+  assert.equal(cards.length, 9);
-+  assert.equal(cards[8].props['data-idx'], 8);
-+  assert.equal(cards[8].props.disabled, false);
-+  cards[8].props.onClick();
-+  assert.deepEqual(tapped, [8]);
-+  assert.equal(cardPickable(sp, sp.cards[8], { myId: 'p1', solo: false }), true);
-+  assert.deepEqual(spTap(null, 8, true), { armed: 8, pick: null });
-+  assert.deepEqual(spTap(8, 8, true), { armed: null, pick: 8 });
-+  const css = readFileSync(new URL('../../public/css/screens/game-panels.css', import.meta.url), 'utf8');
-+  assert.match(css, /\.spov__grid--many\s*\{[^}]*overflow:\s*auto/);
-+});
 diff --git a/test/ui/feedback1-gaps.test.js b/test/ui/feedback1-gaps.test.js
 index 0cbb61f..288f326 100644
 --- a/test/ui/feedback1-gaps.test.js
@@ -28559,22 +28183,6 @@ index 0000000..c01fa95
 +    });
 +}
 +}
-diff --git a/test/ui/playtest3.test.js b/test/ui/playtest3.test.js
-index 7b465a4..909bb8b 100644
---- a/test/ui/playtest3.test.js
-+++ b/test/ui/playtest3.test.js
-@@ -492,8 +492,9 @@ describe('9: busy indicators and data loading', () => {
-     const missing = [...used].filter((n) => !GAME_FILES.includes(n));
-     assert.deepEqual(missing, [], 'read by the match UI but not awaited by the match screen');
-     const main = read('public/js/main.js');
--    assert.match(main, /if \(s\.room && !prev\.room\) warmGameData\(\);/);
--    assert.match(main, /data\.loadAll\(GAME_FILES\)/);
-+    assert.match(main, /s\.room && \(!prev\.room \|\| s\.room\.rhineEnabled !== prev\.room\.rhineEnabled\)/);
-+    assert.match(main, /createDataProfilePreparation\(\{ cache: data, target: store,/);
-+    assert.match(main, /\.\.\.CORE_DATA_FILES, \.\.\.GAME_FILES/);
-   });
- });
- 
 diff --git a/test/ui/relics-new.test.js b/test/ui/relics-new.test.js
 new file mode 100644
 index 0000000..dddb1ea
@@ -28761,333 +28369,6 @@ index 0000000..ff71051
 +  assert.equal(rowLp(b, pub, null, { uniteLocal: { b: 3 } }).pending, 1);
 +  assert.equal(rowLp(b, pub, null, { uniteLocal: { b: 1 } }).pending, 0);
 +});
-diff --git a/test/ui/rhine-profiles.e2e.test.js b/test/ui/rhine-profiles.e2e.test.js
-new file mode 100644
-index 0000000..e66acc7
---- /dev/null
-+++ b/test/ui/rhine-profiles.e2e.test.js
-@@ -0,0 +1,321 @@
-+// Real Chrome pages exercise room settings, profile-specific loadouts, reconnect and normal client-side combat.
-+// Opt-in: SP_E2E=1 CHROME_PATH=... node --test test/ui/rhine-profiles.e2e.test.js
-+import { test } from 'node:test';
-+import assert from 'node:assert/strict';
-+import { existsSync } from 'node:fs';
-+import path from 'node:path';
-+import { Client, ROOT, hasChrome, sleep, startRealServer, problemsOf } from '../e2e/client.mjs';
-+import { getDataProfile } from '../../server/data.js';
-+import { DataSource } from '../../server/sim/simdata.js';
-+import { compactResult, createBattleFromSpec, resultDigest } from '../../server/sim/spec.js';
-+
-+const ENABLED = process.env.SP_E2E === '1' && hasChrome() && existsSync(path.join(ROOT, 'public/assets'));
-+const PTILOPSIS = 'chess_char_4_21_a';
-+const SARIA = 'chess_char_5_11_a';
-+const DOROTHY = 'chess_rhine_dorothy_a';
-+const QUIET = { info() {}, warn() {}, error() {}, debug() {} };
-+const profileId = enabled => enabled ? 'rhine' : 'vanilla';
-+
-+function observeImageReplacement(client) {
-+  client.replacedImageRequests = new Set();
-+  client.page.on('requestfailed', request => {
-+    const error = request.failure()?.errorText;
-+    // Search replaces portrait/skill DOM nodes. Chrome intentionally cancels those image requests; other resource
-+    // failures, and image failures outside the explicit replacement, still fail this test.
-+    if (client.replacingImages && request.resourceType() === 'image' && error === 'net::ERR_ABORTED'
-+      && request.url().startsWith(`${client.base}/assets/`)) {
-+      client.replacedImageRequests.add(`${client.label}: requestfailed: ${request.url()} ${error}`);
-+    }
-+  });
-+}
-+const pageProblems = clients => problemsOf(clients).filter(problem => !clients.some(client => client.replacedImageRequests?.has(problem)));
-+
-+async function waitProfile(client, enabled) {
-+  await client.page.waitForFunction(enabled => {
-+    const { store, data } = globalThis.__SP__;
-+    const s = store.get();
-+    const id = enabled ? 'rhine' : 'vanilla';
-+    return s.room?.rhineEnabled === enabled && data.profileId === id && s.ui.dataReady
-+      && s.ui.dataProfile === id && s.ui.dataGeneration === data.generation && data.isReady('chess', 'bonds', 'config');
-+  }, { timeout: 30000 }, enabled);
-+}
-+
-+async function roomSnapshot(client) {
-+  return client.page.evaluate(() => {
-+    const { store, data } = globalThis.__SP__;
-+    const s = store.get(), pub = s.match.public;
-+    return { code: s.room?.code, me: s.me.playerId, roomEnabled: s.room?.rhineEnabled, profile: data.profileId,
-+      generation: data.generation, seats: s.room?.seats?.filter(Boolean), pubEnabled: pub?.rhineEnabled,
-+      pubProfile: pub?.dataProfile, count: pub?.startingPlayerCount, bans: pub?.openingBans };
-+  });
-+}
-+
-+async function rosterSnapshot(client) {
-+  return client.page.evaluate(({ ptilopsis, saria, dorothy }) => {
-+    const { data } = globalThis.__SP__;
-+    const summary = id => {
-+      const c = data.lookup('chess', id);
-+      if (!c) return null;
-+      const g = data.lookup('chess', c.goldenId);
-+      return { tier: c.tier, garrisons: c.garrisonIds, skill: c.skill.skillId,
-+        modules: (g?.modules || []).map(m => m.uniEquipId), defaultModule: g?.defaultUniEquipId ?? null };
-+    };
-+    return { profile: data.profileId, ptilopsis: summary(ptilopsis), saria: summary(saria), dorothy: summary(dorothy) };
-+  }, { ptilopsis: PTILOPSIS, saria: SARIA, dorothy: DOROTHY });
-+}
-+
-+async function searchLoadout(client, query) {
-+  client.replacingImages = true;
-+  try {
-+    await client.click('.lo-search input');
-+    await client.page.keyboard.down('Control');
-+    await client.page.keyboard.press('KeyA');
-+    await client.page.keyboard.up('Control');
-+    await client.page.keyboard.press('Backspace');
-+    if (query) await client.page.keyboard.type(query);
-+    await sleep(250);
-+  } finally { client.replacingImages = false; }
-+}
-+
-+async function closeLoadout(client) {
-+  await client.page.keyboard.press('Escape');
-+  await client.page.waitForFunction(() => !document.querySelector('.lo'), { timeout: 5000 });
-+}
-+
-+async function createCoop(client, name) {
-+  await client.open();
-+  observeImageReplacement(client);
-+  await client.enter(name);
-+  await client.click('.mode-card', '同盟模拟');
-+  await client.click('.diff-card', '标准模拟');
-+  await client.click('.create-box button', '创建同盟');
-+  await client.waitFor(s => !!s.room?.code, 'room created');
-+  await waitProfile(client, true);
-+  return (await roomSnapshot(client)).code;
-+}
-+
-+async function fillBots(client, count) {
-+  for (let n = 1; n <= count; n++) {
-+    await client.click('.seat--empty button', '添加 AI 队友');
-+    await client.page.waitForFunction(n => document.querySelectorAll('.seat.is-bot').length === n, {}, n);
-+  }
-+}
-+
-+async function assertRejected(client, type, fields, code) {
-+  const result = await client.page.evaluate(async (type, fields) => {
-+    try { await globalThis.__SP__.net.request(type, fields); return { accepted: true }; }
-+    catch (error) { return { accepted: false, code: error.code }; }
-+  }, type, fields);
-+  assert.deepEqual(result, { accepted: false, code });
-+}
-+
-+async function captureCombat(client) {
-+  await client.page.evaluate(() => {
-+    globalThis.__profileCombat = { starts: [], uploads: [], errors: [] };
-+    const net = globalThis.__SP__.net;
-+    net.on('*', msg => {
-+      if (msg.t === 'b.start') globalThis.__profileCombat.starts.push(JSON.parse(JSON.stringify(msg)));
-+      if (msg.t === 'error') globalThis.__profileCombat.errors.push({ code: msg.code, detail: msg.detail });
-+    });
-+    const send = net._sendRaw.bind(net);
-+    net._sendRaw = msg => {
-+      if (msg.t === 'b.result') globalThis.__profileCombat.uploads.push(JSON.parse(JSON.stringify(msg)));
-+      return send(msg);
-+    };
-+  });
-+}
-+
-+async function chooseDrafts(clients) {
-+  const done = new Set(), deadline = Date.now() + 90000;
-+  while (done.size < clients.length && Date.now() < deadline) {
-+    for (const client of clients) {
-+      if (done.has(client)) continue;
-+      const state = await client.st();
-+      if (state.phase !== 'BAND_DRAFT' || state.draft?.turn !== state.me) continue;
-+      const name = await client.page.evaluate(() => {
-+        const card = [...document.querySelectorAll('.dband:not(.is-taken)')].find(el => !el.textContent.includes('老鲤'));
-+        card?.scrollIntoView({ block: 'nearest' });
-+        return card?.querySelector('.dband__name')?.textContent.trim();
-+      });
-+      assert.ok(name, `${client.label}: a free strategy exists`);
-+      await sleep(150);
-+      await client.click('.dband:not(.is-taken)', name);
-+      await client.click('.draft-detail__btns .btn--primary', '确认选择');
-+      done.add(client);
-+    }
-+    await sleep(100);
-+  }
-+  assert.equal(done.size, clients.length, 'all real players choose through the draft controls');
-+  for (const client of clients) await client.waitFor(s => s.phase === 'PREP' && s.round === 1, 'first prep');
-+}
-+
-+test('Rhine and vanilla six-seat rooms: host controls, ready/loadout refresh, fixed match profile, real simulation and vanilla reload',
-+  { skip: !ENABLED && 'set SP_E2E=1 and CHROME_PATH to run real Chrome', timeout: 300000 }, async () => {
-+    // fastServer preserves the real match, socket and simulation. Its hooks only supply known operators and speed.
-+    const previousVerify = process.env.SP_VERIFY;
-+    let srv;
-+    try {
-+      process.env.SP_VERIFY = 'all';
-+      srv = await startRealServer({ fast: { timerScale: 1, combatSpeed: 16, startRound: 1, idleBots: true, autoPlace: true,
-+        chess: [PTILOPSIS, SARIA, 'chess_char_1_01_b', 'chess_char_1_19_b', DOROTHY] } });
-+    } finally {
-+      if (previousVerify === undefined) delete process.env.SP_VERIFY;
-+      else process.env.SP_VERIFY = previousVerify;
-+    }
-+    const puppeteer = (await import('puppeteer-core')).default;
-+    const vanillaHost = new Client(puppeteer, srv.base, 'vanilla-host', { prefix: 'rhine-profiles-vanilla-host' });
-+    const guest = new Client(puppeteer, srv.base, 'vanilla-guest', { prefix: 'rhine-profiles-vanilla-guest' });
-+    const rhineHost = new Client(puppeteer, srv.base, 'rhine-host', { prefix: 'rhine-profiles-rhine-host' });
-+    const clients = [vanillaHost, guest, rhineHost];
-+    try {
-+      const code = await createCoop(vanillaHost, '原版房主');
-+      await guest.open(`?room=${code}`);
-+      observeImageReplacement(guest);
-+      await guest.enter('原版队友');
-+      await guest.waitFor(s => s.room?.code === code, 'guest joins');
-+      await waitProfile(guest, true);
-+      const initial = await rosterSnapshot(vanillaHost);
-+      assert.equal(initial.ptilopsis.tier, 3);
-+      assert.equal(initial.saria.tier, 3);
-+      assert.equal(initial.dorothy.tier, 4);
-+      assert.equal(await guest.page.$$eval('[data-testid="rhine-toggle"] button', buttons => buttons.every(button => button.disabled)), true);
-+      await assertRejected(guest, 'room.setRhine', { enabled: false }, 'NOT_HOST');
-+
-+      // A real Rhine-only loadout before the setting changes, then inspect the newly loaded vanilla overlay.
-+      await vanillaHost.click('[data-testid="loadout-open"]');
-+      await vanillaHost.page.waitForSelector('.lo .lo-card', { visible: true });
-+      await searchLoadout(vanillaHost, '多萝西');
-+      await vanillaHost.page.waitForSelector(`.lo-card[data-chess="${DOROTHY}"]`, { visible: true });
-+      await vanillaHost.click(`.lo-card[data-chess="${DOROTHY}"]`);
-+      await vanillaHost.click('.lo-detail .lo-skill[data-skill="0"]');
-+      await vanillaHost.page.waitForFunction(() => /已同步/.test(document.querySelector('.lo-sync')?.textContent || ''));
-+      await closeLoadout(vanillaHost);
-+      await guest.click('.room-bar__right button', '准备就绪');
-+      await guest.page.waitForFunction(() => {
-+        const s = globalThis.__SP__.store.get();
-+        return s.room.seats.find(seat => seat?.playerId === s.me.playerId)?.ready;
-+      });
-+      await vanillaHost.click('[data-testid="rhine-vanilla"]');
-+      await Promise.all([waitProfile(vanillaHost, false), waitProfile(guest, false)]);
-+      const vanillaRoom = await roomSnapshot(vanillaHost);
-+      assert.equal(vanillaRoom.seats.filter(seat => !seat.isBot).every(seat => !seat.ready), true, 'switching clears every human ready flag');
-+      assert.equal(await guest.page.$eval('[data-testid="rhine-vanilla"]', button => button.getAttribute('aria-pressed')), 'true');
-+      const vanilla = await rosterSnapshot(vanillaHost);
-+      assert.equal(vanilla.ptilopsis.tier, 4, 'vanilla whiteface retains its original tier');
-+      assert.equal(vanilla.saria.tier, 5, 'vanilla Saria retains her original tier');
-+      assert.equal(vanilla.dorothy, null);
-+      assert.notDeepEqual(vanilla.ptilopsis.garrisons, initial.ptilopsis.garrisons);
-+      assert.notDeepEqual(vanilla.saria.garrisons, initial.saria.garrisons);
-+      const expectedVanilla = getDataProfile(false, { log: QUIET });
-+      assert.deepEqual(vanilla.ptilopsis.modules, expectedVanilla.chess[expectedVanilla.chess[PTILOPSIS].goldenId].modules.map(m => m.uniEquipId));
-+      await vanillaHost.click('[data-testid="loadout-open"]');
-+      await vanillaHost.page.waitForSelector('.lo', { visible: true });
-+      await searchLoadout(vanillaHost, '多萝西');
-+      assert.equal(await vanillaHost.page.$$eval('.lo-card', cards => cards.length), 0, 'the actual vanilla overlay excludes Dorothy');
-+      await searchLoadout(vanillaHost, '塞雷娅');
-+      await vanillaHost.page.waitForSelector(`.lo-card[data-chess="${SARIA}"]`, { visible: true });
-+      assert.equal(await vanillaHost.page.$eval(`.lo-card[data-chess="${SARIA}"]`, card => card.classList.contains('lo-card--t5')), true);
-+      await vanillaHost.shot('vanilla-loadout');
-+      await closeLoadout(vanillaHost);
-+
-+      await createCoop(rhineHost, '莱茵房主');
-+      await fillBots(vanillaHost, 4);
-+      await fillBots(rhineHost, 5);
-+      for (const [client, enabled] of [[vanillaHost, false], [guest, false], [rhineHost, true]]) {
-+        await waitProfile(client, enabled);
-+        const state = await roomSnapshot(client);
-+        assert.equal(state.seats.length, 6);
-+        assert.equal(state.profile, profileId(enabled));
-+        assert.equal(await client.page.$$eval('.seat', cards => cards.length), 6);
-+        await client.page.waitForFunction(() => [...document.querySelectorAll('.seat')]
-+          .every(card => Number(getComputedStyle(card).opacity) > 0.99), { timeout: 5000 });
-+        await client.page.evaluate(async () => {
-+          const animations = document.querySelector('.room-screen').getAnimations({ subtree: true });
-+          await Promise.all(animations.filter(animation => Number.isFinite(animation.effect.getTiming().iterations))
-+            .map(animation => animation.finished.catch(() => {})));
-+        });
-+      }
-+      assert.deepEqual(await rosterSnapshot(rhineHost), initial, 'the parallel Rhine room still uses its own roster');
-+      await vanillaHost.shot('six-seat-room');
-+      await rhineHost.shot('six-seat-room');
-+
-+      // Reload while waiting in the vanilla room: restore identity and fetch that profile before controls unlock.
-+      const guestId = (await guest.st()).me;
-+      await guest.page.waitForNetworkIdle({ idleTime: 500, timeout: 15000 });
-+      await guest.page.reload({ waitUntil: 'domcontentloaded' });
-+      await guest.page.waitForFunction(() => !!globalThis.__SP__, { timeout: 30000 });
-+      await guest.waitFor(s => s.room?.code === code, 'guest reconnects to vanilla');
-+      await waitProfile(guest, false);
-+      assert.equal((await guest.st()).me, guestId);
-+      assert.deepEqual(await rosterSnapshot(guest), vanilla);
-+      await guest.click('.room-bar__right button', '准备就绪');
-+      await Promise.all([vanillaHost.click('.room-bar__right button', '开始模拟'), rhineHost.click('.room-bar__right button', '开始模拟')]);
-+      for (const [client, enabled] of [[vanillaHost, false], [guest, false], [rhineHost, true]]) {
-+        await client.waitFor(s => s.phase === 'INFO_CHECK', 'briefing');
-+        const state = await roomSnapshot(client);
-+        assert.equal(state.pubEnabled, enabled);
-+        assert.equal(state.pubProfile, profileId(enabled));
-+        assert.equal(state.count, 6);
-+        assert.deepEqual(state.bans, { core: 0, addon: 1 }, 'the six-seat opening reduction works for both profiles');
-+      }
-+      await assertRejected(vanillaHost, 'room.setRhine', { enabled: true }, 'ROOM_STARTED');
-+      await assertRejected(rhineHost, 'room.setRhine', { enabled: false }, 'ROOM_STARTED');
-+      assert.equal((await roomSnapshot(vanillaHost)).pubEnabled, false);
-+      assert.equal((await roomSnapshot(rhineHost)).pubEnabled, true);
-+      const privateLoadout = await vanillaHost.page.evaluate(() => globalThis.__SP__.store.get().match.private.loadout);
-+      assert.equal(privateLoadout[DOROTHY], undefined, 'the new match has no stale Rhine-only loadout');
-+      for (const client of clients) await captureCombat(client);
-+      await Promise.all(clients.map(client => client.click('.brief__foot .btn--primary', '准备就绪')));
-+      await chooseDrafts(clients);
-+      await Promise.all(clients.map(client => client.click('.readybtn')));
-+
-+      // Inspect the live, per-battle DataSource rather than only the current page's display cache.
-+      for (const [client, enabled] of [[vanillaHost, false], [guest, false], [rhineHost, true]]) {
-+        const live = await client.page.waitForFunction(({ ptilopsis, saria, dorothy }) => {
-+          const e = [...(globalThis.__SP_RUNNER__?._entries?.values() || [])].find(e => e.own && e.battle && e.spec.round === 1);
-+          if (!e) return false;
-+          const chess = id => e.battle.data.getChess(id)?.raw ?? null;
-+          return { enabled: e.spec.rhineEnabled, profile: e.spec.dataProfile, authoritative: e.authoritative,
-+            ptilopsisTier: chess(ptilopsis)?.tier, sariaTier: chess(saria)?.tier, dorothyTier: chess(dorothy)?.tier ?? null };
-+        }, { timeout: 60000, polling: 100 }, { ptilopsis: PTILOPSIS, saria: SARIA, dorothy: DOROTHY }).then(handle => handle.jsonValue());
-+        assert.deepEqual(live, { enabled, profile: profileId(enabled), authoritative: true,
-+          ptilopsisTier: enabled ? 3 : 4, sariaTier: enabled ? 3 : 5, dorothyTier: enabled ? 4 : null });
-+      }
-+      for (const client of clients) await client.page.waitForFunction(() => globalThis.__profileCombat.uploads.length > 0, { timeout: 90000 });
-+      for (const [client, enabled] of [[vanillaHost, false], [guest, false], [rhineHost, true]]) {
-+        const captured = await client.page.evaluate(() => globalThis.__profileCombat);
-+        assert.deepEqual(captured.errors, [], `${client.label}: no rejected combat report`);
-+        const start = captured.starts.find(msg => msg.authoritative && msg.spec.round === 1 && msg.kind === 'normal');
-+        assert.ok(start, `${client.label}: an authoritative normal field was received`);
-+        assert.equal(start.rhineEnabled, enabled);
-+        assert.equal(start.dataProfile, profileId(enabled));
-+        const upload = captured.uploads.find(msg => msg.battleId === start.battleId);
-+        assert.ok(upload, `${client.label}: its real browser uploaded the normal battle`);
-+        const ds = new DataSource(getDataProfile(enabled, { log: QUIET }), null);
-+        const replay = compactResult(createBattleFromSpec(start.spec, ds, { recordEvents: false, quiet: true }).runToEnd(4000));
-+        assert.equal(resultDigest(upload.result).hash, resultDigest(replay).hash,
-+          `${client.label}: real browser result matches the server simulation for ${profileId(enabled)}`);
-+        assert.equal(upload.result.errors, 0);
-+        await client.waitFor(s => s.phase === 'PREP' && s.round === 2, 'the first round settles normally', 90000);
-+        assert.equal((await roomSnapshot(client)).pubEnabled, enabled);
-+        assert.equal(await client.page.evaluate(() => globalThis.__SP_RUNNER__.stats().errors), 0);
-+      }
-+      await vanillaHost.page.waitForNetworkIdle({ idleTime: 500, timeout: 15000 });
-+      await vanillaHost.page.reload({ waitUntil: 'domcontentloaded' });
-+      await vanillaHost.page.waitForFunction(() => !!globalThis.__SP__ && !!globalThis.__SP_RUNNER__, { timeout: 30000 });
-+      await vanillaHost.waitFor(s => s.phase === 'PREP' && s.round === 2 && s.room?.code === code, 'vanilla mid-match reconnect');
-+      await waitProfile(vanillaHost, false);
-+      assert.equal((await roomSnapshot(vanillaHost)).pubProfile, 'vanilla');
-+      assert.deepEqual(await rosterSnapshot(vanillaHost), vanilla);
-+      await vanillaHost.page.waitForFunction(() => globalThis.__SP_VIEW__ && document.querySelector('.gm canvas')?.width > 0,
-+        { timeout: 30000 });
-+      await sleep(1800); // the reconnected prep camera and round banner complete their entrance
-+      await vanillaHost.shot('reconnected-prep');
-+      assert.deepEqual(pageProblems(clients), [], 'no console, page or resource errors in the real pages');
-+      assert.deepEqual(srv.logs.filter(line => /verify mismatch|meta handler error|\[sim\].*(?:error|failed)/i.test(line)), [], 'no server verification/content errors');
-+    } finally {
-+      if (pageProblems(clients).length) console.log(pageProblems(clients).slice(0, 20).join('\n'));
-+      await Promise.all(clients.map(client => client.close()));
-+      await srv.stop();
-+    }
-+  });
 diff --git a/test/ui/rhine.test.js b/test/ui/rhine.test.js
 new file mode 100644
 index 0000000..9bc19a6

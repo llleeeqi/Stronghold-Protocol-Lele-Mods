@@ -34,7 +34,7 @@ bash scripts/activate.sh plugins-030
 | 定向甄选 | 晋升奖励仅第一位向主要盟约加权 ×2.6，后两位随机；第6回合起转职装备加权 ×2.6 | [Strinova-xinghui](https://github.com/Strinova-xinghui/Stronghold-Protocol) |
 
 
-插件目录为 `plugins/lele-rounds`、`lele-factions`、`lele-relics`、`lele-operators`、`lele-damage`、`lele-lucky`、`lele-recruits`、`lele-targeted`。每项均有说明与来源。房主通过官方插件面板查看并勾选，等待室可更改，改动后重新准备和校验，开局锁定，在线重连保留同一份内容。
+插件目录为 `plugins/lele-rounds`、`lele-factions`、`lele-relics`、`lele-operators`、`lele-damage`、`lele-lucky`、`lele-recruits`、`lele-targeted`。每项均有说明与来源。房主在等待室插件面板连续勾选时只暂存选择，点击“加载所选插件”（或关闭面板）后统一应用一次，显示启动与内容校验进度；所有玩家校验并重新准备后开局。开局锁定，在线重连保留同一份内容。
 
 0.3.0没有把固定自定义干员所需的缺失补位形态变出来：缺失官方补位资料的新增干员按PRESET本人上场。更多阵营与额外干员同时开启时，只保留卡兹戴尔维什戴尔。鸭梨手机继续不加入；训练模式不延长。
 

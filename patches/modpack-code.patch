@@ -2806,7 +2806,7 @@ index 5ed04d9..57580f6 100644
      ${paused ? html`<${PausedOverlay} canResume=${solo} busy=${pauseBusy} onResume=${() => togglePause(false)} onExit=${() => setExitOpen(true)} />` : null}
  
 diff --git a/public/js/screens/loadout.js b/public/js/screens/loadout.js
-index fe266c8..d99165c 100644
+index fe266c8..9c9fa12 100644
 --- a/public/js/screens/loadout.js
 +++ b/public/js/screens/loadout.js
 @@ -290,7 +290,8 @@ export function ModuleInfo({ m, golden, opt, potential = null }) {
@@ -2819,26 +2819,16 @@ index fe266c8..d99165c 100644
      <div class="lo-minfo__row">
        <span class="lo-minfo__k">${t('属性')}</span>
        <span class="lo-minfo__v lo-attrs">${rows.length ? rows.map((r) => html`<span key=${r.key} class=${cx('lo-attr', r.positive ? 'is-up' : 'is-down')}>${r.label}<b class="num">${r.text}</b></span>`) : html`<span class="t-dim">${t('无属性加成')}</span>`}</span>
-@@ -478,7 +479,8 @@ export function DataMissing({ files }) {
- 
- /** The overlay screen. */
- function LoadoutScreen({ st }) {
--  const ready = useData('chess', 'bonds', 'assets', 'local', 'backups', 'garrisons', 'effects');
-+  const settled = useData('chess', 'bonds', 'assets', 'local', 'backups', 'garrisons', 'effects');
-+  const ready = settled && data.isReady('chess', 'bonds');
-   const phase = useStore((s) => s.match?.public?.phase || null);
-   const inMatch = useStore((s) => !!s.room?.inMatch);
-   // co-op briefing (INFO_CHECK, 25 s): the overlay covers the briefing's own countdown, so it shows the time left — the
-@@ -487,7 +489,7 @@ function LoadoutScreen({ st }) {
+@@ -487,7 +488,7 @@ function LoadoutScreen({ st }) {
    const m = data.get('assets');
    const getChess = (id) => data.lookup('chess', id);
    const getBond = (id) => data.lookup('bonds', id);
 -  const roster = useMemo(() => rosterOf(data.list('chess')), [ready, data.locale()]); // (names follow a language switch)
-+  const roster = useMemo(() => rosterOf(data.list('chess')), [ready, data.generation, data.locale()]);
++  const roster = useMemo(() => rosterOf(data.list('chess')), [ready, data.contentId(), data.locale()]);
    const bonds = useMemo(() => {
      const used = new Set(roster.flatMap((c) => c.bonds || []));
      return (data.list('bonds') || []).filter((b) => b && used.has(b.bondId))
-@@ -804,7 +806,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
+@@ -804,7 +805,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
   * Entry button (lobby / room / briefing).
   * @param {{ from: 'lobby'|'room'|'briefing', size?: string, variant?: string, class?: string, label?: string }} props
   */
@@ -2847,7 +2837,7 @@ index fe266c8..d99165c 100644
    useData('local'); // the official preset icon (re-render once the local-art manifest arrives)
    const entries = useStore((s) => s.entries, Object.is, loadoutStore);
    const ops = useStore((s) => s.ops, Object.is, loadoutStore);
-@@ -817,7 +819,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
+@@ -817,7 +818,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
    // 0.2.0 自选编队: how many DIY slots the player filled
    const nDiy = diyCount(diy);
    return html`<button type="button" class=${cx('btn', `btn--${variant}`, `btn--${size}`, 'lo-entry', cls)} data-testid="loadout-open"
@@ -3722,7 +3712,7 @@ index a4afb7f..10cc083 100644
    ready: (ready) => act('g.ready', { ready }, { sfx: ready ? 'ready' : 'back' }),
    emote: (id) => act('g.emote', { id }, { quiet: true }),
 diff --git a/public/js/ui/gameComponents.js b/public/js/ui/gameComponents.js
-index 166dd2d..71edeec 100644
+index 166dd2d..796406f 100644
 --- a/public/js/ui/gameComponents.js
 +++ b/public/js/ui/gameComponents.js
 @@ -2,13 +2,11 @@
@@ -3741,20 +3731,17 @@ index 166dd2d..71edeec 100644
  
  const cx = (...p) => p.flat().filter(Boolean).join(' ');
  
-@@ -23,9 +21,9 @@ export const GAME_FILES = ['config', 'assets', 'chess', 'bonds', 'items', 'bands
-  *   effect: (id:string)=>any, garrison: (id:string)=>any, factions: any, choices: any, backups: any, list: (name:string)=>any[] }}
+@@ -24,8 +22,7 @@ export const GAME_FILES = ['config', 'assets', 'chess', 'bonds', 'items', 'bands
   */
  export function useGameData() {
--  const ready = useData(...GAME_FILES);
+   const ready = useData(...GAME_FILES);
 -  // (config / factions / choices are read once per memo: a language switch reads them again in the new locale)
 -  return useMemo(() => makeLookups(ready), [ready, data.locale()]);
-+  const settled = useData(...GAME_FILES);
-+  const ready = settled && data.isReady(GAME_FILES);
-+  return useMemo(() => makeLookups(ready), [ready, data.generation, data.locale()]);
++  return useMemo(() => makeLookups(ready), [ready, data.contentId(), data.locale()]);
  }
  
  /** A 自选 operator's summon record (data/backups.json `tokens`, 0.2.0), or null. */
-@@ -208,12 +206,12 @@ export function GIcon({ name, class: cls, title }) {
+@@ -208,12 +205,12 @@ export function GIcon({ name, class: cls, title }) {
   */
  export function LpTower({ value, size = 'md', class: cls, tone, pending = 0, note = null, tip = null }) {
    const ok = Number.isFinite(value);
@@ -3770,7 +3757,7 @@ index 166dd2d..71edeec 100644
      ${note ? html`<span class="lp__note">${note}</span>` : null}
    </span>`;
  }
-@@ -261,7 +259,7 @@ export function PlayerAvatar({ player, size = 'md', self = false, class: cls })
+@@ -261,7 +258,7 @@ export function PlayerAvatar({ player, size = 'md', self = false, class: cls })
    const glyph = [...(player?.name || '').trim()][0] || '?';
    const dead = player?.alive === false || player?.status === 'dead';
    const left = player?.status === 'left';

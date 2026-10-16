@@ -1,0 +1,21 @@
+{
+  "lock": 1,
+  "id": "lele-relics",
+  "version": "0.3.0",
+  "generator": "tools/plugin.mjs pack",
+  "files": {
+    "README.md": {
+      "sha256": "d4ea3fd1dc30d313595947d3d9926976af74b6d084460ce8d5436c90a7319c29",
+      "bytes": 734
+    },
+    "data/feature.json": {
+      "sha256": "2a33c8c604ba155168904f63277cea5a0cdee5fd8d0cfa9d55a3699b88a59197",
+      "bytes": 318
+    },
+    "plugin.json": {
+      "sha256": "478f904d215e41eebedef27f504a6fb9c17fddfc54aa207255b2636edd5b4f96",
+      "bytes": 701
+    }
+  },
+  "spine": {}
+}

@@ -1,0 +1,21 @@
+{
+  "lock": 1,
+  "id": "lele-recruits",
+  "version": "0.3.0",
+  "generator": "tools/plugin.mjs pack",
+  "files": {
+    "README.md": {
+      "sha256": "7ed93d58490ba6f33ecfeac45c1050a66ce6fd4559f6ae96fe5749361320ee00",
+      "bytes": 759
+    },
+    "data/feature.json": {
+      "sha256": "309c8d8f37b8ceeb86f6cb0da6c025c36650e4a8e26db853c353fc9940f990a5",
+      "bytes": 251402
+    },
+    "plugin.json": {
+      "sha256": "d13fd7c437db629a2b1f545136381e334dd33e67592624a97e4b11fdf6f9448b",
+      "bytes": 730
+    }
+  },
+  "spine": {}
+}

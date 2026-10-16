@@ -1,0 +1,21 @@
+{
+  "lock": 1,
+  "id": "lele-targeted",
+  "version": "0.3.0",
+  "generator": "tools/plugin.mjs pack",
+  "files": {
+    "README.md": {
+      "sha256": "c064692d4dadd698131bdf9f5c9cc7168e9573d056313afa4d1966a0f2a899f7",
+      "bytes": 764
+    },
+    "data/feature.json": {
+      "sha256": "0e4bf710f694f087b0700fa658fb0a826535690f5fd1b134f36757d006dfa31f",
+      "bytes": 324
+    },
+    "plugin.json": {
+      "sha256": "3982002487b0ec489ec92439cb3a98b2196a5bd73dc62aa68dcf2d4a008da9e4",
+      "bytes": 726
+    }
+  },
+  "spine": {}
+}

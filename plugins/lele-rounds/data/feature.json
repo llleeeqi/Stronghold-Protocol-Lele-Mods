@@ -1,0 +1,4118 @@
+{
+  "patch": 1,
+  "ops": [
+    {
+      "op": "merge",
+      "file": "config",
+      "path": [
+        "economy",
+        "leleHost",
+        "packages",
+        "rounds"
+      ],
+      "value": {
+        "api": 1,
+        "feature": "rounds",
+        "flag": "doubleRounds",
+        "changes": [
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "desc"
+            ],
+            "value": "时长较短的模拟训练 · 乐勒砳特供：额外4回合，共13回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "lastRound"
+            ],
+            "value": 13
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "bossRound"
+            ],
+            "value": 13
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "template"
+            ],
+            "value": "act1autochess_02"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "combatTimeLimit"
+            ],
+            "value": 45
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "levelMaxPlayTime"
+            ],
+            "value": 45
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "9",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "10"
+            ],
+            "value": {
+              "template": "act1autochess_03",
+              "bossTemplates": null,
+              "combatTimeLimit": 55,
+              "levelMaxPlayTime": 55,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "11"
+            ],
+            "value": {
+              "template": "act1autochess_04",
+              "bossTemplates": null,
+              "combatTimeLimit": 55,
+              "levelMaxPlayTime": 55,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "12"
+            ],
+            "value": {
+              "template": "act1autochess_05",
+              "bossTemplates": null,
+              "combatTimeLimit": 55,
+              "levelMaxPlayTime": 55,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "rounds",
+              "13"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01_s",
+                "boss_2": "act1autochess_h07_02_s",
+                "boss_3": "act1autochess_h07_03_s",
+                "boss_4": "act1autochess_h07_04_s",
+                "boss_5": "act2autochess_h07_05_s",
+                "boss_6": "act1autochess_h07_06_s",
+                "boss_7": "act1autochess_h07_07_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "combatTimeLimit",
+              "9"
+            ],
+            "value": 45
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "combatTimeLimit",
+              "10"
+            ],
+            "value": 55
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "combatTimeLimit",
+              "11"
+            ],
+            "value": 55
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "combatTimeLimit",
+              "12"
+            ],
+            "value": 55
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "combatTimeLimit",
+              "13"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "enemyScale",
+              "10"
+            ],
+            "value": {
+              "atk": 0.7,
+              "hp": 0.75,
+              "speed": 1,
+              "kAtk": 0,
+              "kHp": 0
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "enemyScale",
+              "11"
+            ],
+            "value": {
+              "atk": 0.7,
+              "hp": 0.75,
+              "speed": 1,
+              "kAtk": 0,
+              "kHp": 0
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "enemyScale",
+              "12"
+            ],
+            "value": {
+              "atk": 0.7,
+              "hp": 0.75,
+              "speed": 1,
+              "kAtk": 0,
+              "kHp": 0
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_funny",
+              "enemyScale",
+              "13"
+            ],
+            "value": {
+              "atk": 0.7,
+              "hp": 0.75,
+              "speed": 1,
+              "kAtk": 0,
+              "kHp": 0
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "desc"
+            ],
+            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01_s",
+                "boss_2": "act1autochess_h07_02_s",
+                "boss_3": "act1autochess_h07_03_s",
+                "boss_4": "act1autochess_h07_04_s",
+                "boss_5": "act2autochess_h07_05_s",
+                "boss_6": "act1autochess_h07_06_s",
+                "boss_7": "act1autochess_h07_07_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.127357,
+              "hp": 1.86624,
+              "speed": 1,
+              "kAtk": 5,
+              "kHp": 5
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.127357,
+              "hp": 1.86624,
+              "speed": 1,
+              "kAtk": 5,
+              "kHp": 5
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 1.127357,
+              "hp": 1.86624,
+              "speed": 1,
+              "kAtk": 5,
+              "kHp": 5
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "desc"
+            ],
+            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01_s",
+                "boss_2": "act1autochess_h07_02_s",
+                "boss_3": "act1autochess_h07_03_s",
+                "boss_4": "act1autochess_h07_04_s",
+                "boss_5": "act2autochess_h07_05_s",
+                "boss_6": "act1autochess_h07_06_s",
+                "boss_7": "act1autochess_h07_07_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.17128,
+              "hp": 1.65888,
+              "speed": 1,
+              "kAtk": 4,
+              "kHp": 4
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.17128,
+              "hp": 1.65888,
+              "speed": 1,
+              "kAtk": 4,
+              "kHp": 4
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 1.17128,
+              "hp": 1.65888,
+              "speed": 1,
+              "kAtk": 4,
+              "kHp": 4
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "desc"
+            ],
+            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01_s",
+                "boss_2": "act1autochess_h07_02_s",
+                "boss_3": "act1autochess_h07_03_s",
+                "boss_4": "act1autochess_h07_04_s",
+                "boss_5": "act2autochess_h07_05_s",
+                "boss_6": "act1autochess_h07_06_s",
+                "boss_7": "act1autochess_h07_07_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "14",
+              "atk"
+            ],
+            "value": 1.771561
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "14",
+              "hp"
+            ],
+            "value": 2.985984
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "14",
+              "kAtk"
+            ],
+            "value": 6
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "14",
+              "kHp"
+            ],
+            "value": 6
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "15",
+              "atk"
+            ],
+            "value": 1.771561
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "15",
+              "hp"
+            ],
+            "value": 2.985984
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "15",
+              "kAtk"
+            ],
+            "value": 6
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "15",
+              "kHp"
+            ],
+            "value": 6
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.771561,
+              "hp": 2.985984,
+              "speed": 1.15,
+              "kAtk": 6,
+              "kHp": 6
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.771561,
+              "hp": 2.985984,
+              "speed": 1.15,
+              "kAtk": 6,
+              "kHp": 6
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 1.948717,
+              "hp": 3.583181,
+              "speed": 1.15,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "desc"
+            ],
+            "value": "敌方攻击强度较低的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "15"
+            ],
+            "value": {
+              "template": "act1autochess_h01",
+              "bossTemplates": null,
+              "combatTimeLimit": 85,
+              "levelMaxPlayTime": 85,
+              "prepTime": 105,
+              "prepTimeData": 105,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01",
+                "boss_2": "act1autochess_h07_02",
+                "boss_3": "act1autochess_h07_03",
+                "boss_4": "act1autochess_h07_04",
+                "boss_5": "act2autochess_h07_05",
+                "boss_6": "act1autochess_h07_06",
+                "boss_7": "act1autochess_h07_07"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 195,
+              "prepTimeData": 195,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "enemyScale",
+              "15"
+            ],
+            "value": {
+              "atk": 0.88,
+              "hp": 0.96,
+              "speed": 1,
+              "kAtk": 1,
+              "kHp": 1
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 0.88,
+              "hp": 0.96,
+              "speed": 1,
+              "kAtk": 1,
+              "kHp": 1
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 0.88,
+              "hp": 0.96,
+              "speed": 1,
+              "kAtk": 1,
+              "kHp": 1
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_funny",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 0.88,
+              "hp": 0.96,
+              "speed": 1,
+              "kAtk": 1,
+              "kHp": 1
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "desc"
+            ],
+            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01",
+                "boss_2": "act1autochess_h07_02",
+                "boss_3": "act1autochess_h07_03",
+                "boss_4": "act1autochess_h07_04",
+                "boss_5": "act2autochess_h07_05",
+                "boss_6": "act1autochess_h07_06",
+                "boss_7": "act1autochess_h07_07"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 195,
+              "prepTimeData": 195,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.558974,
+              "hp": 2.866545,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.558974,
+              "hp": 2.866545,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 1.558974,
+              "hp": 2.866545,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "desc"
+            ],
+            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01",
+                "boss_2": "act1autochess_h07_02",
+                "boss_3": "act1autochess_h07_03",
+                "boss_4": "act1autochess_h07_04",
+                "boss_5": "act2autochess_h07_05",
+                "boss_6": "act1autochess_h07_06",
+                "boss_7": "act1autochess_h07_07"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 195,
+              "prepTimeData": 195,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "14",
+              "atk"
+            ],
+            "value": 1.948717
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "14",
+              "hp"
+            ],
+            "value": 3.583181
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "14",
+              "kAtk"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "14",
+              "kHp"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "15",
+              "atk"
+            ],
+            "value": 1.948717
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "15",
+              "hp"
+            ],
+            "value": 3.583181
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "15",
+              "kAtk"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "15",
+              "kHp"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.948717,
+              "hp": 3.583181,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.948717,
+              "hp": 3.583181,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 2.143589,
+              "hp": 4.299817,
+              "speed": 1,
+              "kAtk": 8,
+              "kHp": 8
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "desc"
+            ],
+            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "lastRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "bossRound"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "hiddenRound"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "template"
+            ],
+            "value": "act1autochess_07"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "14",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "template"
+            ],
+            "value": "act1autochess_h01"
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "bossTemplates"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "combatTimeLimit"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "levelMaxPlayTime"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "prepTime"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "prepTimeData"
+            ],
+            "value": 105
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "isBoss"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "isHidden"
+            ],
+            "value": false
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "15",
+              "bossOvertimeAfter"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "template": "act1autochess_h02",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": true,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "17"
+            ],
+            "value": {
+              "template": "act1autochess_h03",
+              "bossTemplates": null,
+              "combatTimeLimit": 95,
+              "levelMaxPlayTime": 95,
+              "prepTime": 125,
+              "prepTimeData": 125,
+              "isSpPrepare": false,
+              "isBoss": false,
+              "isHidden": false,
+              "bossOvertimeAfter": null
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "rounds",
+              "18"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_1": "act1autochess_h07_01",
+                "boss_2": "act1autochess_h07_02",
+                "boss_3": "act1autochess_h07_03",
+                "boss_4": "act1autochess_h07_04",
+                "boss_5": "act2autochess_h07_05",
+                "boss_6": "act1autochess_h07_06",
+                "boss_7": "act1autochess_h07_07"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 195,
+              "prepTimeData": 195,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": false,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "14"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "15"
+            ],
+            "value": 85
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "16"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "17"
+            ],
+            "value": 95
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "14",
+              "atk"
+            ],
+            "value": 1.948717
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "14",
+              "kAtk"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "14",
+              "supplyHp"
+            ],
+            "value": 1.86624
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "15",
+              "atk"
+            ],
+            "value": 1.948717
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "15",
+              "kAtk"
+            ],
+            "value": 7
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "15",
+              "supplyHp"
+            ],
+            "value": 1.86624
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "16"
+            ],
+            "value": {
+              "atk": 1.948717,
+              "hp": 6.687075,
+              "speed": 1.15,
+              "kAtk": 7,
+              "kHp": 10,
+              "supplyHp": 1.86624
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "17"
+            ],
+            "value": {
+              "atk": 1.948717,
+              "hp": 6.687075,
+              "speed": 1.15,
+              "kAtk": 7,
+              "kHp": 10,
+              "supplyHp": 1.86624
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "enemyScale",
+              "18"
+            ],
+            "value": {
+              "atk": 2.143589,
+              "hp": 6.687075,
+              "speed": 1.15,
+              "kAtk": 8,
+              "kHp": 10,
+              "supplyHp": 1.5552
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "hiddenBossWeights",
+              "boss_8"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "hiddenBossWeights",
+              "boss_9"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "hiddenBossWeights",
+              "boss_10"
+            ],
+            "remove": true
+          },
+          {
+            "path": [
+              "config",
+              "trophies",
+              "byRoundsPassed"
+            ],
+            "value": [
+              {
+                "maxRound": 4,
+                "FUNNY": 0,
+                "NORMAL": 0,
+                "HARD": 0,
+                "ABYSS": 0
+              },
+              {
+                "maxRound": 8,
+                "FUNNY": 1,
+                "NORMAL": 1,
+                "HARD": 1,
+                "ABYSS": 1
+              },
+              {
+                "maxRound": 11,
+                "FUNNY": 2,
+                "NORMAL": 2,
+                "HARD": 2,
+                "ABYSS": 2
+              },
+              {
+                "maxRound": 13,
+                "FUNNY": 2,
+                "NORMAL": 3,
+                "HARD": 3,
+                "ABYSS": 3
+              },
+              {
+                "maxRound": 18,
+                "FUNNY": 3,
+                "NORMAL": 4,
+                "HARD": 5,
+                "ABYSS": 6
+              }
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_normal",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_normal",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "tactic",
+                  "weight": 100
+                }
+              ],
+              "cards": 3,
+              "supplyTiers": [
+                3,
+                6
+              ],
+              "bountyDraft": "boss",
+              "events": {
+                "bounty": [
+                  "bossInitial_1_s",
+                  "bossInitial_2_s",
+                  "bossInitial_3_s",
+                  "bossInitial_4_s",
+                  "bossInitial_5_s",
+                  "bossInitial_6_s"
+                ],
+                "supply": [
+                  "equip_free_2_s",
+                  "equip_free_3_s",
+                  "equip_free_4_s"
+                ],
+                "shop": [
+                  "artifact_paid_1_s",
+                  "artifact_paid_2_s",
+                  "artifact_paid_3_s",
+                  "artifact_paid_4_s",
+                  "artifact_paid_5_s"
+                ],
+                "tactic": [
+                  "buff_select_1_s",
+                  "buff_select_2_s",
+                  "buff_select_3_s",
+                  "buff_select_4_s",
+                  "terrain_m01_1_s",
+                  "terrain_m02_1_s",
+                  "terrain_m02_2_s",
+                  "terrain_m03_1_s",
+                  "terrain_m04_1_s",
+                  "terrain_m06_1_s",
+                  "terrain_m07_1_s"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_hard",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_hard",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "bounty",
+                  "weight": 14
+                },
+                {
+                  "family": "shop",
+                  "weight": 4
+                },
+                {
+                  "family": "tactic",
+                  "weight": 4
+                }
+              ],
+              "cards": 3,
+              "supplyTiers": [
+                4,
+                6
+              ],
+              "bountyDraft": "hunter",
+              "events": {
+                "bounty": [
+                  "bounty_hunter_1_s",
+                  "bounty_hunter_2_s",
+                  "bounty_hunter_3_s",
+                  "bounty_hunter_4_s",
+                  "bounty_hunter_5_s",
+                  "bounty_hunter_6_s",
+                  "bounty_hunter_7_s",
+                  "bounty_hunter_8_s",
+                  "bounty_hunter_9_s",
+                  "bounty_hunter_10_s",
+                  "bounty_hunter_11_s",
+                  "bounty_hunter_12_s",
+                  "bounty_hunter_13_s",
+                  "bounty_hunter_14_s",
+                  "bounty_hunter_15_s"
+                ],
+                "supply": [
+                  "equip_free_2_s",
+                  "equip_free_3_s",
+                  "equip_free_4_s"
+                ],
+                "shop": [
+                  "artifact_paid_1_s",
+                  "artifact_paid_2_s",
+                  "artifact_paid_3_s",
+                  "artifact_paid_4_s",
+                  "artifact_paid_5_s"
+                ],
+                "tactic": [
+                  "buff_select_1_s",
+                  "buff_select_2_s",
+                  "buff_select_3_s",
+                  "buff_select_4_s",
+                  "hardbuff_select_1_s",
+                  "hardbuff_select_2_s",
+                  "hardbuff_select_3_s",
+                  "terrain_m01_1_s",
+                  "terrain_m02_1_s",
+                  "terrain_m02_2_s",
+                  "terrain_m03_1_s",
+                  "terrain_m04_1_s",
+                  "terrain_m06_1_s",
+                  "terrain_m07_1_s"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_abyss",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_single_abyss",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "bounty",
+                  "weight": 14
+                },
+                {
+                  "family": "shop",
+                  "weight": 4
+                },
+                {
+                  "family": "tactic",
+                  "weight": 4
+                }
+              ],
+              "cards": 3,
+              "supplyTiers": [
+                4,
+                6
+              ],
+              "bountyDraft": "hunter",
+              "events": {
+                "bounty": [
+                  "bounty_hunter_1_s",
+                  "bounty_hunter_2_s",
+                  "bounty_hunter_3_s",
+                  "bounty_hunter_4_s",
+                  "bounty_hunter_5_s",
+                  "bounty_hunter_6_s",
+                  "bounty_hunter_7_s",
+                  "bounty_hunter_8_s",
+                  "bounty_hunter_9_s",
+                  "bounty_hunter_10_s",
+                  "bounty_hunter_11_s",
+                  "bounty_hunter_12_s",
+                  "bounty_hunter_13_s",
+                  "bounty_hunter_14_s",
+                  "bounty_hunter_15_s"
+                ],
+                "supply": [
+                  "equip_free_2_s",
+                  "equip_free_3_s",
+                  "equip_free_4_s"
+                ],
+                "shop": [
+                  "artifact_paid_1_s",
+                  "artifact_paid_2_s",
+                  "artifact_paid_3_s",
+                  "artifact_paid_4_s",
+                  "artifact_paid_5_s"
+                ],
+                "tactic": [
+                  "buff_select_1_s",
+                  "buff_select_2_s",
+                  "buff_select_3_s",
+                  "buff_select_4_s",
+                  "hardbuff_select_1_s",
+                  "hardbuff_select_2_s",
+                  "hardbuff_select_3_s",
+                  "terrain_m01_1_s",
+                  "terrain_m02_1_s",
+                  "terrain_m02_2_s",
+                  "terrain_m03_1_s",
+                  "terrain_m04_1_s",
+                  "terrain_m06_1_s",
+                  "terrain_m07_1_s"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_funny",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_funny",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "supply",
+                  "weight": 45
+                },
+                {
+                  "family": "tactic",
+                  "weight": 35
+                },
+                {
+                  "family": "shop",
+                  "weight": 20
+                }
+              ],
+              "cards": 6,
+              "supplyTiers": [
+                3,
+                6
+              ],
+              "bountyDraft": "boss",
+              "events": {
+                "bounty": [
+                  "bossInitial_1",
+                  "bossInitial_2",
+                  "bossInitial_3",
+                  "bossInitial_4",
+                  "bossInitial_5",
+                  "bossInitial_6"
+                ],
+                "supply": [
+                  "equip_free_1",
+                  "equip_free_2",
+                  "equip_free_3",
+                  "equip_free_4"
+                ],
+                "shop": [
+                  "artifact_paid_1",
+                  "artifact_paid_2",
+                  "artifact_paid_3",
+                  "artifact_paid_4",
+                  "artifact_paid_5"
+                ],
+                "tactic": [
+                  "buff_select_1",
+                  "buff_select_2",
+                  "buff_select_3",
+                  "buff_select_4",
+                  "terrain_m01_1",
+                  "terrain_m02_1",
+                  "terrain_m02_2",
+                  "terrain_m03_1",
+                  "terrain_m04_1",
+                  "terrain_m06_1",
+                  "terrain_m07_1"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_normal",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_normal",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "bounty",
+                  "weight": 50
+                },
+                {
+                  "family": "supply",
+                  "weight": 25
+                },
+                {
+                  "family": "shop",
+                  "weight": 10
+                },
+                {
+                  "family": "tactic",
+                  "weight": 15
+                }
+              ],
+              "cards": 6,
+              "supplyTiers": [
+                3,
+                6
+              ],
+              "bountyDraft": "boss",
+              "events": {
+                "bounty": [
+                  "bossInitial_1",
+                  "bossInitial_2",
+                  "bossInitial_3",
+                  "bossInitial_4",
+                  "bossInitial_5",
+                  "bossInitial_6"
+                ],
+                "supply": [
+                  "equip_free_1",
+                  "equip_free_2",
+                  "equip_free_3",
+                  "equip_free_4"
+                ],
+                "shop": [
+                  "artifact_paid_1",
+                  "artifact_paid_2",
+                  "artifact_paid_3",
+                  "artifact_paid_4",
+                  "artifact_paid_5"
+                ],
+                "tactic": [
+                  "buff_select_1",
+                  "buff_select_2",
+                  "buff_select_3",
+                  "buff_select_4",
+                  "terrain_m01_1",
+                  "terrain_m02_1",
+                  "terrain_m02_2",
+                  "terrain_m03_1",
+                  "terrain_m04_1",
+                  "terrain_m06_1",
+                  "terrain_m07_1"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_hard",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_hard",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "bounty",
+                  "weight": 14
+                },
+                {
+                  "family": "shop",
+                  "weight": 4
+                },
+                {
+                  "family": "tactic",
+                  "weight": 4
+                }
+              ],
+              "cards": 6,
+              "supplyTiers": [
+                4,
+                6
+              ],
+              "bountyDraft": "hunter",
+              "events": {
+                "bounty": [
+                  "bounty_hunter_1",
+                  "bounty_hunter_2",
+                  "bounty_hunter_3",
+                  "bounty_hunter_4",
+                  "bounty_hunter_5",
+                  "bounty_hunter_6",
+                  "bounty_hunter_7",
+                  "bounty_hunter_8",
+                  "bounty_hunter_9",
+                  "bounty_hunter_10",
+                  "bounty_hunter_11",
+                  "bounty_hunter_12",
+                  "bounty_hunter_13",
+                  "bounty_hunter_14",
+                  "bounty_hunter_15"
+                ],
+                "supply": [
+                  "equip_free_1",
+                  "equip_free_2",
+                  "equip_free_3",
+                  "equip_free_4"
+                ],
+                "shop": [
+                  "artifact_paid_1",
+                  "artifact_paid_2",
+                  "artifact_paid_3",
+                  "artifact_paid_4",
+                  "artifact_paid_5"
+                ],
+                "tactic": [
+                  "buff_select_1",
+                  "buff_select_2",
+                  "buff_select_3",
+                  "buff_select_4",
+                  "hardbuff_select_1",
+                  "hardbuff_select_2",
+                  "hardbuff_select_3",
+                  "terrain_m01_1",
+                  "terrain_m02_1",
+                  "terrain_m02_2",
+                  "terrain_m03_1",
+                  "terrain_m04_1",
+                  "terrain_m06_1",
+                  "terrain_m07_1"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_abyss",
+              "spRounds"
+            ],
+            "append": [
+              16
+            ]
+          },
+          {
+            "path": [
+              "choices",
+              "schedule",
+              "mode_multi_abyss",
+              "rounds",
+              "16"
+            ],
+            "value": {
+              "families": [
+                {
+                  "family": "bounty",
+                  "weight": 14
+                },
+                {
+                  "family": "shop",
+                  "weight": 4
+                },
+                {
+                  "family": "tactic",
+                  "weight": 4
+                }
+              ],
+              "cards": 6,
+              "supplyTiers": [
+                4,
+                6
+              ],
+              "bountyDraft": "hunter",
+              "events": {
+                "bounty": [
+                  "bounty_hunter_1",
+                  "bounty_hunter_2",
+                  "bounty_hunter_3",
+                  "bounty_hunter_4",
+                  "bounty_hunter_5",
+                  "bounty_hunter_6",
+                  "bounty_hunter_7",
+                  "bounty_hunter_8",
+                  "bounty_hunter_9",
+                  "bounty_hunter_10",
+                  "bounty_hunter_11",
+                  "bounty_hunter_12",
+                  "bounty_hunter_13",
+                  "bounty_hunter_14",
+                  "bounty_hunter_15"
+                ],
+                "supply": [
+                  "equip_free_1",
+                  "equip_free_2",
+                  "equip_free_3",
+                  "equip_free_4"
+                ],
+                "shop": [
+                  "artifact_paid_1",
+                  "artifact_paid_2",
+                  "artifact_paid_3",
+                  "artifact_paid_4",
+                  "artifact_paid_5"
+                ],
+                "tactic": [
+                  "buff_select_1",
+                  "buff_select_2",
+                  "buff_select_3",
+                  "buff_select_4",
+                  "hardbuff_select_1",
+                  "hardbuff_select_2",
+                  "hardbuff_select_3",
+                  "terrain_m01_1",
+                  "terrain_m02_1",
+                  "terrain_m02_2",
+                  "terrain_m03_1",
+                  "terrain_m04_1",
+                  "terrain_m06_1",
+                  "terrain_m07_1"
+                ]
+              },
+              "assumed": true
+            }
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "FLY",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "TIMES",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "ELEMENT",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "DOT",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "INVISIBLE",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "types",
+              "REFLECTION",
+              "count"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "maxLevelCnt"
+            ],
+            "value": 18
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "FLY"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "TIMES"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "ELEMENT"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "DOT"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "INVISIBLE"
+            ],
+            "value": 4
+          },
+          {
+            "path": [
+              "factions",
+              "generation",
+              "typeSlots",
+              "REFLECTION"
+            ],
+            "value": 4
+          }
+        ]
+      }
+    }
+  ]
+}

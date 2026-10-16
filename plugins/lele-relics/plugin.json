@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/plugin.schema.json",
+  "manifest": 2,
+  "id": "lele-relics",
+  "name": "收藏品玩法",
+  "version": "0.3.0",
+  "app": ">=0.3.0 <0.4.0",
+  "api": 1,
+  "class": "content",
+  "scope": [
+    "room"
+  ],
+  "authors": [
+    "llleeeqi"
+  ],
+  "credits": [
+    "UNDFFIO"
+  ],
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
+  "description": "46件收藏品、战后三选一、一次复活与敌人转移等；不包含鸭梨手机。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "permissions": [
+    "data.patch"
+  ],
+  "data": [
+    "data/feature.json"
+  ]
+}

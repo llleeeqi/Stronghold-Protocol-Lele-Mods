@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/plugin.schema.json",
+  "manifest": 2,
+  "id": "lele-damage",
+  "name": "伤害统计",
+  "version": "0.3.0",
+  "app": ">=0.3.0 <0.4.0",
+  "api": 1,
+  "class": "content",
+  "scope": [
+    "room"
+  ],
+  "authors": [
+    "llleeeqi"
+  ],
+  "credits": [
+    "Stardust-minus"
+  ],
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
+  "description": "实际扣血排行，召唤物归属干员，仅保留本轮与上一轮。 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "permissions": [
+    "data.patch"
+  ],
+  "data": [
+    "data/feature.json"
+  ]
+}

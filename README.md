@@ -1,8 +1,26 @@
-# 乐勒砳特供 · Stronghold Protocol Mods
+# 乐勒砳特供 · Stronghold Protocol Plugins
 
-为朋友小服整理的独立 Mod 工具包，基于 [Stronghold Protocol](https://github.com/sganggs/Stronghold-Protocol)。采用可重放补丁与数据生成器：保留干净上游，构建单独运行目录，再交给 Docker Compose。适配版本见 [upstream.lock.json](upstream.lock.json)。
+同一项目下的八个独立玩法插件，适配官方 **0.3.0**。各项可以单独安装、选择和移除，也提供整套下载。默认全部关闭，使用上游自带的插件面板与内容校验。
 
-更多阵营、收藏品、两个干员包、伤害统计、恭喜发财和定向甄选来自其他作者的项目，本仓库做选择性移植、兼容整合与部署封装。感谢 [sganggs](https://github.com/sganggs) 及各拓展作者；这些玩法的原有实现与创意归原贡献者，不以本仓库名义宣称原创。
+**目前需要本仓库的宿主适配 API 1，不能直接装到纯原版 0.3.0。** 科研装置、魂灵、收藏品复活等流程还没有完整的上游插件接口，因此仍保留版本固定的共享宿主补丁；八个插件负责各自数据和启用状态。缺少兼容层时明确拒绝加载。详见 [插件与兼容边界](docs/PLUGINS.md)。
+
+## 首次部署：建议交给 Agent
+
+DSH、WorkBuddy、OpenCode 等能读仓库和执行命令的 Agent 均可使用。把仓库地址与下面这段话交给它：
+
+> 请部署这个仓库的0.3.0插件版。先读AGENTS.md、docs/PLUGINS.md、docs/DEPLOYMENT.md和upstream.lock.json。构建带Lele宿主兼容层的独立候选，安装八个插件，默认全部关闭。不要只把插件放进纯原版目录。云服务器使用Docker Compose，保留其他服务与正在进行的对局，空闲后切换并验证公网、房间内容校验和在线重连，最后给我可用链接。
+
+```bash
+git clone https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods.git
+cd Stronghold-Protocol-Lele-Mods
+cp .env.example .env
+bash scripts/stage.sh --name plugins-030
+bash scripts/activate.sh plugins-030
+```
+
+已有本仓库0.3.0适配宿主时，可单独安装：`node scripts/install-plugins.mjs /abs/game lele-factions lele-relics`。安装器不覆盖其他插件或服务器配置。游戏默认端口33000；本地开服见 [启动端接入](docs/LOCAL-LAUNCHER.md)。
+
+## 八个插件
 
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
@@ -15,61 +33,21 @@
 | 额外干员包 | 望、赤刃明霄陈、凯尔希·思衡托、维什戴尔；不重复丰川祥子，同时开启更多阵营时采用卡兹戴尔维什戴尔 | [Lunac1a](https://github.com/Lunac1a/Stronghold-Protocol) |
 | 定向甄选 | 晋升奖励仅第一位向主要盟约加权 ×2.6，后两位随机；第6回合起转职装备加权 ×2.6 | [Strinova-xinghui](https://github.com/Strinova-xinghui/Stronghold-Protocol) |
 
-游戏本体来自 [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。本仓库主要补充独立房间开关、+4 回合、多资料集联机适配、朋友服配置、界面整合与 Docker 部署流程。[完整来源、引用提交与移植范围](notices/SOURCES.md) 可供核对；引用不代表来源作者参与或认可本整合版。
 
-2026-10-14 已同步更多阵营来源 v0.2.4-rhine.3 的玩法到官方 **0.2.6** 基线：新增舍身刻印、众魂战刃及同构转职，魂灵完整继承原生技能/天赋/模组，卡兹戴尔改为3/6档、21格炮击仅误伤所属玩家。同步莱茵梅尔24/48层预算、多萝西科研攻击与钻机层数真伤，保留谬因、四人及八项默认关闭拓展。其他来源已检查，具体采用与未移植范围见 [更新说明](docs/MOD-UPDATES.md)。
+插件目录为 `plugins/lele-rounds`、`lele-factions`、`lele-relics`、`lele-operators`、`lele-damage`、`lele-lucky`、`lele-recruits`、`lele-targeted`。每项均有说明与来源。房主通过官方插件面板查看并勾选，等待室可更改，改动后重新准备和校验，开局锁定，在线重连保留同一份内容。
 
-更多阵营的玩法与适配边界见 [更多阵营说明](docs/MORE-FACTIONS.md)；全部拓展的来源项目、作者和固定提交见 [来源与署名](notices/SOURCES.md)。
+0.3.0没有把固定自定义干员所需的缺失补位形态变出来：缺失官方补位资料的新增干员按PRESET本人上场。更多阵营与额外干员同时开启时，只保留卡兹戴尔维什戴尔。鸭梨手机继续不加入；训练模式不延长。
 
-谬因随莱茵生命开启，二技能为固定朝向的周期直线法伤，中继器增攻、友军穿抗；友军波束折射仍简化，三技能暂未开放。
+## 来源与更新
 
-所有拓展默认关闭，可自由组合。所有八项均有圆圈叹号按钮，点击打开介绍，非房主也能阅读；说明按钮不会切换开关。大厅和等待室统一用勾选框：宽屏三列、中等屏两列、窄屏一列。房主在等待室切换，无需重建房间；切换清除玩家准备，开局后锁定，重连保留本局设置。
+本体来自 [sganggs/Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol)。除额外回合与本仓库整合外，多数玩法来自社区作者；感谢各来源贡献者，原有创意和实现不以本仓库名义宣称原创。
 
-“更多阵营”仍沿用 `rhineEnabled` 与 `rhine*` 资料集标识，旧房间协议和 Agent 脚本无需改名。
+准确仓库、作者、完整提交和选择性移植范围见 [notices/SOURCES.md](notices/SOURCES.md)。本次迁移保留2026-10-14已核对的玩法版本，升级本体及插件安装链路，不把迁移工作称为已同步所有来源的新HEAD。
 
-服务器演算，最多 4 人合作；原版/更多阵营 × 新干员包 × 额外干员包，共八套资料隔离。莱茵资料集标识仍叫 `rhine`，保留现有配置兼容。
+- [插件、安装与兼容边界](docs/PLUGINS.md)
+- [部署、更新与回退](docs/DEPLOYMENT.md)
+- [更多阵营玩法](docs/MORE-FACTIONS.md)
+- [46件收藏品](docs/COLLECTIBLES.md)
+- [更新记录](docs/MOD-UPDATES.md)
 
-## 首次部署
-
-### 推荐：交给 Agent 部署
-
-建议优先交给 Agent 完成部署。可以使用 DSH、WorkBuddy、OpenCode 等能读仓库并执行命令的 Agent。把仓库链接与下面这段话交给它，提供目标电脑或服务器的实际环境即可；这些工具不是本项目的运行依赖。
-
-> 请部署这个仓库的 Mod 版。先阅读 AGENTS.md、README.md 和 docs/DEPLOYMENT.md，按 upstream.lock.json 固定版本，在独立目录构建并验证，保留八个默认关闭的拓展开关。云服务器优先 Docker Compose；本地开服请按 docs/LOCAL-LAUNCHER.md 使用上游统一启动入口，必须启动带 Mod 的构建目录。保护已有服务和活跃房间，部署后验证多人同步与重连，最后给我可用地址。
-
-上游整合包和本地统一启动入口的接入说明见 [本地开服与 Agent 适配指引](docs/LOCAL-LAUNCHER.md)。当前工具包默认仍用 Docker 构建（Windows 可用 WSL），不宣称提供原生 Windows 一键 Mod 安装器，也不自动兼容未经验证的最新上游。
-
-### 手动部署
-
-推荐 Linux 服务器或 WSL，安装 Git、Python 3、Docker Engine 和 Compose v2。宿主机无需安装 Node。预留资源下载和候选版本的磁盘空间；小内存服务器建议配置至少 2 GB swap。
-
-```bash
-git clone https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods.git
-cd Stronghold-Protocol-Lele-Mods
-cp .env.example .env
-# 按需修改 PORT，默认 33000
-bash scripts/stage.sh --name first
-bash scripts/activate.sh first
-bash scripts/status.sh
-```
-
-打开 `http://服务器公网IP:33000/`，在安全组/防火墙放行实际 PORT 的 TCP。域名和 HTTPS 可接已有反向代理。首次构建需访问 GitHub、npm 和资源站点，图片、模型和音频由脚本下载到本机。
-
-Compose 默认限制 640 MiB、Node heap 384 MiB、1 CPU，只读运行目录、受限权限和滚动日志。朋友服保留在线断线重连，并限制闲置房间和队列；重启进程会结束原有房间和对局。
-
-## 部署、更新与回退
-
-- [Agent 操作说明](AGENTS.md)
-- [部署与更新流程](docs/DEPLOYMENT.md)
-- [Mod 分层与开关协议](docs/MODS.md)
-- [46件收藏品与新增玩法](docs/COLLECTIBLES.md)
-- [AI 托管、漏怪与实验结果](docs/AI-STATUS.md)
-- [来源与许可](notices/SOURCES.md)
-
-`stage.sh` 只构建候选；`activate.sh` 才切换线上，存在房间或对局会拒绝切换，启动检查失败自动回退。上游更新先在隔离目录验证补丁与联机，再修改固定版本。
-
-GitHub 的 Code → Download ZIP 下载本工具包；游戏本体由脚本获取。
-
-## 版权
-
-代码 GPL-3.0-or-later，见 [LICENSE](LICENSE)。保留上游与扩展作者署名。《明日方舟》的角色、美术、音频、官方数据等归相应权利人所有，不因本仓库 GPL 获得许可；详见 [上游声明](notices/UPSTREAM-NOTICE.md) 和莱茵相关声明。
+朋友服Compose默认640MiB内存、384MiB Node heap、1CPU、服务器演算、不写永久战绩。限制不是满载保证；活跃内容集会使用上游独立对局宿主。重启不恢复进行中的对局。上游插件工作台沿用本机/LAN访问规则。

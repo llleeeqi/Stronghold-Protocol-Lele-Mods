@@ -1,67 +1,39 @@
-# 部署与更新流程
+# 部署、更新与回退（0.3.0）
 
-## 构建顺序
+首次部署建议交给 Agent，先读 README、AGENTS.md 和 [插件兼容边界](PLUGINS.md)。需要 Git、Python 3、Docker Compose；Windows 可用 WSL。复制 `.env.example` 为 `.env`，设置端口和资源限制，保留已有 Compose 项目名与其他服务配置。
 
-stage.sh 在 `state/stages/NAME/source` 中：
+```bash
+bash scripts/stage.sh --name plugins-030
+bash scripts/activate.sh plugins-030
+```
 
-1. 获取固定干净上游并克隆候选。
-2. 应用 patches/modpack-code.patch，安装锁文件依赖；新版上游模块保留。
-3. 生成莱茵及完整原版快照，再仅生成 +4 回合数据，不复制 UI 覆盖文件。
-4. 刷新莱茵科研数据，追加莱茵谬因，再生成原四套及各自 -custom 的八套资料。
-5. 校验/下载原版、莱茵（含谬因）、两个干员包和收藏品资源，执行测试。
-6. 记录 UPSTREAM_REVISION / MODKIT_REVISION，全部成功才写 READY。
-
-失败保留 build.log，不改变线上。重新构建使用新阶段名，可复用已下载文件。构建默认最多 768 MiB，调整方式：`BUILD_MEMORY=1g bash scripts/stage.sh ...`。运行配置由 .env 读取，构建 BUILD_MEMORY 通过 shell 环境传入。
-
-## 复用与快速检查
+stage 在独立目录获取 upstream.lock.json 固定的官方 0.3.0，检查并应用宿主补丁，安装锁文件依赖。历史数据生成器只为准备素材使用；下载完成后恢复官方原版基线，写入 Lele API 1 标记，再安装、严格检查和打包八个插件。最终检查成功才写 READY，不改变运行中的服务。
 
 ```bash
 bash scripts/stage.sh --source /abs/clean-upstream --assets-from /abs/old-runtime --name update-001
-bash scripts/verify-patches.sh /abs/clean-upstream
 ```
 
-source 的 HEAD 等于指定 revision。baseline 数据只读，依赖和生成文件写候选。verify-patches.sh 不安装依赖、不下载资源，其候选没有 READY，不能直接部署。
+干净 source 的 HEAD 必须等于固定上游 SHA。素材使用普通复制，不能用会修改旧版本的硬链接。构建内存默认768MiB，可用 BUILD_MEMORY=1g 调整。Compose运行限制由 .env 设置；构建限制与运行限制独立。
 
-## 更新上游
+仅检查补丁和插件、不下载素材：`bash scripts/verify-patches.sh /abs/clean-upstream`。该命令安装依赖并准备检查候选，没有 READY，不能直接上线；随后可执行 `bash scripts/test.sh /abs/check/source`。检查围绕插件组合、房间内容校验、重连和相关界面，不重复全量测试。
 
-```bash
-git ls-remote https://github.com/sganggs/Stronghold-Protocol.git HEAD
-bash scripts/stage.sh --revision FULL_40_CHARACTER_SHA --name update-002
-```
+## 更新插件和本体
 
-核对默认关闭、256 种组合、多人资料载入、准备清除、开局锁定、收藏品与莱茵共存、新干员技能和重连。成功后更新 upstream.lock.json revision，提交补丁适配及验证结果。
+已有本仓库适配宿主，可在独立候选运行 `node scripts/install-plugins.mjs /abs/game [lele-id ...]`。它不覆盖 .env、其他作者插件和 plugins/config.json。插件依赖宿主API1，纯原版会明确拒绝，不能跳过检查。
 
-0.2.6 的代码补丁导出基线为 upstream.lock.json 的完整官方提交，包含八项拓展的代码，排除 data/ 和运行资源。资料集由独立生成器重建；八项仍由房间开关分别控制。后续新上游必须适配补丁并检查方法模块，不能直接复用旧 UI 覆盖文件。
+升级本体先适配新的固定 SHA、重做 patches/modpack-code.patch，再更新 lock、插件锁和说明。不能只修改 revision 就声称兼容。生成器负责重建素材输入，plugins/ 保存正式功能数据，运行时不依赖旧八套资料切换。
 
-## 切换与回退
+## 切换和回退
 
 ```bash
-bash scripts/activate.sh update-002
+bash scripts/activate.sh update-001
 bash scripts/status.sh
-bash scripts/activate.sh first  # 回退至旧 READY 阶段
+# 回退时传入上一份仍保留的 READY 阶段名
+bash scripts/activate.sh PREVIOUS_STAGE
 ```
 
-activate.sh 验证 Compose，检查已管理实例 rooms=0/matches=0，原子更新 state/current，再 force-recreate 本游戏。无法启动或 healthz 不可用则恢复旧链接与旧容器；首次部署没有旧版本时停止失败容器。
+activate 检查 rooms=0、matches=0 后原子更新 state/current 并重建游戏容器；健康检查失败恢复旧版。仅重建本游戏。保留上一版本及其干净git基线（候选git可能使用alternates），清理明确不再使用的阶段，不影响其他服务。
 
-healthz 表示进程健康，切换后还需验证公网及联机。服务器演算支持在线断线重连，重启进程不保留对局。
+切换后检查公网页面、/healthz、/plugins/index.json、WebSocket、等待室插件更改、内容准备和在线重连。服务器演算支持断线重连，进程重启不恢复进行中的对局。朋友进入原游戏链接，在房间插件面板选择；所有拓展默认关闭。
 
-Compose 项目名 lele-stronghold，独立于其他项目。迁移已有服务时准备候选后按用户授权确认空闲并释放目标端口。
-
-## 管理
-
-```bash
-docker compose logs --tail 100 game
-docker compose stop game  # 明确停止本游戏时使用
-docker compose start game
-bash scripts/status.sh
-```
-
-旧阶段保留作回退，确认不再需要后只清理明确指定的目录。公网链接使用 .env 的 PORT，配置反代时检查 WebSocket。
-
-科研来源只选择性移植玩法与校验改动，保留来源署名，不把来源 fork 的 Windows 更新器或服务器配置覆盖到候选目录。
-
-复用旧运行目录时，stage.sh 会刷新音频／语音／模型索引，现有素材文件仍增量复用，避免新版本新增干员素材被旧索引遗漏。保留上游素材清单防缩减检查，不使用 --allow-shrink 绕过。
-
-常规更新可使用 `SP_STAGE_CHECKS=update bash scripts/stage.sh ...`，执行关键拓展、联机、库存与界面兼容检查。默认 `full` 保留完整检查；GitHub CI 仍执行完整检查。任一模式失败都不会生成 READY。
-
-0.2.6 官方场景可从官方 full / update ZIP 提取 `public/assets/local/scene/`，并仅合并 `data/local-assets.json` 中的 `scene/` 分组，保留现有 Mod 索引。不要覆盖 ZIP 的代码或其他资料。后续 `--assets-from` 会复用素材和本地素材索引。
+远程管理插件工作台请用SSH转发，保留上游本机/LAN访问规则。公网反代须支持WebSocket。

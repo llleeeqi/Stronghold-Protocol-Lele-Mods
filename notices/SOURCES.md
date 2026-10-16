@@ -1,3 +1,5 @@
+> 2026-10-16：本体与官方插件加载器固定0.3.0（c24e17eec3af1e6dedfa9935a6d15245cf2f4586）。玩法来源沿用2026-10-14锁定的选择性移植，新增八个独立插件封装及Lele宿主API1兼容层；未声称同步所有fork的新HEAD。
+
 > 2026-10-14：更多阵营选择性同步至 `19f8f2d853144c94cd71554c0989d7550ad9de65`，保留四人、默认关闭、谬因与官方0.2.6。伤害统计兼容修复来自 Stardust-minus 的 `b442d41ec719b7c85ac3b9468604acda9f4eff19`，适配本包面板布局。
 
 > 2026-10-13：本体固定版本更新到官方 0.2.6；拓展来源的采用提交保持不变，本轮仅做新版兼容。
@@ -12,7 +14,7 @@
 
 | 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-09） |
 |---|---|---|
-| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `488db49f11daf862b67ce26fa4cf89aa6cba2466` | `488db49f11daf862b67ce26fa4cf89aa6cba2466` |
+| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `c24e17eec3af1e6dedfa9935a6d15245cf2f4586` | `c24e17eec3af1e6dedfa9935a6d15245cf2f4586` |
 | 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `19f8f2d853144c94cd71554c0989d7550ad9de65` | `19f8f2d853144c94cd71554c0989d7550ad9de65` |
 | 谬因二技能（本整合归入莱茵生命） | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` |
 | 收藏品玩法（46 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `7edfb9662f26a7b8e829f378a069a847b341a583` | `7edfb9662f26a7b8e829f378a069a847b341a583` |

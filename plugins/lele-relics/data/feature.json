@@ -1,0 +1,21 @@
+{
+  "patch": 1,
+  "ops": [
+    {
+      "op": "merge",
+      "file": "config",
+      "path": [
+        "economy",
+        "leleHost",
+        "packages",
+        "relics"
+      ],
+      "value": {
+        "api": 1,
+        "feature": "relics",
+        "flag": "relicsEnabled",
+        "changes": []
+      }
+    }
+  ]
+}

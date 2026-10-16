@@ -1,0 +1,5845 @@
+{
+  "patch": 1,
+  "ops": [
+    {
+      "op": "merge",
+      "file": "config",
+      "path": [
+        "economy",
+        "leleHost",
+        "packages",
+        "operators"
+      ],
+      "value": {
+        "api": 1,
+        "feature": "operators",
+        "flag": "operatorsEnabled",
+        "changes": [
+          {
+            "path": [
+              "chess",
+              "chess_char_5_makoto_a"
+            ],
+            "value": {
+              "chessId": "chess_char_5_makoto_a",
+              "baseId": "chess_char_5_makoto_a",
+              "goldenId": "chess_char_5_makoto_b",
+              "isGolden": false,
+              "tier": 5,
+              "identifier": 10001,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4217_makoto",
+                "skillIndex": 2,
+                "uniEquipId": null
+              },
+              "shopSortId": 24,
+              "charId": "char_4217_makoto",
+              "name": "结城理",
+              "appellation": "Makoto Yuki",
+              "rarity": 6,
+              "profession": "SPECIAL",
+              "subProfessionId": "dollkeeper",
+              "subProfessionName": "傀儡师",
+              "position": "MELEE",
+              "nationId": null,
+              "bonds": [
+                "lateranoShip",
+                "indomShip"
+              ],
+              "garrisonIds": [
+                "garrison_makoto_a"
+              ],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 3,
+              "upgradeChessId": "chess_char_5_makoto_b",
+              "status": {
+                "phase": 2,
+                "level": 1,
+                "skillLevel": 4,
+                "equipLevel": 0
+              },
+              "stats": {
+                "maxHp": 2215,
+                "atk": 677,
+                "def": 253,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 2,
+                "bat": 1.2,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "1-1",
+              "rangeGrid": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "melee",
+              "projectile": "none",
+              "canHitFly": false,
+              "targetPriority": null,
+              "trait": {
+                "desc": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0），持续20秒后自身再次替换<替身>",
+                "descRaw": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0），持续20秒后自身再次替换<替身>",
+                "bb": {
+                  "duration": 20
+                },
+                "bbStr": {},
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    1,
+                    -1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    0,
+                    -2
+                  ],
+                  [
+                    0,
+                    -1
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    -1,
+                    -1
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -2,
+                    0
+                  ]
+                ]
+              },
+              "skill": {
+                "skillId": "skchr_makoto_3",
+                "iconId": "skchr_makoto_3",
+                "name": "开辟明日的剑刃",
+                "level": 4,
+                "desc": "被动：<替身>状态初始召唤塔纳托斯，攻击速度+30，攻击对至多3名敌人造成攻击力170%的弱点伤害，塔纳托斯在场时，开启技能或受到致命伤时改为召唤俄耳甫斯，阻挡数+2，使范围内友方干员获得30%的物理与法术闪避并每秒治疗范围内最多3名友方干员相当于结城理攻击力25%的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                "descRaw": "被动：<替身>状态初始召唤<@ba.vup>塔纳托斯</>，攻击速度<@ba.vup>+30</>，攻击对至多<@ba.vup>3</>名敌人造成攻击力<@ba.vup>170%</>的<$ba.weaknessatk>弱点伤害</>，<@ba.vup>塔纳托斯</>在场时，开启技能或受到致命伤时改为召唤<@ba.vup>俄耳甫斯</>，阻挡数<@ba.vup>+2</>，使范围内友方干员获得<@ba.vup>30%</>的物理与法术闪避并每秒治疗范围内最多<@ba.vup>3</>名友方干员相当于结城理攻击力<@ba.vup>25%</>的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 0,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 20,
+                "initSp": 5,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "talent@attack_speed": 30,
+                  "attack@atk_scale": 1.7,
+                  "attack@heal_scale": 0.25,
+                  "attack@interval": 1,
+                  "attack@prob": 0.3,
+                  "attack@max_target": 3,
+                  "attack@max_target_heal": 3,
+                  "attack@block_cnt": 2
+                },
+                "bbStr": {},
+                "rangeId": "x-1",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    1,
+                    -1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    0,
+                    -2
+                  ],
+                  [
+                    0,
+                    -1
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    -1,
+                    -1
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -2,
+                    0
+                  ]
+                ],
+                "prefabId": "skchr_makoto_3",
+                "trigger": {
+                  "rule": "SKILL_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "不羁之力",
+                  "desc": "结城理切换为<替身>状态时停顿周围一定范围内敌人8秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+80%，生命值+35%，作战能力随技能选择而改变",
+                  "descRaw": "结城理切换为<替身>状态时<$ba.sluggish>停顿</>周围一定范围内敌人8秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+80%，生命值+35%，作战能力随技能选择而改变",
+                  "bb": {
+                    "atk": 0.8,
+                    "base_attack_time": 0.4,
+                    "sluggish": 8,
+                    "max_hp_t1": 0.35
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "S.E.E.S.队长",
+                  "desc": "结城理<替身>状态结束后，带领S.E.E.S.小队发动总攻击，对S.E.E.S.小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "descRaw": "结城理<替身>状态结束后，带领<$ba.sees>S.E.E.S.</>小队发动总攻击，对<$ba.sees>S.E.E.S.</>小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "bb": {
+                    "atk_scale": 4.3,
+                    "multi_attack_total_cnt": 1,
+                    "final_damage_different_ratio": 1
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_makoto",
+                "name": "彼此的声音",
+                "type": "PUM-Y",
+                "level": 0,
+                "active": false
+              },
+              "assets": {
+                "avatar": "char_4217_makoto",
+                "portrait": "char_4217_makoto_1",
+                "spine": "char_4217_makoto",
+                "skillIcon": "skchr_makoto_3",
+                "subProfIcon": "sub_dollkeeper_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_makoto_1",
+                  "iconId": "skchr_makoto_1",
+                  "name": "俄耳甫斯的竖琴",
+                  "level": 4,
+                  "desc": "被动：<替身>状态召唤俄耳甫斯，攻击对敌人造成攻击力150%的法术伤害，范围内有生命值低于50%的友方干员时，改为对其治疗相当于结城理攻击力40%的生命值\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态召唤<@ba.vup>俄耳甫斯</>，攻击对敌人造成攻击力<@ba.vup>150%</>的法术伤害，范围内有生命值低于<@ba.vup>50%</>的友方干员时，改为对其治疗相当于结城理攻击力<@ba.vup>40%</>的生命值\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 14,
+                  "initSp": 0,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 1.5,
+                    "attack@heal_scale": 0.4
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_1",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_makoto_2",
+                  "iconId": "skchr_makoto_2",
+                  "name": "塔纳托斯的囚锁",
+                  "level": 4,
+                  "desc": "被动：<替身>状态召唤塔纳托斯，攻击对至多3名敌人造成攻击力160%的法术伤害并有35%概率恐惧敌人1.5秒，范围内恐惧中的敌人若生命值低于结城理攻击力的230%则立刻倒下\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态召唤<@ba.vup>塔纳托斯</>，攻击对至多<@ba.vup>3</>名敌人造成攻击力<@ba.vup>160%</>的法术伤害并有<@ba.vup>35%</>概率<$ba.fear>恐惧</>敌人<@ba.vup>1.5</>秒，范围内<$ba.fear>恐惧</>中的敌人若生命值低于结城理攻击力的<@ba.vup>230%</>则立刻倒下\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 18,
+                  "initSp": 3,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@max_target": 3,
+                    "attack@atk_scale": 1.6,
+                    "attack@prob": 0.35,
+                    "attack@fear": 1.5,
+                    "attack@kill_atk_scale": 2.3,
+                    "attack@kill_damage": 9999999
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_2",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_makoto_3",
+                  "iconId": "skchr_makoto_3",
+                  "name": "开辟明日的剑刃",
+                  "level": 4,
+                  "desc": "被动：<替身>状态初始召唤塔纳托斯，攻击速度+30，攻击对至多3名敌人造成攻击力170%的弱点伤害，塔纳托斯在场时，开启技能或受到致命伤时改为召唤俄耳甫斯，阻挡数+2，使范围内友方干员获得30%的物理与法术闪避并每秒治疗范围内最多3名友方干员相当于结城理攻击力25%的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态初始召唤<@ba.vup>塔纳托斯</>，攻击速度<@ba.vup>+30</>，攻击对至多<@ba.vup>3</>名敌人造成攻击力<@ba.vup>170%</>的<$ba.weaknessatk>弱点伤害</>，<@ba.vup>塔纳托斯</>在场时，开启技能或受到致命伤时改为召唤<@ba.vup>俄耳甫斯</>，阻挡数<@ba.vup>+2</>，使范围内友方干员获得<@ba.vup>30%</>的物理与法术闪避并每秒治疗范围内最多<@ba.vup>3</>名友方干员相当于结城理攻击力<@ba.vup>25%</>的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 20,
+                  "initSp": 5,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "talent@attack_speed": 30,
+                    "attack@atk_scale": 1.7,
+                    "attack@heal_scale": 0.25,
+                    "attack@interval": 1,
+                    "attack@prob": 0.3,
+                    "attack@max_target": 3,
+                    "attack@max_target_heal": 3,
+                    "attack@block_cnt": 2
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_3",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_5_makoto_b"
+            ],
+            "value": {
+              "chessId": "chess_char_5_makoto_b",
+              "baseId": "chess_char_5_makoto_a",
+              "goldenId": "chess_char_5_makoto_b",
+              "isGolden": true,
+              "tier": 5,
+              "identifier": 10002,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4217_makoto",
+                "skillIndex": 2,
+                "uniEquipId": "uniequip_002_makoto"
+              },
+              "shopSortId": 24,
+              "charId": "char_4217_makoto",
+              "name": "结城理",
+              "appellation": "Makoto Yuki",
+              "rarity": 6,
+              "profession": "SPECIAL",
+              "subProfessionId": "dollkeeper",
+              "subProfessionName": "傀儡师",
+              "position": "MELEE",
+              "nationId": null,
+              "bonds": [
+                "lateranoShip",
+                "indomShip"
+              ],
+              "garrisonIds": [
+                "garrison_makoto_b"
+              ],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 0,
+              "upgradeChessId": null,
+              "status": {
+                "phase": 2,
+                "level": 60,
+                "skillLevel": 7,
+                "equipLevel": 3
+              },
+              "stats": {
+                "maxHp": 2910,
+                "atk": 805,
+                "def": 321,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 2,
+                "bat": 1.2,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "1-1",
+              "rangeGrid": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "melee",
+              "projectile": "none",
+              "canHitFly": false,
+              "targetPriority": null,
+              "trait": {
+                "desc": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0但生命值提升），持续20秒后自身再次替换<替身>",
+                "descRaw": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0但生命值<@ba.kw>提升</>），持续20秒后自身再次替换<替身>",
+                "bb": {
+                  "duration": 20,
+                  "max_hp": 0.2
+                },
+                "bbStr": {},
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    1,
+                    -1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    0,
+                    -2
+                  ],
+                  [
+                    0,
+                    -1
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    -1,
+                    -1
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -2,
+                    0
+                  ]
+                ]
+              },
+              "skill": {
+                "skillId": "skchr_makoto_3",
+                "iconId": "skchr_makoto_3",
+                "name": "开辟明日的剑刃",
+                "level": 7,
+                "desc": "被动：<替身>状态初始召唤塔纳托斯，攻击速度+45，攻击对至多4名敌人造成攻击力200%的弱点伤害，塔纳托斯在场时，开启技能或受到致命伤时改为召唤俄耳甫斯，阻挡数+2，使范围内友方干员获得35%的物理与法术闪避并每秒治疗范围内最多4名友方干员相当于结城理攻击力30%的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                "descRaw": "被动：<替身>状态初始召唤<@ba.vup>塔纳托斯</>，攻击速度<@ba.vup>+45</>，攻击对至多<@ba.vup>4</>名敌人造成攻击力<@ba.vup>200%</>的<$ba.weaknessatk>弱点伤害</>，<@ba.vup>塔纳托斯</>在场时，开启技能或受到致命伤时改为召唤<@ba.vup>俄耳甫斯</>，阻挡数<@ba.vup>+2</>，使范围内友方干员获得<@ba.vup>35%</>的物理与法术闪避并每秒治疗范围内最多<@ba.vup>4</>名友方干员相当于结城理攻击力<@ba.vup>30%</>的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 0,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 15,
+                "initSp": 7,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "talent@attack_speed": 45,
+                  "attack@atk_scale": 2,
+                  "attack@heal_scale": 0.3,
+                  "attack@interval": 1,
+                  "attack@prob": 0.35,
+                  "attack@max_target": 4,
+                  "attack@max_target_heal": 4,
+                  "attack@block_cnt": 2
+                },
+                "bbStr": {},
+                "rangeId": "x-1",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    1,
+                    -1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    0,
+                    -2
+                  ],
+                  [
+                    0,
+                    -1
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    -1,
+                    -1
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -2,
+                    0
+                  ]
+                ],
+                "prefabId": "skchr_makoto_3",
+                "trigger": {
+                  "rule": "SKILL_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "不羁之力",
+                  "desc": "结城理切换为<替身>状态时停顿周围一定范围内敌人10秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+95%，生命值+40%，作战能力随技能选择而改变",
+                  "descRaw": "结城理切换为<替身>状态时<$ba.sluggish>停顿</>周围一定范围内敌人10秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+95%，生命值+40%，作战能力随技能选择而改变",
+                  "bb": {
+                    "atk": 0.95,
+                    "base_attack_time": 0.4,
+                    "sluggish": 10,
+                    "max_hp_t1": 0.4
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": true
+                },
+                {
+                  "index": 1,
+                  "name": "S.E.E.S.队长",
+                  "desc": "结城理<替身>状态结束后，带领S.E.E.S.小队发动总攻击，对S.E.E.S.小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "descRaw": "结城理<替身>状态结束后，带领<$ba.sees>S.E.E.S.</>小队发动总攻击，对<$ba.sees>S.E.E.S.</>小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "bb": {
+                    "atk_scale": 4.3,
+                    "multi_attack_total_cnt": 1,
+                    "final_damage_different_ratio": 1
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_makoto",
+                "name": "彼此的声音",
+                "type": "PUM-Y",
+                "level": 3,
+                "active": true
+              },
+              "assets": {
+                "avatar": "char_4217_makoto_2",
+                "portrait": "char_4217_makoto_2",
+                "spine": "char_4217_makoto",
+                "skillIcon": "skchr_makoto_3",
+                "subProfIcon": "sub_dollkeeper_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_makoto_1",
+                  "iconId": "skchr_makoto_1",
+                  "name": "俄耳甫斯的竖琴",
+                  "level": 7,
+                  "desc": "被动：<替身>状态召唤俄耳甫斯，攻击对敌人造成攻击力210%的法术伤害，范围内有生命值低于50%的友方干员时，改为对其治疗相当于结城理攻击力50%的生命值\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态召唤<@ba.vup>俄耳甫斯</>，攻击对敌人造成攻击力<@ba.vup>210%</>的法术伤害，范围内有生命值低于<@ba.vup>50%</>的友方干员时，改为对其治疗相当于结城理攻击力<@ba.vup>50%</>的生命值\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 8,
+                  "initSp": 4,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 2.1,
+                    "attack@heal_scale": 0.5
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_1",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_makoto_2",
+                  "iconId": "skchr_makoto_2",
+                  "name": "塔纳托斯的囚锁",
+                  "level": 7,
+                  "desc": "被动：<替身>状态召唤塔纳托斯，攻击对至多4名敌人造成攻击力220%的法术伤害并有35%概率恐惧敌人1.5秒，范围内恐惧中的敌人若生命值低于结城理攻击力的250%则立刻倒下\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态召唤<@ba.vup>塔纳托斯</>，攻击对至多<@ba.vup>4</>名敌人造成攻击力<@ba.vup>220%</>的法术伤害并有<@ba.vup>35%</>概率<$ba.fear>恐惧</>敌人<@ba.vup>1.5</>秒，范围内<$ba.fear>恐惧</>中的敌人若生命值低于结城理攻击力的<@ba.vup>250%</>则立刻倒下\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 12,
+                  "initSp": 6,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@max_target": 4,
+                    "attack@atk_scale": 2.2,
+                    "attack@prob": 0.35,
+                    "attack@fear": 1.5,
+                    "attack@kill_atk_scale": 2.5,
+                    "attack@kill_damage": 9999999
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_2",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_makoto_3",
+                  "iconId": "skchr_makoto_3",
+                  "name": "开辟明日的剑刃",
+                  "level": 7,
+                  "desc": "被动：<替身>状态初始召唤塔纳托斯，攻击速度+45，攻击对至多4名敌人造成攻击力200%的弱点伤害，塔纳托斯在场时，开启技能或受到致命伤时改为召唤俄耳甫斯，阻挡数+2，使范围内友方干员获得35%的物理与法术闪避并每秒治疗范围内最多4名友方干员相当于结城理攻击力30%的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                  "descRaw": "被动：<替身>状态初始召唤<@ba.vup>塔纳托斯</>，攻击速度<@ba.vup>+45</>，攻击对至多<@ba.vup>4</>名敌人造成攻击力<@ba.vup>200%</>的<$ba.weaknessatk>弱点伤害</>，<@ba.vup>塔纳托斯</>在场时，开启技能或受到致命伤时改为召唤<@ba.vup>俄耳甫斯</>，阻挡数<@ba.vup>+2</>，使范围内友方干员获得<@ba.vup>35%</>的物理与法术闪避并每秒治疗范围内最多<@ba.vup>4</>名友方干员相当于结城理攻击力<@ba.vup>30%</>的生命值，直到<替身>状态结束\n主动：立即切换为<替身>状态作战",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 15,
+                  "initSp": 7,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "talent@attack_speed": 45,
+                    "attack@atk_scale": 2,
+                    "attack@heal_scale": 0.3,
+                    "attack@interval": 1,
+                    "attack@prob": 0.35,
+                    "attack@max_target": 4,
+                    "attack@max_target_heal": 4,
+                    "attack@block_cnt": 2
+                  },
+                  "bbStr": {},
+                  "rangeId": "x-1",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      1,
+                      -1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      -2
+                    ],
+                    [
+                      0,
+                      -1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      -1
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -2,
+                      0
+                    ]
+                  ],
+                  "prefabId": "skchr_makoto_3",
+                  "trigger": {
+                    "rule": "SKILL_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ],
+              "statsBase": {
+                "maxHp": 2606,
+                "atk": 771,
+                "def": 287,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 2,
+                "bat": 1.2,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "traitBase": {
+                "desc": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0），持续20秒后自身再次替换<替身>",
+                "descRaw": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0），持续20秒后自身再次替换<替身>",
+                "bb": {
+                  "duration": 20
+                },
+                "bbStr": {},
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    1,
+                    -1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    0,
+                    -2
+                  ],
+                  [
+                    0,
+                    -1
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    -1,
+                    -1
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -2,
+                    0
+                  ]
+                ]
+              },
+              "talentsBase": [
+                {
+                  "index": 0,
+                  "name": "不羁之力",
+                  "desc": "结城理切换为<替身>状态时停顿周围一定范围内敌人8秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+80%，生命值+35%，作战能力随技能选择而改变",
+                  "descRaw": "结城理切换为<替身>状态时<$ba.sluggish>停顿</>周围一定范围内敌人8秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+80%，生命值+35%，作战能力随技能选择而改变",
+                  "bb": {
+                    "atk": 0.8,
+                    "base_attack_time": 0.4,
+                    "sluggish": 8,
+                    "max_hp_t1": 0.35
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "S.E.E.S.队长",
+                  "desc": "结城理<替身>状态结束后，带领S.E.E.S.小队发动总攻击，对S.E.E.S.小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "descRaw": "结城理<替身>状态结束后，带领<$ba.sees>S.E.E.S.</>小队发动总攻击，对<$ba.sees>S.E.E.S.</>小队队员周围一定范围内的所有敌人造成相当于结城理攻击力430%的真实伤害（可叠加）",
+                  "bb": {
+                    "atk_scale": 4.3,
+                    "multi_attack_total_cnt": 1,
+                    "final_damage_different_ratio": 1
+                  },
+                  "bbStr": {
+                    "range_id": "x-1"
+                  },
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "modules": [
+                {
+                  "uniEquipId": "uniequip_002_makoto",
+                  "name": "彼此的声音",
+                  "typeName": "PUM-Y",
+                  "typeIcon": "pum-y",
+                  "icon": "uniequip_002_makoto",
+                  "isDefault": true,
+                  "level": 3,
+                  "attr": {
+                    "maxHp": 304,
+                    "atk": 34,
+                    "def": 34
+                  },
+                  "traitOverride": {
+                    "desc": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0但生命值提升），持续20秒后自身再次替换<替身>",
+                    "descRaw": "受到致命伤时不撤退，切换成<替身>作战（替身阻挡数为0但生命值<@ba.kw>提升</>），持续20秒后自身再次替换<替身>",
+                    "bb": {
+                      "duration": 20,
+                      "max_hp": 0.2
+                    },
+                    "bbStr": {},
+                    "rangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        1,
+                        -1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        0,
+                        -2
+                      ],
+                      [
+                        0,
+                        -1
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        -1,
+                        -1
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -2,
+                        0
+                      ]
+                    ]
+                  },
+                  "talentChanges": [
+                    {
+                      "talentIndex": 0,
+                      "name": "不羁之力",
+                      "desc": "结城理切换为<替身>状态时停顿周围一定范围内敌人10秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+95%，生命值+40%，作战能力随技能选择而改变",
+                      "descRaw": "结城理切换为<替身>状态时<$ba.sluggish>停顿</>周围一定范围内敌人10秒；<替身>状态下结城理召唤人格面具作战，攻击间隔增大，攻击力+95%，生命值+40%，作战能力随技能选择而改变",
+                      "bb": {
+                        "atk": 0.95,
+                        "base_attack_time": 0.4,
+                        "sluggish": 10,
+                        "max_hp_t1": 0.4
+                      },
+                      "bbStr": {
+                        "range_id": "x-1"
+                      },
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": false
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_5_narant_a"
+            ],
+            "value": {
+              "chessId": "chess_char_5_narant_a",
+              "baseId": "chess_char_5_narant_a",
+              "goldenId": "chess_char_5_narant_b",
+              "isGolden": false,
+              "tier": 5,
+              "identifier": 10020,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4138_narant",
+                "skillIndex": 2,
+                "uniEquipId": null
+              },
+              "shopSortId": 27,
+              "charId": "char_4138_narant",
+              "name": "娜仁图亚",
+              "appellation": "Narantuya",
+              "rarity": 6,
+              "profession": "SNIPER",
+              "subProfessionId": "loopshooter",
+              "subProfessionName": "回环射手",
+              "position": "RANGED",
+              "nationId": "sargon",
+              "bonds": [
+                "sargonShip"
+              ],
+              "garrisonIds": [
+                "garrison_narant_a"
+              ],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 3,
+              "upgradeChessId": "chess_char_5_narant_b",
+              "status": {
+                "phase": 2,
+                "level": 1,
+                "skillLevel": 4,
+                "equipLevel": 0
+              },
+              "stats": {
+                "maxHp": 2000,
+                "atk": 573,
+                "def": 144,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 1,
+                "bat": 1,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "y-7",
+              "rangeGrid": [
+                [
+                  1,
+                  -1
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  0,
+                  -1
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -1,
+                  -1
+                ],
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  1
+                ],
+                [
+                  -1,
+                  2
+                ],
+                [
+                  -1,
+                  3
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "ranged",
+              "projectile": "arrow",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "持有回旋投射物时才能够攻击（投射物需要时间回收）",
+                "descRaw": "持有<@ba.kw>回旋投射物</>时才能够攻击（投射物需要时间回收）",
+                "bb": {},
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "skill": {
+                "skillId": "skchr_narant_3",
+                "iconId": "skchr_narant_3",
+                "name": "吞日",
+                "level": 4,
+                "desc": "每次攻击发射3个回旋投射物（每个造成相当于攻击力145%的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多3名敌人造成一次相当于攻击力130%的物理伤害并使其停顿1秒",
+                "descRaw": "每次攻击发射<@ba.vup>3</>个回旋投射物（每个造成相当于攻击力<@ba.vup>145%</>的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多<@ba.vup>3</>名敌人造成一次相当于攻击力<@ba.vup>130%</>的物理伤害并使其<$ba.sluggish>停顿</><@ba.vup>1</>秒",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 20,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 39,
+                "initSp": 14,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 1.45,
+                  "atk_scale_aoe": 1.3,
+                  "sluggish": 1,
+                  "attack@aoe.max_target": 3,
+                  "cnt": 3
+                },
+                "bbStr": {},
+                "rangeId": null,
+                "rangeGrid": null,
+                "prefabId": "skchr_narant_3",
+                "trigger": {
+                  "rule": "DEFAULT",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": null
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "“我见，我得”",
+                  "desc": "在场时，每次攻击到敌人偷取其25点攻击力（最高250点）与20点防御力（最高200点）",
+                  "descRaw": "在场时，每次攻击到敌人<$ba.steal>偷取</>其25点攻击力（最高250点）与20点防御力（最高200点）",
+                  "bb": {
+                    "attack@steal_atk": 25,
+                    "attack@steal_atk_max": 250,
+                    "attack@steal_def": 20,
+                    "attack@steal_def_max": 200
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "婀娜虚影",
+                  "desc": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "descRaw": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "bb": {
+                    "prob": 0.35,
+                    "damage_hitrate_physical": -0.2,
+                    "damage_hitrate_magical": -0.2
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_narant",
+                "name": "“吹尽狂沙”",
+                "type": "LPS-X",
+                "level": 0,
+                "active": false
+              },
+              "assets": {
+                "avatar": "char_4138_narant",
+                "portrait": "char_4138_narant_1",
+                "spine": "char_4138_narant",
+                "skillIcon": "skchr_narant_3",
+                "subProfIcon": "sub_loopshooter_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_narant_1",
+                  "iconId": "skchr_narant_1",
+                  "name": "旋刃",
+                  "level": 4,
+                  "desc": "可以在下列状态和初始状态间切换：\n攻击距离-1，回旋投射物造成相当于攻击力140%的物理伤害，并且可以在敌人间重复弹射（最多弹跳3次）",
+                  "descRaw": "<@ba.rem>可以在下列状态和初始状态间切换：</>\n攻击距离<@ba.vdown>-1</>，回旋投射物造成相当于攻击力<@ba.vup>140%</>的物理伤害，并且可以在敌人间重复弹射（最多弹跳<@ba.vup>3</>次）",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 9,
+                  "initSp": 0,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@times": 3,
+                    "attack@atk_scale": 1.4,
+                    "ability_range_forward_extend": -1
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_narant_2",
+                  "iconId": "skchr_narant_2",
+                  "name": "恶魇",
+                  "level": 4,
+                  "desc": "每次攻击造成相当于攻击力210%的物理伤害并使目标停顿1秒，投射物命中目标后会在短暂突进后折返，返回时对穿过的所有敌人造成一次相当于攻击力155%的物理伤害",
+                  "descRaw": "每次攻击造成相当于攻击力<@ba.vup>210%</>的物理伤害并使目标<$ba.sluggish>停顿</><@ba.vup>1</>秒，投射物命中目标后会在短暂突进后折返，返回时对穿过的所有敌人造成一次相当于攻击力<@ba.vup>155%</>的物理伤害",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 30,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 18,
+                  "initSp": 5,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@move_ahead_time": 0.5,
+                    "attack@projectile_range": 1,
+                    "attack@atk_scale": 2.1,
+                    "attack@atk_scale_comeback": 1.55,
+                    "attack@sluggish": 1
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_2",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_narant_3",
+                  "iconId": "skchr_narant_3",
+                  "name": "吞日",
+                  "level": 4,
+                  "desc": "每次攻击发射3个回旋投射物（每个造成相当于攻击力145%的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多3名敌人造成一次相当于攻击力130%的物理伤害并使其停顿1秒",
+                  "descRaw": "每次攻击发射<@ba.vup>3</>个回旋投射物（每个造成相当于攻击力<@ba.vup>145%</>的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多<@ba.vup>3</>名敌人造成一次相当于攻击力<@ba.vup>130%</>的物理伤害并使其<$ba.sluggish>停顿</><@ba.vup>1</>秒",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 20,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 39,
+                  "initSp": 14,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 1.45,
+                    "atk_scale_aoe": 1.3,
+                    "sluggish": 1,
+                    "attack@aoe.max_target": 3,
+                    "cnt": 3
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_3",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_5_narant_b"
+            ],
+            "value": {
+              "chessId": "chess_char_5_narant_b",
+              "baseId": "chess_char_5_narant_a",
+              "goldenId": "chess_char_5_narant_b",
+              "isGolden": true,
+              "tier": 5,
+              "identifier": 10021,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4138_narant",
+                "skillIndex": 2,
+                "uniEquipId": "uniequip_002_narant"
+              },
+              "shopSortId": 27,
+              "charId": "char_4138_narant",
+              "name": "娜仁图亚",
+              "appellation": "Narantuya",
+              "rarity": 6,
+              "profession": "SNIPER",
+              "subProfessionId": "loopshooter",
+              "subProfessionName": "回环射手",
+              "position": "RANGED",
+              "nationId": "sargon",
+              "bonds": [
+                "sargonShip"
+              ],
+              "garrisonIds": [
+                "garrison_narant_b"
+              ],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 0,
+              "upgradeChessId": null,
+              "status": {
+                "phase": 2,
+                "level": 60,
+                "skillLevel": 7,
+                "equipLevel": 3
+              },
+              "stats": {
+                "maxHp": 2331,
+                "atk": 704,
+                "def": 206,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 1,
+                "bat": 1,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "y-7",
+              "rangeGrid": [
+                [
+                  1,
+                  -1
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  0,
+                  -1
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -1,
+                  -1
+                ],
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  1
+                ],
+                [
+                  -1,
+                  2
+                ],
+                [
+                  -1,
+                  3
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "ranged",
+              "projectile": "arrow",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "持有回旋投射物时才能够攻击（投射物需要时间回收）",
+                "descRaw": "持有<@ba.kw>回旋投射物</>时才能够攻击（投射物需要时间回收）",
+                "bb": {
+                  "atk_scale": 1.1
+                },
+                "bbStr": {},
+                "rangeGrid": null,
+                "moduleDesc": "攻击周围8格的敌人时攻击力提升至110%",
+                "moduleDescRaw": "攻击周围8格的敌人时攻击力提升至<@ba.kw>110%</>"
+              },
+              "skill": {
+                "skillId": "skchr_narant_3",
+                "iconId": "skchr_narant_3",
+                "name": "吞日",
+                "level": 7,
+                "desc": "每次攻击发射3个回旋投射物（每个造成相当于攻击力160%的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多3名敌人造成一次相当于攻击力140%的物理伤害并使其停顿1秒",
+                "descRaw": "每次攻击发射<@ba.vup>3</>个回旋投射物（每个造成相当于攻击力<@ba.vup>160%</>的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多<@ba.vup>3</>名敌人造成一次相当于攻击力<@ba.vup>140%</>的物理伤害并使其<$ba.sluggish>停顿</><@ba.vup>1</>秒",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 20,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 36,
+                "initSp": 17,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 1.6,
+                  "atk_scale_aoe": 1.4,
+                  "sluggish": 1,
+                  "attack@aoe.max_target": 3,
+                  "cnt": 3
+                },
+                "bbStr": {},
+                "rangeId": null,
+                "rangeGrid": null,
+                "prefabId": "skchr_narant_3",
+                "trigger": {
+                  "rule": "DEFAULT",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": null
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "“我见，我得”",
+                  "desc": "在场时，每次攻击到敌人偷取其25点攻击力（最高300点）与20点防御力（最高240点），攻击到周围8格的敌人时偷取触发2次",
+                  "descRaw": "在场时，每次攻击到敌人<$ba.steal>偷取</>其25点攻击力（最高300点）与20点防御力（最高240点），攻击到周围8格的敌人时偷取触发2次",
+                  "bb": {
+                    "attack@steal_atk": 25,
+                    "attack@steal_atk_max": 300,
+                    "attack@steal_def": 20,
+                    "attack@steal_def_max": 240
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": true
+                },
+                {
+                  "index": 1,
+                  "name": "婀娜虚影",
+                  "desc": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "descRaw": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "bb": {
+                    "prob": 0.35,
+                    "damage_hitrate_physical": -0.2,
+                    "damage_hitrate_magical": -0.2
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": -1,
+                  "name": null,
+                  "desc": null,
+                  "descRaw": null,
+                  "bb": {
+                    "atk_scale": 1.1
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": true
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_narant",
+                "name": "“吹尽狂沙”",
+                "type": "LPS-X",
+                "level": 3,
+                "active": true
+              },
+              "assets": {
+                "avatar": "char_4138_narant_2",
+                "portrait": "char_4138_narant_2",
+                "spine": "char_4138_narant",
+                "skillIcon": "skchr_narant_3",
+                "subProfIcon": "sub_loopshooter_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_narant_1",
+                  "iconId": "skchr_narant_1",
+                  "name": "旋刃",
+                  "level": 7,
+                  "desc": "可以在下列状态和初始状态间切换：\n攻击距离-1，回旋投射物造成相当于攻击力160%的物理伤害，并且可以在敌人间重复弹射（最多弹跳3次）",
+                  "descRaw": "<@ba.rem>可以在下列状态和初始状态间切换：</>\n攻击距离<@ba.vdown>-1</>，回旋投射物造成相当于攻击力<@ba.vup>160%</>的物理伤害，并且可以在敌人间重复弹射（最多弹跳<@ba.vup>3</>次）",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 0,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 8,
+                  "initSp": 0,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@times": 3,
+                    "attack@atk_scale": 1.6,
+                    "ability_range_forward_extend": -1
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_narant_2",
+                  "iconId": "skchr_narant_2",
+                  "name": "恶魇",
+                  "level": 7,
+                  "desc": "每次攻击造成相当于攻击力225%的物理伤害并使目标停顿1秒，投射物命中目标后会在短暂突进后折返，返回时对穿过的所有敌人造成一次相当于攻击力170%的物理伤害",
+                  "descRaw": "每次攻击造成相当于攻击力<@ba.vup>225%</>的物理伤害并使目标<$ba.sluggish>停顿</><@ba.vup>1</>秒，投射物命中目标后会在短暂突进后折返，返回时对穿过的所有敌人造成一次相当于攻击力<@ba.vup>170%</>的物理伤害",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 30,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 18,
+                  "initSp": 8,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@move_ahead_time": 0.5,
+                    "attack@projectile_range": 1,
+                    "attack@atk_scale": 2.25,
+                    "attack@atk_scale_comeback": 1.7,
+                    "attack@sluggish": 1
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_2",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_narant_3",
+                  "iconId": "skchr_narant_3",
+                  "name": "吞日",
+                  "level": 7,
+                  "desc": "每次攻击发射3个回旋投射物（每个造成相当于攻击力160%的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多3名敌人造成一次相当于攻击力140%的物理伤害并使其停顿1秒",
+                  "descRaw": "每次攻击发射<@ba.vup>3</>个回旋投射物（每个造成相当于攻击力<@ba.vup>160%</>的物理伤害），投射物全部回收时娜仁图亚对周围8格内至多<@ba.vup>3</>名敌人造成一次相当于攻击力<@ba.vup>140%</>的物理伤害并使其<$ba.sluggish>停顿</><@ba.vup>1</>秒",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 20,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 36,
+                  "initSp": 17,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 1.6,
+                    "atk_scale_aoe": 1.4,
+                    "sluggish": 1,
+                    "attack@aoe.max_target": 3,
+                    "cnt": 3
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_narant_3",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ],
+              "statsBase": {
+                "maxHp": 2331,
+                "atk": 659,
+                "def": 161,
+                "res": 0,
+                "cost": 14,
+                "blockCnt": 1,
+                "bat": 1,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "traitBase": {
+                "desc": "持有回旋投射物时才能够攻击（投射物需要时间回收）",
+                "descRaw": "持有<@ba.kw>回旋投射物</>时才能够攻击（投射物需要时间回收）",
+                "bb": {},
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "talentsBase": [
+                {
+                  "index": 0,
+                  "name": "“我见，我得”",
+                  "desc": "在场时，每次攻击到敌人偷取其25点攻击力（最高250点）与20点防御力（最高200点）",
+                  "descRaw": "在场时，每次攻击到敌人<$ba.steal>偷取</>其25点攻击力（最高250点）与20点防御力（最高200点）",
+                  "bb": {
+                    "attack@steal_atk": 25,
+                    "attack@steal_atk_max": 250,
+                    "attack@steal_def": 20,
+                    "attack@steal_def_max": 200
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "婀娜虚影",
+                  "desc": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "descRaw": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-20%",
+                  "bb": {
+                    "prob": 0.35,
+                    "damage_hitrate_physical": -0.2,
+                    "damage_hitrate_magical": -0.2
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "modules": [
+                {
+                  "uniEquipId": "uniequip_002_narant",
+                  "name": "“吹尽狂沙”",
+                  "typeName": "LPS-X",
+                  "typeIcon": "lps-x",
+                  "icon": "uniequip_002_narant",
+                  "isDefault": true,
+                  "level": 3,
+                  "attr": {
+                    "atk": 45,
+                    "def": 45
+                  },
+                  "traitOverride": {
+                    "desc": "持有回旋投射物时才能够攻击（投射物需要时间回收）",
+                    "descRaw": "持有<@ba.kw>回旋投射物</>时才能够攻击（投射物需要时间回收）",
+                    "bb": {
+                      "atk_scale": 1.1
+                    },
+                    "bbStr": {},
+                    "rangeGrid": null,
+                    "moduleDesc": "攻击周围8格的敌人时攻击力提升至110%",
+                    "moduleDescRaw": "攻击周围8格的敌人时攻击力提升至<@ba.kw>110%</>"
+                  },
+                  "talentChanges": [
+                    {
+                      "talentIndex": -1,
+                      "name": null,
+                      "desc": null,
+                      "descRaw": null,
+                      "bb": {
+                        "atk_scale": 1.1
+                      },
+                      "bbStr": {},
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": false
+                    },
+                    {
+                      "talentIndex": 0,
+                      "name": "“我见，我得”",
+                      "desc": "在场时，每次攻击到敌人偷取其25点攻击力（最高300点）与20点防御力（最高240点），攻击到周围8格的敌人时偷取触发2次",
+                      "descRaw": "在场时，每次攻击到敌人<$ba.steal>偷取</>其25点攻击力（最高300点）与20点防御力（最高240点），攻击到周围8格的敌人时偷取触发2次",
+                      "bb": {
+                        "attack@steal_atk": 25,
+                        "attack@steal_atk_max": 300,
+                        "attack@steal_def": 20,
+                        "attack@steal_def_max": 240
+                      },
+                      "bbStr": {},
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": false
+                    }
+                  ]
+                },
+                {
+                  "uniEquipId": "uniequip_003_narant",
+                  "name": "“致我们的老大”",
+                  "typeName": "LPS-Y",
+                  "typeIcon": "lps-y",
+                  "icon": "uniequip_003_narant",
+                  "isDefault": false,
+                  "level": 3,
+                  "attr": {
+                    "maxHp": 300,
+                    "atk": 40
+                  },
+                  "traitOverride": {
+                    "desc": "持有回旋投射物时才能够攻击（投射物需要时间回收）",
+                    "descRaw": "持有<@ba.kw>回旋投射物</>时才能够攻击（投射物需要时间回收）",
+                    "bb": {
+                      "come_back_cnt": 5,
+                      "sp": 1
+                    },
+                    "bbStr": {},
+                    "rangeGrid": null,
+                    "moduleDesc": "每回收5次回旋投射物时获得1点技力",
+                    "moduleDescRaw": "每回收5次<@ba.kw>回旋投射物</>时获得1点技力"
+                  },
+                  "talentChanges": [
+                    {
+                      "talentIndex": 1,
+                      "name": "婀娜虚影",
+                      "desc": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-30%；6秒内未受到伤害时，攻击力+15%",
+                      "descRaw": "获得35%的物理与法术闪避，周围8格内敌人的物理与法术命中率-30%；6秒内未受到伤害时，攻击力+15%",
+                      "bb": {
+                        "prob": 0.35,
+                        "damage_hitrate_physical": -0.3,
+                        "damage_hitrate_magical": -0.3
+                      },
+                      "bbStr": {},
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": false
+                    },
+                    {
+                      "talentIndex": -1,
+                      "name": null,
+                      "desc": null,
+                      "descRaw": null,
+                      "bb": {
+                        "atk": 0.15,
+                        "interval": 6
+                      },
+                      "bbStr": {},
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": true
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_6_aglna2_a"
+            ],
+            "value": {
+              "chessId": "chess_char_6_aglna2_a",
+              "baseId": "chess_char_6_aglna2_a",
+              "goldenId": "chess_char_6_aglna2_b",
+              "isGolden": false,
+              "tier": 6,
+              "identifier": 10010,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_1015_aglna2",
+                "skillIndex": 2,
+                "uniEquipId": null
+              },
+              "shopSortId": 25,
+              "charId": "char_1015_aglna2",
+              "name": "予愿安洁莉娜",
+              "appellation": "Angelina the Mellow Wish",
+              "rarity": 6,
+              "profession": "SPECIAL",
+              "subProfessionId": "skywalker",
+              "subProfessionName": "巡空者",
+              "position": "MELEE",
+              "nationId": "rhodes",
+              "bonds": [
+                "siracusaShip"
+              ],
+              "garrisonIds": [],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 3,
+              "upgradeChessId": "chess_char_6_aglna2_b",
+              "status": {
+                "phase": 2,
+                "level": 1,
+                "skillLevel": 4,
+                "equipLevel": 0
+              },
+              "stats": {
+                "maxHp": 1884,
+                "atk": 661,
+                "def": 410,
+                "res": 0,
+                "cost": 16,
+                "blockCnt": 2,
+                "bat": 1.5,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "2-2",
+              "rangeGrid": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "melee",
+              "projectile": "none",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "起飞后能够阻挡2个飞行敌人",
+                "descRaw": "<$ba.liftoff>起飞</>后能够阻挡2个飞行敌人",
+                "bb": {
+                  "height_offset": 0.8
+                },
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "skill": {
+                "skillId": "skchr_aglna2_3",
+                "iconId": "skchr_aglna2_3",
+                "name": "酸橙的心事",
+                "level": 4,
+                "desc": "立刻起飞，攻击力+20%，获得55%的对空庇护，攻击范围扩大，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对3个敌人造成攻击力275%的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度-40%，原技能范围内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，移动至该敌人所在格\n攻击装有30发弹药，打完后技能结束（期间可随时停止技能）",
+                "descRaw": "立刻<$ba.liftoff>起飞</>，攻击力<@ba.vup>+20%</>，获得<@ba.vup>55%</>的<$ba.airprotect>对空庇护</>，攻击范围<@ba.vup>扩大</>，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对<@ba.vup>3</>个敌人造成攻击力<@ba.vup>275%</>的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度<@ba.vup>-40%</>，<@ba.vup>原技能范围</>内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，<$ba.addash>移动</>至该敌人所在格\n<@ba.rem>攻击装有30发弹药，打完后技能结束（期间可随时停止技能）</>",
+                "skillType": "MANUAL",
+                "durationType": "AMMO",
+                "duration": -1,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 42,
+                "initSp": 19,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 2.75,
+                  "attack@max_target": 4,
+                  "move_speed": -0.4,
+                  "aglna2_s_3[unblocked].attack_speed": 0,
+                  "aglna2_s_3[blocked].attack_speed": 0,
+                  "atk": 0.2,
+                  "damage_resistance": 0.55,
+                  "attack@max_walk_target": 3,
+                  "attack@trigger_time": 30
+                },
+                "bbStr": {
+                  "attack@attack_range_id": "x-4"
+                },
+                "rangeId": "3-9",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    2,
+                    2
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    0,
+                    3
+                  ],
+                  [
+                    0,
+                    4
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -1,
+                    2
+                  ],
+                  [
+                    -1,
+                    3
+                  ],
+                  [
+                    -2,
+                    0
+                  ],
+                  [
+                    -2,
+                    1
+                  ],
+                  [
+                    -2,
+                    2
+                  ]
+                ],
+                "prefabId": "skchr_aglna2_3",
+                "trigger": {
+                  "rule": "ACTIVE_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      2,
+                      2
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ],
+                    [
+                      -2,
+                      2
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "飘浮大地之上",
+                  "desc": "予愿安洁莉娜攻击额外造成相当于攻击力25%的法术伤害，攻击重量较轻（小于等于3）的敌人时则额外造成相当于攻击力35%的法术伤害；处于起飞状态时使攻击范围内的敌人失重",
+                  "descRaw": "予愿安洁莉娜攻击额外造成相当于攻击力25%的法术伤害，攻击重量较轻（小于等于3）的敌人时则额外造成相当于攻击力35%的法术伤害；处于<$ba.liftoff>起飞</>状态时使攻击范围内的敌人<$ba.weightless>失重</>",
+                  "bb": {
+                    "atk_scale_hi": 0.35,
+                    "atk_scale_lo": 0.25,
+                    "mass_level": 3
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "天穹间的舞步",
+                  "desc": "在场时，所有处于起飞状态的友方干员攻击力+13%且阻挡时每秒回复8%的最大生命值",
+                  "descRaw": "在场时，所有处于<$ba.liftoff>起飞</>状态的友方干员攻击力+13%且阻挡时每秒回复8%的最大生命值",
+                  "bb": {
+                    "atk": 0.13,
+                    "hp_recovery_per_sec_by_max_hp_ratio": 0.08
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": null,
+              "assets": {
+                "avatar": "char_1015_aglna2",
+                "portrait": "char_1015_aglna2_1",
+                "spine": "char_1015_aglna2",
+                "skillIcon": "skchr_aglna2_3",
+                "subProfIcon": "sub_skywalker_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_aglna2_1",
+                  "iconId": "skchr_aglna2_1",
+                  "name": "极速送达",
+                  "level": 4,
+                  "desc": "部署后立刻起飞，攻击范围扩大，攻击力+75%，同时攻击两个目标",
+                  "descRaw": "部署后立刻<$ba.liftoff>起飞</>，攻击范围<@ba.vup>扩大</>，攻击力<@ba.vup>+75%</>，同时攻击两个目标",
+                  "skillType": "PASSIVE",
+                  "durationType": "NONE",
+                  "duration": 56,
+                  "spType": "ON_DEPLOY",
+                  "spCost": 0,
+                  "initSp": 0,
+                  "maxChargeTime": 0,
+                  "increment": 0,
+                  "bb": {
+                    "atk": 0.75,
+                    "attack@max_target": 2
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-6",
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_aglna2_2",
+                  "iconId": "skchr_aglna2_2",
+                  "name": "重力自定义",
+                  "level": 4,
+                  "desc": "攻击范围扩大并向前方滑翔起飞，使掠过的攻击范围内的地面敌人浮空10秒、飞行敌人缚地20秒，随后攻击间隔缩短，攻击力+105%，攻击变为法术伤害且同时攻击4个目标",
+                  "descRaw": "攻击范围<@ba.vup>扩大</>并向前方滑翔<$ba.liftoff>起飞</>，使掠过的攻击范围内的地面敌人<$ba.levitate>浮空</><@ba.vup>10</>秒、飞行敌人<$ba.groundbind>缚地</><@ba.vup>20</>秒，随后攻击间隔<@ba.vup>缩短</>，攻击力<@ba.vup>+105%</>，攻击变为法术伤害且同时攻击<@ba.vup>4</>个目标",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 22,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 32,
+                  "initSp": 17,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "atk": 1.05,
+                    "base_attack_time": -0.6,
+                    "attack@max_target": 4,
+                    "chant_duration": 2.5,
+                    "mass_level": 10,
+                    "buff_duration_ground_bound": 20,
+                    "buff_duration_levitate": 10
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-10",
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      1,
+                      4
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -1,
+                      4
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_2",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        1,
+                        4
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        0,
+                        4
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -1,
+                        4
+                      ]
+                    ]
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_aglna2_3",
+                  "iconId": "skchr_aglna2_3",
+                  "name": "酸橙的心事",
+                  "level": 4,
+                  "desc": "立刻起飞，攻击力+20%，获得55%的对空庇护，攻击范围扩大，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对3个敌人造成攻击力275%的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度-40%，原技能范围内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，移动至该敌人所在格\n攻击装有30发弹药，打完后技能结束（期间可随时停止技能）",
+                  "descRaw": "立刻<$ba.liftoff>起飞</>，攻击力<@ba.vup>+20%</>，获得<@ba.vup>55%</>的<$ba.airprotect>对空庇护</>，攻击范围<@ba.vup>扩大</>，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对<@ba.vup>3</>个敌人造成攻击力<@ba.vup>275%</>的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度<@ba.vup>-40%</>，<@ba.vup>原技能范围</>内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，<$ba.addash>移动</>至该敌人所在格\n<@ba.rem>攻击装有30发弹药，打完后技能结束（期间可随时停止技能）</>",
+                  "skillType": "MANUAL",
+                  "durationType": "AMMO",
+                  "duration": -1,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 42,
+                  "initSp": 19,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 2.75,
+                    "attack@max_target": 4,
+                    "move_speed": -0.4,
+                    "aglna2_s_3[unblocked].attack_speed": 0,
+                    "aglna2_s_3[blocked].attack_speed": 0,
+                    "atk": 0.2,
+                    "damage_resistance": 0.55,
+                    "attack@max_walk_target": 3,
+                    "attack@trigger_time": 30
+                  },
+                  "bbStr": {
+                    "attack@attack_range_id": "x-4"
+                  },
+                  "rangeId": "3-9",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      2,
+                      2
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ],
+                    [
+                      -2,
+                      2
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_3",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        2,
+                        1
+                      ],
+                      [
+                        2,
+                        2
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        0,
+                        4
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -2,
+                        0
+                      ],
+                      [
+                        -2,
+                        1
+                      ],
+                      [
+                        -2,
+                        2
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_6_aglna2_b"
+            ],
+            "value": {
+              "chessId": "chess_char_6_aglna2_b",
+              "baseId": "chess_char_6_aglna2_a",
+              "goldenId": "chess_char_6_aglna2_b",
+              "isGolden": true,
+              "tier": 6,
+              "identifier": 10011,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_1015_aglna2",
+                "skillIndex": 2,
+                "uniEquipId": null
+              },
+              "shopSortId": 25,
+              "charId": "char_1015_aglna2",
+              "name": "予愿安洁莉娜",
+              "appellation": "Angelina the Mellow Wish",
+              "rarity": 6,
+              "profession": "SPECIAL",
+              "subProfessionId": "skywalker",
+              "subProfessionName": "巡空者",
+              "position": "MELEE",
+              "nationId": "rhodes",
+              "bonds": [
+                "siracusaShip"
+              ],
+              "garrisonIds": [],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 0,
+              "upgradeChessId": null,
+              "status": {
+                "phase": 2,
+                "level": 60,
+                "skillLevel": 7,
+                "equipLevel": 0
+              },
+              "stats": {
+                "maxHp": 2216,
+                "atk": 772,
+                "def": 483,
+                "res": 0,
+                "cost": 16,
+                "blockCnt": 2,
+                "bat": 1.5,
+                "aspd": 100,
+                "respawnTime": 70,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "2-2",
+              "rangeGrid": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "melee",
+              "projectile": "none",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "起飞后能够阻挡2个飞行敌人",
+                "descRaw": "<$ba.liftoff>起飞</>后能够阻挡2个飞行敌人",
+                "bb": {
+                  "height_offset": 0.8
+                },
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "skill": {
+                "skillId": "skchr_aglna2_3",
+                "iconId": "skchr_aglna2_3",
+                "name": "酸橙的心事",
+                "level": 7,
+                "desc": "立刻起飞，攻击力+30%，获得60%的对空庇护，攻击范围扩大，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对3个敌人造成攻击力305%的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度-40%，原技能范围内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，移动至该敌人所在格\n攻击装有31发弹药，打完后技能结束（期间可随时停止技能）",
+                "descRaw": "立刻<$ba.liftoff>起飞</>，攻击力<@ba.vup>+30%</>，获得<@ba.vup>60%</>的<$ba.airprotect>对空庇护</>，攻击范围<@ba.vup>扩大</>，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对<@ba.vup>3</>个敌人造成攻击力<@ba.vup>305%</>的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度<@ba.vup>-40%</>，<@ba.vup>原技能范围</>内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，<$ba.addash>移动</>至该敌人所在格\n<@ba.rem>攻击装有31发弹药，打完后技能结束（期间可随时停止技能）</>",
+                "skillType": "MANUAL",
+                "durationType": "AMMO",
+                "duration": -1,
+                "spType": "INCREASE_WITH_TIME",
+                "spCost": 36,
+                "initSp": 22,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 3.05,
+                  "attack@max_target": 4,
+                  "move_speed": -0.4,
+                  "aglna2_s_3[unblocked].attack_speed": 0,
+                  "aglna2_s_3[blocked].attack_speed": 0,
+                  "atk": 0.3,
+                  "damage_resistance": 0.6,
+                  "attack@max_walk_target": 3,
+                  "attack@trigger_time": 31
+                },
+                "bbStr": {
+                  "attack@attack_range_id": "x-4"
+                },
+                "rangeId": "3-9",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    2,
+                    2
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    0,
+                    3
+                  ],
+                  [
+                    0,
+                    4
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -1,
+                    2
+                  ],
+                  [
+                    -1,
+                    3
+                  ],
+                  [
+                    -2,
+                    0
+                  ],
+                  [
+                    -2,
+                    1
+                  ],
+                  [
+                    -2,
+                    2
+                  ]
+                ],
+                "prefabId": "skchr_aglna2_3",
+                "trigger": {
+                  "rule": "ACTIVE_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      2,
+                      2
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ],
+                    [
+                      -2,
+                      2
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "飘浮大地之上",
+                  "desc": "予愿安洁莉娜攻击额外造成相当于攻击力25%的法术伤害，攻击重量较轻（小于等于3）的敌人时则额外造成相当于攻击力35%的法术伤害；处于起飞状态时使攻击范围内的敌人失重",
+                  "descRaw": "予愿安洁莉娜攻击额外造成相当于攻击力25%的法术伤害，攻击重量较轻（小于等于3）的敌人时则额外造成相当于攻击力35%的法术伤害；处于<$ba.liftoff>起飞</>状态时使攻击范围内的敌人<$ba.weightless>失重</>",
+                  "bb": {
+                    "atk_scale_hi": 0.35,
+                    "atk_scale_lo": 0.25,
+                    "mass_level": 3
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "天穹间的舞步",
+                  "desc": "在场时，所有处于起飞状态的友方干员攻击力+13%且阻挡时每秒回复8%的最大生命值",
+                  "descRaw": "在场时，所有处于<$ba.liftoff>起飞</>状态的友方干员攻击力+13%且阻挡时每秒回复8%的最大生命值",
+                  "bb": {
+                    "atk": 0.13,
+                    "hp_recovery_per_sec_by_max_hp_ratio": 0.08
+                  },
+                  "bbStr": {},
+                  "rangeGrid": null,
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": null,
+              "assets": {
+                "avatar": "char_1015_aglna2_2",
+                "portrait": "char_1015_aglna2_2",
+                "spine": "char_1015_aglna2",
+                "skillIcon": "skchr_aglna2_3",
+                "subProfIcon": "sub_skywalker_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_aglna2_1",
+                  "iconId": "skchr_aglna2_1",
+                  "name": "极速送达",
+                  "level": 7,
+                  "desc": "部署后立刻起飞，攻击范围扩大，攻击力+100%，同时攻击两个目标",
+                  "descRaw": "部署后立刻<$ba.liftoff>起飞</>，攻击范围<@ba.vup>扩大</>，攻击力<@ba.vup>+100%</>，同时攻击两个目标",
+                  "skillType": "PASSIVE",
+                  "durationType": "NONE",
+                  "duration": 56,
+                  "spType": "ON_DEPLOY",
+                  "spCost": 0,
+                  "initSp": 0,
+                  "maxChargeTime": 0,
+                  "increment": 0,
+                  "bb": {
+                    "atk": 1,
+                    "attack@max_target": 2
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-6",
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_aglna2_2",
+                  "iconId": "skchr_aglna2_2",
+                  "name": "重力自定义",
+                  "level": 7,
+                  "desc": "攻击范围扩大并向前方滑翔起飞，使掠过的攻击范围内的地面敌人浮空12秒、飞行敌人缚地22秒，随后攻击间隔较大幅缩短，攻击力+135%，攻击变为法术伤害且同时攻击5个目标",
+                  "descRaw": "攻击范围<@ba.vup>扩大</>并向前方滑翔<$ba.liftoff>起飞</>，使掠过的攻击范围内的地面敌人<$ba.levitate>浮空</><@ba.vup>12</>秒、飞行敌人<$ba.groundbind>缚地</><@ba.vup>22</>秒，随后攻击间隔<@ba.vup>较大幅缩短</>，攻击力<@ba.vup>+135%</>，攻击变为法术伤害且同时攻击<@ba.vup>5</>个目标",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 22,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 29,
+                  "initSp": 20,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "atk": 1.35,
+                    "base_attack_time": -0.8,
+                    "attack@max_target": 5,
+                    "chant_duration": 2.5,
+                    "mass_level": 10,
+                    "buff_duration_ground_bound": 22,
+                    "buff_duration_levitate": 12
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-10",
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      1,
+                      4
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -1,
+                      4
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_2",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        1,
+                        4
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        0,
+                        4
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -1,
+                        4
+                      ]
+                    ]
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_aglna2_3",
+                  "iconId": "skchr_aglna2_3",
+                  "name": "酸橙的心事",
+                  "level": 7,
+                  "desc": "立刻起飞，攻击力+30%，获得60%的对空庇护，攻击范围扩大，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对3个敌人造成攻击力305%的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度-40%，原技能范围内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，移动至该敌人所在格\n攻击装有31发弹药，打完后技能结束（期间可随时停止技能）",
+                  "descRaw": "立刻<$ba.liftoff>起飞</>，攻击力<@ba.vup>+30%</>，获得<@ba.vup>60%</>的<$ba.airprotect>对空庇护</>，攻击范围<@ba.vup>扩大</>，且周围8格视作予愿安洁莉娜的额外攻击范围，攻击对<@ba.vup>3</>个敌人造成攻击力<@ba.vup>305%</>的物理伤害且额外攻击1个飞行敌人；范围内飞行敌人移动速度<@ba.vup>-40%</>，<@ba.vup>原技能范围</>内有未被阻挡的可阻挡飞行敌人，且自身未阻挡时，<$ba.addash>移动</>至该敌人所在格\n<@ba.rem>攻击装有31发弹药，打完后技能结束（期间可随时停止技能）</>",
+                  "skillType": "MANUAL",
+                  "durationType": "AMMO",
+                  "duration": -1,
+                  "spType": "INCREASE_WITH_TIME",
+                  "spCost": 36,
+                  "initSp": 22,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 3.05,
+                    "attack@max_target": 4,
+                    "move_speed": -0.4,
+                    "aglna2_s_3[unblocked].attack_speed": 0,
+                    "aglna2_s_3[blocked].attack_speed": 0,
+                    "atk": 0.3,
+                    "damage_resistance": 0.6,
+                    "attack@max_walk_target": 3,
+                    "attack@trigger_time": 31
+                  },
+                  "bbStr": {
+                    "attack@attack_range_id": "x-4"
+                  },
+                  "rangeId": "3-9",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      2,
+                      2
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      0,
+                      4
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ],
+                    [
+                      -2,
+                      2
+                    ]
+                  ],
+                  "prefabId": "skchr_aglna2_3",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        2,
+                        1
+                      ],
+                      [
+                        2,
+                        2
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        0,
+                        4
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -2,
+                        0
+                      ],
+                      [
+                        -2,
+                        1
+                      ],
+                      [
+                        -2,
+                        2
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_6_oblvns_a"
+            ],
+            "value": {
+              "chessId": "chess_char_6_oblvns_a",
+              "baseId": "chess_char_6_oblvns_a",
+              "goldenId": "chess_char_6_oblvns_b",
+              "isGolden": false,
+              "tier": 6,
+              "identifier": 10012,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4182_oblvns",
+                "skillIndex": 2,
+                "uniEquipId": null
+              },
+              "shopSortId": 26,
+              "charId": "char_4182_oblvns",
+              "name": "丰川祥子",
+              "appellation": "Togawa Sakiko",
+              "rarity": 6,
+              "profession": "WARRIOR",
+              "subProfessionId": "lord",
+              "subProfessionName": "领主",
+              "position": "MELEE",
+              "nationId": null,
+              "bonds": [
+                "emptyShip"
+              ],
+              "garrisonIds": [],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 3,
+              "upgradeChessId": "chess_char_6_oblvns_b",
+              "status": {
+                "phase": 2,
+                "level": 1,
+                "skillLevel": 4,
+                "equipLevel": 0
+              },
+              "stats": {
+                "maxHp": 1624,
+                "atk": 613,
+                "def": 352,
+                "res": 10,
+                "cost": 18,
+                "blockCnt": 2,
+                "bat": 1.3,
+                "aspd": 100,
+                "respawnTime": 66,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "3-12",
+              "rangeGrid": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  1
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "ranged",
+              "projectile": "arrow",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "可以进行远程攻击，但此时攻击力降低至80%",
+                "descRaw": "可以进行<@ba.kw>远程攻击</>，但此时攻击力降低至80%",
+                "bb": {
+                  "atk_scale": 0.8
+                },
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "skill": {
+                "skillId": "skchr_oblvns_3",
+                "iconId": "skchr_oblvns_3",
+                "name": "残月的余响",
+                "level": 4,
+                "desc": "攻击范围扩大，攻击同时使用钢琴和风琴音色演奏，各自演奏2个造成相当于攻击力155%物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\nFever期间Ave Mujica成员受到致命伤害时不撤退，Fever结束后退场",
+                "descRaw": "攻击范围扩大，攻击同时使用<@ba.vup>钢琴</>和<@ba.vup>风琴</>音色演奏，各自演奏<@ba.vup>2</>个造成相当于攻击力<@ba.vup>155%</>物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\n<@ba.rem><$ba.fever>Fever</>期间<$ba.mujica>Ave Mujica</>成员受到致命伤害时不撤退，<$ba.fever>Fever</>结束后退场</>",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 25,
+                "spType": "INCREASE_WHEN_ATTACK",
+                "spCost": 47,
+                "initSp": 28,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 1.55,
+                  "attack_speed": 0
+                },
+                "bbStr": {},
+                "rangeId": "3-21",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    0,
+                    3
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -1,
+                    2
+                  ],
+                  [
+                    -1,
+                    3
+                  ],
+                  [
+                    -2,
+                    0
+                  ],
+                  [
+                    -2,
+                    1
+                  ]
+                ],
+                "prefabId": "skchr_oblvns_3",
+                "trigger": {
+                  "rule": "ACTIVE_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "颂乐音符",
+                  "desc": "丰川祥子可以持续攻击且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，Ave Mujica成员无视敌人3%的防御力和2%法术抗性（最多叠加至10层）",
+                  "descRaw": "丰川祥子可以<$ba.permanentatk>持续攻击</>且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，<$ba.mujica>Ave Mujica</>成员无视敌人3%的防御力和2%法术抗性（最多叠加至10层）",
+                  "bb": {
+                    "delay": 1,
+                    "def_penetrate_ratio": 0.03,
+                    "magic_resist_penetrate_ratio": 0.02,
+                    "attack@angle": 20,
+                    "max_cnt": 10
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "毋畏遗忘",
+                  "desc": "对敌人造成伤害时使Fever+3；其他Ave Mujica成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "descRaw": "对敌人造成伤害时使<$ba.fever>Fever</>+3；其他<$ba.mujica>Ave Mujica</>成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "bb": {
+                    "enable": 1,
+                    "attack_speed": 12,
+                    "cnt": 3
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_oblvns",
+                "name": "无言的约定",
+                "type": "LOR-Y",
+                "level": 0,
+                "active": false
+              },
+              "assets": {
+                "avatar": "char_4182_oblvns",
+                "portrait": "char_4182_oblvns_1",
+                "spine": "char_4182_oblvns",
+                "skillIcon": "skchr_oblvns_3",
+                "subProfIcon": "sub_lord_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_oblvns_1",
+                  "iconId": "skchr_oblvns_1",
+                  "name": "新月的苏醒",
+                  "level": 4,
+                  "desc": "演奏出8个音符。每个音符造成的法术伤害依次从攻击力的65%逐渐降低至4%。\n可充能2次，充能至最大层数时自动释放一次",
+                  "descRaw": "演奏出<@ba.vup>8</>个音符。每个音符造成的法术伤害依次从攻击力的<@ba.vup>65%</>逐渐降低至<@ba.vup>4%</>。\n<@ba.rem>可充能2次，充能至最大层数时自动释放一次</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": -1,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 4,
+                  "initSp": 0,
+                  "maxChargeTime": 2,
+                  "increment": 1,
+                  "bb": {
+                    "atk_scale": 0.65,
+                    "atk_scale_2": 0.6,
+                    "atk_scale_3": 0.49,
+                    "atk_scale_4": 0.38,
+                    "atk_scale_5": 0.27,
+                    "atk_scale_6": 0.22,
+                    "atk_scale_7": 0.11,
+                    "atk_scale_8": 0.04,
+                    "angle": 15
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_oblvns_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_oblvns_2",
+                  "iconId": "skchr_oblvns_2",
+                  "name": "满月的舞会",
+                  "level": 4,
+                  "desc": "可以切换钢琴（初始）或风琴音色演奏：\n钢琴：攻击力+60%，音符飞行速度加快，命中目标后穿过敌人造成物理伤害\n风琴：攻击速度+80，音符造成法术伤害且飞行速度减缓 \nFever期间变为当前音色的二连击",
+                  "descRaw": "<@ba.rem>可以切换<@ba.vup>钢琴（初始）</>或<@ba.vup>风琴</>音色演奏：</>\n<@ba.vup>钢琴</>：攻击力<@ba.vup>+60%</>，音符飞行速度加快，命中目标后穿过敌人造成<@ba.vup>物理伤害</>\n<@ba.vup>风琴</>：攻击速度<@ba.vup>+80</>，音符造成<@ba.vup>法术伤害</>且飞行速度减缓 \n<@ba.rem><$ba.fever>Fever</>期间变为当前音色的二连击</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": -1,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 5,
+                  "initSp": 0,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk": 0.6,
+                    "attack@passby_delay": 0.5,
+                    "attack_speed": 80
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_oblvns_2",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_oblvns_3",
+                  "iconId": "skchr_oblvns_3",
+                  "name": "残月的余响",
+                  "level": 4,
+                  "desc": "攻击范围扩大，攻击同时使用钢琴和风琴音色演奏，各自演奏2个造成相当于攻击力155%物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\nFever期间Ave Mujica成员受到致命伤害时不撤退，Fever结束后退场",
+                  "descRaw": "攻击范围扩大，攻击同时使用<@ba.vup>钢琴</>和<@ba.vup>风琴</>音色演奏，各自演奏<@ba.vup>2</>个造成相当于攻击力<@ba.vup>155%</>物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\n<@ba.rem><$ba.fever>Fever</>期间<$ba.mujica>Ave Mujica</>成员受到致命伤害时不撤退，<$ba.fever>Fever</>结束后退场</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 25,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 47,
+                  "initSp": 28,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 1.55,
+                    "attack_speed": 0
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-21",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ]
+                  ],
+                  "prefabId": "skchr_oblvns_3",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        2,
+                        1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -2,
+                        0
+                      ],
+                      [
+                        -2,
+                        1
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "chess",
+              "chess_char_6_oblvns_b"
+            ],
+            "value": {
+              "chessId": "chess_char_6_oblvns_b",
+              "baseId": "chess_char_6_oblvns_a",
+              "goldenId": "chess_char_6_oblvns_b",
+              "isGolden": true,
+              "tier": 6,
+              "identifier": 10013,
+              "isHidden": false,
+              "isDiy": false,
+              "visible": true,
+              "chessType": "PRESET",
+              "backup": {
+                "charId": "char_4182_oblvns",
+                "skillIndex": 2,
+                "uniEquipId": "uniequip_002_oblvns"
+              },
+              "shopSortId": 26,
+              "charId": "char_4182_oblvns",
+              "name": "丰川祥子",
+              "appellation": "Togawa Sakiko",
+              "rarity": 6,
+              "profession": "WARRIOR",
+              "subProfessionId": "lord",
+              "subProfessionName": "领主",
+              "position": "MELEE",
+              "nationId": null,
+              "bonds": [
+                "emptyShip"
+              ],
+              "garrisonIds": [],
+              "price": 4,
+              "sellPrice": 1,
+              "upgradeNum": 0,
+              "upgradeChessId": null,
+              "status": {
+                "phase": 2,
+                "level": 60,
+                "skillLevel": 7,
+                "equipLevel": 3
+              },
+              "stats": {
+                "maxHp": 2210,
+                "atk": 767,
+                "def": 400,
+                "res": 10,
+                "cost": 18,
+                "blockCnt": 2,
+                "bat": 1.3,
+                "aspd": 107,
+                "respawnTime": 66,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "immunities": {
+                "stun": false,
+                "silence": false,
+                "sleep": false,
+                "frozen": false,
+                "levitate": false
+              },
+              "rangeId": "3-12",
+              "rangeGrid": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  1
+                ]
+              ],
+              "dmgType": "phys",
+              "attackKind": "ranged",
+              "projectile": "arrow",
+              "canHitFly": true,
+              "targetPriority": null,
+              "trait": {
+                "desc": "可以进行远程攻击，但此时攻击力降低至80%",
+                "descRaw": "可以进行<@ba.kw>远程攻击</>，但此时攻击力降低至80%",
+                "bb": {
+                  "atk_scale": 0.8,
+                  "attack_speed": 12
+                },
+                "bbStr": {},
+                "rangeGrid": null,
+                "moduleDesc": "攻击范围内存在2名及以上敌人时攻击速度+12",
+                "moduleDescRaw": "攻击范围内存在2名及以上敌人时攻击速度<@ba.vup>+12</>"
+              },
+              "skill": {
+                "skillId": "skchr_oblvns_3",
+                "iconId": "skchr_oblvns_3",
+                "name": "残月的余响",
+                "level": 7,
+                "desc": "攻击范围扩大，攻击同时使用钢琴和风琴音色演奏，各自演奏2个造成相当于攻击力180%物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\nFever期间Ave Mujica成员受到致命伤害时不撤退，Fever结束后退场",
+                "descRaw": "攻击范围扩大，攻击同时使用<@ba.vup>钢琴</>和<@ba.vup>风琴</>音色演奏，各自演奏<@ba.vup>2</>个造成相当于攻击力<@ba.vup>180%</>物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\n<@ba.rem><$ba.fever>Fever</>期间<$ba.mujica>Ave Mujica</>成员受到致命伤害时不撤退，<$ba.fever>Fever</>结束后退场</>",
+                "skillType": "MANUAL",
+                "durationType": "NONE",
+                "duration": 25,
+                "spType": "INCREASE_WHEN_ATTACK",
+                "spCost": 46,
+                "initSp": 30,
+                "maxChargeTime": 1,
+                "increment": 1,
+                "bb": {
+                  "attack@atk_scale": 1.8,
+                  "attack_speed": 0
+                },
+                "bbStr": {},
+                "rangeId": "3-21",
+                "rangeGrid": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0,
+                    2
+                  ],
+                  [
+                    0,
+                    3
+                  ],
+                  [
+                    -1,
+                    0
+                  ],
+                  [
+                    -1,
+                    1
+                  ],
+                  [
+                    -1,
+                    2
+                  ],
+                  [
+                    -1,
+                    3
+                  ],
+                  [
+                    -2,
+                    0
+                  ],
+                  [
+                    -2,
+                    1
+                  ]
+                ],
+                "prefabId": "skchr_oblvns_3",
+                "trigger": {
+                  "rule": "ACTIVE_RANGE",
+                  "rawRule": "DEFAULT",
+                  "customRangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ]
+                  ]
+                },
+                "index": 2,
+                "overrideTokenKey": null
+              },
+              "talents": [
+                {
+                  "index": 0,
+                  "name": "颂乐音符",
+                  "desc": "丰川祥子可以持续攻击且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，Ave Mujica成员无视敌人5%的防御力和2.5%法术抗性（最多可叠加12层）；技能期间远程攻击不再降低攻击力",
+                  "descRaw": "丰川祥子可以<$ba.permanentatk>持续攻击</>且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，<$ba.mujica>Ave Mujica</>成员无视敌人5%的防御力和2.5%法术抗性（最多可叠加12层）；技能期间远程攻击不再降低攻击力",
+                  "bb": {
+                    "delay": 1,
+                    "def_penetrate_ratio": 0.05,
+                    "magic_resist_penetrate_ratio": 0.025,
+                    "attack@angle": 20,
+                    "max_cnt": 12
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": true
+                },
+                {
+                  "index": 1,
+                  "name": "毋畏遗忘",
+                  "desc": "对敌人造成伤害时使Fever+3；其他Ave Mujica成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "descRaw": "对敌人造成伤害时使<$ba.fever>Fever</>+3；其他<$ba.mujica>Ave Mujica</>成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "bb": {
+                    "enable": 1,
+                    "attack_speed": 12,
+                    "cnt": 3
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "tokens": [],
+              "module": {
+                "id": "uniequip_002_oblvns",
+                "name": "无言的约定",
+                "type": "LOR-Y",
+                "level": 3,
+                "active": true
+              },
+              "assets": {
+                "avatar": "char_4182_oblvns_2",
+                "portrait": "char_4182_oblvns_2",
+                "spine": "char_4182_oblvns",
+                "skillIcon": "skchr_oblvns_3",
+                "subProfIcon": "sub_lord_icon"
+              },
+              "skills": [
+                {
+                  "skillId": "skchr_oblvns_1",
+                  "iconId": "skchr_oblvns_1",
+                  "name": "新月的苏醒",
+                  "level": 7,
+                  "desc": "演奏出8个音符。每个音符造成的法术伤害依次从攻击力的80%逐渐降低至4%。\n可充能2次，充能至最大层数时自动释放一次",
+                  "descRaw": "演奏出<@ba.vup>8</>个音符。每个音符造成的法术伤害依次从攻击力的<@ba.vup>80%</>逐渐降低至<@ba.vup>4%</>。\n<@ba.rem>可充能2次，充能至最大层数时自动释放一次</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": -1,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 4,
+                  "initSp": 0,
+                  "maxChargeTime": 2,
+                  "increment": 1,
+                  "bb": {
+                    "atk_scale": 0.8,
+                    "atk_scale_2": 0.73,
+                    "atk_scale_3": 0.6,
+                    "atk_scale_4": 0.47,
+                    "atk_scale_5": 0.33,
+                    "atk_scale_6": 0.27,
+                    "atk_scale_7": 0.13,
+                    "atk_scale_8": 0.04,
+                    "angle": 15
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_oblvns_1",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 0,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_oblvns_2",
+                  "iconId": "skchr_oblvns_2",
+                  "name": "满月的舞会",
+                  "level": 7,
+                  "desc": "可以切换钢琴（初始）或风琴音色演奏：\n钢琴：攻击力+75%，音符飞行速度加快，命中目标后穿过敌人造成物理伤害\n风琴：攻击速度+110，音符造成法术伤害且飞行速度减缓 \nFever期间变为当前音色的二连击",
+                  "descRaw": "<@ba.rem>可以切换<@ba.vup>钢琴（初始）</>或<@ba.vup>风琴</>音色演奏：</>\n<@ba.vup>钢琴</>：攻击力<@ba.vup>+75%</>，音符飞行速度加快，命中目标后穿过敌人造成<@ba.vup>物理伤害</>\n<@ba.vup>风琴</>：攻击速度<@ba.vup>+110</>，音符造成<@ba.vup>法术伤害</>且飞行速度减缓 \n<@ba.rem><$ba.fever>Fever</>期间变为当前音色的二连击</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": -1,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 5,
+                  "initSp": 0,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk": 0.75,
+                    "attack@passby_delay": 0.5,
+                    "attack_speed": 110
+                  },
+                  "bbStr": {},
+                  "rangeId": null,
+                  "rangeGrid": null,
+                  "prefabId": "skchr_oblvns_2",
+                  "trigger": {
+                    "rule": "DEFAULT",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": null
+                  },
+                  "index": 1,
+                  "overrideTokenKey": null,
+                  "isDefault": false
+                },
+                {
+                  "skillId": "skchr_oblvns_3",
+                  "iconId": "skchr_oblvns_3",
+                  "name": "残月的余响",
+                  "level": 7,
+                  "desc": "攻击范围扩大，攻击同时使用钢琴和风琴音色演奏，各自演奏2个造成相当于攻击力180%物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\nFever期间Ave Mujica成员受到致命伤害时不撤退，Fever结束后退场",
+                  "descRaw": "攻击范围扩大，攻击同时使用<@ba.vup>钢琴</>和<@ba.vup>风琴</>音色演奏，各自演奏<@ba.vup>2</>个造成相当于攻击力<@ba.vup>180%</>物理和法术伤害的音符，且分别追踪法术抗性和防御力最高的敌人。\n<@ba.rem><$ba.fever>Fever</>期间<$ba.mujica>Ave Mujica</>成员受到致命伤害时不撤退，<$ba.fever>Fever</>结束后退场</>",
+                  "skillType": "MANUAL",
+                  "durationType": "NONE",
+                  "duration": 25,
+                  "spType": "INCREASE_WHEN_ATTACK",
+                  "spCost": 46,
+                  "initSp": 30,
+                  "maxChargeTime": 1,
+                  "increment": 1,
+                  "bb": {
+                    "attack@atk_scale": 1.8,
+                    "attack_speed": 0
+                  },
+                  "bbStr": {},
+                  "rangeId": "3-21",
+                  "rangeGrid": [
+                    [
+                      2,
+                      0
+                    ],
+                    [
+                      2,
+                      1
+                    ],
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      1,
+                      3
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ],
+                    [
+                      -1,
+                      2
+                    ],
+                    [
+                      -1,
+                      3
+                    ],
+                    [
+                      -2,
+                      0
+                    ],
+                    [
+                      -2,
+                      1
+                    ]
+                  ],
+                  "prefabId": "skchr_oblvns_3",
+                  "trigger": {
+                    "rule": "ACTIVE_RANGE",
+                    "rawRule": "DEFAULT",
+                    "customRangeGrid": [
+                      [
+                        2,
+                        0
+                      ],
+                      [
+                        2,
+                        1
+                      ],
+                      [
+                        1,
+                        0
+                      ],
+                      [
+                        1,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        1,
+                        3
+                      ],
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        0,
+                        2
+                      ],
+                      [
+                        0,
+                        3
+                      ],
+                      [
+                        -1,
+                        0
+                      ],
+                      [
+                        -1,
+                        1
+                      ],
+                      [
+                        -1,
+                        2
+                      ],
+                      [
+                        -1,
+                        3
+                      ],
+                      [
+                        -2,
+                        0
+                      ],
+                      [
+                        -2,
+                        1
+                      ]
+                    ]
+                  },
+                  "index": 2,
+                  "overrideTokenKey": null,
+                  "isDefault": true
+                }
+              ],
+              "statsBase": {
+                "maxHp": 1910,
+                "atk": 704,
+                "def": 400,
+                "res": 10,
+                "cost": 18,
+                "blockCnt": 2,
+                "bat": 1.3,
+                "aspd": 100,
+                "respawnTime": 66,
+                "spRecovery": 1,
+                "hpRecoveryPerSec": 0,
+                "moveSpeed": 1,
+                "tauntLevel": 0,
+                "massLevel": 0,
+                "deployLimit": 1,
+                "deckStack": 0
+              },
+              "traitBase": {
+                "desc": "可以进行远程攻击，但此时攻击力降低至80%",
+                "descRaw": "可以进行<@ba.kw>远程攻击</>，但此时攻击力降低至80%",
+                "bb": {
+                  "atk_scale": 0.8
+                },
+                "bbStr": {},
+                "rangeGrid": null
+              },
+              "talentsBase": [
+                {
+                  "index": 0,
+                  "name": "颂乐音符",
+                  "desc": "丰川祥子可以持续攻击且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，Ave Mujica成员无视敌人3%的防御力和2%法术抗性（最多叠加至10层）",
+                  "descRaw": "丰川祥子可以<$ba.permanentatk>持续攻击</>且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，<$ba.mujica>Ave Mujica</>成员无视敌人3%的防御力和2%法术抗性（最多叠加至10层）",
+                  "bb": {
+                    "delay": 1,
+                    "def_penetrate_ratio": 0.03,
+                    "magic_resist_penetrate_ratio": 0.02,
+                    "attack@angle": 20,
+                    "max_cnt": 10
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                },
+                {
+                  "index": 1,
+                  "name": "毋畏遗忘",
+                  "desc": "对敌人造成伤害时使Fever+3；其他Ave Mujica成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "descRaw": "对敌人造成伤害时使<$ba.fever>Fever</>+3；其他<$ba.mujica>Ave Mujica</>成员的攻击范围若与自身原本攻击范围重合，则将其视作攻击范围的延伸；攻击范围内干员攻击速度+12",
+                  "bb": {
+                    "enable": 1,
+                    "attack_speed": 12,
+                    "cnt": 3
+                  },
+                  "bbStr": {},
+                  "rangeGrid": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      1
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1
+                    ],
+                    [
+                      0,
+                      2
+                    ],
+                    [
+                      0,
+                      3
+                    ],
+                    [
+                      -1,
+                      0
+                    ],
+                    [
+                      -1,
+                      1
+                    ]
+                  ],
+                  "tokenKey": null,
+                  "hidden": false,
+                  "fromModule": false
+                }
+              ],
+              "modules": [
+                {
+                  "uniEquipId": "uniequip_002_oblvns",
+                  "name": "无言的约定",
+                  "typeName": "LOR-Y",
+                  "typeIcon": "lor-y",
+                  "icon": "uniequip_002_oblvns",
+                  "isDefault": true,
+                  "level": 3,
+                  "attr": {
+                    "maxHp": 300,
+                    "atk": 63,
+                    "aspd": 7
+                  },
+                  "traitOverride": {
+                    "desc": "可以进行远程攻击，但此时攻击力降低至80%",
+                    "descRaw": "可以进行<@ba.kw>远程攻击</>，但此时攻击力降低至80%",
+                    "bb": {
+                      "atk_scale": 0.8,
+                      "attack_speed": 12
+                    },
+                    "bbStr": {},
+                    "rangeGrid": null,
+                    "moduleDesc": "攻击范围内存在2名及以上敌人时攻击速度+12",
+                    "moduleDescRaw": "攻击范围内存在2名及以上敌人时攻击速度<@ba.vup>+12</>"
+                  },
+                  "talentChanges": [
+                    {
+                      "talentIndex": 0,
+                      "name": "颂乐音符",
+                      "desc": "丰川祥子可以持续攻击且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，Ave Mujica成员无视敌人5%的防御力和2.5%法术抗性（最多可叠加12层）；技能期间远程攻击不再降低攻击力",
+                      "descRaw": "丰川祥子可以<$ba.permanentatk>持续攻击</>且攻击会演奏追踪敌人的音符，音符飘出攻击范围一段时间后消失。每存在一个音符，<$ba.mujica>Ave Mujica</>成员无视敌人5%的防御力和2.5%法术抗性（最多可叠加12层）；技能期间远程攻击不再降低攻击力",
+                      "bb": {
+                        "def_penetrate_ratio": 0.05,
+                        "magic_resist_penetrate_ratio": 0.025,
+                        "attack@angle": 20,
+                        "delay": 1,
+                        "max_cnt": 12
+                      },
+                      "bbStr": {},
+                      "rangeGrid": [
+                        [
+                          1,
+                          0
+                        ],
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          0,
+                          0
+                        ],
+                        [
+                          0,
+                          1
+                        ],
+                        [
+                          0,
+                          2
+                        ],
+                        [
+                          0,
+                          3
+                        ],
+                        [
+                          -1,
+                          0
+                        ],
+                        [
+                          -1,
+                          1
+                        ]
+                      ],
+                      "tokenKey": null,
+                      "hidden": false
+                    },
+                    {
+                      "talentIndex": -1,
+                      "name": null,
+                      "desc": null,
+                      "descRaw": null,
+                      "bb": {},
+                      "bbStr": {},
+                      "rangeGrid": null,
+                      "tokenKey": null,
+                      "hidden": false
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "path": [
+              "bonds",
+              "sargonShip",
+              "members"
+            ],
+            "append": [
+              "chess_char_5_narant_a"
+            ]
+          },
+          {
+            "path": [
+              "bonds",
+              "lateranoShip",
+              "members"
+            ],
+            "append": [
+              "chess_char_5_makoto_a"
+            ]
+          },
+          {
+            "path": [
+              "bonds",
+              "siracusaShip",
+              "members"
+            ],
+            "append": [
+              "chess_char_6_aglna2_a"
+            ]
+          },
+          {
+            "path": [
+              "bonds",
+              "indomShip",
+              "members"
+            ],
+            "append": [
+              "chess_char_5_makoto_a"
+            ]
+          },
+          {
+            "path": [
+              "bonds",
+              "emptyShip",
+              "members"
+            ],
+            "append": [
+              "chess_char_6_oblvns_a"
+            ]
+          },
+          {
+            "path": [
+              "garrisons",
+              "garrison_makoto_a"
+            ],
+            "value": {
+              "garrisonId": "garrison_makoto_a",
+              "desc": "<战斗中>自身被击倒或替身与本体进行切换时，使已激活的【拉特兰】层数+3、【不屈】层数+3",
+              "descRaw": "<战斗中>自身被击倒或替身与本体进行切换时，使已激活的【拉特兰】层数+3、【不屈】层数+3",
+              "eventType": "IN_BATTLE",
+              "eventTypeDesc": "持续叠加",
+              "eventTypeIcon": "icon_bond",
+              "effectType": "ADD_BOND",
+              "effectKey": "act1autochess_gar_event_selfdead",
+              "battleRuneKey": "env_gbuff_new_with_verify",
+              "charLevel": 0,
+              "bb": {
+                "bond_add_count": 3
+              },
+              "bbStr": {
+                "key": "act1autochess_gar_event_selfdead",
+                "bond_type": "bond_by_id",
+                "bond_id": "lateranoShip,indomShip",
+                "bond_add_type": "by_count"
+              },
+              "owners": [
+                "chess_char_5_makoto_a"
+              ]
+            }
+          },
+          {
+            "path": [
+              "garrisons",
+              "garrison_makoto_b"
+            ],
+            "value": {
+              "garrisonId": "garrison_makoto_b",
+              "desc": "<战斗中>自身被击倒或替身与本体进行切换时，使已激活的【拉特兰】层数+6、【不屈】层数+6",
+              "descRaw": "<战斗中>自身被击倒或替身与本体进行切换时，使已激活的【拉特兰】层数+6、【不屈】层数+6",
+              "eventType": "IN_BATTLE",
+              "eventTypeDesc": "持续叠加",
+              "eventTypeIcon": "icon_bond",
+              "effectType": "ADD_BOND",
+              "effectKey": "act1autochess_gar_event_selfdead",
+              "battleRuneKey": "env_gbuff_new_with_verify",
+              "charLevel": 0,
+              "bb": {
+                "bond_add_count": 6
+              },
+              "bbStr": {
+                "key": "act1autochess_gar_event_selfdead",
+                "bond_type": "bond_by_id",
+                "bond_id": "lateranoShip,indomShip",
+                "bond_add_type": "by_count"
+              },
+              "owners": [
+                "chess_char_5_makoto_b"
+              ]
+            }
+          },
+          {
+            "path": [
+              "garrisons",
+              "garrison_narant_a"
+            ],
+            "value": {
+              "garrisonId": "garrison_narant_a",
+              "desc": "【萨尔贡】每叠加8层，本干员攻击力+1%",
+              "descRaw": "【萨尔贡】每叠加8层，本干员攻击力+1%",
+              "eventType": "IN_BATTLE",
+              "eventTypeDesc": "作战能力",
+              "eventTypeIcon": "icon_battle",
+              "effectType": "GAIN_BUFF",
+              "effectKey": "act1autochess_gar_eff_attrByBond",
+              "battleRuneKey": "env_gbuff_new_with_verify",
+              "charLevel": 0,
+              "bb": {
+                "divide_num": 8,
+                "atk": 0.01
+              },
+              "bbStr": {
+                "key": "act1autochess_gar_eff_attrByBond",
+                "bond_id": "sargonShip"
+              },
+              "owners": [
+                "chess_char_5_narant_a"
+              ]
+            }
+          },
+          {
+            "path": [
+              "garrisons",
+              "garrison_narant_b"
+            ],
+            "value": {
+              "garrisonId": "garrison_narant_b",
+              "desc": "【萨尔贡】每叠加8层，本干员攻击力+2%",
+              "descRaw": "【萨尔贡】每叠加8层，本干员攻击力+2%",
+              "eventType": "IN_BATTLE",
+              "eventTypeDesc": "作战能力",
+              "eventTypeIcon": "icon_battle",
+              "effectType": "GAIN_BUFF",
+              "effectKey": "act1autochess_gar_eff_attrByBond",
+              "battleRuneKey": "env_gbuff_new_with_verify",
+              "charLevel": 0,
+              "bb": {
+                "divide_num": 8,
+                "atk": 0.02
+              },
+              "bbStr": {
+                "key": "act1autochess_gar_eff_attrByBond",
+                "bond_id": "sargonShip"
+              },
+              "owners": [
+                "chess_char_5_narant_b"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

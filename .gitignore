@@ -2,3 +2,5 @@ state/
 .env
 *.log
 *.tar.gz
+
+/dist/

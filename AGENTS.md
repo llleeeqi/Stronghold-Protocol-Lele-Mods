@@ -1,42 +1,23 @@
-# Agent 部署说明
+# Agent：部署与维护
 
-这是独立 Mod 构建工具包。先读 README.md、docs/DEPLOYMENT.md、docs/MODS.md、upstream.lock.json。
+先读README.md、docs/PLUGINS.md、docs/DEPLOYMENT.md与upstream.lock.json。继续使用用户已有授权、服务器信息与本会话工作子目录，不重复询问。
 
-本地开服或接入上游统一启动端时，再读 docs/LOCAL-LAUNCHER.md。构建入口属于工具包，启动入口属于生成后的游戏目录；不要在工具包根目录直接运行 npm start，也不要直接启动未打 Mod 的官方整合包并当作部署完成。
+这是八个独立插件与固定0.3.0宿主兼容层，不是纯原版即装即用插件，也不是自制新加载器。plugins/lele-*/保存可发布源码；patches/modpack-code.patch保存共享宿主适配。不要掩盖这一依赖，不要绕过官方PLUGIN_*检查。
 
-## 部署信息与授权
+## 部署
 
-确认目标服务器、目录、资源余量、Docker/Compose v2、公网端口或反代入口。检查已有服务、端口和游戏 healthz。用户已有的信息和授权继续有效，无需重复询问。
+用scripts/stage.sh构建独立候选，复用旧素材缓存；生成器只为素材准备历史数据，finalize-plugin-host.mjs恢复官方原版基线，install-plugins.mjs安装、检查、打包八项插件。全部默认关闭，使用上游room.setPlugins/contentReady/cs流程，勿恢复旧八个私有房间开关或客户端资料切换。
 
-## 目录规则
+已有适配宿主可用node scripts/install-plugins.mjs /abs/game [lele-id ...]单独安装。不要覆盖.env、plugins/config.json、其他作者插件或凭据。发布单个zip与整套目录包，写清整套包不能当单插件zip导入。
 
-- upstream.lock.json 固定完整上游提交，保持干净 checkout 不变。
-- patches/modpack-code.patch 是适配固定 0.2.6 的完整代码补丁；mods/rhine/generate-rounds.mjs 仅生成 +4 数据，不覆盖上游 UI。
-- mods/party 和 mods/recruits 是两个独立干员包生成器；全部拓展由八个独立默认关闭开关控制；“莱茵生命”资料开关现显示为“更多阵营”，同时包含卡兹戴尔。
-- 朋友服资源限制随 modpack-code.patch 适配到 server/http/；compose.yml 是部署默认值。
-- state/、.env 为本机私有状态。凭据、SSH 信息、会话令牌、真实主机配置和日志留在本机。
+检查既有服务、资源、端口和healthz。候选检查失败不得READY。已有授权且rooms=0、matches=0时用scripts/activate.sh切换；活跃时保留候选等待。保留上一版回退；不要重启正在进行的对局。验证公网页面、WebSocket、插件清单、房间校验与在线重连，最后给可用链接。
 
-## 执行流程
+## 更新与贡献
 
-1. 复制 .env.example 为 .env，确定 PORT，执行 `bash scripts/stage.sh --name NAME`。
-2. 可用 `--source /abs/upstream` 指定已有干净 checkout：HEAD 等于指定 revision，tracked 文件无修改。
-3. 可用 `--assets-from /abs/runtime` 复用资源和下载缓存，脚本仍验证/补全。
-4. 记录候选目录和测试输出；检查八个开关、八个资料集、房主权限、准备清除、开局锁定、服务器演算、多人及重连。
-5. 已授权部署且 healthz rooms=0/matches=0 时执行 `bash scripts/activate.sh NAME`。有等待室或对局时保留候选，空闲后继续。stage.sh 永远不重启游戏。
-6. 从公网验证页面、WebSocket、多人和重连，用 status.sh 检查健康与占用。最终给用户可用链接。
+固定完整上游SHA，保留干净基线；源码补丁、插件源码、lock与说明一起提交。功能插件数据与选定集合进入内容哈希，服务端和客户端必须使用同一快照。插件不能改原型键或伪造其他插件身份。不要放宽通用数值上限来使检查通过。
 
-## 更新与失败处理
+脚本默认关闭，本包不需要trusted-force或沙箱脚本执行。共享引擎随宿主构建，删除插件不会物理剔除引擎代码，但会关闭对应内容。新增功能优先用上游公开接口，缺接口才集中维护宿主适配；不要复制一套加载器。
 
-改动 AI 决策前阅读 docs/AI-STATUS.md，按真实资料集做同种子整局比较；不能只凭单个波次、纯原版改善或总漏怪减少，就全局部署到拓展房间。
+移植任何内容时更新README、notices/SOURCES.md、upstream.lock.json和对应插件README中的来源作者、仓库、完整SHA与边界。不放官方美术进插件包；素材下载/引用由宿主处理。
 
-用 `--revision FULL_SHA` 构建新上游候选，成功后更新 lock。保持完整提交固定；git apply、数据生成、资源下载或测试失败时停止切换。
-
-有冲突时在新 worktree 适配补丁，保留默认关闭、4 席、原版数据隔离与最后一关 Boss 规则，复测后切换。回退使用旧 READY 阶段：`bash scripts/activate.sh PREVIOUS_NAME`。
-
-更改其他服务依照用户具体授权。清理自建测试客户端、房间和容器，保留可回退版本。
-
-## 交付
-
-移植或更新拓展时同步 README.md 的来源栏、notices/SOURCES.md 和 upstream.lock.json，写明来源仓库、作者账号、完整提交与选择性移植范围。保留原代码署名、LICENSE/NOTICE 和第三方声明；区分来源玩法与本仓库适配，不把整合内容全部标为原创。
-
-提交补丁、脚本、固定版本和说明，资源及运行状态保存在 state/。区分短局占用与长期峰值、在线重连与跨重启恢复，报告真实验证结果。
+不要做无关重复全量测试。围绕改动验证插件单开、主要组合、原版隔离、房主权限、内容校验、开局和重连；改动AI决策前另读docs/AI-STATUS.md。不得上传真实主机、令牌、私有配置或运行日志。

@@ -1,0 +1,21 @@
+{
+  "patch": 1,
+  "ops": [
+    {
+      "op": "merge",
+      "file": "config",
+      "path": [
+        "economy",
+        "leleHost",
+        "packages",
+        "lucky"
+      ],
+      "value": {
+        "api": 1,
+        "feature": "lucky",
+        "flag": "luckyEnabled",
+        "changes": []
+      }
+    }
+  ]
+}

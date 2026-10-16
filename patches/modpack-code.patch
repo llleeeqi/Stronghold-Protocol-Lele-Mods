@@ -2647,7 +2647,7 @@ index 8510b21..182b03e 100644
          <div class="brief-boss brackets">
            <${MicroLabel} tone="gold">${t('ENEMY LEADER // 敌方领袖')}</${MicroLabel}>
 diff --git a/public/js/screens/game.js b/public/js/screens/game.js
-index 5ed04d9..57580f6 100644
+index 5ed04d9..8fc3904 100644
 --- a/public/js/screens/game.js
 +++ b/public/js/screens/game.js
 @@ -89,6 +89,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
@@ -2670,19 +2670,17 @@ index 5ed04d9..57580f6 100644
    useDocClass('sp-in-match');
    const pub = useStore((s) => s.match.public);
    const priv = useStore((s) => s.match.private);
-@@ -224,8 +230,9 @@ function MatchScreen() {
-   const [facing, setFacing] = useState(null);            // direction step: { uid, piece, row, col, grid, name }
-   const [sel, setSel] = useState(null);                  // tapped own piece: { uid }
+@@ -226,6 +232,9 @@ function MatchScreen() {
    const [selBusy, setSelBusy] = useState(false);
--  const pieceActionBusy = useRef(false);
--  const buyPending = useRef(new Set());
+   const pieceActionBusy = useRef(false);
+   const buyPending = useRef(new Set());
 +  const [manualWang,setManualWang]=useState(null);
 +  const [manualBusy,setManualBusy]=useState(false);
 +
    const [holdSeq, setHoldSeq] = useState(0);             // bumped when a held piece is released (re-apply the prep state)
    const [hud, setHud] = useState(null);
    const [banner, setBanner] = useState(null);
-@@ -282,7 +289,7 @@ function MatchScreen() {
+@@ -282,7 +291,7 @@ function MatchScreen() {
    const leaker = phase === PHASE.UNITE && Array.isArray(pub?.unite?.leakers) && pub.unite.leakers.includes(myId);
    const localLeft = leaker && uniteLocal ? (uniteLocal[myId] ?? 0) : undefined;
    const liveLpNow = liveLp(lpBaseRef.current, {
@@ -2691,7 +2689,7 @@ index 5ed04d9..57580f6 100644
      leaks: ownLeaks(localLeaks, meP?.pendingLp), cap: gd.config?.lpCapPerRound,
      uniteLeft: leaker ? uniteRemaining(localLeft, meP?.uniteLeft) : null,
    });
-@@ -322,7 +329,9 @@ function MatchScreen() {
+@@ -322,7 +331,9 @@ function MatchScreen() {
      getChess: (id) => { const c = gd.chess(id); return ownDiyRecord(c, priv, { chess: data.get('chess'), backups: data.get('backups') }) || c; },
      getToken: gd.token, getItem: gd.item, getEffect: gd.effect, backups: gd.backups,
    }), [priv, pub?.stageId, editable, gd.ready, deployField]);
@@ -2702,7 +2700,7 @@ index 5ed04d9..57580f6 100644
  
    // ---- camera: every request goes through setCam, which remembers it for the pen's way back -----------------------
    // the own prep board: the normal board, or — in the prep of a boss round — the player's half of the boss field
-@@ -756,7 +765,9 @@ function MatchScreen() {
+@@ -756,7 +767,9 @@ function MatchScreen() {
        // survivors, not for its own battle's leaks), else the own battle's as kept while it ran (roundLossRef)
        const kept = roundLossRef.current;
        roundLossRef.current = null;
@@ -2713,7 +2711,7 @@ index 5ed04d9..57580f6 100644
        const sfx = battleOverSfx(cost, pub?.uniteResult?.losses?.[myId]);
        if (sfx) audio.sfx(sfx);
        const box = uniteResultBox(pub?.uniteResult, myId) || battleResultBox(cost);
-@@ -1011,6 +1022,7 @@ function MatchScreen() {
+@@ -1011,6 +1024,7 @@ function MatchScreen() {
        moveOff?.(); moveOff = null;
        setDrag(null);
        view.highlightTiles(null, null);
@@ -2721,7 +2719,7 @@ index 5ed04d9..57580f6 100644
      };
      /** Open the direction wheel for a legal board drop (the piece stays on the tile meanwhile). */
      const openFacing = (entry, t) => {
-@@ -1035,12 +1047,20 @@ function MatchScreen() {
+@@ -1035,12 +1049,20 @@ function MatchScreen() {
          view.highlightTiles(null, null);
          view.highlightTiles(legal, 'legal');
          ptr.released = false; ptr.tile = null;
@@ -2743,7 +2741,7 @@ index 5ed04d9..57580f6 100644
        view.on('pieceDrop', async (e) => {
          endDrag();
          const L = live.current;
-@@ -1074,13 +1094,30 @@ function MatchScreen() {
+@@ -1074,13 +1096,30 @@ function MatchScreen() {
          const reason = dropFailureReason(L.placeCtx, e.uid, tile);
          if (reason) refuse(reason);
        }),
@@ -2775,7 +2773,7 @@ index 5ed04d9..57580f6 100644
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1231,6 +1268,14 @@ function MatchScreen() {
+@@ -1231,6 +1270,14 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
@@ -2790,7 +2788,7 @@ index 5ed04d9..57580f6 100644
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
    // item 8 — at some aspect ratios a bench unit's 出售 sat under the left card); the underframe is drawn above every
    // panel anyway (css z-index), this keeps it visible too
-@@ -1368,6 +1413,7 @@ function MatchScreen() {
+@@ -1368,6 +1415,7 @@ function MatchScreen() {
        }
        if (act === 'escape') {
          if (L.emoteOpen) setEmoteOpen(false);
@@ -2798,7 +2796,7 @@ index 5ed04d9..57580f6 100644
          else if (L.pen && !L.detail) togglePenRef.current(false);
          else if (L.bondOpen) setBondOpen(null);
          else if (L.detail) setDetail(null);
-@@ -1460,7 +1506,10 @@ function MatchScreen() {
+@@ -1460,7 +1508,10 @@ function MatchScreen() {
      battleFieldId: cc ? (battleState?.fieldId || null) : (combat || settleMode ? lastFieldRef.current : null),
      field, layers, layer, who: watchWho, bondLayers: battleState?.bondLayers || null,
    });
@@ -2809,7 +2807,7 @@ index 5ed04d9..57580f6 100644
    const liveLayers = (combat || settleMode) && battleState?.bondLayers ? battleState.bondLayers : null;
    // the observing pill names the player whose bonds the strip shows (the same teammate as the strip's "👁 name" tag)
    const observingName = cc && combat && watchedFid ? (!strip.self && stripFid === watchedFid ? strip.name : (players.find((p) => p.fieldId === watchedFid || ownFieldId(p.playerId) === watchedFid)?.name || t('队友'))) : null;
-@@ -1559,6 +1608,10 @@ function MatchScreen() {
+@@ -1559,6 +1610,10 @@ function MatchScreen() {
    return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', barCollapsed && 'is-collapsed', (sp || hasPersonalChoice) && 'has-sp', pen && 'is-pen', readyWhy && 'has-readywhy')}
        data-camera=${pen ? 'pen' : camKind}>
      <div class="gm__field" ref=${hostRef} onContextMenu=${(e) => e.preventDefault()}></div>
@@ -2820,7 +2818,7 @@ index 5ed04d9..57580f6 100644
      ${viewKind === 'loading' ? html`<div class="gm__loading"><${Spinner} label="LOADING FIELD" /></div>` : null}
      <div class="gm__vignette" aria-hidden="true"></div>
      ${tempNotice ? html`<${TempRowNotice} view=${view} count=${temp.count} items=${temp.items} label=${!drag && !facing}
-@@ -1595,8 +1648,20 @@ function MatchScreen() {
+@@ -1595,8 +1650,20 @@ function MatchScreen() {
          self=${Number.isFinite(priv?.lp) ? { lp: priv.lp, pending: liveLpNow.pending, unite: liveLpNow.unite, left: liveLpNow.left } : null}
          observe=${cc ? { canObserve: (p) => observeTarget(p, pub, myId, { observing: watchingOther, ownDone: localDone }), observing: watchingOther, onBack: backHome } : null} />
  
@@ -2843,7 +2841,7 @@ index 5ed04d9..57580f6 100644
        ${watchingOther && !combat ? html`<div class="gm__watching" role="status">
          <${GIcon} name="eye" /><span>${tParts('正在查看 {name} 的阵地（只读）', { name: html`<b>${watchedName}</b>` })}</span>
          ${spectator ? null : html`<${Button} size="sm" variant="primary" icon="back" onClick=${() => watchPlayer({ playerId: myId })}>${t('返回自己')}<//>`}
-@@ -1619,14 +1684,16 @@ function MatchScreen() {
+@@ -1619,14 +1686,16 @@ function MatchScreen() {
          client=${cc ? { progress, observing: observingName ? { name: observingName } : null, onBack: alive ? backHome : null, layers, layer, onLayer: setLayer } : null} />` : null}
  
        ${showDeadPill(alive, phase) ? (spectator
@@ -2862,7 +2860,7 @@ index 5ed04d9..57580f6 100644
          ${showMetrics && metricsOpen ? html`<${CombatMetricsPanel} myId=${myId} onClose=${() => setMetricsOpen(false)} />` : null}
          ${spectator ? null : html`<${EmoteWheel} open=${emoteOpen} onToggle=${setEmoteOpen} onSend=${(id) => actions.emote(id)} disabled=${conn.status !== 'online'} />`}
          ${showMetrics ? html`<button type="button" class="gm__gear gm__metrics" aria-label=${t('作战统计')} title=${t('作战统计')} aria-expanded=${metricsOpen}
-@@ -1674,12 +1741,13 @@ function MatchScreen() {
+@@ -1674,12 +1743,13 @@ function MatchScreen() {
  
      ${banner ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
        tone=${banner.tone} duration=${banner.duration || 1500} onDone=${() => setBanner(null)} />` : null}

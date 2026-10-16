@@ -28,7 +28,7 @@ bash scripts/activate.sh plugins-030
 
 | 可选内容 | 开启后的效果 | 来源项目 / 作者 |
 |---|---|---|
-| 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，Boss 在最后一关；延长模式关闭额外隐藏关 | 本仓库新增规则与开关，基于上游回合系统 |
+| 额外 4 回合 | 常规 14 → 18，短单人 9 → 13，常规 Boss 在第18回合；保留原版隐藏 Boss 触发条件，满足后进入第19回合 | 本仓库新增规则与开关，基于上游回合系统 |
 | 更多阵营 | 莱茵生命：生态治疗/减速/护盾、能量充能、九人激光钻机；卡兹戴尔：10名成员、完整技能魂灵、21格众魂炮与转职装备；保留谬因 | [Stronghold-Protocol-Rhine / YUYUYUYUYUYUYUTOUA](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine)；谬因来自 [SrC2O4](https://github.com/SrC2O4/Stronghold-Protocol) |
 | 收藏品玩法 | 46 件收藏品，战后三选一；包含一次复活、敌人转移、治疗屏障与组合减伤，默认关闭 | [Stronghold-Protocol-dlc / UNDFFIO](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) |
 | 新干员包 | 结城理、娜仁图亚、予愿安洁莉娜、丰川祥子，实际技能与模组 | [Stronghold-Protocol-Rem / remember-4](https://github.com/remember-4/Stronghold-Protocol-Rem) |

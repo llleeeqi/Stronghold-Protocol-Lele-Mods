@@ -45,9 +45,16 @@ export function extendData(raw) {
     }
     mode.lastRound = FINAL_ROUND;
     mode.bossRound = FINAL_ROUND;
-    mode.hiddenRound = null;
-    mode.hiddenBossWeights = {};
-    mode.desc = `${original.desc || ''} · 乐勒砳特供：额外${EXTRA_ROUNDS}回合，共${FINAL_ROUND}回合，最终回合打 Boss，无额外隐藏关。`;
+    // Preserve upstream eligibility and boss selection; move its optional encounter after the extended final boss.
+    if (Number.isInteger(original.hiddenRound) && original.hiddenRound > boss) {
+      const hidden = original.hiddenRound;
+      requireValue(original.rounds[hidden]?.isHidden && original.enemyScale?.[hidden], `missing hidden encounter for ${id}`);
+      mode.hiddenRound = hidden + EXTRA_ROUNDS;
+      mode.rounds[mode.hiddenRound] = clone(original.rounds[hidden]);
+      mode.enemyScale[mode.hiddenRound] = clone(original.enemyScale[hidden]);
+      mode.combatTimeLimit[mode.hiddenRound] = original.combatTimeLimit?.[hidden] ?? mode.rounds[mode.hiddenRound].combatTimeLimit;
+    }
+    mode.desc = `${original.desc || ''} · 乐勒砳特供：额外${EXTRA_ROUNDS}回合，共${FINAL_ROUND}回合，常规最终回合打 Boss，隐藏关按原版条件触发。`;
     changedModes.push(id);
   }
   requireValue(changedModes.length > 0, 'no supported modes');
@@ -59,7 +66,7 @@ export function extendData(raw) {
   for (const key of Object.keys(out.factions.generation.typeSlots || {})) out.factions.generation.typeSlots[key] = Math.ceil(out.factions.generation.typeSlots[key] * poolFactor);
   const tiers = out.config.trophies?.byRoundsPassed;
   if (Array.isArray(tiers) && tiers.length) tiers[tiers.length - 1].maxRound = finalRound;
-  return { data: out, manifest: { mod: 'long-session', version: 3, extraRounds: EXTRA_ROUNDS, optional: true, hiddenBoss: false, modes: changedModes } };
+  return { data: out, manifest: { mod: 'long-session', version: 4, extraRounds: EXTRA_ROUNDS, optional: true, hiddenBoss: true, modes: changedModes } };
 }
 
 export function buildOverlay(sourceDir, outputDir) {
@@ -128,7 +135,7 @@ export function buildOverlay(sourceDir, outputDir) {
         <div class="section-label">乐勒砳特供 · 拓展选项</div>
         <label style="display:flex;align-items:center;gap:12px;cursor:pointer"><input class="friend-double-rounds" type="checkbox" checked=\${doubleRounds} onChange=\${e => setDoubleRounds(e.target.checked)} />额外 4 回合</label>
         ${profileAware ? '<label style="display:flex;align-items:center;gap:12px;cursor:pointer;margin-top:12px"><input class="friend-rhine-enabled" type="checkbox" checked=${rhineEnabled} onChange=${e => setRhineEnabled(e.target.checked)} />莱茵生命</label><p class="t-lo">加入莱茵生命羁绊、干员与科研装置。可与额外 4 回合组合，等待室中房主仍可调整。</p>' : ''}
-        <p class="t-lo">默认使用原版规则。开启后增加 4 回合，Boss 在最后一回合，无额外隐藏关。房主可在等待室切换，全员同步，开局后锁定。</p>
+        <p class="t-lo">默认使用原版规则。开启后增加 4 回合，Boss 在常规最后一回合，隐藏关按原版条件触发。房主可在等待室切换，全员同步，开局后锁定。</p>
       </section>\` : null}`],
     ['difficulty=${d} selected=${difficulty === d}', 'difficulty=${d} doubleRounds=${doubleRounds} selected=${difficulty === d}']
   ]);
@@ -145,7 +152,7 @@ export function buildOverlay(sourceDir, outputDir) {
         data-testid=\${value ? 'extra-rounds-enabled' : 'extra-rounds-vanilla'} aria-pressed=\${enabled === value ? 'true' : 'false'}
         onClick=\${() => !disabled && enabled !== value && onPick(value)}>\${label}</button>\`)}
     </div>
-    <span class="rhine-setting__desc">\${enabled ? '增加 4 回合 · 最后一关 Boss · 无额外隐藏关' : '原版回合与隐藏关规则'}\${isHost ? '' : ' · 由房主选择'}</span>
+    <span class="rhine-setting__desc">\${enabled ? '增加 4 回合 · 常规最后一关 Boss · 保留隐藏关' : '原版回合与隐藏关规则'}\${isHost ? '' : ' · 由房主选择'}</span>
   </div>\`;
 }
 

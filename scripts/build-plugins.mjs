@@ -24,7 +24,7 @@ function diff(a,b,at=[],changes=[]){
  return changes;
 }
 const specs=[
- ['rounds','额外 4 回合','常规14→18，短单人9→13；Boss最后一关，延长模式无额外隐藏关。',['llleeeqi']],
+ ['rounds','额外 4 回合','常规14→18，短单人9→13；常规Boss仍在最终回合；隐藏Boss保留原版触发条件，常规模式满足后进入第19回合。',['llleeeqi']],
  ['factions','更多阵营','莱茵生命科研与装置、卡兹戴尔魂灵与21格炮击、转职装备；含谬因二技能。',['YUYUYUYUYUYUYUTOUA','SrC2O4']],
  ['relics','收藏品玩法','46件收藏品、战后三选一、一次复活与敌人转移等；不包含鸭梨手机。',['UNDFFIO']],
  ['operators','新干员包','结城理、娜仁图亚、予愿安洁莉娜、丰川祥子；包含原有技能和模组。',['remember-4']],
@@ -58,7 +58,7 @@ for(const [key,name,description,authors]of specs){
   changes=diff(original,extendData(structuredClone(original)).data);
  }
  const payload={api:1,feature:key,flag:flagNames[key],changes};
- const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:'0.3.1',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors,credits:authors.length===1&&authors[0]==='llleeeqi'?[]:['整合适配：llleeeqi'],license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:'整合适配：llleeeqi。'+description+' 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
+ const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:key==='rounds'?'0.3.2':'0.3.1',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors,credits:authors.length===1&&authors[0]==='llleeeqi'?[]:['整合适配：llleeeqi'],license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:'整合适配：llleeeqi。'+description+' 需要本仓库0.3.0宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
  const patch={patch:1,ops:[{op:'merge',file:'config',path:['economy','leleHost','packages',key],value:payload}]};
  const sources=(sourceKeys[key]||[]).map(k=>`- ${lock.mods[k]}`).join('\n')||'- https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods';
  for(const [rel,v]of Object.entries({'plugin.json':manifest,'data/feature.json':patch}))fs.writeFileSync(path.join(folder,rel),JSON.stringify(v,null,2)+'\n');

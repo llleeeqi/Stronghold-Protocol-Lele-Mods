@@ -22,7 +22,7 @@
               "mode_single_funny",
               "desc"
             ],
-            "value": "时长较短的模拟训练 · 乐勒砳特供：额外4回合，共13回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "时长较短的模拟训练 · 乐勒砳特供：额外4回合，共13回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -321,7 +321,7 @@
               "mode_single_normal",
               "desc"
             ],
-            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -348,7 +348,7 @@
               "mode_single_normal",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -569,6 +569,31 @@
               "config",
               "modes",
               "mode_single_normal",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01_s",
+                "boss_9": "act1autochess_h08_02_s",
+                "boss_10": "act1autochess_h08_03_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
               "spRounds"
             ],
             "append": [
@@ -630,6 +655,16 @@
               "config",
               "modes",
               "mode_single_normal",
+              "combatTimeLimit",
+              "19"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_normal",
               "enemyScale",
               "16"
             ],
@@ -678,30 +713,16 @@
               "config",
               "modes",
               "mode_single_normal",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_normal",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_normal",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 1.127357,
+              "hp": 1.86624,
+              "speed": 1,
+              "kAtk": 5,
+              "kHp": 5
+            }
           },
           {
             "path": [
@@ -710,7 +731,7 @@
               "mode_single_hard",
               "desc"
             ],
-            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -737,7 +758,7 @@
               "mode_single_hard",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -958,6 +979,31 @@
               "config",
               "modes",
               "mode_single_hard",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01_s",
+                "boss_9": "act1autochess_h08_02_s",
+                "boss_10": "act1autochess_h08_03_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
               "spRounds"
             ],
             "append": [
@@ -1019,6 +1065,16 @@
               "config",
               "modes",
               "mode_single_hard",
+              "combatTimeLimit",
+              "19"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_hard",
               "enemyScale",
               "16"
             ],
@@ -1067,30 +1123,16 @@
               "config",
               "modes",
               "mode_single_hard",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_hard",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_hard",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 1.17128,
+              "hp": 1.65888,
+              "speed": 1,
+              "kAtk": 4,
+              "kHp": 4
+            }
           },
           {
             "path": [
@@ -1099,7 +1141,7 @@
               "mode_single_abyss",
               "desc"
             ],
-            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -1126,7 +1168,7 @@
               "mode_single_abyss",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -1347,6 +1389,31 @@
               "config",
               "modes",
               "mode_single_abyss",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01_s",
+                "boss_9": "act1autochess_h08_02_s",
+                "boss_10": "act1autochess_h08_03_s"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": null,
+              "prepTimeData": 300,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
               "spRounds"
             ],
             "append": [
@@ -1400,6 +1467,16 @@
               "mode_single_abyss",
               "combatTimeLimit",
               "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_single_abyss",
+              "combatTimeLimit",
+              "19"
             ],
             "value": null
           },
@@ -1544,30 +1621,16 @@
               "config",
               "modes",
               "mode_single_abyss",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_abyss",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_single_abyss",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 1.948717,
+              "hp": 3.583181,
+              "speed": 1.15,
+              "kAtk": 7,
+              "kHp": 7
+            }
           },
           {
             "path": [
@@ -1576,7 +1639,7 @@
               "mode_multi_funny",
               "desc"
             ],
-            "value": "敌方攻击强度较低的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度较低的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -1908,7 +1971,7 @@
               "mode_multi_normal",
               "desc"
             ],
-            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度较高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -1935,7 +1998,7 @@
               "mode_multi_normal",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -2200,6 +2263,31 @@
               "config",
               "modes",
               "mode_multi_normal",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01",
+                "boss_9": "act1autochess_h08_02",
+                "boss_10": "act1autochess_h08_03"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 195,
+              "prepTimeData": 195,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
               "spRounds"
             ],
             "append": [
@@ -2261,6 +2349,16 @@
               "config",
               "modes",
               "mode_multi_normal",
+              "combatTimeLimit",
+              "19"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_normal",
               "enemyScale",
               "16"
             ],
@@ -2309,30 +2407,16 @@
               "config",
               "modes",
               "mode_multi_normal",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_normal",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_normal",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 1.558974,
+              "hp": 2.866545,
+              "speed": 1,
+              "kAtk": 7,
+              "kHp": 7
+            }
           },
           {
             "path": [
@@ -2341,7 +2425,7 @@
               "mode_multi_hard",
               "desc"
             ],
-            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度极高的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -2368,7 +2452,7 @@
               "mode_multi_hard",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -2633,6 +2717,31 @@
               "config",
               "modes",
               "mode_multi_hard",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01",
+                "boss_9": "act1autochess_h08_02",
+                "boss_10": "act1autochess_h08_03"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 215,
+              "prepTimeData": 215,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
               "spRounds"
             ],
             "append": [
@@ -2686,6 +2795,16 @@
               "mode_multi_hard",
               "combatTimeLimit",
               "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_hard",
+              "combatTimeLimit",
+              "19"
             ],
             "value": null
           },
@@ -2830,30 +2949,16 @@
               "config",
               "modes",
               "mode_multi_hard",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_hard",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_hard",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 2.143589,
+              "hp": 4.299817,
+              "speed": 1,
+              "kAtk": 8,
+              "kHp": 8
+            }
           },
           {
             "path": [
@@ -2862,7 +2967,7 @@
               "mode_multi_abyss",
               "desc"
             ],
-            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，最终回合打 Boss，无额外隐藏关。"
+            "value": "敌方攻击强度到达极限的模拟训练 · 乐勒砳特供：额外4回合，共18回合，常规最终回合打 Boss，隐藏关按原版条件触发。"
           },
           {
             "path": [
@@ -2889,7 +2994,7 @@
               "mode_multi_abyss",
               "hiddenRound"
             ],
-            "value": null
+            "value": 19
           },
           {
             "path": [
@@ -3154,6 +3259,31 @@
               "config",
               "modes",
               "mode_multi_abyss",
+              "rounds",
+              "19"
+            ],
+            "value": {
+              "template": null,
+              "bossTemplates": {
+                "boss_8": "act1autochess_h08_01",
+                "boss_9": "act1autochess_h08_02",
+                "boss_10": "act1autochess_h08_03"
+              },
+              "combatTimeLimit": null,
+              "levelMaxPlayTime": 120,
+              "prepTime": 215,
+              "prepTimeData": 215,
+              "isSpPrepare": false,
+              "isBoss": true,
+              "isHidden": true,
+              "bossOvertimeAfter": 150
+            }
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
               "spRounds"
             ],
             "append": [
@@ -3207,6 +3337,16 @@
               "mode_multi_abyss",
               "combatTimeLimit",
               "18"
+            ],
+            "value": null
+          },
+          {
+            "path": [
+              "config",
+              "modes",
+              "mode_multi_abyss",
+              "combatTimeLimit",
+              "19"
             ],
             "value": null
           },
@@ -3332,30 +3472,17 @@
               "config",
               "modes",
               "mode_multi_abyss",
-              "hiddenBossWeights",
-              "boss_8"
+              "enemyScale",
+              "19"
             ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_abyss",
-              "hiddenBossWeights",
-              "boss_9"
-            ],
-            "remove": true
-          },
-          {
-            "path": [
-              "config",
-              "modes",
-              "mode_multi_abyss",
-              "hiddenBossWeights",
-              "boss_10"
-            ],
-            "remove": true
+            "value": {
+              "atk": 2.143589,
+              "hp": 6.687075,
+              "speed": 1.15,
+              "kAtk": 8,
+              "kHp": 10,
+              "supplyHp": 1.5552
+            }
           },
           {
             "path": [

@@ -1,20 +1,20 @@
 {
   "lock": 1,
   "id": "lele-rounds",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
-      "sha256": "9710f8c9b4eb1f27ea934a80f0e88f40ad0cae3e5574269689ec53063bc863d9",
-      "bytes": 690
+      "sha256": "c4b06b4af32981f66639a9960260546f053bedaa67ad01111ddc78a041f6ae3b",
+      "bytes": 760
     },
     "data/feature.json": {
-      "sha256": "524cce8cc7531379d5fd739e783e10f25c2d5cd2f3b294163a0e6db0a69f2a6c",
-      "bytes": 100116
+      "sha256": "72fe188d81b767a8d2fba06b0fd3a852dd23f92c822faaa4c5b764397aa3aae2",
+      "bytes": 104111
     },
     "plugin.json": {
-      "sha256": "b217ff0ccda5b88950393e5db1b6e7b52c0819516af78ff7b94bd382f420f940",
-      "bytes": 730
+      "sha256": "8fedba35ddb48db3dce22baccd18b3c0aa0b7993323b8ba2319b422c47038e66",
+      "bytes": 787
     }
   },
   "spine": {}

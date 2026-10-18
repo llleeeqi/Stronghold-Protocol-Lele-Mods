@@ -1,4 +1,4 @@
-// Preserve native 0.3.0 content as the default; legacy profiles are generation inputs only.
+// Preserve native 0.3.1 content as the default; legacy profiles are generation inputs only.
 import fs from 'node:fs';
 import path from 'node:path';
 const source=path.resolve(process.argv[2]),baseline=path.resolve(process.argv[3]);

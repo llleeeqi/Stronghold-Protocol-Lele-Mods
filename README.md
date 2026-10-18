@@ -1,26 +1,26 @@
 # 乐勒砳特供 · Stronghold Protocol Plugins
 
-同一项目下的八个独立玩法插件，适配官方 **0.3.0**。各项可以单独安装、选择和移除，也提供整套下载。默认全部关闭，使用上游自带的插件面板与内容校验。
+以[官方上游](https://github.com/sganggs/Stronghold-Protocol)为主线，本仓库维护轻量整合适配。同一项目下的八个独立玩法插件，适配官方 **0.3.1**。各项可以单独安装、选择和移除，也提供整套下载。默认全部关闭，使用上游自带的插件面板与内容校验。
 
-**目前需要本仓库的宿主适配 API 1，不能直接装到纯原版 0.3.0。** 科研装置、魂灵、收藏品复活等流程还没有完整的上游插件接口，因此仍保留版本固定的共享宿主补丁；八个插件负责各自数据和启用状态。缺少兼容层时明确拒绝加载。详见 [插件与兼容边界](docs/PLUGINS.md)。
+**目前需要本仓库的宿主适配 API 1，不能直接装到纯原版 0.3.1。** 科研装置、魂灵、收藏品复活等流程还没有完整的上游插件接口，因此仍保留版本固定的共享宿主补丁；八个插件负责各自数据和启用状态。缺少兼容层时明确拒绝加载。详见 [插件与兼容边界](docs/PLUGINS.md)。
 
-宿主修复：恢复购买与撤退/出售操作所需的状态声明，解决点击商店时的 `buyPending is not defined`；已部署旧版的用户需更新宿主并刷新网页。
+本轮以官方 0.3.1 主线为准，只做现有插件兼容；不新增拓展源玩法。更新宿主后请刷新网页。
 
 ## 首次部署：建议交给 Agent
 
 DSH、WorkBuddy、OpenCode 等能读仓库和执行命令的 Agent 均可使用。把仓库地址与下面这段话交给它：
 
-> 请部署这个仓库的0.3.0插件版。先读AGENTS.md、docs/PLUGINS.md、docs/DEPLOYMENT.md和upstream.lock.json。构建带Lele宿主兼容层的独立候选，安装八个插件，默认全部关闭。不要只把插件放进纯原版目录。云服务器使用Docker Compose，保留其他服务与正在进行的对局，空闲后切换并验证公网、房间内容校验和在线重连，最后给我可用链接。
+> 请部署这个仓库的0.3.1插件版。先读AGENTS.md、docs/PLUGINS.md、docs/DEPLOYMENT.md和upstream.lock.json。构建带Lele宿主兼容层的独立候选，安装八个插件，默认全部关闭。不要只把插件放进纯原版目录。云服务器使用Docker Compose，保留其他服务与正在进行的对局，空闲后切换并验证公网、房间内容校验和在线重连，最后给我可用链接。
 
 ```bash
 git clone https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods.git
 cd Stronghold-Protocol-Lele-Mods
 cp .env.example .env
-bash scripts/stage.sh --name plugins-030
-bash scripts/activate.sh plugins-030
+bash scripts/stage.sh --name plugins-031
+bash scripts/activate.sh plugins-031
 ```
 
-已有本仓库0.3.0适配宿主时，可单独安装：`node scripts/install-plugins.mjs /abs/game lele-factions lele-relics`。安装器不覆盖其他插件或服务器配置。游戏默认端口33000；本地开服见 [启动端接入](docs/LOCAL-LAUNCHER.md)。
+已有本仓库0.3.1适配宿主时，可单独安装：`node scripts/install-plugins.mjs /abs/game lele-factions lele-relics`。安装器不覆盖其他插件或服务器配置。游戏默认端口33000；本地开服见 [启动端接入](docs/LOCAL-LAUNCHER.md)。
 
 插件面板的作者署名为各拓展来源作者；本仓库标注为整合适配。额外4回合由本仓库实现。
 
@@ -40,7 +40,7 @@ bash scripts/activate.sh plugins-030
 
 插件目录为 `plugins/lele-rounds`、`lele-factions`、`lele-relics`、`lele-operators`、`lele-damage`、`lele-lucky`、`lele-recruits`、`lele-targeted`。每项均有说明与来源。房主在等待室插件面板连续勾选时只暂存选择，点击“加载所选插件”（或关闭面板）后统一应用一次，显示启动与内容校验进度；所有玩家校验并重新准备后开局。开局锁定，在线重连保留同一份内容。
 
-0.3.0没有把固定自定义干员所需的缺失补位形态变出来：缺失官方补位资料的新增干员按PRESET本人上场。更多阵营与额外干员同时开启时，只保留卡兹戴尔维什戴尔。鸭梨手机继续不加入；训练模式不延长。
+0.3.1没有把固定自定义干员所需的缺失补位形态变出来：缺失官方补位资料的新增干员按PRESET本人上场。更多阵营与额外干员同时开启时，只保留卡兹戴尔维什戴尔。鸭梨手机继续不加入；训练模式不延长。
 
 ## 来源与更新
 
@@ -53,6 +53,8 @@ bash scripts/activate.sh plugins-030
 - [更多阵营玩法](docs/MORE-FACTIONS.md)
 - [46件收藏品](docs/COLLECTIBLES.md)
 - [更新记录](docs/MOD-UPDATES.md)
-- [0.3.0 插件宿主验证记录](docs/TESTING-030.md)
+- [0.3.1 更新与验证](docs/UPDATES-031.md)
 
 朋友服Compose默认640MiB物理内存、内存加swap总额1280MiB、主进程384MiB／对局子进程256MiB Node heap、1CPU、服务器演算、不写永久战绩。插件闲置缓存缩减；主机须已启用swap。限制不是满载保证；活跃内容集会使用上游独立对局宿主。重启不恢复进行中的对局。上游插件工作台沿用本机/LAN访问规则。
+
+本轮以官方主线为准，仅适配现有插件，不另建玩法分叉。来源新增玩法的检查结果见 [0.3.1 更新记录](docs/UPDATES-031.md)。

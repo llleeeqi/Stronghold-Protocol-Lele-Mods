@@ -1,6 +1,6 @@
 {
   "upstream": "https://github.com/sganggs/Stronghold-Protocol.git",
-  "revision": "c24e17eec3af1e6dedfa9935a6d15245cf2f4586",
+  "revision": "c9d804f470b8d7422ae04eb66faf671cef21ad52",
   "modpack_source_revision": "73720faf9beee30d718e472245bf8d8c3ff72273",
   "mods": {
     "rhine": "https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine/tree/19f8f2d853144c94cd71554c0989d7550ad9de65",
@@ -17,26 +17,27 @@
     "rhine_gameplay_revision": "19f8f2d853144c94cd71554c0989d7550ad9de65",
     "operators_base_revision": "df2488f021e1b069c22c9215f586559ec388b153",
     "operators_fixes_revision": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-    "scope": "Official 0.3.0 + native plugin loader + Lele host API 1; Rhine research balance, full native Kazdel soul kits, 3/6 tiers, own-player cannon fire and transfer equipment; four seats, eight default-off options, targeted first-slot weight 2.6. Other source changes audited; no six-seat or ascension rules. 46 optional collectibles, including revival and wave redistribution; phone excluded; source ascension/lottery excluded.",
+    "scope": "Official 0.3.1 + native plugin loader + Lele host API 1; Rhine research balance, full native Kazdel soul kits, 3/6 tiers, own-player cannon fire and transfer equipment; four seats, eight default-off options, targeted first-slot weight 2.6. Other source changes audited; no six-seat or ascension rules. 46 optional collectibles, including revival and wave redistribution; phone excluded; source ascension/lottery excluded.",
     "damage_ui_revision": "b442d41ec719b7c85ac3b9468604acda9f4eff19",
     "relics_revision": "7edfb9662f26a7b8e829f378a069a847b341a583"
   },
   "source_audit": {
-    "date": "2026-10-14",
+    "date": "2026-10-18",
     "heads": {
-      "rhine": "19f8f2d853144c94cd71554c0989d7550ad9de65",
-      "relics": "7edfb9662f26a7b8e829f378a069a847b341a583",
+      "rhine": "6e2d50a018522f8c19554748845fdc70b24d8626",
+      "relics": "f5ba4bf157e0ba176758fe8e46778ed6f9d5e971",
       "operators": "97887cac3abc474f4933ac620ecbd043974c6f3d",
-      "damage": "c7521500f506cdf02467bffa9c169a25e1a82cbb",
-      "lucky": "83bfd9de5f2b28870ea15946796a5abcb0fe87f7",
+      "damage": "3dbdbc25c9cf372b31d95e48546e23ad907e8ebb",
+      "lucky": "ed42928d707303a7f6ba1c20fadf7545de20cbca",
       "recruits": "c8141334266fd1d5971ed996d62ac59addb92b5d",
-      "targeted": "68560faec2187a5ada5757e27b44aa195cbfdfe5",
+      "targeted": "a552329e588de19ab94939cbe2fbb3083cafe558",
       "rhine_aphris": "c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88"
-    }
+    },
+    "note": "Audited latest source heads; this release prioritizes official 0.3.1 compatibility and retains the previously integrated gameplay revisions. New source gameplay is not incorporated."
   },
   "plugin_host": {
     "api": 1,
-    "version": "0.3.0",
+    "version": "0.3.1",
     "requires_host_patch": true,
     "features": [
       "rounds",

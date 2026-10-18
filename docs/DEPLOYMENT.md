@@ -1,13 +1,13 @@
-# 部署、更新与回退（0.3.0）
+# 部署、更新与回退（0.3.1）
 
 首次部署建议交给 Agent，先读 README、AGENTS.md 和 [插件兼容边界](PLUGINS.md)。需要 Git、Python 3、Docker Compose；Windows 可用 WSL。复制 `.env.example` 为 `.env`，设置端口和资源限制，保留已有 Compose 项目名与其他服务配置。
 
 ```bash
-bash scripts/stage.sh --name plugins-030
-bash scripts/activate.sh plugins-030
+bash scripts/stage.sh --name plugins-031
+bash scripts/activate.sh plugins-031
 ```
 
-stage 在独立目录获取 upstream.lock.json 固定的官方 0.3.0，检查并应用宿主补丁，安装锁文件依赖。历史数据生成器只为准备素材使用；下载完成后恢复官方原版基线，写入 Lele API 1 标记，再安装、严格检查和打包八个插件。最终检查成功才写 READY，不改变运行中的服务。
+stage 在独立目录获取 upstream.lock.json 固定的官方 0.3.1，检查并应用宿主补丁，安装锁文件依赖。历史数据生成器只为准备素材使用；下载完成后恢复官方原版基线，写入 Lele API 1 标记，再安装、严格检查和打包八个插件。最终检查成功才写 READY，不改变运行中的服务。
 
 ```bash
 bash scripts/stage.sh --source /abs/clean-upstream --assets-from /abs/old-runtime --name update-001
@@ -45,3 +45,5 @@ activate 检查 rooms=0、matches=0 后原子更新 state/current 并重建游�
 Compose默认物理内存上限仍为 `MEMORY_LIMIT=640m`，`MEMORY_SWAP_LIMIT=1280m` 表示**内存加swap总额**，允许使用最多640MiB主机swap；须先在主机启用swap。此前将两者设成640m实际禁止了容器使用swap。swap用于缓冲短时峰值，不能视为多人多房间的内存保证。
 
 插件应用请求单独等待最多60秒，普通游戏操作超时保持原样；失败在插件面板保留原因和选择。真实部署验证须包含“原版→组合A→关闭→组合B”的多次切换，仅验证全部插件全开不能覆盖缓存累积问题。
+
+素材使用官方抓取器重建本机清单，允许省略源站未提供的可选音效／外语语音，不删除旧素材文件；随后 check-required-assets.mjs 确认 requiredMisses 为空，必要游戏素材缺失时不得 READY。

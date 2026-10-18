@@ -341,7 +341,7 @@ index 0000000..413c142
 +更新方法：先应用莱茵补丁并生成原版/莱茵数据，再运行 +4 回合生成器，覆盖 data 及四个 overlay 文件；随后 git apply --check mods/party/party-code.patch 验证后应用补丁，运行 generate-data.mjs 生成额外干员的两个独立数据目录。最后应用 friends-profile.patch，增量下载干员模型与收藏品图标。
 +任何补丁冲突都停止暂存构建；测试通过并确认无对局后才切换 Compose 挂载。reapply.sh 不会改动线上或自动重启。
 diff --git a/docs/PLAYING.md b/docs/PLAYING.md
-index 0d99eef..7de1a99 100644
+index 574fb84..0b43e8b 100644
 --- a/docs/PLAYING.md
 +++ b/docs/PLAYING.md
 @@ -1,6 +1,6 @@
@@ -353,14 +353,13 @@ index 0d99eef..7de1a99 100644
  本文数值来自官方数据表（`data/config.json` 等）与 [research](research/00-INDEX.md)；游戏内左下角 📖「玩法说明」有官方教程图（随素材一起下载；没下载到时显示文字要点）。操作方式见 [README · 操作](../README.md#操作)，键盘快捷键和修改方法见 [§11](#11-快捷键)。
  
 diff --git a/docs/PLUGINS.md b/docs/PLUGINS.md
-index 4c21813..cec0c90 100644
+index 2be3511..e33903e 100644
 --- a/docs/PLUGINS.md
 +++ b/docs/PLUGINS.md
-@@ -1618,3 +1618,7 @@ which needs a real `node_modules` inside the checkout, as every sandbox test), `
- a server path refused, preview writes nothing, import writes, a kit pack's script plugin and `noScripts`, a file list,
- a path-escape name) and the browser test `test/ui/forge-import.e2e.test.js` (`SP_E2E=1`, including a read that starts
- while a report is on screen and the no-scripts box; a sandbox that cannot open a browser leaves that file unrun).
-+
+@@ -2436,3 +2436,6 @@ sets pin the runtime bytes. Match hosts, bot rehearsals, studio trials and the b
+ Workers still cannot fetch: the page verifies the runtime bytes before sending content. The standalone battle console
+ does not replay preparation; use room test grants for gain effects. Forge's existing custom JavaScript handlers are
+ not inferred from effect names or prose: this API does not automatically translate those handlers.
 +## Lele friend-server resource profile
 +
 +With `SP_FRIENDS=1`, the builder retains one recent composition and the room content service retains one unused set, in addition to held rooms. A match host uses a 256 MiB old-generation limit and exits after 30 seconds idle. These limits affect caches and process budgets only; content hashes, validation and held room snapshots are unchanged. The room panel stages choices locally and applies them together; applying has a separate 60-second request timeout and keeps a persistent error on failure.
@@ -713,10 +712,10 @@ index 0000000..2c890f7
 +  ]
 +}
 diff --git a/public/css/components.css b/public/css/components.css
-index b0adaf7..7bf340a 100644
+index 66918c9..2de3e77 100644
 --- a/public/css/components.css
 +++ b/public/css/components.css
-@@ -1143,3 +1143,10 @@
+@@ -1163,3 +1163,10 @@
  .plugin-settings__row { display: flex; gap: .1rem; align-items: center; justify-content: space-between; }
  .plugin-settings input, .plugin-settings select { color: var(--text-hi); background: var(--bg-2); border: 1px solid var(--line-2); padding: .03rem .06rem; max-width: 2rem; }
  .plugin-settings input[aria-invalid="true"] { border-color: var(--orange); }
@@ -835,22 +834,21 @@ index 0cf5eb9..a219ff9 100644
    padding: .1rem .12rem .1rem .08rem; background: rgba(12, 15, 14, .82); border: 1px solid var(--line);
    transition: border-color var(--t-med), background var(--t-med);
 diff --git a/public/css/screens/game-panels.css b/public/css/screens/game-panels.css
-index 414df25..fd8cef1 100644
+index 7bf48ba..2deefeb 100644
 --- a/public/css/screens/game-panels.css
 +++ b/public/css/screens/game-panels.css
-@@ -408,6 +408,7 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
- .spov__who.is-cur .spov__wstate { color: var(--gold); }
- .spov__grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .2rem; }
+@@ -417,6 +417,7 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
+   .gm.has-spdraft .spov__grid { gap: .46rem .6rem; padding: .14rem .1rem 0 .06rem; }
+ }
  .spov__grid--3 { grid-template-columns: repeat(3, minmax(0, 4.3rem)); grid-template-rows: minmax(0, 4.6rem); justify-content: center; align-content: start; gap: .36rem; margin-top: .3rem; }
 +.spov__grid--many { grid-template-rows: none; grid-auto-rows: minmax(2.8rem, auto); align-content: start; overflow: auto; padding: .06rem; }
  .spov__grid--3 .spcard__icon { width: 1.3rem; height: 1.3rem; }
  /* The official card (research 06 §11.5; the official 悬赏 / 机密商店 / 战术 screenshots): a framed icon at the top-left
     with the bold name beside it, the effect text under both across the card, left-aligned; the tier chip on the icon's
-@@ -688,3 +689,72 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
- .eqr__hint { margin: .04rem 0 0; text-align: center; font-size: calc(.15 * var(--t)); color: var(--text-lo); min-height: .24rem; }
- .eqr__hint b { color: var(--text-hi); }
- .eqr__ok-icon { width: .2rem; height: .2rem; margin-right: .06rem; vertical-align: -.03rem; filter: brightness(0) invert(1); }
-+
+@@ -763,3 +764,71 @@ button.bpop__harmony:hover { border-style: solid; color: #fff; }
+   .offerov .spov__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ }
+ .offerov .spcard__icon { width: .6rem; height: .6rem; }
 +/* ---- personal relics: a matching icon column beside effects, clear of the cost counter ---- */
 +.gm__effects { display: flex; align-items: flex-start; gap: .14rem; }
 +.gm__effect-base { flex: none; width: .74rem; }
@@ -920,7 +918,7 @@ index 414df25..fd8cef1 100644
 +.relic-card__revive { display:flex; flex-wrap:wrap; align-items:center; gap:.08rem; margin:.06rem 0; }
 +.relic-card__revive > .relic-panel__note { flex-basis:100%; }
 diff --git a/public/css/screens/game.css b/public/css/screens/game.css
-index 75d1367..c6812eb 100644
+index bd16394..bbaedd7 100644
 --- a/public/css/screens/game.css
 +++ b/public/css/screens/game.css
 @@ -1,3 +1,4 @@
@@ -928,7 +926,7 @@ index 75d1367..c6812eb 100644
  /* ==========================================================================================
     screens/game.css — in-match screen layout & HUD (js/screens/game.js, js/ui/hud.js, bondStrip.js,
     teamPanel.js, emotes.js, ticker.js, effectsList.js, combatHud.js, settings.js, matchChrome.js,
-@@ -295,6 +296,9 @@
+@@ -467,6 +468,9 @@
  
  /* ---- team panel ------------------------------------------------------------------------------------------- */
  .team { position: absolute; left: .22rem; top: 2.36rem; display: flex; flex-direction: column; gap: .14rem; pointer-events: none; }
@@ -957,11 +955,11 @@ index 0000000..9bd2529
 +.dbond.is-off .dbond__icon img[src="/art/kazdel/bond.png"],.ibond.is-off .bglyph img[src="/art/kazdel/bond.png"]{filter:brightness(0) invert(.55)}
 +@media(max-width:900px){.kazdel-cannon-hud{top:2.3rem;width:2.4rem;max-width:27vw}.kazdel-cannon{padding:.065rem}.kazdel-cannon header small{display:none}}
 diff --git a/public/css/screens/lobby.css b/public/css/screens/lobby.css
-index 5117f1c..323cf64 100644
+index 4ae8b48..a19b752 100644
 --- a/public/css/screens/lobby.css
 +++ b/public/css/screens/lobby.css
-@@ -238,3 +238,10 @@
- .create-box { margin-top: .3rem; display: flex; flex-direction: column; gap: .12rem; }
+@@ -249,3 +249,10 @@
+ }
  .create-box .btn--xl { height: .92rem; font-size: calc(.32 * var(--t)); letter-spacing: .3em; }
  .create-box__hint { display: flex; align-items: center; justify-content: center; min-height: .3rem; font-size: calc(.14 * var(--t)); color: var(--text-lo); }
 +
@@ -1097,11 +1095,11 @@ index 4c056b3..f67c129 100644
 +@media (max-width: 1023px) { .room-options { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 +@media (max-width: 600px) { .room-options { grid-template-columns: minmax(0, 1fr); } }
 diff --git a/public/dev/game-mock.html b/public/dev/game-mock.html
-index 2cfdb87..eb6cbca 100644
+index f236fdd..744f140 100644
 --- a/public/dev/game-mock.html
 +++ b/public/dev/game-mock.html
-@@ -24,6 +24,7 @@
-   <link rel="stylesheet" href="/css/screens/game.css" />
+@@ -27,6 +27,7 @@
+   <link rel="stylesheet" href="/css/screens/boss-plates.css" />
    <link rel="stylesheet" href="/css/screens/game-shop.css" />
    <link rel="stylesheet" href="/css/screens/game-panels.css" />
 +  <link rel="stylesheet" href="/css/screens/rhine.css" />
@@ -1109,7 +1107,7 @@ index 2cfdb87..eb6cbca 100644
    <link rel="stylesheet" href="/css/screens/draft.css" />
    <link rel="stylesheet" href="/css/screens/result.css" />
 diff --git a/public/dev/game-mock.js b/public/dev/game-mock.js
-index 8e33a42..8ec412b 100644
+index ac3b008..44858cb 100644
 --- a/public/dev/game-mock.js
 +++ b/public/dev/game-mock.js
 @@ -19,6 +19,7 @@ import { settingsStore } from '/js/ui/settings.js';
@@ -1144,7 +1142,7 @@ index 8e33a42..8ec412b 100644
    if (VARIANTS.has('reward') && !S.priv.shop.rewardOffer) S.priv.shop.rewardOffer = { tier: 5, slots: shuffle(visibleChess(5)).slice(0, 3).map((c) => ({ kind: 'chess', id: c.chessId, price: 0, sold: false })) };
    if (VARIANTS.has('temp') && !S.priv.temp.some(Boolean)) { S.priv.temp[0] = chessPiece(pick(S.pool)); S.priv.temp[1] = itemPiece(shopItems()[2]); }
    applyGapVariants();
-@@ -549,12 +567,15 @@ function findPiece(uid) {
+@@ -551,12 +569,15 @@ function findPiece(uid) {
    if (i >= 0) return { area: 'hand', i, piece: p.hand[i] };
    i = p.temp.findIndex((x) => x && x.uid === uid);
    if (i >= 0) return { area: 'temp', i, piece: p.temp[i] };
@@ -1160,7 +1158,7 @@ index 8e33a42..8ec412b 100644
    else p.temp[loc.i] = null;
  }
  function freeHandIdx() { for (let i = GEO.HAND_SIZE - 1; i >= 0; i--) if (!S.priv.hand[i]) return i; return -1; }
-@@ -620,6 +641,17 @@ async function mockRequest(t, f = {}) {
+@@ -622,6 +643,17 @@ async function mockRequest(t, f = {}) {
        prepOnly();
        const loc = findPiece(f.uid); if (!loc) fail('BAD_TARGET');
        const to = f.to;
@@ -1350,59 +1348,59 @@ index 0000000..a74fafd
 +  return { b, roster, body };
 +}
 diff --git a/public/i18n/en.json b/public/i18n/en.json
-index f1f9cc2..5a99b47 100644
+index 92100b5..3b43247 100644
 --- a/public/i18n/en.json
 +++ b/public/i18n/en.json
-@@ -1800,5 +1800,6 @@
-   "其余 {n} 个已移到 plugins/_removed/。": "The other {n} {n|was|were} moved to plugins/_removed/.",
-   "已移到 plugins/_removed/：{n} 个插件": "Moved to plugins/_removed/: {n} {n|plugin|plugins}",
-   "选中「{name}」": "Select \"{name}\"",
--  "符号链接的插件文件夹不能在这里删除。": "A plugin folder that is a symbolic link cannot be deleted here."
-+  "符号链接的插件文件夹不能在这里删除。": "A plugin folder that is a symbolic link cannot be deleted here.",
+@@ -2188,5 +2188,6 @@
+   "删除这台浏览器里、当前服务器版本已经用不到的导入素材；仍在使用的会保留。": "Delete the imported assets in this browser that this server's current version no longer uses; the ones still in use stay.",
+   "已清理 {n} 个旧版本文件。": "Cleared {n} old-version files.",
+   "没有需要清理的旧版本文件。": "No old-version files to clear.",
+-  "读不到服务器的素材清单，没有删除任何文件。": "Could not read the server's asset lists; nothing was deleted."
++  "读不到服务器的素材清单，没有删除任何文件。": "Could not read the server's asset lists; nothing was deleted.",
 +  "插件未能应用：{reason}。选择已保留，请重试。": "Could not apply plugins: {reason}. Your selection was kept. Please retry."
  }
 diff --git a/public/i18n/ja.json b/public/i18n/ja.json
-index 77a5f06..4f6dd71 100644
+index b31303b..4657689 100644
 --- a/public/i18n/ja.json
 +++ b/public/i18n/ja.json
-@@ -1806,5 +1806,6 @@
-   "其余 {n} 个已移到 plugins/_removed/。": "残りの {n} 件は plugins/_removed/ に移しました。",
-   "已移到 plugins/_removed/：{n} 个插件": "plugins/_removed/ に移しました：プラグイン {n} 件",
-   "选中「{name}」": "「{name}」を選択",
--  "符号链接的插件文件夹不能在这里删除。": "シンボリックリンクのプラグインフォルダーはここでは削除できません。"
-+  "符号链接的插件文件夹不能在这里删除。": "シンボリックリンクのプラグインフォルダーはここでは削除できません。",
+@@ -2194,5 +2194,6 @@
+   "删除这台浏览器里、当前服务器版本已经用不到的导入素材；仍在使用的会保留。": "このブラウザーに取り込んだ素材のうち、現在のサーバーのバージョンで使われなくなったものを削除します。使用中の素材は残ります。",
+   "已清理 {n} 个旧版本文件。": "旧バージョンのファイルを {n} 個整理しました。",
+   "没有需要清理的旧版本文件。": "整理する旧バージョンのファイルはありません。",
+-  "读不到服务器的素材清单，没有删除任何文件。": "サーバーの素材リストを読み込めなかったため、何も削除していません。"
++  "读不到服务器的素材清单，没有删除任何文件。": "サーバーの素材リストを読み込めなかったため、何も削除していません。",
 +  "插件未能应用：{reason}。选择已保留，请重试。": "プラグインを適用できませんでした：{reason}。選択内容は保持されています。再試行してください。"
  }
 diff --git a/public/i18n/ko.json b/public/i18n/ko.json
-index e4fbe91..5534b2f 100644
+index 85f99db..bff8d27 100644
 --- a/public/i18n/ko.json
 +++ b/public/i18n/ko.json
-@@ -1802,5 +1802,6 @@
-   "其余 {n} 个已移到 plugins/_removed/。": "나머지 {n}개는 plugins/_removed/로 옮겼습니다.",
-   "已移到 plugins/_removed/：{n} 个插件": "plugins/_removed/로 옮김: 플러그인 {n}개",
-   "选中「{name}」": "[{name}] 선택",
--  "符号链接的插件文件夹不能在这里删除。": "심볼릭 링크인 플러그인 폴더는 여기서 삭제할 수 없습니다."
-+  "符号链接的插件文件夹不能在这里删除。": "심볼릭 링크인 플러그인 폴더는 여기서 삭제할 수 없습니다.",
+@@ -2190,5 +2190,6 @@
+   "删除这台浏览器里、当前服务器版本已经用不到的导入素材；仍在使用的会保留。": "이 브라우저에 가져온 소재 중 현재 서버 버전에서 더 이상 쓰지 않는 것을 지웁니다. 사용 중인 소재는 남습니다.",
+   "已清理 {n} 个旧版本文件。": "이전 버전 파일 {n}개를 정리했습니다.",
+   "没有需要清理的旧版本文件。": "정리할 이전 버전 파일이 없습니다.",
+-  "读不到服务器的素材清单，没有删除任何文件。": "서버의 소재 목록을 읽지 못해 아무것도 지우지 않았습니다."
++  "读不到服务器的素材清单，没有删除任何文件。": "서버의 소재 목록을 읽지 못해 아무것도 지우지 않았습니다.",
 +  "插件未能应用：{reason}。选择已保留，请重试。": "플러그인을 적용하지 못했습니다: {reason}. 선택 항목은 유지됩니다. 다시 시도하세요."
  }
 diff --git a/public/i18n/zh-TW.json b/public/i18n/zh-TW.json
-index 28bafc8..3f88f5d 100644
+index e4cc116..3d0194d 100644
 --- a/public/i18n/zh-TW.json
 +++ b/public/i18n/zh-TW.json
-@@ -1804,5 +1804,6 @@
-   "其余 {n} 个已移到 plugins/_removed/。": "其餘 {n} 個已移到 plugins/_removed/。",
-   "已移到 plugins/_removed/：{n} 个插件": "已移到 plugins/_removed/：{n} 個插件",
-   "选中「{name}」": "選取「{name}」",
--  "符号链接的插件文件夹不能在这里删除。": "符號連結的插件資料夾不能在這裡刪除。"
-+  "符号链接的插件文件夹不能在这里删除。": "符號連結的插件資料夾不能在這裡刪除。",
+@@ -2192,5 +2192,6 @@
+   "删除这台浏览器里、当前服务器版本已经用不到的导入素材；仍在使用的会保留。": "刪除這個瀏覽器裡、目前伺服器版本已經用不到的匯入素材；仍在使用的會保留。",
+   "已清理 {n} 个旧版本文件。": "已清理 {n} 個舊版本檔案。",
+   "没有需要清理的旧版本文件。": "沒有需要清理的舊版本檔案。",
+-  "读不到服务器的素材清单，没有删除任何文件。": "讀不到伺服器的素材清單，沒有刪除任何檔案。"
++  "读不到服务器的素材清单，没有删除任何文件。": "讀不到伺服器的素材清單，沒有刪除任何檔案。",
 +  "插件未能应用：{reason}。选择已保留，请重试。": "外掛未能套用：{reason}。選擇已保留，請重試。"
  }
 diff --git a/public/index.html b/public/index.html
-index 42d4c57..2e48209 100644
+index 22287fc..c3d9301 100644
 --- a/public/index.html
 +++ b/public/index.html
-@@ -39,6 +39,8 @@
-   <link rel="stylesheet" href="/css/screens/game.css" />
+@@ -42,6 +42,8 @@
+   <link rel="stylesheet" href="/css/screens/boss-plates.css" />
    <link rel="stylesheet" href="/css/screens/game-shop.css" />
    <link rel="stylesheet" href="/css/screens/game-panels.css" />
 +  <link rel="stylesheet" href="/css/screens/rhine.css" />
@@ -1411,10 +1409,10 @@ index 42d4c57..2e48209 100644
    <link rel="stylesheet" href="/css/screens/draft.css" />
    <link rel="stylesheet" href="/css/screens/result.css" />
 diff --git a/public/js/assets.js b/public/js/assets.js
-index 65e6649..a682e1d 100644
+index 80ae47e..6d887ec 100644
 --- a/public/js/assets.js
 +++ b/public/js/assets.js
-@@ -947,7 +947,7 @@ export function createAssets(options) {
+@@ -1023,7 +1023,7 @@ export function createAssets(options) {
        sfx: (group, key) => sfxUrl(m(), group, key),
        unit: (id, kind, idx) => unitSfxUrl(m(), id, kind, idx),
      },
@@ -1443,7 +1441,7 @@ index 0000000..8821775
 +    });
 +}
 diff --git a/public/js/render/app.js b/public/js/render/app.js
-index efeabb8..b436769 100644
+index bf75008..2018efc 100644
 --- a/public/js/render/app.js
 +++ b/public/js/render/app.js
 @@ -1,3 +1,4 @@
@@ -1451,7 +1449,7 @@ index efeabb8..b436769 100644
  // render/app.js — battlefield view (DESIGN §9). PixiJS 7 (global PIXI) + pixi-spine (PIXI.spine), loaded on demand
  // from /vendor when the page did not include them as classic <script> tags.
  //
-@@ -155,7 +156,7 @@ import { stepClipBounds } from './spine.js';
+@@ -157,7 +158,7 @@ import { stepClipBounds } from './spine.js';
  import { loadThree, loadBoardPack, loadScenePack, webgl2Available, boardArtListed } from './board3d/load.js';
  import { BoardScene } from './board3d/scene.js';
  import { layoutPen, penSignature } from './pen.js';
@@ -1460,7 +1458,7 @@ index efeabb8..b436769 100644
  import { pickOnTile, pickBattle, hitTiles } from './pick.js';
  import { promotionsOf } from './promote.js';
  import { ensurePixi } from './app/pixi.js';
-@@ -188,6 +189,7 @@ export async function createFieldView(host, options = {}) {
+@@ -194,6 +195,7 @@ export async function createFieldView(host, options = {}) {
    const signal = opts.signal;
    signal?.throwIfAborted();
    const P = await withTimeout(ensurePixi(), null, signal);
@@ -1468,7 +1466,7 @@ index efeabb8..b436769 100644
    signal?.throwIfAborted();
    const assets = resolveAssets(opts.assets);
    const data = makeData(opts.data);
-@@ -758,7 +760,7 @@ export async function createFieldView(host, options = {}) {
+@@ -778,7 +780,7 @@ export async function createFieldView(host, options = {}) {
      }
      if (kind === 'token') {
        const rec = data.token(piece.id);
@@ -1477,7 +1475,7 @@ index efeabb8..b436769 100644
      }
      const chess = data.chess(piece.id);
      // 0.2.0 补位: a piece of a chess the player does not own (m.private.standIns) is its stand-in's model, in the hand,
-@@ -900,6 +902,7 @@ export async function createFieldView(host, options = {}) {
+@@ -929,6 +931,7 @@ export async function createFieldView(host, options = {}) {
          if (was && e.area === 'board' && (was.area !== 'board' || was.row !== e.row || was.col !== e.col) && !(dragState && dragState.key === key)) landPiece(v, 'board');
        }
        v._home = w;
@@ -1485,7 +1483,7 @@ index efeabb8..b436769 100644
        v.dimmed = false;
        if (info.kind === 'item' && v.setIcon) v.setIcon(info.icon); // an icon the manifest named late (onAssets)
        if (v.setCount) v.setCount(e.piece.kind === 'token' ? e.piece.count : 0);
-@@ -1222,10 +1225,16 @@ export async function createFieldView(host, options = {}) {
+@@ -1258,10 +1261,16 @@ export async function createFieldView(host, options = {}) {
     */
    function drawHighlight(list, style, group) {
      const key = hlKey(style, group);
@@ -1503,7 +1501,7 @@ index efeabb8..b436769 100644
      tiles.setHighlights(t, style, key, { stripes: range && key !== 'rangeStand' && !board3d });
    }
    function clearHl(group) {
-@@ -1369,6 +1378,8 @@ export async function createFieldView(host, options = {}) {
+@@ -1405,6 +1414,8 @@ export async function createFieldView(host, options = {}) {
      if (destroyed) return;
      const ev = evPayload(e);
      if (mode === 'battle') {
@@ -1512,7 +1510,7 @@ index efeabb8..b436769 100644
        const v = battleUnitAt(ev.x, ev.y);
        if (v) {
          const info = infos.get(v.id) || v.info;
-@@ -1502,6 +1513,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1538,6 +1549,7 @@ export async function createFieldView(host, options = {}) {
        ofx.setGround(heightAt, stageRec?.id ?? null);
        wiring.begin([...infos.values()].map((info) => ({ id: info.id, info }))).catch(() => {});
      }
@@ -1520,7 +1518,7 @@ index efeabb8..b436769 100644
      return true;
    }
  
-@@ -1707,7 +1719,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1811,7 +1823,7 @@ export async function createFieldView(host, options = {}) {
          let officialForm = false;
          if (form !== undefined) {
            const inf = infos.get(e[4].id);
@@ -1529,7 +1527,7 @@ index efeabb8..b436769 100644
            const x = late > 0 ? { ...e[4], late, ...(Number(e[4].dur) > 0 ? { dur: Math.max(0, Number(e[4].dur) - late) } : {}) } : e[4];
            const fv = views.get(e[4].id);
            fv?.setForm?.(form, x);
-@@ -1775,6 +1787,7 @@ export async function createFieldView(host, options = {}) {
+@@ -1880,6 +1892,7 @@ export async function createFieldView(host, options = {}) {
      slideAt = interp.nextSnapT(renderT);
      if (slideAt > renderT) interp.forEachUpcoming(renderT, slideAt, startSlide);
      interp.sample(renderT, sample);
@@ -1538,7 +1536,7 @@ index efeabb8..b436769 100644
        let v = views.get(id);
        if (!v && gone.has(id)) {
 diff --git a/public/js/render/app/info.js b/public/js/render/app/info.js
-index 3e2d983..f70a4d6 100644
+index 4a6335d..586d6d4 100644
 --- a/public/js/render/app/info.js
 +++ b/public/js/render/app/info.js
 @@ -12,7 +12,7 @@ export const FORCED_EXIT = 'forcedExit';
@@ -1716,7 +1714,7 @@ index 6b14f9a..70e0fac 100644
    let spec = FX_KINDS[k];
    if (!spec) {
 diff --git a/public/js/render/fx/simfx.js b/public/js/render/fx/simfx.js
-index 01fdca4..0857981 100644
+index d1450b9..19a0300 100644
 --- a/public/js/render/fx/simfx.js
 +++ b/public/js/render/fx/simfx.js
 @@ -1,6 +1,13 @@
@@ -1932,7 +1930,7 @@ index 98b8a33..1c2fa12 100644
    for (const part of FX_PARTS) {
      if (!Object.prototype.hasOwnProperty.call(part.prototype, key)) continue;
 diff --git a/public/js/render/fx/zones.js b/public/js/render/fx/zones.js
-index a6ad4f8..221e135 100644
+index 7f1d6cb..1eb4d77 100644
 --- a/public/js/render/fx/zones.js
 +++ b/public/js/render/fx/zones.js
 @@ -1,6 +1,12 @@
@@ -1948,7 +1946,7 @@ index a6ad4f8..221e135 100644
  import { NO_OPTS, clamp, easeOut } from './limits.js';
  
  /** A zone lasting longer than this (real s) is a persistent area (炼金单元, fields): drawn dimmer than a skill's short burst. */
-@@ -141,11 +147,37 @@ export class FxZones {
+@@ -141,11 +147,38 @@ export class FxZones {
      }
    }
  
@@ -1974,12 +1972,13 @@ index a6ad4f8..221e135 100644
 +  }
 +
    /** Flash a set of tiles ([[r,c]]) on the ground (telegraphed boxes, blast tiles). */
--  tileFlash(tiles, tint, dur, warn = false) {
+-  tileFlash(tiles, tint, dur, warn = false, wall = null) {
 +  tileFlash(tiles, tint, dur, warn = false, options = undefined) {
      if (!Array.isArray(tiles) || !tiles.length) return;
--    this.tileFlashes.push({ tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn });
+-    this.tileFlashes.push({ tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn, wall });
 -    if (this.tileFlashes.length > 12) this.tileFlashes.shift();
-+    const record = { tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn, ...options };
++    const wall = options?.owner ? options : options?.wall || null;
++    const record = { tiles: tiles.slice(0, 60), tint, dur: Math.max(0.2, dur), t: 0, warn, ...options, wall };
 +    const previous = options?.key && this.tileFlashes.find(f => f.key === options.key);
 +    if (previous) Object.assign(previous, record);
 +    else this.tileFlashes.push(record);
@@ -1989,18 +1988,19 @@ index a6ad4f8..221e135 100644
    }
  
    _updateTileFlashes(dt) {
-@@ -156,10 +188,13 @@ export class FxZones {
+@@ -156,12 +189,14 @@ export class FxZones {
      const p = this._p;
      let w = 0;
      for (const f of this.tileFlashes) {
 +      if (f.anchor && (!f.anchor.alive || f.anchor.remove || f.anchor.destroyed || f.anchor.prep
 +        || f.anchor.info?.researchActive === false || !Number.isInteger(f.anchor.info?.researchStage))) continue;
        f.t += dt;
-       if (f.t >= f.dur) continue;
-       const k = f.t / f.dur;
+       const wall = f.wall;
+       if (wall && (wall.owner.destroyed || wall.owner.alive === false || !wall.owner.statuses?.has('skill'))) continue;
+       if (!wall && f.t >= f.dur) continue;
+       const k = wall ? 0 : f.t / f.dur;
 -      const a = (f.warn ? 0.35 + 0.35 * Math.abs(Math.sin(f.t * 7)) : 0.55 * (1 - k)) * (k > 0.85 ? (1 - k) / 0.15 : 1);
-+      const a = f.steady ? .15 + .025 * Math.sin(f.t * 2)
-+        : (f.warn ? 0.35 + 0.35 * Math.abs(Math.sin(f.t * 7)) : 0.55 * (1 - k)) * (k > 0.85 ? (1 - k) / 0.15 : 1);
++      const a = f.steady ? .15 + .025 * Math.sin(f.t * 2) : (f.warn ? 0.35 + 0.35 * Math.abs(Math.sin(f.t * 7)) : 0.55 * (1 - k)) * (k > 0.85 ? (1 - k) / 0.15 : 1);
        for (const [r, c] of f.tiles) {
          const z = (this.ctx.heightAt ? this.ctx.heightAt(r, c) : 0) + 0.015;
          const pts = [];
@@ -2349,18 +2349,20 @@ index 6ac4c18..a232058 100644
  
    _buildDevices() {
 diff --git a/public/js/render/units.js b/public/js/render/units.js
-index 1a2e421..f21f2ea 100644
+index f0ce135..83c2938 100644
 --- a/public/js/render/units.js
 +++ b/public/js/render/units.js
-@@ -82,11 +82,16 @@
+@@ -82,13 +82,18 @@
  // ground point, i.e. on the pointer (render/app.js).
  
  import { UF, ANIM } from '../../../shared/constants.js';
 +import { rhineDevice } from '../../../shared/rhineResearch.js';
  import { SpineActor } from './spine.js';
+ import { skillAttackMode } from './skillAttack.js';
+ import { MANIFOLD, isManifold, manifoldCopyForm, manifoldAttackForm } from './manifold.js';
 -import { diamondTexture, shadowTexture, fxAtlas, tierChip, statusTexture, itemTexture, hudRings, ringArc, downLabel, HUD_DISC, ELEMENT_RING } from './textures.js';
-+import { ResearchDeviceActor } from './rhineDevices.js';
 +import { diamondTexture, unitSpriteTexture, shadowTexture, fxAtlas, tierChip, statusTexture, itemTexture, hudRings, ringArc, downLabel, HUD_DISC, ELEMENT_RING } from './textures.js';
++import { ResearchDeviceActor } from './rhineDevices.js';
  import { COLORS, TIER_COLORS, ENEMY_FRAME, UNIT, PROJ, statusIconKey, statusIconSuppressed } from './style.js';
  import { drawCrate, rowDepthKey, ROW_KEY, deviceBoxOf, DEVICE_BOX } from './tiles.js';
  
@@ -2370,10 +2372,10 @@ index 1a2e421..f21f2ea 100644
  const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
  const DIRS = ['UP', 'RIGHT', 'DOWN', 'LEFT'];
  /** Deploy direction of an ally from a UnitInfo / piece: `dir` (any case), else the legacy `facing` sign. */
-@@ -374,6 +379,17 @@ const dollRoles = (idle, die, attack = null) => Object.freeze({
-   idle, deploy: idle, die, attack: attack ? Object.freeze({ begin: null, loop: attack, end: null }) : null, attackDown: null, skill: null,
- });
- export const FORMS = Object.freeze({
+@@ -381,6 +386,17 @@ export const FORMS = Object.freeze({
+     Melee: Object.freeze({ change: 'Change_A', combat: 'A_Combat', roles: { ...clipSet('A_Idle', null, 'Die', 'A_Attack'), deploy: 'A_Start', stun: loop('A_Stun'), attackDown: null } }),
+     Range: Object.freeze({ change: 'Change_B', combat: 'B_Combat', roles: { ...clipSet('B_Idle', null, 'B_Die', 'B_Attack'), deploy: 'B_Start', stun: loop('B_Stun'), attackDown: null } }),
+   }),
 +  token_10025_doroth_recttp: Object.freeze({
 +    dorothyCritical: Object.freeze({ roles: Object.freeze({}), tint: 0xff665c }),
 +    dorothyNormal: Object.freeze({ roles: Object.freeze({}), tint: 0xffffff }),
@@ -2388,7 +2390,7 @@ index 1a2e421..f21f2ea 100644
    enemy_9011_acrefr: Object.freeze({
      stopped: Object.freeze({ change: null, roles: clipSet('B_Idle', 'B_Move', 'B_Die', 'B_Attack') }),
    }),
-@@ -658,6 +674,7 @@ export class UnitView {
+@@ -665,6 +681,7 @@ export class UnitView {
      this.modelKY = this.isEnemy ? enemyModelScaleY(def) : 1;
      this.mirrorX = this.isEnemy && !!(def && def.mirrorX);
      this.isToken = info.kind === 'token';
@@ -2396,7 +2398,7 @@ index 1a2e421..f21f2ea 100644
      this.golden = !!info.golden;
      this.tier = clamp(Number(info.tier) || 1, 1, 6);
      this.x = Number(info.x) || 0; this.y = Number(info.y) || 0; this.z = 0;
-@@ -676,7 +693,7 @@ export class UnitView {
+@@ -683,7 +700,7 @@ export class UnitView {
      this.facing = this.dir === 'LEFT' ? -1 : 1;
      this.visFacing = this.isEnemy ? -1 : this.facing;
      this.hp = Number(info.maxHp) || 1; this.maxHp = Number(info.maxHp) || 1; this.ghostHp = this.hp;
@@ -2405,7 +2407,7 @@ index 1a2e421..f21f2ea 100644
      this.ammo = null;             // [rounds left, rounds in the magazine] while an ammo skill runs (sync; b.snap `ammo`)
      this.wolves = null;           // [狼影 left, the talent's maximum] of a 狼群 (sync; b.snap `wolves`)
      this.coins = null;            // [balance, cap] of 琳琅诗怀雅's skill purse, including zero
-@@ -736,6 +753,7 @@ export class UnitView {
+@@ -743,6 +760,7 @@ export class UnitView {
      this.fallback = new P.Sprite(P.Texture.EMPTY);
      this.fallback.anchor.set(0.5, 1);
      this.body.addChild(this.fallback);
@@ -2413,12 +2415,12 @@ index 1a2e421..f21f2ea 100644
      this.actor = null;
      this.spineReady = false;
      this._modelDirty = false;            // died / stood up since the last frame: update() checks Front ⇄ Back (_syncModel)
-@@ -774,13 +792,15 @@ export class UnitView {
-    *  owner's face — assets.js tokenAvatarUrl). */
+@@ -784,13 +802,15 @@ export class UnitView {
    _pictureUrl() {
      const a = this.ctx.assets;
--    return ICE_TOKENS.has(this.info.defId) ? null : a && (a.picture ? a.picture(this.info.avatar) || a.picture(this.info.defId) || a.picture(this.info.spine) : null) || null;
-+    return this.researchDevice?.sprite || (ICE_TOKENS.has(this.info.defId) ? null : a && (a.picture ? a.picture(this.info.avatar) || a.picture(this.info.defId) || a.picture(this.info.spine) : null)) || null;
+     const o = this.info.skin ? { skin: this.info.skin } : undefined;
+-    return ICE_TOKENS.has(this.info.defId) ? null : a && (a.picture ? a.picture(this.info.avatar, o) || a.picture(this.info.defId, o) || a.picture(this.info.spine, o) : null) || null;
++    return this.researchDevice?.sprite || (ICE_TOKENS.has(this.info.defId) ? null : a && (a.picture ? a.picture(this.info.avatar, o) || a.picture(this.info.defId, o) || a.picture(this.info.spine, o) : null) || null);
    }
  
    /** @param {boolean} [replace] another picture replaces a shown one: the old one stays on the diamond until it is there */
@@ -2428,9 +2430,9 @@ index 1a2e421..f21f2ea 100644
 +    const urls = [...new Set([this.researchDevice?.sprite, url, this.researchDevice?.icon].filter(Boolean))];
 +    const retry = replace;
      const old = replace && this._pic && this._pic.state === 'img' ? this._pic : null;
-     this._pic = { key: String(this.info.avatar || this.info.defId || 'unknown'), color: this._frameColor(), img: null, state: 'none', shown: null, t0: nowMs(), url, prev: !!old };
-     if (!url || !a.image) return;
-@@ -788,9 +808,15 @@ export class UnitView {
+     // the key carries the skinId too (docs/SKINS.md): a switch otherwise keeps the previous appearance's portrait
+     this._pic = { key: String(this.info.avatar || this.info.defId || 'unknown') + (this.info.skin ? `|${this.info.skin}` : ''), color: this._frameColor(), img: null, state: 'none', shown: null, t0: nowMs(), url, prev: !!old };
+@@ -799,9 +819,15 @@ export class UnitView {
      if (cached) { this._pic.img = cached; this._pic.state = 'img'; return; }
      this._pic.state = 'wait';
      const pic = this._pic;
@@ -2449,7 +2451,7 @@ index 1a2e421..f21f2ea 100644
    }
  
    /**
-@@ -830,9 +856,10 @@ export class UnitView {
+@@ -841,9 +867,10 @@ export class UnitView {
      // still loading: nothing new yet (a replaced picture keeps the old one meanwhile; else the placeholder after a while)
      if (pic.state === 'wait' && (pic.prev || nowMs() - pic.t0 < PIC_WAIT_MS)) want = null;
      if (!want || pic.shown === want) return;
@@ -2462,7 +2464,7 @@ index 1a2e421..f21f2ea 100644
      pic.shown = want;
    }
  
-@@ -850,6 +877,7 @@ export class UnitView {
+@@ -863,6 +890,7 @@ export class UnitView {
  
    /** @param {boolean} [retry] load again even after a remembered failure (assets.js acquire `{ retry }`) */
    _loadSpine(retry = false) {
@@ -2470,8 +2472,8 @@ index 1a2e421..f21f2ea 100644
      const a = this.ctx.assets;
      if (!a || !a.spineEntry || !a.spine) return;
      const id = this.info.spine || this.info.defId;
-@@ -922,7 +950,7 @@ export class UnitView {
-         actor.setSkillIndex(this.skillIndex ?? undefined);
+@@ -944,7 +972,7 @@ export class UnitView {
+         };
          actor.setRunMode(this.moveFast);
          // enemies play their attack clip once per attack, then walk on (GitHub #58: the sim stands them for that clip)
 -        actor.clipPerAttack = this.isEnemy;
@@ -2479,7 +2481,7 @@ index 1a2e421..f21f2ea 100644
        } catch (err) {
          console.warn('[render] spine build failed', id, err?.message || err);
          this._releaseEntry(entry);
-@@ -975,8 +1003,16 @@ export class UnitView {
+@@ -997,9 +1025,17 @@ export class UnitView {
      });
    }
  
@@ -2490,14 +2492,15 @@ index 1a2e421..f21f2ea 100644
 +  onResearchFx(kind, extra) { this.researchActor?.trigger(kind, extra); }
 +
    _formSpec() {
--    return this.form ? FORMS[this.info.spine || this.info.defId]?.[this.form] || null : null;
 +    if (this.info.kazdelSoul === true && this.form === 'kazdelSoul') return KAZDEL_SOUL_LOOK;
+     const form = this.form || (isManifold(this.info) ? 'Default' : null);
+-    const f = form ? FORMS[this.info.spine || this.info.defId]?.[form] || null : null;
 +    const forms = FORMS[this.info.spine || this.info.defId];
-+    return this.form ? forms?.[this.form] || null : forms?.body || null;
++    const f = form ? forms?.[form] || null : forms?.body || null;
+     if (f?.combat && this._manifoldCombat) return { ...f, roles: { ...f.roles, attack: loop(f.combat), skill: { ...f.roles.skill, loop: f.combat } } };
+     return f;
    }
- 
-   /**
-@@ -990,7 +1026,7 @@ export class UnitView {
+@@ -1032,7 +1068,7 @@ export class UnitView {
    setForm(kind, fx = null) {
      const k = typeof kind === 'string' ? kind : null;
      if (k === this.form) return;
@@ -2506,7 +2509,7 @@ index 1a2e421..f21f2ea 100644
      const prev = this._formSpec();
      this.form = k;
      this.info.form = k;
-@@ -1089,6 +1125,7 @@ export class UnitView {
+@@ -1132,6 +1168,7 @@ export class UnitView {
    /** Apply an interpolated sample (render/interp.js); `t` = the render clock's game time (ring countdowns). */
    sync(s, t) {
      if (!s) return;
@@ -2514,7 +2517,7 @@ index 1a2e421..f21f2ea 100644
      if (Number.isFinite(t)) this.gameT = t;
      // the element gauge shown (b.snap `elem`): element, fill 0..1, cooldown end (game s) and length
      this.el = typeof s.el === 'string' ? s.el : null;
-@@ -1566,7 +1603,10 @@ export class UnitView {
+@@ -1613,7 +1650,10 @@ export class UnitView {
      if (lungeK) { const q = cam.project(this.x + lx, this.y + ly, this.z + this.hover + this.lift, LG_P); bx = q.x; by = q.y; }
      this.root.position.set(bx, by);
      this.root.alpha = alpha;
@@ -2525,7 +2528,7 @@ index 1a2e421..f21f2ea 100644
      // off-screen: nothing to animate or draw (bounds / hit-testing still follow `screen`)
      if (this._cull(bx, by, s, dt)) return;
      const flip = this.modelFlip();
-@@ -1589,7 +1629,7 @@ export class UnitView {
+@@ -1636,7 +1676,7 @@ export class UnitView {
        this.fallback.visible = this.swapT < 1;
        const sc = s * UNIT.modelScale * this.modelK;
        const flashK = this.flash > 0 ? this.flash : 0;
@@ -2534,7 +2537,7 @@ index 1a2e421..f21f2ea 100644
        if (this.down) tint = DOWN_LOOK.tint;
        else if (this.flags & UF.FROZEN) tint = 0x9fd4ff;
        else if (this.flags & UF.COLD) tint = 0xcfe6ff;
-@@ -1630,14 +1670,16 @@ export class UnitView {
+@@ -1677,14 +1717,16 @@ export class UnitView {
        const bob = this.alive ? Math.sin(t * 2.4 + this.bob) * s * 0.03 : 0;
        this.fallback.scale.set(size / 160);
        this.fallback.position.set(0, -s * 0.08 + bob);
@@ -2553,7 +2556,7 @@ index 1a2e421..f21f2ea 100644
      if (wedge && this.alive) {
        if (!this.facingArrow) {
          this.facingArrow = new P.Sprite(fxAtlas().tex.chevron);
-@@ -1672,7 +1714,7 @@ export class UnitView {
+@@ -1719,7 +1761,7 @@ export class UnitView {
      // keep the original short-circuit: many views never build an actor (prep chips, diamonds, tests), so the model
      // only counts when a spine is actually shown
      const actor = spineShown ? this.actor : null;
@@ -2562,7 +2565,7 @@ index 1a2e421..f21f2ea 100644
        isEnemy: this.isEnemy, isBoss: this.isBoss, spineShown,
        bounds: actor && actor.entry ? actor.entry.bounds : null,
        modelK: this.modelK, modelKY: this.modelKY,
-@@ -1737,6 +1779,7 @@ export class UnitView {
+@@ -1784,6 +1826,7 @@ export class UnitView {
      const shielded = showHp && (this.flags & UF.SHIELD);
      this.shieldBar.visible = !!shielded;
      if (shielded) { this.shieldBar.position.set(x0, cy - bh / 2 - 1); this.shieldBar.width = bw; this.shieldBar.height = Math.max(1.5, bh * 0.35); }
@@ -2570,7 +2573,7 @@ index 1a2e421..f21f2ea 100644
      // SP — or, while an ammo skill runs, its magazine: yellow cells, one per round, emptying from the right (b.snap `ammo`;
      // the SP bar's own fraction, ammoLeft / ammoMax, is the same width). Without an `ammo` row the bar is the plain SP bar.
      const ammo = !this.isEnemy ? this.ammo : null;
-@@ -1749,10 +1792,10 @@ export class UnitView {
+@@ -1796,10 +1839,10 @@ export class UnitView {
        const active = !!(this.flags & UF.SKILL);
        const k = ammo ? ammo[0] / ammo[1] : clamp(this.sp / this.spMax, 0, 1);
        ready = !active && k >= 0.999;
@@ -2583,7 +2586,7 @@ index 1a2e421..f21f2ea 100644
        this._spY = sy;
      }
      this._updateAmmoCuts(showSp && !!ammo, ammo, x0, sy, bw, spH);
-@@ -1957,6 +2000,26 @@ export class UnitView {
+@@ -2003,6 +2046,26 @@ export class UnitView {
     * The share of the element bar drawn (0..1): the remaining 元素值 (1 − fill), or during a 爆发冷却 the part of the
     * cooldown already run (the bar refills to full, PRTS 元素 "元素条显示缓慢恢复至上限"). 0 without a gauge.
     */
@@ -2611,10 +2614,10 @@ index 1a2e421..f21f2ea 100644
      if (!this.el) return 0;
      if (this.elementCooling()) return clamp(1 - (this.elUntil - this.gameT) / this.elDur, 0, 1);
 diff --git a/public/js/screens/bandDraft.js b/public/js/screens/bandDraft.js
-index 62874c7..3a5a0db 100644
+index 0225a09..26ebea3 100644
 --- a/public/js/screens/bandDraft.js
 +++ b/public/js/screens/bandDraft.js
-@@ -19,16 +19,17 @@
+@@ -19,19 +19,19 @@
  // never touches the highlighted band or the buttons.
  
  import { useEffect, useMemo, useRef, useState } from '../../vendor/hooks.module.js';
@@ -2629,8 +2632,10 @@ index 62874c7..3a5a0db 100644
  import { useStore } from '../store.js';
  import { data } from '../data.js';
  import { audio } from '../audio.js';
+ import { TurnBanner } from '../ui/turnBanner.js';
+ import { bootArtReady } from '../ui/protocolBoot.js';
+ import { reducedMotion } from '../ui/device.js';
 -import { modeOffBonds, bandOffBonds, bandOffLine } from '../ui/gameLogic.js';
-+
  import { t, tParts, tName } from '../../../shared/i18n.js';
  
  const cx = (...p) => p.flat().filter(Boolean).join(' ');
@@ -2647,10 +2652,10 @@ index 8510b21..182b03e 100644
          <div class="brief-boss brackets">
            <${MicroLabel} tone="gold">${t('ENEMY LEADER // 敌方领袖')}</${MicroLabel}>
 diff --git a/public/js/screens/game.js b/public/js/screens/game.js
-index 5ed04d9..8fc3904 100644
+index fedaeb8..b7f3ac1 100644
 --- a/public/js/screens/game.js
 +++ b/public/js/screens/game.js
-@@ -89,6 +89,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
+@@ -96,6 +96,10 @@ import { EnemyDrawer } from '../ui/enemyDrawer.js';
  import { Ticker } from '../ui/ticker.js';
  import { EmoteWheel } from '../ui/emotes.js';
  import { EffectsList } from '../ui/effectsList.js';
@@ -2661,16 +2666,16 @@ index 5ed04d9..8fc3904 100644
  import { CombatHud } from '../ui/combatHud.js';
  import { CombatMetricsPanel } from '../ui/combatMetrics.js';
  import { SettingsModal, settingsStore, useSettings } from '../ui/settings.js';
-@@ -171,6 +175,8 @@ export function GameScreen() {
+@@ -186,6 +190,8 @@ export function GameScreen() {
  const inBattleCard = (d) => d?.kind === 'unit' || (d?.kind === 'device' && d.device?.unitId != null);
  
  function MatchScreen() {
 +  const damage = useStore(s => s.match?.damage);
 +  const [damageOpen, setDamageOpen] = useState(false);
    useDocClass('sp-in-match');
+   useEffect(() => { preloadPopupArt(); }, []);
    const pub = useStore((s) => s.match.public);
-   const priv = useStore((s) => s.match.private);
-@@ -226,6 +232,9 @@ function MatchScreen() {
+@@ -243,6 +249,9 @@ function MatchScreen() {
    const [selBusy, setSelBusy] = useState(false);
    const pieceActionBusy = useRef(false);
    const buyPending = useRef(new Set());
@@ -2679,8 +2684,8 @@ index 5ed04d9..8fc3904 100644
 +
    const [holdSeq, setHoldSeq] = useState(0);             // bumped when a held piece is released (re-apply the prep state)
    const [hud, setHud] = useState(null);
-   const [banner, setBanner] = useState(null);
-@@ -282,7 +291,7 @@ function MatchScreen() {
+   const [banner, setBanner] = useState(null);            // a phase's banner (PhaseBanner) or plate (ui/matchPopups.js PhasePopup: `plate`)
+@@ -318,7 +327,7 @@ function MatchScreen() {
    const leaker = phase === PHASE.UNITE && Array.isArray(pub?.unite?.leakers) && pub.unite.leakers.includes(myId);
    const localLeft = leaker && uniteLocal ? (uniteLocal[myId] ?? 0) : undefined;
    const liveLpNow = liveLp(lpBaseRef.current, {
@@ -2689,18 +2694,17 @@ index 5ed04d9..8fc3904 100644
      leaks: ownLeaks(localLeaks, meP?.pendingLp), cap: gd.config?.lpCapPerRound,
      uniteLeft: leaker ? uniteRemaining(localLeft, meP?.uniteLeft) : null,
    });
-@@ -322,7 +331,9 @@ function MatchScreen() {
+@@ -360,7 +369,8 @@ function MatchScreen() {
      getChess: (id) => { const c = gd.chess(id); return ownDiyRecord(c, priv, { chess: data.get('chess'), backups: data.get('backups') }) || c; },
-     getToken: gd.token, getItem: gd.item, getEffect: gd.effect, backups: gd.backups,
-   }), [priv, pub?.stageId, editable, gd.ready, deployField]);
+     getToken: gd.token, getItem: gd.item, getEffect: gd.effect, backups: gd.backups, morphMode,
+   }), [priv, pub?.stageId, editable, gd.ready, deployField, data.locale(), morphMode]);
 -  live.current = { pub, priv, field, view, editable, hasPersonalChoice, placeCtx, watching, watchWho, watchingOther, home, myId, alive, spectator, detail, drawer, bondOpen, emoteOpen, settingsOpen, exitOpen, drag, facing, sel, selBusy, pen, collapsedNow: collapsed, localDone: false, canPause: false, paused };
-+
 +  useEffect(()=>{if(!combat||watchingOther||battleState?.done)setManualWang(null);},[combat,watchingOther,battleState?.battleId,battleState?.done]);
 +  live.current = { pub, priv, field, view, editable, hasPersonalChoice, placeCtx, watching, watchWho, watchingOther, home, myId, alive, spectator, detail, drawer, bondOpen, emoteOpen, damageOpen, metricsOpen, manualWang, manualBusy, settingsOpen, exitOpen, drag, facing, sel, selBusy, pen, collapsedNow: collapsed, localDone: false, canPause: false, paused };
  
    // ---- camera: every request goes through setCam, which remembers it for the pen's way back -----------------------
    // the own prep board: the normal board, or — in the prep of a boss round — the player's half of the boss field
-@@ -756,7 +767,9 @@ function MatchScreen() {
+@@ -820,7 +830,9 @@ function MatchScreen() {
        // survivors, not for its own battle's leaks), else the own battle's as kept while it ran (roundLossRef)
        const kept = roundLossRef.current;
        roundLossRef.current = null;
@@ -2711,7 +2715,7 @@ index 5ed04d9..8fc3904 100644
        const sfx = battleOverSfx(cost, pub?.uniteResult?.losses?.[myId]);
        if (sfx) audio.sfx(sfx);
        const box = uniteResultBox(pub?.uniteResult, myId) || battleResultBox(cost);
-@@ -1011,6 +1024,7 @@ function MatchScreen() {
+@@ -1117,6 +1129,7 @@ function MatchScreen() {
        moveOff?.(); moveOff = null;
        setDrag(null);
        view.highlightTiles(null, null);
@@ -2719,7 +2723,7 @@ index 5ed04d9..8fc3904 100644
      };
      /** Open the direction wheel for a legal board drop (the piece stays on the tile meanwhile). */
      const openFacing = (entry, t) => {
-@@ -1035,12 +1049,20 @@ function MatchScreen() {
+@@ -1141,12 +1154,20 @@ function MatchScreen() {
          view.highlightTiles(null, null);
          view.highlightTiles(legal, 'legal');
          ptr.released = false; ptr.tile = null;
@@ -2741,7 +2745,7 @@ index 5ed04d9..8fc3904 100644
        view.on('pieceDrop', async (e) => {
          endDrag();
          const L = live.current;
-@@ -1074,13 +1096,30 @@ function MatchScreen() {
+@@ -1180,13 +1201,30 @@ function MatchScreen() {
          const reason = dropFailureReason(L.placeCtx, e.uid, tile);
          if (reason) refuse(reason);
        }),
@@ -2773,7 +2777,7 @@ index 5ed04d9..8fc3904 100644
          if (!Number.isInteger(e.uid)) return;
          setDetail({ kind: 'piece', uid: e.uid });
          // a tap selects an own piece (underframe + range); right-click / long-press only opens its detail card. A tap on
-@@ -1231,6 +1270,14 @@ function MatchScreen() {
+@@ -1337,6 +1375,14 @@ function MatchScreen() {
    const selEntry = sel ? placeCtx.pieces.get(sel.uid) || null : null;
    live.current.showPrep = showPrep;
    useEffect(() => { if (sel && (!selEntry || !editable || !showPrep)) setSel(null); }, [sel, selEntry, editable, showPrep]);
@@ -2788,7 +2792,7 @@ index 5ed04d9..8fc3904 100644
    // the selected piece's underframe on screen: the detail card docks on the side away from it (user playtest #2
    // item 8 — at some aspect ratios a bench unit's 出售 sat under the left card); the underframe is drawn above every
    // panel anyway (css z-index), this keeps it visible too
-@@ -1368,6 +1415,7 @@ function MatchScreen() {
+@@ -1475,6 +1521,7 @@ function MatchScreen() {
        }
        if (act === 'escape') {
          if (L.emoteOpen) setEmoteOpen(false);
@@ -2796,7 +2800,7 @@ index 5ed04d9..8fc3904 100644
          else if (L.pen && !L.detail) togglePenRef.current(false);
          else if (L.bondOpen) setBondOpen(null);
          else if (L.detail) setDetail(null);
-@@ -1460,7 +1508,10 @@ function MatchScreen() {
+@@ -1567,7 +1614,10 @@ function MatchScreen() {
      battleFieldId: cc ? (battleState?.fieldId || null) : (combat || settleMode ? lastFieldRef.current : null),
      field, layers, layer, who: watchWho, bondLayers: battleState?.bondLayers || null,
    });
@@ -2807,8 +2811,8 @@ index 5ed04d9..8fc3904 100644
    const liveLayers = (combat || settleMode) && battleState?.bondLayers ? battleState.bondLayers : null;
    // the observing pill names the player whose bonds the strip shows (the same teammate as the strip's "👁 name" tag)
    const observingName = cc && combat && watchedFid ? (!strip.self && stripFid === watchedFid ? strip.name : (players.find((p) => p.fieldId === watchedFid || ownFieldId(p.playerId) === watchedFid)?.name || t('队友'))) : null;
-@@ -1559,6 +1610,10 @@ function MatchScreen() {
-   return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', barCollapsed && 'is-collapsed', (sp || hasPersonalChoice) && 'has-sp', pen && 'is-pen', readyWhy && 'has-readywhy')}
+@@ -1666,6 +1716,10 @@ function MatchScreen() {
+   return html`<div class=${cx('screen', 'gm', `gm--${mode}`, drag && 'is-dragging', barCollapsed && 'is-collapsed', (sp || hasPersonalChoice || offerBlocksPrep(pub?.offers)) && 'has-sp', sp && 'has-spdraft', pen && 'is-pen', readyWhy && 'has-readywhy')}
        data-camera=${pen ? 'pen' : camKind}>
      <div class="gm__field" ref=${hostRef} onContextMenu=${(e) => e.preventDefault()}></div>
 +    ${manualWang&&combat&&!watchingOther?html`<div style="position:absolute;left:50%;top:90px;transform:translateX(-50%);z-index:20;pointer-events:auto" role="status">
@@ -2818,7 +2822,7 @@ index 5ed04d9..8fc3904 100644
      ${viewKind === 'loading' ? html`<div class="gm__loading"><${Spinner} label="LOADING FIELD" /></div>` : null}
      <div class="gm__vignette" aria-hidden="true"></div>
      ${tempNotice ? html`<${TempRowNotice} view=${view} count=${temp.count} items=${temp.items} label=${!drag && !facing}
-@@ -1595,8 +1650,20 @@ function MatchScreen() {
+@@ -1703,8 +1757,20 @@ function MatchScreen() {
          self=${Number.isFinite(priv?.lp) ? { lp: priv.lp, pending: liveLpNow.pending, unite: liveLpNow.unite, left: liveLpNow.left } : null}
          observe=${cc ? { canObserve: (p) => observeTarget(p, pub, myId, { observing: watchingOther, ownDone: localDone }), observing: watchingOther, onBack: backHome } : null} />
  
@@ -2841,7 +2845,7 @@ index 5ed04d9..8fc3904 100644
        ${watchingOther && !combat ? html`<div class="gm__watching" role="status">
          <${GIcon} name="eye" /><span>${tParts('正在查看 {name} 的阵地（只读）', { name: html`<b>${watchedName}</b>` })}</span>
          ${spectator ? null : html`<${Button} size="sm" variant="primary" icon="back" onClick=${() => watchPlayer({ playerId: myId })}>${t('返回自己')}<//>`}
-@@ -1619,14 +1686,16 @@ function MatchScreen() {
+@@ -1727,14 +1793,16 @@ function MatchScreen() {
          client=${cc ? { progress, observing: observingName ? { name: observingName } : null, onBack: alive ? backHome : null, layers, layer, onLayer: setLayer } : null} />` : null}
  
        ${showDeadPill(alive, phase) ? (spectator
@@ -2860,14 +2864,16 @@ index 5ed04d9..8fc3904 100644
          ${showMetrics && metricsOpen ? html`<${CombatMetricsPanel} myId=${myId} onClose=${() => setMetricsOpen(false)} />` : null}
          ${spectator ? null : html`<${EmoteWheel} open=${emoteOpen} onToggle=${setEmoteOpen} onSend=${(id) => actions.emote(id)} disabled=${conn.status !== 'online'} />`}
          ${showMetrics ? html`<button type="button" class="gm__gear gm__metrics" aria-label=${t('作战统计')} title=${t('作战统计')} aria-expanded=${metricsOpen}
-@@ -1674,12 +1743,13 @@ function MatchScreen() {
- 
-     ${banner ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
+@@ -1793,6 +1861,7 @@ function MatchScreen() {
+       chev=${banner.chev} duration=${banner.duration} onDone=${() => setBanner(null)} />` : null}
+     ${!hasOffers && banner && !banner.plate && !roundPop ? html`<${PhaseBanner} key=${banner.key} mode="overlay" title=${banner.title} sub=${banner.sub} micro=${banner.micro}
        tone=${banner.tone} duration=${banner.duration || 1500} onDone=${() => setBanner(null)} />` : null}
 +    <${RelicChoice} offer=${priv?.relicOffer} deadline=${pub?.deadline} onChoose=${actions.relic} />
  
      ${resultBox ? html`<${ResultDialog} key=${resultBox.key} title=${resultBox.title} sub=${resultBox.sub} micro=${resultBox.micro}
        tone=${resultBox.tone} duration=${resultBox.duration} onDone=${() => setResultBox(null)} />` : null}
+@@ -1804,7 +1873,7 @@ function MatchScreen() {
+         onDone=${() => setBossPlate(null)} />` : null}
  
      ${facing && view ? html`<${FacingWheel} key=${`${facing.uid}:${facing.row},${facing.col}`} view=${view} row=${facing.row} col=${facing.col}
 -      grid=${facing.grid} name=${facing.name} onPreview=${previewFacing} onCommit=${commitFacing} onCancel=${cancelFacing} />` : null}
@@ -2876,10 +2882,10 @@ index 5ed04d9..8fc3904 100644
      ${paused ? html`<${PausedOverlay} canResume=${solo} busy=${pauseBusy} onResume=${() => togglePause(false)} onExit=${() => setExitOpen(true)} />` : null}
  
 diff --git a/public/js/screens/loadout.js b/public/js/screens/loadout.js
-index fe266c8..9c9fa12 100644
+index f6c9f84..44a253a 100644
 --- a/public/js/screens/loadout.js
 +++ b/public/js/screens/loadout.js
-@@ -290,7 +290,8 @@ export function ModuleInfo({ m, golden, opt, potential = null }) {
+@@ -294,7 +294,8 @@ export function ModuleInfo({ m, golden, opt, potential = null }) {
    const talents = (Array.isArray(rec.talentChanges) ? rec.talentChanges : []).filter((t) => t && (t.name || t.desc) && !t.hidden);
    return html`<div class="lo-minfo">
      <div class="lo-minfo__title"><${Img} src=${moduleIconOf(m, rec)} class="lo-minfo__icon" /><span class="lo-minfo__type num">${rec.typeName || ''}</span><b>${rec.name || rec.uniEquipId}</b>
@@ -2889,7 +2895,7 @@ index fe266c8..9c9fa12 100644
      <div class="lo-minfo__row">
        <span class="lo-minfo__k">${t('属性')}</span>
        <span class="lo-minfo__v lo-attrs">${rows.length ? rows.map((r) => html`<span key=${r.key} class=${cx('lo-attr', r.positive ? 'is-up' : 'is-down')}>${r.label}<b class="num">${r.text}</b></span>`) : html`<span class="t-dim">${t('无属性加成')}</span>`}</span>
-@@ -487,7 +488,7 @@ function LoadoutScreen({ st }) {
+@@ -499,7 +500,7 @@ function LoadoutScreen({ st }) {
    const m = data.get('assets');
    const getChess = (id) => data.lookup('chess', id);
    const getBond = (id) => data.lookup('bonds', id);
@@ -2898,16 +2904,16 @@ index fe266c8..9c9fa12 100644
    const bonds = useMemo(() => {
      const used = new Set(roster.flatMap((c) => c.bonds || []));
      return (data.list('bonds') || []).filter((b) => b && used.has(b.bondId))
-@@ -804,7 +805,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
+@@ -823,7 +824,7 @@ export function badgeCount(entries, getChess, ops = null, roster = null) {
   * Entry button (lobby / room / briefing).
-  * @param {{ from: 'lobby'|'room'|'briefing', size?: string, variant?: string, class?: string, label?: string }} props
+  * @param {{ from: 'lobby'|'room'|'briefing'|'prep', size?: string, variant?: string, class?: string, label?: string }} props
   */
 -export function LoadoutButton({ from, size = 'md', variant = 'secondary', class: cls, label = t('干员调配') }) {
 +export function LoadoutButton({ from, size = 'md', variant = 'secondary', class: cls, label = '干员调配', disabled = false }) {
    useData('local'); // the official preset icon (re-render once the local-art manifest arrives)
    const entries = useStore((s) => s.entries, Object.is, loadoutStore);
    const ops = useStore((s) => s.ops, Object.is, loadoutStore);
-@@ -817,7 +818,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
+@@ -836,7 +837,7 @@ export function LoadoutButton({ from, size = 'md', variant = 'secondary', class:
    // 0.2.0 自选编队: how many DIY slots the player filled
    const nDiy = diyCount(diy);
    return html`<button type="button" class=${cx('btn', `btn--${variant}`, `btn--${size}`, 'lo-entry', cls)} data-testid="loadout-open"
@@ -2917,10 +2923,10 @@ index fe266c8..9c9fa12 100644
      <span class="btn__label">${label}</span>
      ${n ? html`<span class="lo-entry__n num" aria-label=${t('{n} 名干员已调整', { n })}>${n}</span>` : null}
 diff --git a/public/js/screens/lobby.js b/public/js/screens/lobby.js
-index 7177752..192ddcb 100644
+index e7cb499..f1ca575 100644
 --- a/public/js/screens/lobby.js
 +++ b/public/js/screens/lobby.js
-@@ -336,6 +336,7 @@ export function LobbyScreen() {
+@@ -364,6 +364,7 @@ export function LobbyScreen() {
  
      <div class="lobby-body screen__scroll">
        <section class="lobby-left">
@@ -2929,7 +2935,7 @@ index 7177752..192ddcb 100644
          <div class="mode-cards">
            ${MODE_CARDS.map((c) => html`<${ModeCard} key=${c.id} card=${c} selected=${roomMode === c.id} onSelect=${pickMode} />`)}
 diff --git a/public/js/store.js b/public/js/store.js
-index f82dfaa..71ec016 100644
+index 671799e..76fa5cc 100644
 --- a/public/js/store.js
 +++ b/public/js/store.js
 @@ -1,3 +1,4 @@
@@ -2946,14 +2952,14 @@ index f82dfaa..71ec016 100644
  
  /** Initial app state (exported for tests and resets). */
  export const initialState = Object.freeze({
-@@ -224,3 +225,5 @@ export function useStore(selector = identity, isEqual = Object.is, target = stor
+@@ -228,3 +229,5 @@ export function useStore(selector = identity, isEqual = Object.is, target = stor
  
    return value;
  }
 +
 +installNumberMask(store);
 diff --git a/public/js/ui/assetUrls.js b/public/js/ui/assetUrls.js
-index dc6079a..0608952 100644
+index bf1cfb3..2adc402 100644
 --- a/public/js/ui/assetUrls.js
 +++ b/public/js/ui/assetUrls.js
 @@ -11,6 +11,11 @@ export function uiUrl(m, key) {
@@ -2969,19 +2975,19 @@ index dc6079a..0608952 100644
   * Operator avatar for a chess record (golden → E2 art when present).
   * @param {any} m manifest
 diff --git a/public/js/ui/choiceOverlay.js b/public/js/ui/choiceOverlay.js
-index fc5c2ca..df4ba93 100644
+index 3d23360..94bb722 100644
 --- a/public/js/ui/choiceOverlay.js
 +++ b/public/js/ui/choiceOverlay.js
-@@ -210,7 +210,7 @@ export function ChoiceView({ pub, sp, myId, solo, personal = false, busyIdx = nu
-           </div>`;
-         })}
-       </div>` : null}
+@@ -214,7 +214,7 @@ export function ChoiceView({ pub, sp, myId, solo, personal = false, busyIdx = nu
+           ${timed ? html`<${Countdown} deadline=${pub?.deadline} total=${total ?? undefined} size="md" />` : null}
+         </div>
+       </header>
 -      <div class=${cx('spov__grid', sp.cards.length <= 3 && 'spov__grid--3')}>
 +      <div class=${cx('spov__grid', sp.cards.length <= 3 && 'spov__grid--3', sp.cards.length > 6 && 'spov__grid--many')}>
          ${sp.cards.map((card) => {
            const r = resolveSpCard(card, sp.family);
            const taker = card.takenBy ? players.get(card.takenBy) : null;
-@@ -219,6 +219,7 @@ export function ChoiceView({ pub, sp, myId, solo, personal = false, busyIdx = nu
+@@ -223,6 +223,7 @@ export function ChoiceView({ pub, sp, myId, solo, personal = false, busyIdx = nu
            const isArmed = can && armed === card.idx;
            const takerName = taker ? (card.takenBy === myId ? t('你') : taker.name) : null;
            return html`<button key=${card.idx} type="button" class=${cx('spcard', `spcard--${r.kind}`, (card.takenBy || card.soldOut) && 'is-taken', card.takenBy === myId && 'is-mine', can && 'is-pickable', isArmed && 'is-armed', busy && 'is-busy')}
@@ -3035,7 +3041,7 @@ index fcb0083..ffa16c1 100644
        ${myDone && !observing ? html`<div class="chud__msg chud__wait" role="status"><${Icon} name="hourglass" /><span>${t('作战结束，等待队友完成作战')}</span></div>
          <${ProgressList} list=${client.progress} />` : null}
 diff --git a/public/js/ui/components.js b/public/js/ui/components.js
-index 9c425f5..b9cc7c4 100644
+index 663973d..4478026 100644
 --- a/public/js/ui/components.js
 +++ b/public/js/ui/components.js
 @@ -16,7 +16,8 @@ import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } fro
@@ -3071,7 +3077,7 @@ index 9c425f5..b9cc7c4 100644
    </span>`;
  }
  
-@@ -725,7 +728,12 @@ export function Spinner({ size = 'md', label, tone = 'mint', class: cls }) {
+@@ -726,7 +729,12 @@ export function Spinner({ size = 'md', label, tone = 'mint', class: cls }) {
  
  // ---- Avatar frame ------------------------------------------------------------------------------
  
@@ -3085,7 +3091,7 @@ index 9c425f5..b9cc7c4 100644
  /**
   * Square avatar frame with bracket corners. Falls back to a glyph (first letter / robot).
   * @param {{ name?: string, src?: string, size?: 'sm'|'md'|'lg'|'xl', seat?: number, host?: boolean, bot?: boolean,
-@@ -734,7 +742,7 @@ const SEAT_HUES = [162, 196, 38, 280];
+@@ -735,7 +743,7 @@ const SEAT_HUES = [162, 196, 38, 280];
  export function AvatarFrame({ name = '', src, size = 'md', seat = 0, host, bot, self, ready, offline, dead, empty, class: cls }) {
    const [badSrc, setBadSrc] = useState(null);
    const imgOk = !!src && badSrc !== src;
@@ -3250,7 +3256,7 @@ index 0000000..6330821
 +  </ol>`;
 +}
 diff --git a/public/js/ui/detailPanel.js b/public/js/ui/detailPanel.js
-index 5f06866..e598243 100644
+index 1924c51..be7b856 100644
 --- a/public/js/ui/detailPanel.js
 +++ b/public/js/ui/detailPanel.js
 @@ -34,15 +34,21 @@
@@ -3275,10 +3281,10 @@ index 5f06866..e598243 100644
 +
  import { moduleBadge, fullTraitText } from './loadoutModel.js';
  import { t, tc, N_ } from '../../../shared/i18n.js';
- import { audio } from '../audio.js';
-@@ -498,6 +504,10 @@ export function ChessDetail({ chess, piece, unit, snapHp, editable, onSell, bond
+ import { morphSlotPolicy } from '../../../shared/plugins/rules.js';
+@@ -506,6 +512,10 @@ export function ChessDetail({ chess, piece, unit, snapHp, editable, onSell, bond
   */
- export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null }) {
+ export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null, morphMode = 'official', unequipAllowed = false }) {
    const m = data.get('assets');
 +  const immediateGift = item.id === 'chess_item_5_04_e_a' && piece?.giftTiming === 'immediate';
 +  const effectText = immediateGift
@@ -3287,17 +3293,20 @@ index 5f06866..e598243 100644
    return html`
      <div class="dhead dhead--item">
        <div class=${cx('dhead__icon', item.isGolden && 'is-golden')}><${Img} src=${itemIconUrl(m, item)} fallback=${html`<${GIcon} name="bolt" />`} /></div>
-@@ -508,7 +518,8 @@ export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null }
+@@ -516,10 +526,11 @@ export function ItemDetail({ item, piece, editable, onDestroy, offBonds = null,
          ${item.flavor ? html`<span class="dhead__flavor">${item.flavor}</span>` : null}
        </div>
      </div>
 -    <${Section} title=${t('效果')} micro="EFFECT"><${RichText} as="p" text=${item.descRaw || item.desc} class="dtext" /><//>
 +    <${Section} title=${t('效果')} micro="EFFECT"><${RichText} as="p" text=${effectText} class="dtext" /><//>
+     ${item.canGiveBond ? html`<${Section} title=${t('天赋')} micro="TALENT" class="dsec--morph"><${MorphPairings} off=${offBonds} mode=${morphMode} /><//>` : null}
+     ${item.canGiveBond && morphMode === 'plus' ? html`<p class="dhint" data-testid="morph-free"><${Icon} name="info" />${t('不占装备格')}</p>` : null}
+     ${!item.canGiveBond && item.giveBondId ? html`<${MorphGrantLine} item=${item} off=${offBonds} mode=${morphMode} />` : null}
 +    ${immediateGift ? html`<p class="dhint dhint--rule"><${Icon} name="info" />${t('第14回合六人补给信标 · 使用后立即转赠')}</p>` : null}
-     ${item.canGiveBond ? html`<${Section} title=${t('天赋')} micro="TALENT" class="dsec--morph"><${MorphPairings} off=${offBonds} /><//>` : null}
-     ${!item.canGiveBond && item.giveBondId ? html`<${MorphGrantLine} item=${item} off=${offBonds} />` : null}
      ${item.note ? html`<p class="dhint dhint--rule"><${Icon} name="info" />${item.note}</p>` : null}
-@@ -575,6 +586,9 @@ function EnemyDetail({ enemy, snapHp, count, live = null }) {
+     ${item.itemType === 'MAGIC'
+       ? html`<p class="dhint"><${Icon} name="info" />${t('将其拖拽至战场上的格子使用')}</p>`
+@@ -584,6 +595,9 @@ function EnemyDetail({ enemy, snapHp, count, live = null }) {
   * @param {boolean} [startDeploy] the sim's switch (tests pass both values)
   */
  export function summonDeployHint(token, startDeploy = SKILL_SUMMON_START_DEPLOY) {
@@ -3307,7 +3316,7 @@ index 5f06866..e598243 100644
    if (!token || token.kind !== 'summon' || token.placeable !== true) return null;
    const talent = Object.values(token.variants || {}).some((v) => (v?.sources || []).includes('talent'));
    if (talent) return t('作战开始时在摆放的位置部署');
-@@ -641,14 +655,19 @@ function MapCharDetail({ token, snapHp, live, m }) {
+@@ -650,14 +664,19 @@ function MapCharDetail({ token, snapHp, live, m }) {
      <//>` : null}`;
  }
  
@@ -3329,7 +3338,7 @@ index 5f06866..e598243 100644
    const hp = hpOf(live, snapHp);
    const st = {
      maxHp: liveStat(live, 'maxHp', s.maxHp), atk: liveStat(live, 'atk', s.atk), def: liveStat(live, 'def', s.def),
-@@ -658,32 +677,32 @@ export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live
+@@ -667,32 +686,32 @@ export function TokenDetail({ token, piece, ownerId = null, snapHp = null, live
    const talents = (v0?.talents || []).filter((t) => t && t.name && t.desc);
    const skill = v0?.skill && v0.skill.desc && !/^skcom_withdraw/.test(String(v0.skill.skillId || '')) ? v0.skill : null;
    const hint = piece ? summonDeployHint(token) : null;
@@ -3375,7 +3384,7 @@ index 5f06866..e598243 100644
  function TerrainDetail({ terrain }) {
    return html`
      <div class="dhead">
-@@ -790,6 +809,12 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
+@@ -799,6 +818,12 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
    if (target.kind === 'token') { const t = data.lookup('tokens', target.id) || diyToken(target.id); return t ? { type: 'token', token: t } : null; }
    if (target.kind === 'unit') {
      const u = target.unit || {};
@@ -3388,7 +3397,7 @@ index 5f06866..e598243 100644
      const own = Number.isInteger(u.uid) ? pieces?.get(u.uid) : null;
      if (u.side === 'enemy') { const en = data.lookup('enemies', u.defId); return en ? { type: 'enemy', enemy: en, unitId: u.id } : null; }
      // a hand item on a scouted prep board (m.field units, kind 'item'): the item's own card
-@@ -810,7 +835,7 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
+@@ -819,7 +844,7 @@ export function resolveDetail(target, pieces, { priv = null, backups = data.get(
      if (dr) return { type: 'chess', chess: dr, piece: own?.piece || null, unitId: u.id, unitItems: Array.isArray(u.items) ? u.items : null, standIn: null, diy: pick, ...cv };
      if (c) return { type: 'chess', chess: c, piece: own?.piece || null, unitId: u.id, unitItems: Array.isArray(u.items) ? u.items : null, standIn: si, ...cv };
      const t = data.lookup('tokens', u.defId) || diyToken(u.defId);
@@ -3397,9 +3406,9 @@ index 5f06866..e598243 100644
      const en = data.lookup('enemies', u.defId);
      return en ? { type: 'enemy', enemy: en, unitId: u.id } : null;
    }
-@@ -881,7 +906,7 @@ export function DetailPanel({ detail, editable, snapHp, onClose, onSell, onDestr
-         standIn=${detail.standIn || null} diy=${detail.diy || null} cultOpts=${detail.cultOpts || { ops }} />` : null}
-       ${detail.type === 'item' ? html`<${ItemDetail} item=${detail.item} piece=${detail.piece} editable=${editable} onDestroy=${destroyIt} offBonds=${offBonds} />` : null}
+@@ -890,7 +915,7 @@ export function DetailPanel({ detail, editable, snapHp, onClose, onSell, onDestr
+         standIn=${detail.standIn || null} diy=${detail.diy || null} cultOpts=${detail.cultOpts || { ops }} morphMode=${morphMode} onUnequip=${onUnequip} />` : null}
+       ${detail.type === 'item' ? html`<${ItemDetail} item=${detail.item} piece=${detail.piece} editable=${editable} onDestroy=${destroyIt} offBonds=${offBonds} morphMode=${morphMode} unequipAllowed=${unequipAllowed} />` : null}
        ${detail.type === 'enemy' ? html`<${EnemyDetail} enemy=${detail.enemy} snapHp=${snapHp} count=${detail.count} live=${liveNow} />` : null}
 -      ${detail.type === 'token' ? html`<${TokenDetail} token=${detail.token} piece=${detail.piece} ownerId=${detail.ownerId ?? null} snapHp=${snapHp} live=${liveNow} />` : null}
 +      ${detail.type === 'token' ? html`<${TokenDetail} token=${detail.token} piece=${detail.piece} ownerId=${detail.ownerId ?? null} snapHp=${snapHp} live=${liveNow} researchStage=${detail.researchStage} researchState=${detail.researchState} soulState=${detail.soulState} />` : null}
@@ -3407,7 +3416,7 @@ index 5f06866..e598243 100644
        ${detail.type === 'device' ? html`<${DeviceDetail} device=${detail.device} snapHp=${snapHp} live=${liveNow} />` : null}
      </div>
 diff --git a/public/js/ui/facing.js b/public/js/ui/facing.js
-index bd403a8..1097dbb 100644
+index 04d3546..de80345 100644
 --- a/public/js/ui/facing.js
 +++ b/public/js/ui/facing.js
 @@ -12,8 +12,10 @@
@@ -3421,7 +3430,7 @@ index bd403a8..1097dbb 100644
  import { N_ } from '../../../shared/i18n.js';
  
  export const DIRS = Object.freeze(['UP', 'RIGHT', 'DOWN', 'LEFT']);
-@@ -142,6 +144,8 @@ export const pieceDir = (piece) => normDir(isObj(piece) ? piece.dir : null);
+@@ -143,6 +145,8 @@ export const pieceDir = (piece) => normDir(isObj(piece) ? piece.dir : null);
   */
  export function previewGrid(lookups, piece) {
    if (!isObj(piece) || !lookups) return null;
@@ -3430,7 +3439,7 @@ index bd403a8..1097dbb 100644
    let rec = null;
    if (piece.kind === 'chess') {
      rec = lookups.getChess?.(piece.id);
-@@ -233,6 +237,7 @@ export function underframeActions(ctx, uid) {
+@@ -234,6 +238,7 @@ export function underframeActions(ctx, uid) {
  export function retreatSlot(ctx, uid) {
    const e = ctx?.pieces?.get(uid);
    if (!e || e.area !== 'board') return null;
@@ -3488,7 +3497,7 @@ index c688a1d..b54dcf4 100644
  }
  
 diff --git a/public/js/ui/fallbackField.js b/public/js/ui/fallbackField.js
-index 350ffdd..ba87c86 100644
+index f93aa0b..9643f18 100644
 --- a/public/js/ui/fallbackField.js
 +++ b/public/js/ui/fallbackField.js
 @@ -22,6 +22,8 @@
@@ -3500,7 +3509,7 @@ index 350ffdd..ba87c86 100644
  import { chessAvatarUrl, itemIconUrl, tokenAvatarUrl, enemyIconUrl } from './assetUrls.js';
  import { tileKey, hasFlag, UF, penPlacement, PEN, fieldTile, ownStandIn, ownDiyRecord } from './gameLogic.js';
  import { t } from '../../../shared/i18n.js';
-@@ -221,7 +223,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -219,7 +221,7 @@ export function createFallbackView(host, opts = {}) {
      if (d.moved) {
        const t = targetAt(e.clientX, e.clientY);
        st.hoverTarget = t;
@@ -3509,7 +3518,7 @@ index 350ffdd..ba87c86 100644
        schedule();
      }
    }
-@@ -273,18 +275,19 @@ export function createFallbackView(host, opts = {}) {
+@@ -271,18 +273,19 @@ export function createFallbackView(host, opts = {}) {
      const px = (x - st.rect.c0 + 0.5) * L.tile;
      const py = (st.rect.r1 - y + 0.5) * L.tile;
      const enemy = info.side === 'enemy';
@@ -3531,7 +3540,7 @@ index 350ffdd..ba87c86 100644
      </div>`;
    }
  
-@@ -343,7 +346,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -341,7 +344,7 @@ export function createFallbackView(host, opts = {}) {
          const p = tilePos(L, row, col);
          const k = tileKey(row, col);
          let hl = st.highlight.get(k);
@@ -3540,7 +3549,7 @@ index 350ffdd..ba87c86 100644
          const hov = st.hoverTarget?.area === 'board' && st.hoverTarget.row === row && st.hoverTarget.col === col ? dropState(st.hoverTarget) : null;
          tiles.push(html`<div key=${k} class=${cx('ff-tile', `ff-tile--${tileClass(row, col)}`, hl && `is-${hl}`, hov && `is-hover-${hov}`)}
            data-drop="board" data-row=${row} data-col=${col}
-@@ -410,7 +413,14 @@ export function createFallbackView(host, opts = {}) {
+@@ -408,7 +411,14 @@ export function createFallbackView(host, opts = {}) {
      if (st.camera === 'pen') { render(html`${penView()}<div class="ff-badge">SIMPLIFIED VIEW</div>`, root); return; }
      render(html`<div class=${cx('ff-board', `ff-board--${st.mode}`, `ff-cam--${st.camera}`)} style=${`left:${L.left}px;top:${L.top}px;width:${L.bw}px;height:${L.bh}px;--tile:${L.tile}px`}>
        ${st.mode === 'prep' ? html`<div class="ff-hand-label" style=${`top:${(L.rows + 0.18) * L.tile}px`}><span>${t('整备区')}</span><i></i></div>` : null}
@@ -3556,7 +3565,7 @@ index 350ffdd..ba87c86 100644
      </div>${ghost}
      <div class="ff-badge">SIMPLIFIED VIEW</div>`, root);
      if (st.floats.length) schedule();
-@@ -456,7 +466,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -454,7 +464,7 @@ export function createFallbackView(host, opts = {}) {
        if (field?.rect && Number.isFinite(field.rect.r0)) st.rect = { ...field.rect };
        for (const u of Array.isArray(field?.units) ? field.units : []) if (u && u.id != null) {
          st.units.set(u.id, u);
@@ -3565,7 +3574,7 @@ index 350ffdd..ba87c86 100644
        }
        schedule();
      },
-@@ -481,7 +491,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -479,7 +489,7 @@ export function createFallbackView(host, opts = {}) {
          if (!Array.isArray(e)) continue;
          if (e[0] === 'spawn' && e[1] && e[1].id != null) {
            st.units.set(e[1].id, e[1]);
@@ -3574,7 +3583,7 @@ index 350ffdd..ba87c86 100644
          } else if (st.floats.length < 60) {
            const spec = fallbackFloat(e, st.settings);
            if (spec) st.floats.push({ key: `${now}:${Math.random()}`, id: spec.id, text: spec.text, type: spec.type, at: now });
-@@ -499,7 +509,7 @@ export function createFallbackView(host, opts = {}) {
+@@ -498,7 +508,7 @@ export function createFallbackView(host, opts = {}) {
            const col = Array.isArray(t) ? t[1] : t?.col;
            if (Number.isInteger(row) && Number.isInteger(col)) set.add(tileKey(row, col));
          }
@@ -3584,7 +3593,7 @@ index 350ffdd..ba87c86 100644
          return;
        }
 diff --git a/public/js/ui/gameActions.js b/public/js/ui/gameActions.js
-index a4afb7f..10cc083 100644
+index 491ce90..140635b 100644
 --- a/public/js/ui/gameActions.js
 +++ b/public/js/ui/gameActions.js
 @@ -9,7 +9,7 @@ import { audio } from '../audio.js';
@@ -3593,13 +3602,13 @@ index a4afb7f..10cc083 100644
    'g.buy': 'buy', 'g.sell': 'sell', 'g.refresh': 'refresh', 'g.freeze': 'freeze', 'g.levelUp': 'levelup',
 -  'g.move': 'drop', 'g.equip': 'equip', 'g.art': 'artPlace', 'g.reward': 'pick', 'g.choice': 'pick',
 +  'g.move': 'drop', 'g.equip': 'equip', 'g.art': 'artPlace', 'g.reward': 'pick', 'g.choice': 'pick', 'g.relic': 'pick',
-   'g.band': 'confirm', 'g.bandSkip': 'back', 'g.infoReady': 'ready', 'g.emote': 'emote', 'g.destroy': 'back',
+   'g.band': 'confirm', 'g.bandSkip': 'back', 'g.infoReady': 'ready', 'g.emote': 'emote', 'g.destroy': 'back', 'g.unequip': 'back',
  };
  
-@@ -89,6 +89,8 @@ export const actions = {
-   art: (itemUid, row, col, dir) => act('g.art', dir ? { itemUid, row, col, dir } : { itemUid, row, col }),
-   destroy: (uid) => act('g.destroy', { uid }),
+@@ -91,6 +91,8 @@ export const actions = {
+   unequip: (itemUid) => act('g.unequip', { itemUid }),
    reward: (idx) => act('g.reward', { idx }),
+   offer: (offer, idx, refresh = false, cardId) => act(refresh ? 'g.offerRefresh' : 'g.offer', { offerId: offer.id, pluginId: offer.pluginId, seq: offer.seq, idx, cardId }),
 +  relic: (offerId, idx) => act('g.relic', { offerId, idx }),
 +  relicRevive: (relicId, playerId) => act('g.relicRevive', { relicId, playerId }),
    choice: (idx, choiceId) => act('g.choice', choiceId === undefined ? { idx } : { idx, choiceId }),
@@ -3751,7 +3760,7 @@ index 33a3208..3bc5c5c 100644
        const sp = normalizeSp(pub.sp, pub.players);
        const first = !sp || sp.pickedCount === 0;
 diff --git a/public/js/ui/gameLogic/placement.js b/public/js/ui/gameLogic/placement.js
-index 342f78a..169a085 100644
+index efb7f09..9df8059 100644
 --- a/public/js/ui/gameLogic/placement.js
 +++ b/public/js/ui/gameLogic/placement.js
 @@ -1,5 +1,7 @@
@@ -3762,7 +3771,7 @@ index 342f78a..169a085 100644
  import { GEO } from '../../../../shared/constants.js';
  import { attackRangeGrid } from '../../../../shared/loadoutRecord.js';
  import { meleeOnHighGround } from '../../../../shared/highGround.js';
-@@ -185,6 +187,9 @@ export function indexPieces(priv) {
+@@ -186,6 +188,9 @@ export function indexPieces(priv) {
    (Array.isArray(priv?.temp) ? priv.temp : []).forEach((p, idx) => {
      if (isObj(p) && Number.isInteger(p.uid)) map.set(p.uid, { piece: p, area: 'temp', idx });
    });
@@ -3772,7 +3781,7 @@ index 342f78a..169a085 100644
    return map;
  }
  
-@@ -241,6 +246,7 @@ export function piecePosition(ctx, piece) {
+@@ -244,6 +249,7 @@ export function piecePosition(ctx, piece) {
  
  /** Whether a unit piece (chess/token) may stand on a board tile. */
  export function tileAllows(ctx, piece, row, col) {
@@ -3780,7 +3789,7 @@ index 342f78a..169a085 100644
    const pos = piecePosition(ctx, piece);
    if (!pos) return false;
    const k = tileKey(row, col);
-@@ -323,6 +329,19 @@ export function canPlace(ctx, uid, target) {
+@@ -326,6 +332,19 @@ export function canPlace(ctx, uid, target) {
    const piece = src.piece;
    const isMagic = piece.kind === 'item' && ctx.getItem(piece.id)?.itemType === 'MAGIC';
  
@@ -3800,7 +3809,7 @@ index 342f78a..169a085 100644
    if (target.area === 'hand') {
      const idx = target.idx;
      if (!Number.isInteger(idx) || idx < 0 || idx >= GEO.HAND_SIZE) return no('BAD_TILE', t('无法放置在该位置'));
-@@ -483,7 +502,9 @@ export function dropIntent(ctx, uid, target) {
+@@ -494,7 +513,9 @@ export function dropIntent(ctx, uid, target) {
      // both slots used: the replace dialog picks the equipped item to destroy (g.equip replaceUid) — see equipReplaces
      return { t: 'g.equip', fields: { itemUid: uid, targetUid: occ.piece.uid }, confirmReplace: equipReplaces(ctx, uid, occ.piece) };
    }
@@ -3812,10 +3821,10 @@ index 342f78a..169a085 100644
  }
  
 diff --git a/public/js/ui/hud.js b/public/js/ui/hud.js
-index d1abfba..51dc33a 100644
+index 27cbccc..c13db28 100644
 --- a/public/js/ui/hud.js
 +++ b/public/js/ui/hud.js
-@@ -200,14 +200,15 @@ export function uniteRemaining(local, server) {
+@@ -299,14 +299,15 @@ export function uniteRemaining(local, server) {
   * @param {{ phase: string, round: any, lp: any, statsLeaks?: any, leaks?: any, cap?: number, alive?: boolean, uniteLeft?: number|null }} s
   * @returns {{ base: { round: any, lp: number, statsLeaks: number|null } | null, pending: number, shown: number|null, unite: boolean, left: number|null }}
   */
@@ -3833,7 +3842,7 @@ index d1abfba..51dc33a 100644
    return { base: b, pending, shown: lp - pending, unite: phase === PHASE.UNITE && (pending > 0 || left != null), left };
  }
  
-@@ -216,6 +217,7 @@ export function liveLp(base, { phase, round, lp, statsLeaks = null, leaks = 0, c
+@@ -315,6 +316,7 @@ export function liveLp(base, { phase, round, lp, statsLeaks = null, leaks = 0, c
   * @param {number} lp settled LP @param {number} pending @param {{ unite?: boolean, cap?: number }} [opts]
   */
  export function pendingTip(lp, pending, { unite = false, cap = 10, left = null } = {}) {
@@ -3841,7 +3850,7 @@ index d1abfba..51dc33a 100644
    if (!(pending > 0)) return null;
    if (unite && Number.isFinite(left)) {
      const each = left > cap ? t('剩余不足 {cap} 个后，队友每击倒一个少扣 1 点', { cap }) : t('队友每击倒一个就少扣 1 点');
-@@ -366,7 +368,7 @@ export function TopBar({ pub, priv, conn, hud, total, drawer, onExit, onDrawer,
+@@ -465,7 +467,7 @@ export function TopBar({ pub, priv, conn, hud, total, drawer, onExit, onDrawer,
    const boss = isBossPhase(phase);
    const lp = boss && Number.isFinite(pub?.teamLp) ? pub.teamLp : Number.isFinite(priv?.lp) ? priv.lp : null;
    // normal rounds: the leaks of the own battle so far (boss rounds: the team LP above already moves live)
@@ -4056,7 +4065,7 @@ index 0000000..ef5840a
 +  return () => { unsubscribe(); enabled = false; apply(); observer.disconnect(); style.remove(); };
 +}
 diff --git a/public/js/ui/pluginPanel.js b/public/js/ui/pluginPanel.js
-index 870afcf..4c70526 100644
+index e245021..6fd64da 100644
 --- a/public/js/ui/pluginPanel.js
 +++ b/public/js/ui/pluginPanel.js
 @@ -9,7 +9,7 @@
@@ -4076,9 +4085,9 @@ index 870afcf..4c70526 100644
  import { APP_VERSION } from '../../../shared/constants.js';
  import { html, Modal, Button, Icon } from './components.js';
  import { PluginSettings, settingsSelection } from './pluginSettings.js';
-@@ -100,12 +101,30 @@ function ModePicker({ room, f, busy, onPick }) {
- export function PluginPanel({ open, room, myId, onClose }) {
+@@ -110,13 +111,31 @@ export function PluginPanel({ open, room, myId, onClose }) {
    const cat = useStore((s) => s, Object.is, catalog);
+   const personalIds = useStore(s => s.ids, Object.is, personal);
    const installed = useStore(installedCount);
 -  const [busy, setBusy] = useState(null);
 +  const [requestBusy, setBusy] = useState(null);
@@ -4091,6 +4100,7 @@ index 870afcf..4c70526 100644
    // the catalogue — again each time the panel opens (a plugin dropped in meanwhile shows), never on a server without any
    useEffect(() => { alive.current = true; if (installed) loadCatalog({ force: true }); return () => { alive.current = false; }; }, [installed]);
    const f = roomPluginFacts(room, myId);
+   const activeCosmetics = new Set([...f.on, ...personalSet(personalIds, cosmeticPlugins(cat.plugins, 'personal')).order]);
 +  // Editing is local: build/download just once when the host finishes selecting.
 +  const signature = JSON.stringify(settingsSelection(f.chosen, f.plugins));
 +  const [draft, setDraft] = useState(() => settingsSelection(f.chosen, f.plugins));
@@ -4108,7 +4118,7 @@ index 870afcf..4c70526 100644
    const recIds = useStore((s) => s.ids, Object.is, uiRecommend);
    const isHost = !!(room && room.hostId != null && room.hostId === myId);
    const recommended = visibleRecommend(room, isHost, recIds);
-@@ -119,18 +138,27 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -130,18 +149,27 @@ export function PluginPanel({ open, room, myId, onClose }) {
    const classOf = (id) => cat.plugins.find((x) => x.id === id)?.class || f.plugins.find((x) => x.id === id)?.class || 'cosmetic';
    const anyContent = f.modded || offered.some((p) => ['content','script','trusted'].includes(p.class));
    /** room.setPlugins with these ids (one request at a time; `what`: the row — or 'reapply' — that shows it busy). */
@@ -4140,7 +4150,7 @@ index 870afcf..4c70526 100644
    // the room's mode (room.setMode, DESIGN §32.6)
    const pickMode = async (modeId) => {
      if (inFlight.current || !f.editable) return;
-@@ -142,17 +170,19 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -153,9 +181,9 @@ export function PluginPanel({ open, room, myId, onClose }) {
      }
    };
    // the same choice again (without a plugin the server no longer offers): the set of the files as they are now
@@ -4153,9 +4163,10 @@ index 870afcf..4c70526 100644
      <div class="plugpanel" data-testid="plugin-panel">
        <p class="plugpanel__lead">
          <span class=${cx('plugtag plugtag--static', f.count && 'is-modded', f.modded && 'is-unofficial')}>${f.count ? t('插件 ×{n}', { n: f.count }) : t('原版')}</span>
-         ${t('房间的外观插件只改变画面和声音，不影响战斗；插件为非官方制作。')}
+@@ -163,8 +191,10 @@ export function PluginPanel({ open, room, myId, onClose }) {
        </p>
        ${anyContent ? html`<p class="set-hint">${t('改变玩法的插件会改变本房间的数据与规则；这样的对局为非官方对局，不计入统计总览。')}</p>` : null}
+       ${ruleLine(f.rules) ? html`<p class="set-hint" data-testid="plugin-rules">${ruleLine(f.rules)}</p>` : null}
 +      ${f.editable ? html`<p class="set-hint" data-testid="plugin-draft-hint">${dirty ? t('选择尚未生效。完成选择后统一加载，所有玩家校验并准备后即可开局。') : t('勾选只暂存选择，完成选择后统一加载。关闭面板也会保存并加载。')}</p>` : null}
 +      ${applyError ? html`<p class="set-hint is-warn" role="alert" data-testid="plugin-apply-error">${t('插件未能应用：{reason}。选择已保留，请重试。', { reason: applyError })}</p>` : null}
        <${ContentState} cs=${f.modded ? f.cs : null} />
@@ -4164,7 +4175,7 @@ index 870afcf..4c70526 100644
        ${f.inMatch ? html`<p class="set-hint">${t('模拟进行中，插件不能更改')}</p>`
          : f.editable ? null : html`<p class="set-hint">${t('由创建者设置')}</p>`}
        ${installed && cat.status === 'loading' && !rows.length ? html`<p class="set-hint">${t('正在读取插件列表…')}</p>` : null}
-@@ -160,8 +190,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
+@@ -172,8 +202,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
        ${(!installed || cat.status === 'ready') && !rows.length ? html`<p class="set-hint">${t('本服务器没有可在房间中使用的插件')}</p>` : null}
        ${rows.length ? html`<ul class="plugpanel__list">
          ${rows.map((p) => {
@@ -4175,10 +4186,10 @@ index 870afcf..4c70526 100644
            const content = ['content','script','trusted'].includes(p.class || classOf(p.id));
            // a gameplay plugin made for other game versions is refused (PLUGIN_INCOMPATIBLE): its switch only turns it off
            const blocked = content && p.compatible === false && !on;
-@@ -178,8 +208,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
-                 ${Number.isFinite(p.artBytes) ? html`<span class="num">${sizeText(p.artBytes)}</span>` : null}
+@@ -191,8 +221,8 @@ export function PluginPanel({ open, room, myId, onClose }) {
                  ${p.missing ? html`<span>${t('本服务器已不再提供')}</span>` : null}
                </div>
+               ${on ? companionCosmeticHints(p, cat.plugins, activeCosmetics).map(hint => html`<p class="set-hint" data-testid="companion-cosmetic">${hint}</p>`) : null}
 -              ${on && p.settings ? html`<${PluginSettings} definitions=${p.settings} values=${f.plugins.find(x => x.id === p.id)?.settings || {}}
 -                disabled=${!f.editable || !!busy || p.missing} onSave=${settings => send([...new Set([...f.chosen, p.id])], p.id, { id: p.id, settings })} />` : null}
 +              ${on && p.settings ? html`<${PluginSettings} definitions=${p.settings} values=${draft.find(x => x.id === p.id)?.settings || f.plugins.find(x => x.id === p.id)?.settings || {}}
@@ -4532,7 +4543,7 @@ index 0000000..bee139a
 +  </section>`;
 +}
 diff --git a/public/js/ui/teamPanel.js b/public/js/ui/teamPanel.js
-index 43d924a..a40111a 100644
+index c65d217..123a4f8 100644
 --- a/public/js/ui/teamPanel.js
 +++ b/public/js/ui/teamPanel.js
 @@ -53,8 +53,8 @@ export function rowLp(p, pub, self = null, { uniteLocal = null, cap = 10 } = {})
@@ -4581,7 +4592,7 @@ index 021692a..f616c3a 100644
   * Brotli quality of the on-the-fly compression: faster than gzip-6 and smaller — measured on this repository against
   * gzip-6: .skel −27 %, data/*.json −26 %, vendor −14 %, public/js and server/sim −5 %, .atlas −7 %. Quality 11 would gain
 diff --git a/server/index.js b/server/index.js
-index 58fbb63..269ea59 100644
+index 78b9e99..866e0b6 100644
 --- a/server/index.js
 +++ b/server/index.js
 @@ -94,6 +94,7 @@ export {
@@ -4593,7 +4604,7 @@ index 58fbb63..269ea59 100644
    const log = opts.log || makeLogger(!!opts.quiet);
    const { publicDir, dataDir, sharedDir, packsDir, pluginsDir } = serveDirs(opts);
 diff --git a/server/match/Match.js b/server/match/Match.js
-index 4f7f986..f0a05f7 100644
+index 4b3bc6f..48e1700 100644
 --- a/server/match/Match.js
 +++ b/server/match/Match.js
 @@ -1,3 +1,5 @@
@@ -4602,7 +4613,7 @@ index 4f7f986..f0a05f7 100644
  // server/match/Match.js — the match & meta engine: state machine, timers, round loop, co-op orchestration,
  // broadcasting views (DESIGN §6, §8). Rules are documented in the module headers of ./PlayerState.js, ./pool.js,
  // ./board.js, ./bondsMeta.js, ./effectsMeta.js, ./choices.js, ./waves.js, ./unite.js, ./finalAssault.js,
-@@ -204,7 +206,12 @@ import { isContentHash } from '../../shared/plugins/identity.js';
+@@ -209,7 +211,12 @@ import { isContentHash } from '../../shared/plugins/identity.js';
  import { Battle } from '../sim/Battle.js';
  import { DataSource } from '../sim/simdata.js';
  import { createRng, deriveSeed } from '../sim/rng.js';
@@ -4615,10 +4626,10 @@ index 4f7f986..f0a05f7 100644
  import { RealScheduler } from './scheduler.js';
  import { SharedPool, SharedItemPool, drawDisabledBonds } from './pool.js';
  import { PlayerState } from './PlayerState.js';
-@@ -229,10 +236,14 @@ import { MatchReports } from './match/reports.js';
- import { MatchUnite } from './match/unitePhase.js';
- import { MatchBoss } from './match/bossRounds.js';
- import { MatchSettle } from './match/settle.js';
+@@ -237,10 +244,14 @@ import { MatchSettle } from './match/settle.js';
+ import { installTestTrace } from './testTrace.js';
+ import { MatchTestCommands } from './match/testCommands.js';
+ import { MatchOffers } from './match/offers.js';
 +import { MatchRelics } from './match/relics.js';
  
  export { FLOW_TICKER_PRIORITY, DELAYS, BAND_TURN_SECONDS } from './match/common.js';
@@ -4630,7 +4641,7 @@ index 4f7f986..f0a05f7 100644
  /** Wall-clock ms of bot layout rehearsal per scheduler callback (real time; virtual time runs it in one go). */
  const BOT_SLICE_MS = 8;
  const env = (k) => (typeof process !== 'undefined' && process.env ? process.env[k] : undefined);
-@@ -266,20 +277,44 @@ export class Match {
+@@ -274,13 +285,28 @@ export class Match {
      this.roomCode = opts.roomCode ?? '----';
      this.mode = opts.mode === 'solo' ? 'solo' : 'coop';
      this.difficulty = opts.difficulty;
@@ -4660,9 +4671,10 @@ index 4f7f986..f0a05f7 100644
      /** the room's content hash (opts.cs, DESIGN §32): every BattleSpec carries it */
      this.cs = isContentHash(opts.cs) ? opts.cs : null;
      /** the room's visual set (opts.vs, DESIGN §32.6): every BattleSpec names it */
-     this.vs = isContentHash(opts.vs) ? opts.vs : null;
-     /** a room with gameplay plugins (opts.requireCs): a client result must name this match's cs (reports.js) */
-     this.requireCs = opts.requireCs === true && !!this.cs;
+@@ -308,7 +334,16 @@ export class Match {
+     this._offerResume = null;
+     /** window sequence (diagnostics and messages) */
+     this.offerSeq = 0;
 -    this.gd = new GameData(this.data, this.modeId);
 +    const seen = new Set();
 +    const startingSeats = opts.seats.filter((s) => {
@@ -4677,7 +4689,7 @@ index 4f7f986..f0a05f7 100644
      if (!this.difficulty) this.difficulty = this.gd.difficulty;
      this.isSolo = this.mode === 'solo' || this.gd.isSolo;
      /** 「AI 队友最后选择」 (opts.aiPicksLast, GitHub #338): humans draft before AI seats (MatchPhases.humansFirst) */
-@@ -349,10 +384,7 @@ export class Match {
+@@ -405,10 +440,7 @@ export class Match {
  
      /** @type {Map<string, PlayerState>} */
      this.players = new Map();
@@ -4689,7 +4701,7 @@ index 4f7f986..f0a05f7 100644
        this.players.set(s.playerId, new PlayerState(this, s));
      }
      if (!this.players.size) throw new TypeError('Match: seats required');
-@@ -378,6 +410,7 @@ export class Match {
+@@ -434,6 +466,7 @@ export class Match {
      this.factions = setup.factions;
      this.bossId = setup.bossId;
      this.hiddenBossId = setup.hiddenBossId;
@@ -4697,7 +4709,7 @@ index 4f7f986..f0a05f7 100644
      const bans = drawDisabledBonds(this.gd, this.rngSetup);
      this.disabledBonds = bans.drawn;
      this.staticInactiveBonds = bans.staticOff;
-@@ -407,6 +440,9 @@ export class Match {
+@@ -463,6 +496,9 @@ export class Match {
      this._setupVoteSeq = 0;
      this._lastSetupVoteAt = -Infinity;
      this._turnTimer = null;
@@ -4707,17 +4719,17 @@ index 4f7f986..f0a05f7 100644
      this._pubDirty = false;
      this._pubTimer = null;
      this._lastPubAt = -Infinity;
-@@ -453,7 +489,7 @@ export class Match {
+@@ -513,7 +549,7 @@ export class Match {
  }
  
  // the method modules, in this order (a name defined twice is an error, never a silent override)
--for (const part of [MatchPlatform, MatchInfra, MatchMessaging, MatchViews, MatchWatch, MatchIntents, MatchPause, MatchPhases, MatchSetupVote, MatchSpDraft, MatchPrep, MatchCombat, MatchClientCombat, MatchRehearsal, MatchReports, MatchUnite, MatchBoss, MatchSettle]) {
-+for (const part of [MatchPlatform, MatchInfra, MatchMessaging, MatchViews, MatchWatch, MatchIntents, MatchPause, MatchPhases, MatchSetupVote, MatchSpDraft, MatchPrep, MatchCombat, MatchClientCombat, MatchRehearsal, MatchReports, MatchUnite, MatchBoss, MatchSettle, MatchRelics]) {
+-for (const part of [MatchPlatform, MatchInfra, MatchMessaging, MatchViews, MatchWatch, MatchIntents, MatchPause, MatchPhases, MatchSetupVote, MatchSpDraft, MatchPrep, MatchCombat, MatchClientCombat, MatchRehearsal, MatchReports, MatchUnite, MatchBoss, MatchSettle, MatchTestCommands, MatchOffers]) {
++for (const part of [MatchPlatform, MatchInfra, MatchMessaging, MatchViews, MatchWatch, MatchIntents, MatchPause, MatchPhases, MatchSetupVote, MatchSpDraft, MatchPrep, MatchCombat, MatchClientCombat, MatchRehearsal, MatchReports, MatchUnite, MatchBoss, MatchSettle, MatchTestCommands, MatchOffers, MatchRelics]) {
    for (const key of Reflect.ownKeys(part.prototype)) {
      if (key === 'constructor') continue;
      if (Object.prototype.hasOwnProperty.call(Match.prototype, key)) throw new Error(`Match.${String(key)} is defined twice`);
 diff --git a/server/match/PlayerState.js b/server/match/PlayerState.js
-index bb85eb4..7350eb7 100644
+index 167ad7c..8fbe68e 100644
 --- a/server/match/PlayerState.js
 +++ b/server/match/PlayerState.js
 @@ -1,3 +1,7 @@
@@ -4747,7 +4759,7 @@ index bb85eb4..7350eb7 100644
  
  export class PlayerState {
    /**
-@@ -196,6 +203,8 @@ export class PlayerState {
+@@ -203,6 +210,8 @@ export class PlayerState {
      this._tempDue = new Map();
      /** @type {Map<string, any>} 'r,c' → piece */
      this.board = new Map();
@@ -4756,7 +4768,7 @@ index bb85eb4..7350eb7 100644
      /** persistent bond layers */
      this.layers = {};
      /** computed bond states */
-@@ -209,6 +218,19 @@ export class PlayerState {
+@@ -216,6 +225,19 @@ export class PlayerState {
      this.bondCountBonus = {};
      /** EffectRef list: { id, key, name, desc, iconKind, iconId, counter?, battle, params, data } */
      this.effects = [];
@@ -4776,7 +4788,7 @@ index bb85eb4..7350eb7 100644
      /** active bounties: { id, card, roundsLeft, chooser } */
      this.bounties = [];
      /**
-@@ -247,7 +269,7 @@ export class PlayerState {
+@@ -254,7 +276,7 @@ export class PlayerState {
  }
  
  // the method modules, in this order (a name defined twice is an error, never a silent override)
@@ -4801,7 +4813,7 @@ index 3ec4eab..ba4f1b8 100644
  //   opts.seed        uint32                     master seed for all match randomness
  //   opts.data        frozen game data (server/data.js getData()); may lack keys while data is generated
 diff --git a/server/match/audit.js b/server/match/audit.js
-index b0208be..a933fe1 100644
+index 7a22de5..fb058b0 100644
 --- a/server/match/audit.js
 +++ b/server/match/audit.js
 @@ -1,3 +1,4 @@
@@ -4833,8 +4845,8 @@ index b0208be..a933fe1 100644
 +      for (const [ps, { lp: lp0, shield, reverse, revival }] of before) {
          const r = m.lastResults.get(ps.playerId) || { leaked: [] };
          const counted = (r.leaked || []).filter((l) => l && l.counted !== false).length;
-         // after 联防 a leaker pays for every surviving enemy of its source — enemies spawned by its leaked enemies
-         // (splitters, summoners) included — so only the cap bounds it; everybody else never exceeds own leaks
+         // after 联防 a leaker pays for every surviving enemy of its source — the enemies the field itself spawned while it
+         // ran (splitters, summoners: `uniteRuntime`) are not billable — so only the cap bounds it; everybody else never exceeds own leaks
 -        const max = uniteRan && plan.leakers.includes(ps) ? cap : Math.min(cap, counted);
 +        const raw = uniteRan && plan.leakers.includes(ps) ? cap : Math.min(cap, counted);
 +        const max = reverse ? -raw : Math.max(0, raw - shield);
@@ -4861,7 +4873,7 @@ index b0208be..a933fe1 100644
      runInvariants();
      return res;
 diff --git a/server/match/bot.js b/server/match/bot.js
-index 3b640a0..d78c0b7 100644
+index 0fcabe7..b60a746 100644
 --- a/server/match/bot.js
 +++ b/server/match/bot.js
 @@ -85,9 +85,11 @@ import { rehearsalCap, RehearsalRun } from '../sim/rehearsal.js';
@@ -4876,8 +4888,8 @@ index 3b640a0..d78c0b7 100644
 +import { researchRange } from '../../shared/rhineRange.js';
  import { HOVER_KEYS } from '../sim/content/enemies.js';
  import { attackRangeGrid, loadoutRecord, resolveRecordLoadout } from '../../shared/loadoutRecord.js';
- 
-@@ -223,7 +225,7 @@ export function bountyKillChance(m, ps, card) {
+ import { morphSlotPolicy, ruleOption } from '../../shared/plugins/rules.js';
+@@ -224,7 +226,7 @@ export function bountyKillChance(m, ps, card) {
    const tileTime = Math.max(0.4, Math.min(6, 1 / (speed * 0.5)));
    const units = [];
    for (const [k, p] of ps.board) {
@@ -4886,7 +4898,7 @@ index 3b640a0..d78c0b7 100644
      if (!rec) continue;
      const [r, c] = parseKey(k);
      const u = unitOf(rec, k, r, c, pieceDir(p), model);
-@@ -236,9 +238,14 @@ export function bountyKillChance(m, ps, card) {
+@@ -237,9 +239,14 @@ export function bountyKillChance(m, ps, card) {
      let t = tileTime;
      if (!fly && !held && units.some((u) => u.block > 0 && u.key === k)) { t += LAYOUT_PARAMS.hold; held = true; }
      let dps = 0;
@@ -4902,7 +4914,7 @@ index 3b640a0..d78c0b7 100644
    return 1 - Math.exp(-exp / (BOUNTY_KILL * hp));
  }
  
-@@ -542,6 +549,9 @@ function lineupScore(m, ps, set, ctx, handSlots = countFree(ps.hand)) {
+@@ -543,6 +550,9 @@ function lineupScore(m, ps, set, ctx, handSlots = countFree(ps.hand)) {
      const w = bond && bond.isCore ? 14 : 9;
      v += b.tier * w + Math.min(12, (b.layers || 0) * 0.1) + (id === ctx.focus ? 6 : 0);
    }
@@ -4912,7 +4924,7 @@ index 3b640a0..d78c0b7 100644
    let blockers = 0;
    let air = 0;
    let healers = 0;
-@@ -685,12 +695,12 @@ export function fieldModel(m, ps = null) {
+@@ -686,12 +696,12 @@ export function fieldModel(m, ps = null) {
    const toBoard = boss
      ? ([r, c]) => boardTileOf(boss.side === 'R' ? 'bossR' : 'bossL', r, c)
      : (p) => p;
@@ -4927,7 +4939,7 @@ index 3b640a0..d78c0b7 100644
    };
    const routes = wave && Array.isArray(wave.routes) ? wave.routes : [];
    const spawns = wave && Array.isArray(wave.spawns) ? wave.spawns : [];
-@@ -720,11 +730,16 @@ export function fieldModel(m, ps = null) {
+@@ -721,11 +731,16 @@ export function fieldModel(m, ps = null) {
        }
        // the leader counts like LEADER_WEIGHT tough enemies: its huge pool makes damage on it worth a lot everywhere
        const hp = isLeader ? LEADER_HP : ((e && e.stats && e.stats.maxHp) || 1000) * ((s.mods && s.mods.hpMul) || 1);
@@ -4945,7 +4957,7 @@ index 3b640a0..d78c0b7 100644
        per.set(key, a);
      }
      for (const a of per.values()) {
-@@ -736,11 +751,11 @@ export function fieldModel(m, ps = null) {
+@@ -737,11 +752,11 @@ export function fieldModel(m, ps = null) {
        const cnt = a.boss ? 1 : a.n;
        const dwell = a.boss ? BOSS_DWELL : 0;
        if (rt.motion === 'FLY') {
@@ -4959,7 +4971,7 @@ index 3b640a0..d78c0b7 100644
        }
      }
    }
-@@ -843,6 +858,45 @@ function dpsVs(rec, def, res) {
+@@ -844,6 +859,45 @@ function dpsVs(rec, def, res) {
    return rec.attackKind === 'none' ? d * 0.4 : d;
  }
  
@@ -5005,7 +5017,7 @@ index 3b640a0..d78c0b7 100644
  /**
   * The record a chess fights with for range purposes: its range grid replaced by the one it is deployed with under the
   * player's loadout — a passive 攻击范围扩大 skill, a module's range or 攻击距离 (shared/loadoutRecord.js attackRangeGrid:
-@@ -875,7 +929,7 @@ export function effDps(model, rec) {
+@@ -876,7 +930,7 @@ export function effDps(model, rec) {
    if (!rec) return 0;
    if (!model || !Array.isArray(model.armor) || !model.armor.length) return dpsOf(rec);
    // (a 自选 record — one DIY slot id, each player's own operator — is cached per operator and skill)
@@ -5014,7 +5026,7 @@ index 3b640a0..d78c0b7 100644
    const cache = model.dps instanceof Map ? model.dps : null;
    if (cache && cache.has(id)) return cache.get(id);
    let v = 0;
-@@ -911,24 +965,29 @@ class Layout {
+@@ -912,24 +966,29 @@ class Layout {
      const p = this.p;
      const cover = new Map(); // key → { g: dps on ground, a: dps on air }
      const healCover = new Map();
@@ -5045,7 +5057,7 @@ index 3b640a0..d78c0b7 100644
          if (!rt.fly && blockAt.has(k)) {
            // a blocker right behind another one mostly holds what slipped past; a separate line holds again
            const fresh = i - lastBlock >= p.spread;
-@@ -938,6 +997,10 @@ class Layout {
+@@ -939,6 +998,10 @@ class Layout {
          const c = cover.get(k);
          if (c) exp += t * (rt.fly ? c.a : c.g);
        }
@@ -5056,7 +5068,7 @@ index 3b640a0..d78c0b7 100644
        total += rt.n * (1 - Math.exp(-exp / (p.kill * rt.hp)));
      }
      // ranged units standing on a road block and get hit: a small penalty per road tile they occupy
-@@ -948,10 +1011,11 @@ class Layout {
+@@ -949,10 +1012,11 @@ class Layout {
  
  function unitOf(rec, key, r, c, dir = 'RIGHT', model = null) {
    const block = isBlocker(rec) ? Math.max(1, rec.stats?.blockCnt ?? 1) : 0;
@@ -5070,7 +5082,7 @@ index 3b640a0..d78c0b7 100644
    };
  }
  
-@@ -989,8 +1053,16 @@ export function* planLayoutSteps(m, ps, pieces, params = LAYOUT_PARAMS, { occupi
+@@ -990,8 +1054,16 @@ export function* planLayoutSteps(m, ps, pieces, params = LAYOUT_PARAMS, { occupi
    const model = fieldModel(m, ps);
    const map = ps.deployMap();
    const pgd = ps.gd || m.gd;
@@ -5088,7 +5100,7 @@ index 3b640a0..d78c0b7 100644
    const rank = (p) => { const r = rec(p); return isBlocker(r) ? 0 : isHealer(r) ? 2 : 1; };
    // [ASSUMED] Boss rounds have no rehearsal: place wider healing ranges first (#315).
    const order = pieces.slice().sort((a, b) => rank(a) - rank(b) || dpsOf(rec(b)) - dpsOf(rec(a))
-@@ -1272,6 +1344,27 @@ function canUseItem(m, ps, item) {
+@@ -1276,6 +1348,27 @@ function canUseItem(m, ps, item) {
    return true;
  }
  
@@ -5116,7 +5128,7 @@ index 3b640a0..d78c0b7 100644
  function context(m, ps) {
    const owned = ownedBonds(m, ps);
    const model = fieldModel(m, ps);
-@@ -1398,7 +1491,7 @@ function takeOffers(m, ps) {
+@@ -1402,7 +1495,7 @@ function takeOffers(m, ps) {
      let bestS = -Infinity;
      offer.slots.forEach((s, i) => {
        if (s.sold) return;
@@ -5125,16 +5137,16 @@ index 3b640a0..d78c0b7 100644
        if (sc > bestS) { bestS = sc; best = i; }
      });
      if (best < 0) break;
-@@ -1613,7 +1706,7 @@ function* buyLoopSteps(m, ps, { fillOnly = false, maxRefreshes = 0 } = {}) {
+@@ -1617,7 +1710,7 @@ function* buyLoopSteps(m, ps, { fillOnly = false, maxRefreshes = 0 } = {}) {
          if (ps.funds - price < reserve && !ps.completesItemMerge(s.id)) return;
-         const carriers = [...ps.board.values()].filter((p) => p.kind === 'chess' && (p.items || []).length < gd.equipPerChess).length;
+         const carriers = [...ps.board.values()].filter((p) => p.kind === 'chess' && slotFree(m, ps, p, gd.item(s.id))).length;
          if (!carriers) return;
 -        sc = 6 + (gd.tierOf(s.id) || 1) * 3 - price + (ps.completesItemMerge(s.id) ? 10 : 0);
 +        sc = 6 + (gd.tierOf(s.id) || 1) * 3 - price + (ps.completesItemMerge(s.id) ? 10 : 0) + rhineItemSynergy(m, ps, s.id);
        }
        // [ASSUMED] Prefer the cheaper purchase when scores tie, including floating-point cancellation noise.
        // Product-policy tracking: https://github.com/sganggs/Stronghold-Protocol/issues/315
-@@ -1730,6 +1823,7 @@ function* applyPlanSteps(m, ps, chosen, target) {
+@@ -1734,6 +1827,7 @@ function* applyPlanSteps(m, ps, chosen, target) {
  function liftTokens(ps) {
    for (const p of [...ps.board.values()]) {
      if (p.kind !== 'token') continue;
@@ -5142,7 +5154,7 @@ index 3b640a0..d78c0b7 100644
      const stack = ps.hand.findIndex((x) => x && x.kind === 'token' && x.ownerUid === p.ownerUid && x.id === p.id);
      const idx = stack >= 0 ? stack : freeSlot(ps.hand);
      if (idx >= 0) tryDo(() => ps.move(p.uid, { area: 'hand', idx }));
-@@ -1780,7 +1874,11 @@ const SUMMON_TRIES = 4;
+@@ -1784,7 +1878,11 @@ const SUMMON_TRIES = 4;
   * legality: a refused tile is excluded and the next best one tried (SUMMON_TRIES).
   */
  function* placeTokensSteps(m, ps) {
@@ -5155,7 +5167,7 @@ index 3b640a0..d78c0b7 100644
      if (!p || p.kind !== 'token') continue;
      for (let n = p.count || 1; n > 0; n--) {
        yield;
-@@ -1899,6 +1997,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
+@@ -1911,6 +2009,15 @@ export function itemTarget(m, ps, item, ctx = context(m, ps)) {
    // a consumable on a full carrier destroys one of its items (the replace rule, GitHub #263): a carrier with a free slot
    // first — the effect is the same on anyone
    if (consume) return list.find(free) || owned.find(free) || list[0] || owned[0] || null;
@@ -5171,7 +5183,7 @@ index 3b640a0..d78c0b7 100644
    if (rec.requiresBondId) {
      const member = list.find((p) => free(p) && (chessRec(m, p.id, ps)?.bonds || []).includes(rec.requiresBondId));
      if (member) return member;
-@@ -1945,7 +2052,7 @@ function useArt(m, ps, item, ctx) {
+@@ -1957,7 +2064,7 @@ function useArt(m, ps, item, ctx) {
    if (key) { const [r, c] = parseKey(key); tryDo(() => ps.useArt(item.uid, r, c)); }
  }
  
@@ -5471,10 +5483,10 @@ index 0000000..bc28e27
 +
 +export const createDamageBoard = (matchId) => new DamageBoard(matchId);
 diff --git a/server/match/effectsMeta.js b/server/match/effectsMeta.js
-index 9a572ce..a9965eb 100644
+index c876405..6ab5f3d 100644
 --- a/server/match/effectsMeta.js
 +++ b/server/match/effectsMeta.js
-@@ -46,6 +46,7 @@ import { charge } from '../sim/content/dsl/budget.js';
+@@ -47,6 +47,7 @@ import { charge } from '../sim/content/dsl/budget.js';
  import { registerExtensionMeta, extensionMetaOwner } from '../sim/content/extensions.js';
  import { registerAllMeta } from '../sim/content/index.js';
  import { registerBuiltins } from './builtinMeta.js';
@@ -5482,7 +5494,7 @@ index 9a572ce..a9965eb 100644
  import { msg, dn } from '../../shared/i18n.js';
  import { onGiftTicker } from './botEmotes.js';
  import { previewContext } from './preview.js';
-@@ -194,7 +195,7 @@ export class EffectDispatcher {
+@@ -195,7 +196,7 @@ export class EffectDispatcher {
      } else ctx = makeCtx(this.m, ps, source, hook, ev);
      for (let i = 0; i < repeat; i++) {
        if (!this._allowScript(handler,hook)) break;
@@ -5491,7 +5503,7 @@ index 9a572ce..a9965eb 100644
      }
    }
  
-@@ -310,7 +311,7 @@ export class EffectDispatcher {
+@@ -312,7 +313,7 @@ export class EffectDispatcher {
    _garrisonHooks(h, g) {
      if (typeof h.garrisonHooks === 'function') {
        try {
@@ -5500,7 +5512,7 @@ index 9a572ce..a9965eb 100644
          if (Array.isArray(list) && list.length) return list;
        } catch (e) { this._report(`garrison:${g.effectKey}`, 'garrisonHooks', e); }
      }
-@@ -423,7 +424,7 @@ export class EffectDispatcher {
+@@ -426,7 +427,7 @@ export class EffectDispatcher {
      this.depth++;
      try {
        const ctx = makeCtx(this.m, ps, { ...source, key }, hook, ev);
@@ -5509,7 +5521,7 @@ index 9a572ce..a9965eb 100644
      } finally {
        this.depth--;
      }
-@@ -535,12 +536,12 @@ export function makeCtx(m, ps, source, hook, ev = null, preview = null) {
+@@ -538,12 +539,12 @@ export function makeCtx(m, ps, source, hook, ev = null, preview = null) {
      board: () => boardOrder(ps.board).map(({ r, c, piece }) => ps.pieceView(piece, [r, c])),
      hand: () => ps.hand.map(view),
      temp: () => ps.temp.map(view),
@@ -5524,7 +5536,7 @@ index 9a572ce..a9965eb 100644
        return v;
      },
      /**
-@@ -675,7 +676,7 @@ export function makeCtx(m, ps, source, hook, ev = null, preview = null) {
+@@ -682,7 +683,7 @@ export function makeCtx(m, ps, source, hook, ev = null, preview = null) {
      },
      destroyPiece: (uid) => {
        const l = ps.find(uid);
@@ -5534,7 +5546,7 @@ index 9a572ce..a9965eb 100644
        if (l.piece.kind === 'chess') {
          ps.removeTokensOf(l.piece.uid);
 diff --git a/server/match/fields.js b/server/match/fields.js
-index 3dc8ce7..99b248c 100644
+index 34fa746..44c7468 100644
 --- a/server/match/fields.js
 +++ b/server/match/fields.js
 @@ -1,3 +1,6 @@
@@ -5544,7 +5556,7 @@ index 3dc8ce7..99b248c 100644
  // server/match/fields.js — runs the battles of one combat phase (DESIGN §4, §11, §14).
  //
  // Server-run combat (legacy streaming mode, SP_COMBAT=server; and the Final Assault when no field has a connected human):
-@@ -172,6 +175,7 @@ export class FieldRunner {
+@@ -173,6 +176,7 @@ export class FieldRunner {
        if (b.finished) { f.live = false; this.m.markPublic(); }
        if (this.ticks % SNAP_EVERY === 0 || !f.live) this._emit(f);
      }
@@ -5552,7 +5564,7 @@ index 3dc8ce7..99b248c 100644
      if (this.onTick) {
        try { this.onTick(this); } catch (e) { this.m.reportError('field onTick', e); }
      }
-@@ -589,6 +593,26 @@ function layerBondsOf(p, gd) {
+@@ -593,6 +597,26 @@ function layerBondsOf(p, gd) {
    return out;
  }
  
@@ -5579,7 +5591,7 @@ index 3dc8ce7..99b248c 100644
  /**
   * What the player's IN_BATTLE layer 特质 can add to each bond in one battle on top of the flat 60 + 4·round (DESIGN
   * §21.26): the traits of its units (garrisons with `bond_add_count` / `bond_add_count_multi`) and the ones their ADD_BOND
-@@ -600,13 +624,14 @@ function layerBondsOf(p, gd) {
+@@ -604,13 +628,14 @@ function layerBondsOf(p, gd) {
   * only by the room under 999 (Infinity here): such boards legitimately gain hundreds of layers a battle.
   * @returns {Map<string, number>} bondId → extra allowance (Infinity: uncapped)
   */
@@ -5596,7 +5608,7 @@ index 3dc8ce7..99b248c 100644
    const credit = (g, times) => {
      const bb = g.bb || {};
      if (Number.isFinite(bb.extra_cnt)) { extra = true; return; }
-@@ -620,11 +645,31 @@ function layerAllowanceOf(p, gd) {
+@@ -624,11 +649,31 @@ function layerAllowanceOf(p, gd) {
      for (const gid of gd.chess(u.chessId)?.garrisonIds || []) {
        const g = gd.garrison(gid);
        if (!g || g.eventType !== 'IN_BATTLE') continue;
@@ -5628,15 +5640,15 @@ index 3dc8ce7..99b248c 100644
    if (extra) for (const b of out.keys()) out.set(b, Infinity);
    return out;
  }
-@@ -705,7 +750,7 @@ export function specBounds(spec, gd = null) {
+@@ -709,7 +754,7 @@ export function specBounds(spec, gd = null) {
        const v = Number(b && b.layers);
        if (Number.isFinite(v) && v > 0) startLayers.set(id, v);
      }
--    players.set(p.playerId, { chess, all, names, defIds, bonds: gd ? layerBondsOf(p, gd) : null, startLayers, layerAllow: gd ? layerAllowanceOf(p, gd) : new Map() });
-+    players.set(p.playerId, { chess, all, names, defIds, bonds: gd ? layerBondsOf(p, gd) : null, startLayers, layerAllow: gd ? layerAllowanceOf(p, gd, spec) : new Map() });
+-    const bonds = gd ? layerBondsOf(p, gd) : null, layerAllow = gd ? layerAllowanceOf(p, gd) : new Map();
++    const bonds = gd ? layerBondsOf(p, gd) : null, layerAllow = gd ? layerAllowanceOf(p, gd, spec) : new Map();
+     players.set(p.playerId, { chess, all, names, defIds, bonds, startLayers, layerAllow });
    }
    const round = Number(spec && spec.round) || 0;
-   return {
 diff --git a/server/match/gamedata.js b/server/match/gamedata.js
 index 61e6008..634a4cf 100644
 --- a/server/match/gamedata.js
@@ -5690,7 +5702,7 @@ index 61e6008..634a4cf 100644
    get bandDraft() {
      const b = this.config.bandDraft && typeof this.config.bandDraft === 'object' ? this.config.bandDraft : {};
 diff --git a/server/match/host/index.js b/server/match/host/index.js
-index df61017..de6121b 100644
+index d4219a4..2016551 100644
 --- a/server/match/host/index.js
 +++ b/server/match/host/index.js
 @@ -53,8 +53,8 @@ export const HOST_DEFAULTS = Object.freeze({
@@ -5705,18 +5717,18 @@ index df61017..de6121b 100644
  
  /** An error the lobby turns into a refusal (start). */
 diff --git a/server/match/invariants.js b/server/match/invariants.js
-index 662f2f7..1a2f4a5 100644
+index a006f1e..9793b5b 100644
 --- a/server/match/invariants.js
 +++ b/server/match/invariants.js
-@@ -26,6 +26,7 @@
- import { PHASE, BOND_LAYER_CAP } from '../../shared/constants.js';
+@@ -28,6 +28,7 @@ import { PHASE, BOND_LAYER_CAP } from '../../shared/constants.js';
+ import { morphSlotPolicy, ruleOption } from '../../shared/plugins/rules.js';
  import { FIELD, canPlace, placeClass, positionClass, parseKey } from './board.js';
  import { computeBonds } from './bondsMeta.js';
 +import { RHINE_BOND, RHINE_BALANCE, RHINE_DEVICES, rhineCapacity, rhineDevice, rhineDeviceUnlocked } from '../../shared/rhineResearch.js';
  
  const PHASES = new Set(Object.values(PHASE));
  
-@@ -87,7 +88,15 @@ export function collectViolations(m, { limit = 25 } = {}) {
+@@ -89,7 +90,15 @@ export function collectViolations(m, { limit = 25 } = {}) {
      }
  
      // pieces
@@ -5733,7 +5745,7 @@ index 662f2f7..1a2f4a5 100644
      const boardChessUids = new Set();
      for (const p of ps.board.values()) if (p.kind === 'chess') boardChessUids.add(p.uid);
      const itemCounts = new Map();
-@@ -119,7 +128,14 @@ export function collectViolations(m, { limit = 25 } = {}) {
+@@ -123,7 +132,14 @@ export function collectViolations(m, { limit = 25 } = {}) {
          if (!pgd.token(p.id)) fail(`${id}: unknown token ${p.id}`);
          if (!(p.count >= 1)) fail(`${id}: token stack count ${p.count}`);
          // summons exist only while their owner is deployed (withdrawing / selling / merging it removes them)
@@ -5750,7 +5762,7 @@ index 662f2f7..1a2f4a5 100644
          fail(`${id}: piece of unknown kind ${p.kind}`);
        }
 diff --git a/server/match/match/bossRounds.js b/server/match/match/bossRounds.js
-index 251285d..cbfba45 100644
+index 51f110c..5a57a85 100644
 --- a/server/match/match/bossRounds.js
 +++ b/server/match/match/bossRounds.js
 @@ -1,3 +1,5 @@
@@ -5759,7 +5771,7 @@ index 251285d..cbfba45 100644
  // server/match/match/bossRounds.js — Match methods: the Final Assault / Hidden Core (the rules:
  // server/match/finalAssault.js) — the boss fields and the shared pool; client-side boss fields (plausibility budgets on
  // the field clock, cumulative credits, handovers, the boss clock, the end: pool 0 → victory, team LP 0 → defeat);
-@@ -86,6 +88,7 @@ export class MatchBoss {
+@@ -83,6 +85,7 @@ export class MatchBoss {
          // `side` + `routes`: the player's half of a pair field (spawn-list edits for one player, e.g. 鸭爵's swap)
          const ev = { input, kind: hidden ? 'hidden' : 'boss', round: this.round, spawns, routes: wave.routes, side: g.length > 1 ? (j === 0 ? 'L' : 'R') : null };
          this.dispatch(ps, 'onBattleStart', ev);
@@ -5767,7 +5779,7 @@ index 251285d..cbfba45 100644
          return ev.input && typeof ev.input === 'object' ? ev.input : input;
        });
        const fieldId = `b${i + 1}`;
-@@ -102,7 +105,7 @@ export class MatchBoss {
+@@ -99,7 +102,7 @@ export class MatchBoss {
          routes: wave.routes,
          sharedBoss: this.bossPool,
          // the round's enemy effects for the leaders' mid-fight summons (server/sim/content/bosses.js summonMods)
@@ -5776,7 +5788,7 @@ index 251285d..cbfba45 100644
          fieldId,
          enemyOverrides: wave.overrides,
          waveId: wave.templateId,
-@@ -111,9 +114,9 @@ export class MatchBoss {
+@@ -108,9 +111,9 @@ export class MatchBoss {
        if (this.clientCombat) return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), opts: bopts, battle: null, live: true };
        const battle = this.newBattle(bopts);
        try {
@@ -5788,7 +5800,7 @@ index 251285d..cbfba45 100644
        } catch (e) { this.reportError('boss leak hook', e); }
        return { fieldId, kind: hidden ? 'hidden' : 'boss', players: g.map((p) => p.playerId), battle, live: true };
      });
-@@ -154,8 +157,8 @@ export class MatchBoss {
+@@ -163,8 +166,8 @@ export class MatchBoss {
          f.credit = new CreditPool(pool);
          f.battle = this._specBattle(f.spec, { sharedBoss: f.credit });
          try {
@@ -5799,7 +5811,7 @@ index 251285d..cbfba45 100644
          } catch (e) { this.reportError('boss leak hook', e); }
        }
        this._watchBossFields(recs);
-@@ -229,13 +232,13 @@ export class MatchBoss {
+@@ -238,13 +241,13 @@ export class MatchBoss {
        if (n <= f.lpAcked) return;
        const d = n - f.lpAcked;
        f.lpAcked = n;
@@ -5815,7 +5827,7 @@ index 251285d..cbfba45 100644
    }
  
    /**
-@@ -424,17 +427,37 @@ export class MatchBoss {
+@@ -433,17 +436,37 @@ export class MatchBoss {
      ps.dirty();
    }
  
@@ -5857,7 +5869,7 @@ index 251285d..cbfba45 100644
      if (this._bossLazyPublic()) { this._bossPublic(); return; }
      this._syncTeamLp();
      this.markPublic();
-@@ -509,6 +532,7 @@ export class MatchBoss {
+@@ -518,6 +541,7 @@ export class MatchBoss {
  
    /** Every boss field is over: stats, bounties, then the Hidden Core or RESULT. */
    _finishFinal(hidden, resultOf) {
@@ -5865,7 +5877,7 @@ index 251285d..cbfba45 100644
      if (this.phase !== (hidden ? PHASE.HIDDEN_CORE : PHASE.FINAL_ASSAULT)) return;
      this._stopClientCombat();
      // the end condition the server registered first decides (client-side combat: _endFinal — pool 0 → victory, team LP 0
-@@ -540,6 +564,9 @@ export class MatchBoss {
+@@ -549,6 +573,9 @@ export class MatchBoss {
          if (pp && ps) this.dispatch(ps, 'onBattleResult', { result: pp, lpLoss: 0, perfect: !!pp.perfect, boss: true });
        }
      }
@@ -5875,7 +5887,7 @@ index 251285d..cbfba45 100644
      this._syncTeamLp();
      this.deadline = 0;
      this.overtimeAt = 0;
-@@ -547,7 +574,7 @@ export class MatchBoss {
+@@ -556,7 +583,7 @@ export class MatchBoss {
      this.runner = null;
      if (!hidden) {
        const eligible = victory && !!this.hiddenBossId && hiddenEligible(this.gd, { layerSum: this.hiddenLayerSum, teamLp: this.teamLp });
@@ -5884,7 +5896,7 @@ index 251285d..cbfba45 100644
          if (eligible) {
            this.hiddenReached = true;
            this.bossPool = null;
-@@ -558,7 +585,7 @@ export class MatchBoss {
+@@ -567,7 +594,7 @@ export class MatchBoss {
          }
        });
      } else {
@@ -5894,7 +5906,7 @@ index 251285d..cbfba45 100644
    }
  }
 diff --git a/server/match/match/clientCombat.js b/server/match/match/clientCombat.js
-index 2049536..cd3e956 100644
+index 8943f1e..da0d1fc 100644
 --- a/server/match/match/clientCombat.js
 +++ b/server/match/match/clientCombat.js
 @@ -1,3 +1,5 @@
@@ -5903,7 +5915,7 @@ index 2049536..cd3e956 100644
  // server/match/match/clientCombat.js — Match methods: client-side combat bookkeeping (DESIGN §14) — field records (the
  // JSON BattleSpec + the authority / result state), spec battles on the server, the field clock, the authority (the
  // lowest connected seat), b.start per recipient, result deadlines and releases, server runs (headless slices,
-@@ -94,6 +96,7 @@ export class MatchClientCombat {
+@@ -100,6 +102,7 @@ export class MatchClientCombat {
      return {
        t: 'b.start', battleId: f.battleId, fieldId: f.fieldId, kind: f.kind,
        spec: this.spectators.has(pid) ? this._spectatorSpec(f) : f.spec,
@@ -5912,7 +5924,7 @@ index 2049536..cd3e956 100644
        startAt: f.startAt, serverNow: this.sched.now(), elapsed: Math.round(this._fieldElapsed(f) * 1000) / 1000,
        speed: this.gameSpeed, watch: !!watch, done: !!f.done,
 diff --git a/server/match/match/combat.js b/server/match/match/combat.js
-index f4faf6f..6d16fc0 100644
+index e2a51c3..960d56d 100644
 --- a/server/match/match/combat.js
 +++ b/server/match/match/combat.js
 @@ -1,3 +1,4 @@
@@ -5928,7 +5940,7 @@ index f4faf6f..6d16fc0 100644
  import { planUnite } from '../unite.js';
  import { FieldRunner, DeadBattle } from '../fields.js';
  import { DELAYS } from './common.js';
-@@ -43,17 +45,26 @@ export class MatchCombat {
+@@ -44,17 +46,26 @@ export class MatchCombat {
  
    _normalBattle(ps) { return this.newBattle(this._normalOpts(ps)); }
  
@@ -5956,7 +5968,7 @@ index f4faf6f..6d16fc0 100644
      return {
        seed: deriveSeed(this.seed, `n:${this.round}:${ps.seat}`),
        kind: 'normal',
-@@ -66,7 +77,7 @@ export class MatchCombat {
+@@ -67,7 +78,7 @@ export class MatchCombat {
        spawns: this._sanitizeSpawns(Array.isArray(ev.spawns) ? ev.spawns : spawns, ps.playerId),
        routes: wave.routes,
        sharedBoss: null,
@@ -5965,7 +5977,7 @@ index f4faf6f..6d16fc0 100644
        fieldId: `n:${ps.playerId}`,
        enemyOverrides: wave.overrides,
        waveId: wave.templateId,
-@@ -139,6 +150,7 @@ export class MatchCombat {
+@@ -140,6 +151,7 @@ export class MatchCombat {
  
    /** Every normal field has its result: record them, then 联防 or SETTLE. */
    _finishCombat(resultOf) {
@@ -5973,7 +5985,7 @@ index f4faf6f..6d16fc0 100644
      if (this.phase !== PHASE.COMBAT) return;
      this._stopClientCombat();
      for (const f of this.fields) {
-@@ -146,7 +158,9 @@ export class MatchCombat {
+@@ -147,7 +159,9 @@ export class MatchCombat {
        this._collectSimErrors(f, res);
        for (const pid of f.players) {
          const pp = res.perPlayer && res.perPlayer[pid];
@@ -5985,7 +5997,7 @@ index f4faf6f..6d16fc0 100644
          const ps = this.players.get(pid);
          const gains = pp && pp.layerGains && typeof pp.layerGains === 'object' ? pp.layerGains : null;
 diff --git a/server/match/match/infra.js b/server/match/match/infra.js
-index 5ffb706..faa1c84 100644
+index 71dfd4e..68c0866 100644
 --- a/server/match/match/infra.js
 +++ b/server/match/match/infra.js
 @@ -1,3 +1,6 @@
@@ -5996,7 +6008,7 @@ index 5ffb706..faa1c84 100644
  // for dispose (later, cancel, scaled) and the phase deadline (setDeadline), soloUntimed, uids, the player lists
  // (alivePlayers, humans), the bonds this match's pool holds (bondInPool, bondLive), a player's boss-round group, deploy
 diff --git a/server/match/match/intents.js b/server/match/match/intents.js
-index 6c8c107..4140930 100644
+index f799f9a..0f458fd 100644
 --- a/server/match/match/intents.js
 +++ b/server/match/match/intents.js
 @@ -1,3 +1,6 @@
@@ -6006,16 +6018,16 @@ index 6c8c107..4140930 100644
  // server/match/match/intents.js — Match methods: the g.* / b.* intent router (_handle: the prep intents go to
  // PlayerState, the drafts, watching, the pause and the battle reports to the match), emotes, AI 托管 (setAutoplay,
  // kickBot) and g.unitStats (the stats the board's units start their next battle with: a preview battle, started, read
-@@ -35,6 +38,8 @@ export class MatchIntents {
-       case 'g.art': return ps.useArt(msg.itemUid, msg.row, msg.col, msg.dir);
+@@ -36,6 +39,8 @@ export class MatchIntents {
        case 'g.destroy': return ps.destroy(msg.uid);
+       case 'g.unequip': return ps.unequip(msg.itemUid);
        case 'g.reward': return ps.pickReward(msg.idx);
 +      case 'g.relic': return this.pickRelicChoice(ps, msg.offerId, msg.idx);
 +      case 'g.relicRevive': return this.reviveTeammate(ps, msg.relicId, msg.playerId);
        case 'g.choice': return msg.choiceId !== undefined
          ? this.pickPersonalChoice(ps, msg.idx, msg.choiceId)
          : this.pickCard(ps, msg.idx);
-@@ -52,6 +57,7 @@ export class MatchIntents {
+@@ -58,6 +63,7 @@ export class MatchIntents {
        // the host's answer to a delegated bot layout rehearsal (DESIGN §14): a report, never an error — an unknown,
        // expired or foreign task is ignored (MatchRehearsal._onRehearsalResult)
        case 'b.rehearsalResult': this._onRehearsalResult(ps, msg); return OK;
@@ -6023,7 +6035,7 @@ index 6c8c107..4140930 100644
        default: return fail(ERR.BAD_MSG);
      }
    }
-@@ -72,6 +78,7 @@ export class MatchIntents {
+@@ -78,6 +84,7 @@ export class MatchIntents {
      ps.autoplay = on;
      this.markPublic();
      if (on) this.kickBot(ps);
@@ -6031,7 +6043,7 @@ index 6c8c107..4140930 100644
      return OK;
    }
  
-@@ -122,7 +129,7 @@ export class MatchIntents {
+@@ -129,7 +136,7 @@ export class MatchIntents {
      const b = this.newBattle({
        seed: deriveSeed(this.seed, `preview:${this.round}:${ps.seat}`), kind: 'normal', modeId: this.modeId, round: this.round,
        stageId: this.stageId, rect: { ...GEO.NORMAL_RECT }, timeLimit: 60, players, spawns: [], routes: this.wave ? this.wave.routes : [],
@@ -6097,7 +6109,7 @@ index 72501d7..934700d 100644
  // (every clock and deadline shifted by the pause), the drop at the battle phase's end, and the field clocks' "now".
  // Installed on Match.prototype by server/match/Match.js (a method container: never instantiated; `this` is the match).
 diff --git a/server/match/match/phases.js b/server/match/match/phases.js
-index 257c193..a6087e4 100644
+index e683e68..50fccc3 100644
 --- a/server/match/match/phases.js
 +++ b/server/match/match/phases.js
 @@ -12,8 +12,32 @@ import { botPickBand } from '../bot.js';
@@ -6134,7 +6146,7 @@ index 257c193..a6087e4 100644
      // solo: no time limit (the player confirms); co-op: the official 25 s guard
      this.setDeadline(this.soloUntimed ? 0 : this.gd.timer('infoCheck'), () => this.enterBandDraft());
 diff --git a/server/match/match/platform.js b/server/match/match/platform.js
-index bd1206e..3700325 100644
+index 6cc7860..2e460b4 100644
 --- a/server/match/match/platform.js
 +++ b/server/match/match/platform.js
 @@ -1,3 +1,5 @@
@@ -6142,8 +6154,8 @@ index bd1206e..3700325 100644
 +import { autoSelectRelic } from '../relics.js';
  // server/match/match/platform.js — Match methods: the platform interface of the server/match/Match.js header
  // (server/lobby.js ⇄ Match) — start, handle (validation, error isolation, flush; the intents themselves: intents.js
- // _handle), setLoadout (INFO_CHECK only), onDisconnect / onReconnect and the full resync of one human, onLeave and 中途退出
-@@ -85,6 +87,7 @@ export class MatchPlatform {
+ // _handle), setLoadout (INFO_CHECK; rule-enabled PREP), onDisconnect / onReconnect and the full resync of one human, onLeave and 中途退出
+@@ -131,6 +133,7 @@ export class MatchPlatform {
        ps.connected = false;
        // A disconnected human's silence is never consent to a new setup.
        this.cancelSetupVote();
@@ -6151,7 +6163,7 @@ index bd1206e..3700325 100644
        // a paused solo battle resumes (the server takes the field over; nobody is left to resume it)
        this._resume();
        if (this.clientCombat) this._authorityLost(ps, 'disconnect');
-@@ -113,6 +116,7 @@ export class MatchPlatform {
+@@ -159,6 +162,7 @@ export class MatchPlatform {
    _resync(ps) {
      const playerId = ps.playerId;
      this.sendTo(playerId, this.publicView());
@@ -6159,7 +6171,7 @@ index bd1206e..3700325 100644
      if (!this.ended) {
        if (!ps.spectator) {
          ps._lastPriv = null;
-@@ -203,6 +207,7 @@ export class MatchPlatform {
+@@ -250,6 +254,7 @@ export class MatchPlatform {
      }
      if (phase === PHASE.SP_DRAFT && this.sp && this.spTurn() === ps.playerId) this.startSpTurn();
      else if (phase === PHASE.PREP) this.maybeEndPrep();
@@ -6168,7 +6180,7 @@ index bd1206e..3700325 100644
  
    dispose() {
 diff --git a/server/match/match/prep.js b/server/match/match/prep.js
-index 053a9c7..eff1d77 100644
+index 3ed1484..60eb51a 100644
 --- a/server/match/match/prep.js
 +++ b/server/match/match/prep.js
 @@ -1,3 +1,4 @@
@@ -6260,7 +6272,7 @@ index 0000000..2f1bd3e
 +  }
 +}
 diff --git a/server/match/match/reports.js b/server/match/match/reports.js
-index a73e721..6f3212d 100644
+index c47acd5..6bd907f 100644
 --- a/server/match/match/reports.js
 +++ b/server/match/match/reports.js
 @@ -1,3 +1,5 @@
@@ -6269,7 +6281,7 @@ index a73e721..6f3212d 100644
  // server/match/match/reports.js — Match methods: the battle reports of client-side combat (DESIGN §14) — b.progress
  // (field progress, boss credits, the 联防 counts) and b.result (validated against the spec; an implausible one is
  // replaced by the server's run; a boss field's 'cleared' result may wait for the budget, `heldResult`), SP_VERIFY
-@@ -14,6 +16,59 @@ export class MatchReports {
+@@ -15,6 +17,59 @@ export class MatchReports {
      return typeof battleId === 'string' ? this.fields.find((f) => f.cc && f.battleId === battleId) || null : null;
    }
  
@@ -6330,7 +6342,7 @@ index a73e721..6f3212d 100644
    _onProgress(ps, msg) {
      if (!this.clientCombat) return fail(ERR.WRONG_PHASE, 'server-run combat');
 diff --git a/server/match/match/settle.js b/server/match/match/settle.js
-index ca74bff..58e8751 100644
+index c2f7df0..5791e45 100644
 --- a/server/match/match/settle.js
 +++ b/server/match/match/settle.js
 @@ -1,18 +1,23 @@
@@ -6389,8 +6401,8 @@ index ca74bff..58e8751 100644
 +      if (ps.lp > 0) settleRelics(ps, r, { completed: r.relicCompleted === true });
        ps.recompute();
      }
-     for (const ps of alive) {
-@@ -87,7 +99,7 @@ export class MatchSettle {
+     this.eliminateBroken();
+@@ -80,7 +92,7 @@ export class MatchSettle {
      this.watchers.clear();
      this.markPublic();
      onSettle(this); // one emote per alive AI per round (enabled by default; SP_BOT_EMOTES=0 silences it)
@@ -6400,7 +6412,7 @@ index ca74bff..58e8751 100644
  
    /**
 diff --git a/server/match/match/unitePhase.js b/server/match/match/unitePhase.js
-index c7fa6c1..d9ff9d1 100644
+index bf0eb67..3b45221 100644
 --- a/server/match/match/unitePhase.js
 +++ b/server/match/match/unitePhase.js
 @@ -1,3 +1,5 @@
@@ -6428,7 +6440,7 @@ index c7fa6c1..d9ff9d1 100644
        // leaked enemies re-enter with the stats they had: the round template's stat overrides apply again
        enemyOverrides: this.wave && this.wave.overrides ? this.wave.overrides : {},
 diff --git a/server/match/match/views.js b/server/match/match/views.js
-index 13ab6f6..9ceeb0c 100644
+index 333097e..c3adc7e 100644
 --- a/server/match/match/views.js
 +++ b/server/match/match/views.js
 @@ -1,3 +1,6 @@
@@ -6438,16 +6450,16 @@ index 13ab6f6..9ceeb0c 100644
  // server/match/match/views.js — Match methods: the state builders — m.public (publicView with statusOf / fieldOf, the
  // fields' progress, the teammates' live pendingLp / uniteLeft, the SETTLE uniteResult), the nextEnemies preview of
  // m.private and the prep scout's m.field (prepFieldMeta: board, hand and temp as units, the scouted player's effects and
-@@ -11,7 +14,7 @@ import { cardView } from '../choices.js';
+@@ -12,7 +15,7 @@ import { cardView } from '../choices.js';
  import { bountySpawns, previewOf } from '../waves.js';
  import { timelineAt } from '../fields.js';
  import { bossFieldPlacement } from '../finalAssault.js';
 -import { battleProgress } from '../../sim/spec.js';
 +
  
- /** A reported capsule numerator clamped to its denominator, else null (unknown — never a fabricated 0). */
- const finiteOrNull = (v, cap = Infinity) => {
-@@ -50,6 +53,7 @@ export class MatchViews {
+ /** Milliseconds since the match started. A stamp before the start, or a bad stamp, is 0. The stored log keeps the epoch. */
+ function auditClock(at, startedAt) {
+@@ -59,6 +62,7 @@ export class MatchViews {
          return f && f.live ? 'combat' : 'done';
        }
        case PHASE.UNITE: return this.unitePlan && this.unitePlan.helpers.includes(ps) ? 'helping' : 'done';
@@ -6455,7 +6467,7 @@ index 13ab6f6..9ceeb0c 100644
        case PHASE.ROUND_START: return 'acting';
        default: return 'done';
      }
-@@ -63,13 +67,21 @@ export class MatchViews {
+@@ -72,13 +76,21 @@ export class MatchViews {
    publicView() {
      const v = {
        t: 'm.public',
@@ -6477,7 +6489,7 @@ index 13ab6f6..9ceeb0c 100644
        stageId: this.stageId,
        setupRevision: this.setupRevision,
        rerollVote: this.setupVote ? {
-@@ -95,11 +107,16 @@ export class MatchViews {
+@@ -104,11 +116,16 @@ export class MatchViews {
        players: this.order.map((ps) => ({
          playerId: ps.playerId,
          seat: ps.seat,
@@ -6495,15 +6507,15 @@ index 13ab6f6..9ceeb0c 100644
          bandId: ps.bandId,
          shopLevel: ps.shop.level,
          boardCount: ps.deployCount,
-@@ -152,6 +169,7 @@ export class MatchViews {
-       const ur = this.uniteResultView;
-       v.uniteResult = { through: ur.through, helpers: ur.helpers.slice(), leakers: ur.leakers.slice(), losses: { ...ur.losses } };
+@@ -181,6 +198,7 @@ export class MatchViews {
+         ...(e.detail ? { detail: e.detail } : {}),
+       }));
      }
 +    if (this.phase === PHASE.SETTLE && this.roundLossesView?.round === this.round) v.roundLosses = { ...this.roundLossesView.losses };
      return v;
    }
  
-@@ -212,8 +230,8 @@ export class MatchViews {
+@@ -241,8 +259,8 @@ export class MatchViews {
      // 联防: a leaker's enemies still standing on the 联防 field (uncapped), the loss capped like settle()
      const left = this._uniteLeft(ps);
      if (left != null) {
@@ -6514,7 +6526,7 @@ index 13ab6f6..9ceeb0c 100644
      }
      let n = 0;
      if (this.lastResults.has(ps.playerId)) n = counted(this.lastResults.get(ps.playerId));
-@@ -222,8 +240,8 @@ export class MatchViews {
+@@ -251,8 +269,8 @@ export class MatchViews {
        if (f && f.cc) n = f.done && f.result ? counted(f.result.perPlayer && f.result.perPlayer[ps.playerId]) : Number(f.progress && f.progress.leaks) || 0;
        else if (f && f.battle) { try { n = battleProgress(f.battle).leaks; } catch { n = 0; } }
      }
@@ -6525,7 +6537,7 @@ index 13ab6f6..9ceeb0c 100644
    }
  
    /** nextEnemies preview for m.private. */
-@@ -235,8 +253,7 @@ export class MatchViews {
+@@ -264,8 +282,7 @@ export class MatchViews {
        return previewOf([...g.wave.spawns, ...bountySpawns(this.gd, this.round, g.wave, ps.bounties, ps.playerId, { solo: this.isSolo, side: g.side })]);
      }
      if (!this.wave) return [];
@@ -6574,7 +6586,7 @@ index 3fa5e35..b0cde2c 100644
        return;
      }
 diff --git a/server/match/player/acquire.js b/server/match/player/acquire.js
-index ce995c4..1750f20 100644
+index 1663ce2..964247c 100644
 --- a/server/match/player/acquire.js
 +++ b/server/match/player/acquire.js
 @@ -1,3 +1,4 @@
@@ -6582,7 +6594,7 @@ index ce995c4..1750f20 100644
  // server/match/player/acquire.js — PlayerState methods: gains and merges — copy counts, acquireChess (hand, overflow
  // temp queue) and the chess merge (3 copies → the elite, on a consumed deployed copy's tile or in the hand;
  // the reward offer), promotion, transformation (突变细胞: a destroy, then a gain), item upgrades, reward / item offers,
-@@ -10,6 +11,47 @@ import { MAX_OFFER_SLOTS } from './common.js';
+@@ -11,6 +12,47 @@ import { MAX_OFFER_SLOTS } from './common.js';
  import { onMerge } from '../botEmotes.js';
  
  export class PlayerAcquire {
@@ -6630,7 +6642,7 @@ index ce995c4..1750f20 100644
    /** Normal copies of a base chess currently owned (board/hand/temp). */
    countCopies(baseId) {
      let n = 0;
-@@ -202,9 +244,25 @@ export class PlayerAcquire {
+@@ -207,9 +249,25 @@ export class PlayerAcquire {
      if (!list) {
        list = [];
        const fresh = (id) => !list.includes(id);
@@ -6659,7 +6671,7 @@ index ce995c4..1750f20 100644
        }
      }
 diff --git a/server/match/player/economy.js b/server/match/player/economy.js
-index c8f1956..3e3b892 100644
+index a5687fb..911d594 100644
 --- a/server/match/player/economy.js
 +++ b/server/match/player/economy.js
 @@ -1,3 +1,4 @@
@@ -6667,11 +6679,11 @@ index c8f1956..3e3b892 100644
  // server/match/player/economy.js — PlayerState methods: the economy — funds, spending (onSpend), prep-side bond layer
  // gains (clamped by layerGainRoom), the shop (onPrice prices, copy-weighted rolls from the shared pool plus the player's
  // own 自选 stock — player/diy.js —, freeze) and its intents: g.buy, g.refresh, g.freeze, g.levelUp, g.sell.
-@@ -71,7 +72,20 @@ export class PlayerEconomy {
-   }
- 
-   _rollItemSlot() {
--    const id = this.m.pool.rollItem(this.m.rngShop, this.shop.level, this.m.itemPool);
+@@ -82,7 +83,20 @@ export class PlayerEconomy {
+       bias = new Set();
+       for (const [id, st] of Object.entries(bonds)) if (st && st.active) bias.add(id);
+     }
+-    const id = this.m.pool.rollItem(this.m.rngShop, this.shop.level, this.m.itemPool, bias);
 +    // 自研「装备甄选」（config/custom-rules.json，热更）：从 minRound 起，提高「与主盟约同阵营、可参与变形
 +    // 同构体转职」的装备出率（数据驱动：giveBondId === 目标盟约）。只改抽中的分布，池子/其它路径不变。
 +    let boost = null;
@@ -6685,12 +6697,12 @@ index c8f1956..3e3b892 100644
 +        if (bond && this.gd.bond(bond)) { boost = new Map([[bond, io.mult]]); onTierMiss = io.onTierMiss; mode = io.mode; }
 +      }
 +    } catch { /* 配置异常按原版 */ }
-+    const id = this.m.pool.rollItem(this.m.rngShop, this.shop.level, this.m.itemPool, { bondBoost: boost, onTierMiss, mode });
++    const id = this.m.pool.rollItem(this.m.rngShop, this.shop.level, this.m.itemPool, boost?.size ? { bondBoost: boost, onTierMiss, mode, bias } : bias);
      return id ? { kind: 'item', id, basePrice: this.gd.itemPrice(id), frozen: false, sold: false } : null;
    }
  
 diff --git a/server/match/player/pieces.js b/server/match/player/pieces.js
-index c888e30..fbc367c 100644
+index 9397e5d..e908e83 100644
 --- a/server/match/player/pieces.js
 +++ b/server/match/player/pieces.js
 @@ -19,6 +19,10 @@ export class PlayerPieces {
@@ -6721,7 +6733,7 @@ index c888e30..fbc367c 100644
        if (Number.isInteger(preferIdx) && preferIdx >= 0 && preferIdx < this.hand.length && this.hand[preferIdx] == null) {
          this.hand[preferIdx] = piece;
 diff --git a/server/match/player/placement.js b/server/match/player/placement.js
-index 3805304..46ef7ca 100644
+index 47a13d0..b2af446 100644
 --- a/server/match/player/placement.js
 +++ b/server/match/player/placement.js
 @@ -1,3 +1,4 @@
@@ -6729,7 +6741,7 @@ index 3805304..46ef7ca 100644
  // server/match/player/placement.js — PlayerState methods: g.move — placement legality on the deploy field (board.js),
  // the summon ranges of 狼群 / 流形 (ownerRange) and the summons an owner's move or re-orientation leaves out of range,
  // operator / summon moves onto the board, back to the hand, between hand and temp, swaps and re-orientation in place.
-@@ -11,6 +12,8 @@ import { attackRangeGrid, loadoutRecord, resolveRecordLoadout } from '../../../s
+@@ -12,6 +13,8 @@ import { attackRangeGrid, loadoutRecord, resolveRecordLoadout } from '../../../s
  import { summonPlacementGrid } from '../../../shared/summonPlacement.js';
  import { OK, fail } from './common.js';
  
@@ -6738,7 +6750,7 @@ index 3805304..46ef7ca 100644
  export class PlayerPlacement {
    /**
     * g.move {uid, to, dir?}. Pieces: chess / token between board, hand and temp; items only within the hand. `dir`
-@@ -23,6 +26,15 @@ export class PlayerPlacement {
+@@ -24,6 +27,15 @@ export class PlayerPlacement {
      if (!loc || loc.area === 'equipped') return fail(ERR.BAD_TARGET);
      if (!to || typeof to !== 'object') return fail(ERR.BAD_TARGET);
      const piece = loc.piece;
@@ -6754,7 +6766,7 @@ index 3805304..46ef7ca 100644
      if (to.area === 'board') {
        if (piece.kind === 'item') return fail(ERR.BAD_TARGET, 'items are equipped, not placed');
        const d = parseDir(dir !== undefined ? dir : to.dir);
-@@ -52,6 +64,10 @@ export class PlayerPlacement {
+@@ -53,6 +65,10 @@ export class PlayerPlacement {
     * with its own owner).
     */
    _legal(piece, r, c, owner = null) {
@@ -6765,7 +6777,7 @@ index 3805304..46ef7ca 100644
      if (!canPlace(this.deployMap(), this._placementOf(piece), r, c)) return false;
      const k = tileKey(r, c);
      const range = this.summonRange(piece, owner);
-@@ -100,7 +116,11 @@ export class PlayerPlacement {
+@@ -101,7 +117,11 @@ export class PlayerPlacement {
      const rec = this.fieldRecord(chess); // 0.2.0 补位: a stand-in's own range (its backup selection)
      const grid = placementGrid || attackRangeGrid(loadoutRecord(rec, resolveRecordLoadout(rec, this.loadoutFor(chess)))) || rec.rangeGrid;
      const [r, c] = parseKey(at.key);
@@ -6778,7 +6790,7 @@ index 3805304..46ef7ca 100644
    }
  
    /**
-@@ -207,6 +227,7 @@ export class PlayerPlacement {
+@@ -209,6 +229,7 @@ export class PlayerPlacement {
     * of them would have nowhere to go.
     */
    _reorient(piece, dir) {
@@ -6786,7 +6798,7 @@ index 3805304..46ef7ca 100644
      if (pieceDir(piece) === dir) return OK;
      if (piece.kind === 'chess') {
        const loc = this.find(piece.uid);
-@@ -230,6 +251,7 @@ export class PlayerPlacement {
+@@ -232,6 +253,7 @@ export class PlayerPlacement {
     * like any other card (research 01 A1) instead of overflowing into temp.
     */
    _returnToken(tok, preferLoc = null, { allowTemp = true } = {}) {
@@ -6794,7 +6806,7 @@ index 3805304..46ef7ca 100644
      const stack = [...this.hand, ...this.temp].find((p) => p && p.kind === 'token' && p.ownerUid === tok.ownerUid && p.id === tok.id);
      if (stack) { stack.count = (stack.count || 1) + (tok.count || 1); return true; }
      tok.count = tok.count || 1;
-@@ -239,6 +261,12 @@ export class PlayerPlacement {
+@@ -241,6 +263,12 @@ export class PlayerPlacement {
  
    _moveTokenToBoard(loc, r, c, dir = 'RIGHT') {
      const piece = loc.piece;
@@ -6807,7 +6819,7 @@ index 3805304..46ef7ca 100644
      if (!inField(r, c)) return fail(ERR.BAD_TILE);
      const key = tileKey(r, c);
      const occ = this.board.get(key) || null;
-@@ -266,7 +294,7 @@ export class PlayerPlacement {
+@@ -268,7 +296,7 @@ export class PlayerPlacement {
      if (occ) return fail(ERR.BAD_TILE, 'occupied');
      // owner must be on the board for its summons to be deployable
      const owner = [...this.board.values()].find((p) => p.uid === piece.ownerUid);
@@ -6983,7 +6995,7 @@ index 0000000..ec90ea8
 +
 +}
 diff --git a/server/match/player/round.js b/server/match/player/round.js
-index 8d7629d..830e2e3 100644
+index b98c449..382318a 100644
 --- a/server/match/player/round.js
 +++ b/server/match/player/round.js
 @@ -1,3 +1,6 @@
@@ -7065,7 +7077,7 @@ index 8d7629d..830e2e3 100644
      const units = [];
      for (const { r, c, piece } of boardOrder(this.board)) {
        if (piece.kind === 'chess') {
-@@ -157,7 +174,7 @@ export class PlayerRound {
+@@ -162,7 +179,7 @@ export class PlayerRound {
          if (carry && carry.has(piece.uid)) u.carryState = carry.get(piece.uid);
          units.push(u);
        } else if (piece.kind === 'token') {
@@ -7074,7 +7086,7 @@ index 8d7629d..830e2e3 100644
          if (carry && carry.has(piece.uid)) u.carryState = carry.get(piece.uid); // 联防: { sp } (unite.js)
          units.push(u);
        }
-@@ -174,6 +191,8 @@ export class PlayerRound {
+@@ -179,6 +196,8 @@ export class PlayerRound {
          id: e.id, key: e.key ?? null, source: e.iconKind ?? null, params: e.params ?? null, counter: e.counter ?? null, data: e.data ?? null,
        })),
        deviceOverrides: { ...this.deviceOverrides },
@@ -7084,7 +7096,7 @@ index 8d7629d..830e2e3 100644
    }
  }
 diff --git a/server/match/player/views.js b/server/match/player/views.js
-index 5172eee..bdc0c27 100644
+index fcd33cc..5f32625 100644
 --- a/server/match/player/views.js
 +++ b/server/match/player/views.js
 @@ -1,3 +1,5 @@
@@ -7102,8 +7114,8 @@ index 5172eee..bdc0c27 100644
  export class PlayerViews {
    pieceView(p, rc = null) {
      const rec = p.kind === 'item' ? this.gd.item(p.id) : p.kind === 'token' ? this.gd.token(p.id) : this.gd.chess(p.id);
-@@ -22,6 +26,15 @@ export class PlayerViews {
-       ownerUid: p.kind === 'token' ? p.ownerUid ?? null : null,
+@@ -27,6 +31,15 @@ export class PlayerViews {
+       ...(skinId ? { skin: skinId } : {}),
      };
      if (rc) { v.row = rc[0]; v.col = rc[1]; v.dir = pieceDir(p); }
 +    if (p.kind === 'item' && p.id === 'chess_item_5_04_e_a' && p.meta?.sixPlayerBeaconRound === 14) v.giftTiming = 'immediate';
@@ -7118,7 +7130,7 @@ index 5172eee..bdc0c27 100644
      return v;
    }
  
-@@ -87,6 +100,7 @@ export class PlayerViews {
+@@ -92,6 +105,7 @@ export class PlayerViews {
        },
        hand: this.hand.map((p) => (p ? this.pieceView(p) : null)),
        temp: this.temp.map((p) => (p ? this.pieceView(p) : null)),
@@ -7126,7 +7138,7 @@ index 5172eee..bdc0c27 100644
        board,
        // The stage's 外勤医疗 reserve medic is present during prep, but is not a draggable board piece.
        prepMapChars: this.m.prepMapChars(this),
-@@ -95,6 +109,14 @@ export class PlayerViews {
+@@ -100,6 +114,14 @@ export class PlayerViews {
        // + the mode-off bonds it has members of (`off: true`, the strip's grey 本局禁用 discs — bondsMeta.offBondCounts)
        bonds: bondList(this.gd, this.bondsView(), { full: true, off: offBondCounts(this.gd, this) }),
        effects: this.effectsView(),
@@ -7142,7 +7154,7 @@ index 5172eee..bdc0c27 100644
        // DESIGN §16: the effective operator loadout ({ [baseChessId]: { skill, module } }; chess not listed use defaults)
        loadout: this.loadout,
 diff --git a/server/match/pool.js b/server/match/pool.js
-index 9597d35..5b271f3 100644
+index 56e2c1e..1d35e32 100644
 --- a/server/match/pool.js
 +++ b/server/match/pool.js
 @@ -124,11 +124,27 @@ export class SharedPool {
@@ -7175,22 +7187,38 @@ index 9597d35..5b271f3 100644
      return el[el.length - 1][0];
    }
  
-@@ -150,7 +166,9 @@ export class SharedPool {
-    * Item roll for the shop's item slot: tier by the chess tier shares at this level, uniform item within the tier,
-    * falling back to lower tiers when a tier has no item. Returns an item id or null.
+@@ -153,7 +169,11 @@ export class SharedPool {
+    * when any remain after the stock gate; an empty filtered tier falls back to the official list of that tier.
+    * null or an empty Set keeps today's rng (one draw for the tier, one for the pick). Bias never grants an item.
     */
--  rollItem(rng, maxTier, stock = null) {
+-  rollItem(rng, maxTier, stock = null, bias = null) {
 +  rollItem(rng, maxTier, stock = null, opts = {}) {
++    opts = opts instanceof Set ? { bias: opts } : opts || {};
++    const bias = opts.bias;
 +    const boost = opts.bondBoost;
 +    const gd = boost && boost.size ? this.gd : null;
      const shares = this.tierShares(maxTier);
      const tiers = Object.keys(shares).map(Number).sort((a, b) => a - b);
      let tier = null;
-@@ -161,13 +179,62 @@ export class SharedPool {
+@@ -164,26 +184,64 @@ export class SharedPool {
      } else {
        tier = 1 + Math.floor(rng() * Math.max(1, maxTier));
      }
-+    const pickFrom = (list) => {
+-    const useBias = bias instanceof Set && bias.size > 0;
+-    const gated = (t) => (this.gd.shopItemsByTier[t] || []).filter((id) => !stock || stock.canGain(id));
+-    const pick = (list) => (stock ? stock.pick(rng, list) : list[Math.floor(rng() * list.length)]);
+-    const choose = (t) => {
+-      const list = gated(t);
+-      if (!list.length) return null;
+-      if (!useBias) return pick(list);
+-      const biased = list.filter((id) => {
+-        const rec = this.gd.item(id);
+-        return !!(rec && typeof rec.giveBondId === 'string' && bias.has(rec.giveBondId));
+-      });
+-      return pick(biased.length ? biased : list);
++    const pickFrom = (candidates) => {
++      const biased = bias instanceof Set && bias.size ? candidates.filter(id => bias.has(this.gd.item(id)?.giveBondId)) : [];
++      const list = biased.length ? biased : candidates;
 +      if (!gd) return stock ? stock.pick(rng, list) : list[Math.floor(rng() * list.length)];
 +      // 目标阵营装备（giveBondId 命中 boost）
 +      const isTarget = (id) => {
@@ -7218,7 +7246,7 @@ index 9597d35..5b271f3 100644
 +      let r = rng() * total;
 +      for (let i = 0; i < list.length; i++) { r -= weights[i]; if (r < 0) return list[i]; }
 +      return list[list.length - 1];
-+    };
+     };
 +    // 有目标盟约时：优先找「含目标装备」的层（按 onTierMiss 决定是否降级/升阶搜索）
 +    if (gd) {
 +      const hasTarget = (t) => {
@@ -7240,13 +7268,15 @@ index 9597d35..5b271f3 100644
 +      }
 +    }
      for (let t = tier; t >= 1; t--) {
-       const list = (this.gd.shopItemsByTier[t] || []).filter(id => !stock || stock.canGain(id));
--      if (list.length) return stock ? stock.pick(rng, list) : list[Math.floor(rng() * list.length)];
+-      const id = choose(t);
+-      if (id) return id;
++      const list = (this.gd.shopItemsByTier[t] || []).filter(id => !stock || stock.canGain(id));
 +      if (list.length) return pickFrom(list);
      }
      for (let t = tier + 1; t <= 6; t++) {
-       const list = (this.gd.shopItemsByTier[t] || []).filter(id => !stock || stock.canGain(id));
--      if (list.length) return stock ? stock.pick(rng, list) : list[Math.floor(rng() * list.length)];
+-      const id = choose(t);
+-      if (id) return id;
++      const list = (this.gd.shopItemsByTier[t] || []).filter(id => !stock || stock.canGain(id));
 +      if (list.length) return pickFrom(list);
      }
      return null;
@@ -7463,7 +7493,7 @@ index 0000000..d3cf854
 +export const relicOfferView = (ps) => ps.relicOffer ? { ...ps.relicOffer, options: [...ps.relicOffer.options] } : null;
 +
 diff --git a/server/match/results.js b/server/match/results.js
-index e8258d0..c84a560 100644
+index e651f55..7a14759 100644
 --- a/server/match/results.js
 +++ b/server/match/results.js
 @@ -14,6 +14,7 @@
@@ -7483,41 +7513,43 @@ index e8258d0..c84a560 100644
        bonds: bondList(gd, ps.bonds).filter((b) => b.active || b.layers > 0),
        stats: {
 diff --git a/server/plugins/contentSet.js b/server/plugins/contentSet.js
-index f9e9974..295425e 100644
+index 942519e..11b5f90 100644
 --- a/server/plugins/contentSet.js
 +++ b/server/plugins/contentSet.js
-@@ -8,6 +8,9 @@ import { contentHashOf, canonicalJson, csUrlPart } from '../../shared/plugins/id
- import { resolvePluginOrder } from '../../shared/plugins/order.js';
- import { applyPatches, normalizeSettings } from '../../shared/plugins/patch.js';
- import { expandRecords } from '../../shared/plugins/records.js';
+@@ -11,6 +11,9 @@ import { applyPatches, normalizeSettings } from '../../shared/plugins/patch.js';
+ import { expandGameplayRecords, reconcilePluginBonds, reconcilePluginTokens, validateGameplayData } from './gameplayRecords.js';
+ import { expandTraitRecords, operatorTraitPatchProblems } from './operatorTraits.js';
+ import { expandFxRecords } from './fxRecords.js';
 +import { getDefaultRegistry } from '../match/effectsMeta.js';
 +import { KAZDEL_GARRISON_KEYS } from '../../shared/kazdel.js';
 +import { applyLelePackages } from '../../shared/lelePlugins.js';
- import { validateData } from '../../shared/plugins/validate.js';
  import { object, own, clone, problem, RECORD_MAPS, recordId, namespaceCollisions } from '../../shared/plugins/dataUtils.js';
  import { buildRecordOverlay, walkOverlay, getPath, applyRecordOverlay } from '../../shared/i18nData.js';
-@@ -19,6 +22,8 @@ import { browserScriptSources } from '../../shared/plugins/scriptLoad.js';
- import { preflightScripts } from './scriptPreflight.js';
- import { validateDsl, validatePrepSpec } from '../sim/content/dsl/validate.js';
+ import { computeGroundPaths, computeDeployTiles } from '../sim/groundPaths.js';
+@@ -24,6 +27,8 @@ import { validateDsl, validatePrepSpec } from '../sim/content/dsl/validate.js';
+ import { composeRules } from '../../shared/plugins/rules.js';
+ import { offerReferenceProblems } from './offerData.js';
  
 +// Friend servers keep only the latest builder result; held rooms own their snapshots separately.
 +const COMPOSITION_CACHE_MAX = process.env.SP_FRIENDS === '1' ? 1 : 32;
  const bases = new WeakMap(), buffers = new WeakMap(), caches = new WeakMap();
  function baseFor(registry) {
    if (bases.has(registry)) return bases.get(registry);
-@@ -267,8 +272,10 @@ function composeContentSet({ registry, ids = [] }) {
+@@ -281,10 +286,12 @@ function composeContentSet({ registry, ids = [], checkDataOnly = false }) {
      if (data === base.data || Object.isFrozen(data)) data = clone(data);
      data.dsl = table;
    }
 +  data = applyLelePackages(data, plugins);
    if (plugins.length) {
--    problems.push(...validateData(data, { kitExists: ref => !!officialKit(ref), vanilla: base.data, owners, validateDsl }));
 +    const hostEffects = data.config.economy.leleHost?.enabled?.factions ? [...Object.values(KAZDEL_GARRISON_KEYS), 'RHINE_MAYER_RESEARCH','RHINE_IFRIT_INHERITANCE','RHINE_ASTGENNE_FIRST_SKILL','RHINE_DOROTHY_ATTACK','RHINE_SARIA_HEALING', ...getDefaultRegistry().keys().filter(k=>k.startsWith('garrison:')).map(k=>k.slice(9))] : [];
-+    problems.push(...validateData(data, { kitExists: ref => !!officialKit(ref), vanilla: base.data, owners, validateDsl, registeredGarrisonKeys: hostEffects }));
+     data = reconcilePluginTokens(reconcilePluginBonds(data));
+     for (const p of plugins) if (p.offers?.length) problems.push(...offerReferenceProblems(p.offers, p.manifest, p.content.documents, base.data, data));
+-    problems.push(...validateGameplayData(data, { kitExists: ref => !!officialKit(ref), vanilla: base.data, owners, validateDsl }));
++    problems.push(...validateGameplayData(data, { kitExists: ref => !!officialKit(ref), vanilla: base.data, owners, validateDsl, registeredGarrisonKeys: hostEffects }));
      if (problems.length) return { problems };
+     warnings.push(...bossCentreWarnings(data));
      data = { ...data, stages: { ...data.stages } };
-     const routes = Object.values(data.waves).flatMap(w => [...(w.routes ?? []), ...(w.extraRoutes ?? [])]);
-@@ -344,7 +351,7 @@ function composeContentSet({ registry, ids = [] }) {
+@@ -382,7 +389,7 @@ function composeContentSet({ registry, ids = [], checkDataOnly = false }) {
    bodies.set('index.json', Buffer.from(JSON.stringify(index)));
    buffers.set(set, bodies); cache.set(cs, set);
    // [ASSUMED] Keep 32 recently constructed sets per registry. Callers may retain a set and its files indefinitely.
@@ -7527,7 +7559,7 @@ index f9e9974..295425e 100644
  }
  
 diff --git a/server/plugins/contentSets.js b/server/plugins/contentSets.js
-index b2b63d6..5604368 100644
+index 1acd356..ff4b0b5 100644
 --- a/server/plugins/contentSets.js
 +++ b/server/plugins/contentSets.js
 @@ -32,7 +32,7 @@ import { buildContentSet, contentSetFiles } from './contentSet.js';
@@ -7540,7 +7572,7 @@ index b2b63d6..5604368 100644
  export const DEFAULT_MAX_SETS = 4;
  /** Builds remembered by what they were built from (resolve). */
 diff --git a/server/sim/Battle.js b/server/sim/Battle.js
-index e4b6507..2c6dfa3 100644
+index df9b7cd..f136cf7 100644
 --- a/server/sim/Battle.js
 +++ b/server/sim/Battle.js
 @@ -1,3 +1,4 @@
@@ -7761,7 +7793,7 @@ index 6095990..2d54929 100644
  
    reduceElement(target, amount, element = null) { return reduceElement(target, amount, element); }
 diff --git a/server/sim/battle/deploy.js b/server/sim/battle/deploy.js
-index 12962e7..2e212dc 100644
+index 48c1689..59c5f7b 100644
 --- a/server/sim/battle/deploy.js
 +++ b/server/sim/battle/deploy.js
 @@ -6,6 +6,8 @@
@@ -7955,7 +7987,7 @@ index cc50822..6170f39 100644
  
    _handlerError(label, owner, e, internal = false) {
 diff --git a/server/sim/battle/lifecycle.js b/server/sim/battle/lifecycle.js
-index e4dca5c..62d20e6 100644
+index b4bcd0d..9970e22 100644
 --- a/server/sim/battle/lifecycle.js
 +++ b/server/sim/battle/lifecycle.js
 @@ -1,3 +1,5 @@
@@ -8008,10 +8040,10 @@ index e4dca5c..62d20e6 100644
        this._phase('spawns', () => this._processSpawns());
        this._phase('dp', () => {
 diff --git a/server/sim/battle/players.js b/server/sim/battle/players.js
-index eff7495..1001f63 100644
+index ea25ec1..8d4a122 100644
 --- a/server/sim/battle/players.js
 +++ b/server/sim/battle/players.js
-@@ -213,6 +213,8 @@ export class BattlePlayers {
+@@ -215,6 +215,8 @@ export class BattlePlayers {
          kit = null;
        }
      }
@@ -12407,18 +12439,18 @@ index 0000000..a71c920
 +  try{return fn();}finally{current=previous;}
 +}
 diff --git a/server/sim/content/support/index.js b/server/sim/content/support/index.js
-index 002b958..19b3cee 100644
+index cd26aa2..a2a5d7c 100644
 --- a/server/sim/content/support/index.js
 +++ b/server/sim/content/support/index.js
-@@ -18,6 +18,7 @@
- //     `PlayerBattleInput.contentInfo`, written by the `global:contentb_info` meta handler (support/meta.js).
+@@ -19,6 +19,7 @@
  
  import { getData } from '../../../data.js';
+ import { grantedBondsByMorph } from '../../../../shared/plugins/rules.js';
 +import { scopedGameData } from './dataScope.js';
  import { COLS, DIRECT_BONUS_STACKING } from '../../constants.js';
  import { frontOf, offsetTile } from '../../dir.js';
  import { bodyInKeys, bodyDist, bodyInRadius, bodyOnTile, bodyTileReach, bodyInRange } from '../../body.js';
-@@ -37,13 +38,15 @@ const QUIET = Object.freeze({ warn() {}, error() {}, info() {} });
+@@ -38,13 +39,15 @@ const QUIET = Object.freeze({ warn() {}, error() {}, info() {} });
  let DATA = null;
  /** Frozen data/*.json (process singleton of server/data.js). Never mutate. */
  export function gameData() {
@@ -12435,7 +12467,7 @@ index 002b958..19b3cee 100644
  
  export const bondRecord = (id) => own(gameData().bonds, id);
  export const itemRecord = (id) => own(gameData().items, id);
-@@ -80,14 +83,17 @@ export function buffParams(rec, key) {
+@@ -81,14 +84,17 @@ export function buffParams(rec, key) {
    return null;
  }
  
@@ -12983,10 +13015,10 @@ index 5ed195a..a7ff10a 100644
        source: p.source ?? (p.from && p.from.id != null ? p.from : null),
        hitDead: !!p.hitDead,
 diff --git a/server/sim/simdata.js b/server/sim/simdata.js
-index bc5dd74..d032932 100644
+index 45d4d71..330ff76 100644
 --- a/server/sim/simdata.js
 +++ b/server/sim/simdata.js
-@@ -347,6 +347,9 @@ export function normalizeToken(id, t0, ownerChessId = null, variantOverride = nu
+@@ -348,6 +348,9 @@ export function normalizeToken(id, t0, ownerChessId = null, variantOverride = nu
        .map((x) => ({ name: x.name ?? '', description: x.desc ?? x.description ?? '', bb: x.bb ? { ...x.bb } : flattenBlackboard(x.blackboard), bbStr: x.bbStr ? { ...x.bbStr } : {}, rangeGrid: toArrayOfPairs(x.rangeGrid), tokenKey: x.tokenKey ?? null })),
      tokens: [],
      count: num(t.count, 1),
@@ -12996,7 +13028,7 @@ index bc5dd74..d032932 100644
      // how the owner (with its loadout) produces this token: ⊆ ['talent','skill','display'] (data variant / bySkill);
      // [] or ['display'] = the owner does not produce it; null = unknown (no owner variant)
      sources: variant && Array.isArray(t.sources) ? [...t.sources] : null,
-@@ -558,6 +561,7 @@ export function freezeDef(d) {
+@@ -559,6 +562,7 @@ export function freezeDef(d) {
   */
  export class DataSource {
    constructor(raw = {}, fallback = null) {
@@ -13034,17 +13066,19 @@ index 1c301f3..8ccf38a 100644
      // deploy-timed skill starts again, PR #109): that cast owns the mods and its events — a trailing skillEnd would make
      // listeners (骑士戒律) clear the new cast and the client would see the skill off while it runs
 diff --git a/server/sim/snapshot.js b/server/sim/snapshot.js
-index 5594ec7..af72f77 100644
+index 601330d..ceee04b 100644
 --- a/server/sim/snapshot.js
 +++ b/server/sim/snapshot.js
-@@ -3,12 +3,13 @@
+@@ -3,14 +3,15 @@
  // b.snap  = { fieldId, t, units: [[id, x, y, hp, maxHp, sp, spMax, flags, anim]], dp, killed, total, resolved }
  //   (hp of a countdown summon — unit.countdown, content/tokens.js startCountdown — is maxHp × the share of its life left)
  // UnitInfo = { id, kind, side, ownerId, defId, name, tier, golden, spine, avatar, x, y, facing, dir, maxHp, motion?, boss?, uid?,
--//   form?, skillIndex?, ammoSkill?, moduleId?, items?, standInFor?, diy? }  (ammoSkill = an ally whose skill is an ammo
-+//   form?, skillIndex?, ammoSkill?, moduleId?, items?, researchStage?, researchActive?, sp?, spMax?, standInFor?, diy? }  (ammoSkill = an ally whose skill is an ammo
+-//   form?, skillIndex?, ammoSkill?, moduleId?, items?, standInFor?, diy?, skin? }  (ammoSkill = an ally whose skill is an ammo
++//   form?, skillIndex?, ammoSkill?, moduleId?, items?, researchStage?, researchActive?, sp?, spMax?, standInFor?, skin?, diy? }  (ammoSkill = an ally whose skill is an ammo
  //   magazine: the HP bar shows its rounds as cells, b.snap `ammo`; standInFor = the replaced operator's charId of a 补位
  //   stand-in; diy = a 自选 piece's pick { charId, skillIndex, uniEquipId } — defId is its slot, spine / avatar the operator's;
+ //   skin = the owning player's chosen skinId, docs/SKINS.md — the client draws that appearance instead of the operator's,
+ //   falling back to the default model when it is not installed;
  //   form = the unit's current model form — an enemy's, content/enemies/helpers.js setForm:
  //   掠海漂移体 'crawl', 暴鸰 'bombed', 转译基底·α's forms …; a 傀儡师 fighting as its 替身 'doll', professions.js — a view built
 -//   after the change, a field opened mid-battle, draws it: render/units.js FORMS)
@@ -13053,7 +13087,7 @@ index 5594ec7..af72f77 100644
  //   dir = 'UP'|'RIGHT'|'DOWN'|'LEFT' (allies: the deploy direction, sim/dir.js); facing = its horizontal sign (±1).
  //   items = an ally operator's equipped item ids (absent without any).
  // flags bits & anim codes come from shared/constants.js (UF / ANIM); an enemy's stealth bit = its 隐匿 is on (not while it
-@@ -46,6 +47,8 @@ export function unitInfo(u) {
+@@ -53,6 +54,8 @@ export function unitInfo(u) {
      // the unit's current model form (an enemy's content/enemies/helpers.js setForm, a 傀儡师's 替身 — render/units.js FORMS): a
      // view built mid-battle (fieldMeta — a watched teammate's field, 联防 observers, a reconnect) starts on that clip set
      form: typeof u.form === 'string' ? u.form : undefined,
@@ -13062,7 +13096,7 @@ index 5594ec7..af72f77 100644
      uid: u.uid ?? undefined,
      // DESIGN §16: the equipped skill's index (the renderer / audio pick that skill's Spine clip and sound)
      skillIndex: u.side === 'ally' && Number.isInteger(d.skill?.index) ? d.skill.index : undefined,
-@@ -55,6 +58,15 @@ export function unitInfo(u) {
+@@ -62,6 +65,15 @@ export function unitInfo(u) {
      // DESIGN §16: an elite ally's equipped module (uniEquipId | 'none'; display only — a teammate's unit in a shared
      // field shows its owner's module in the detail card)
      moduleId: u.side === 'ally' && d.golden && typeof d.loadout?.moduleId === 'string' ? d.loadout.moduleId : undefined,
@@ -13078,7 +13112,7 @@ index 5594ec7..af72f77 100644
      // an ally operator's equipped item ids (display: a 变形同构体 wearer counts for the bond it grants — the bond popup's
      // member list and the detail card's bond chips of a teammate's unit)
      items: u.side === 'ally' && u.kind === 'op' && Array.isArray(u.items) && u.items.length ? [...u.items] : undefined,
-@@ -87,7 +99,7 @@ export function flagsOf(u) {
+@@ -94,7 +106,7 @@ export function flagsOf(u) {
    if (f.invulnerable) bits |= UF.INVULN;
    if (f.cold) bits |= UF.COLD;
    if (f.sleep) bits |= UF.SLEEP;
@@ -13087,7 +13121,7 @@ index 5594ec7..af72f77 100644
    return bits;
  }
  
-@@ -105,8 +117,9 @@ export function animOf(u, t) {
+@@ -112,8 +124,9 @@ export function animOf(u, t) {
  /** Snapshot tuple for one unit. */
  export function unitTuple(u, t) {
    const sk = u.skill;
@@ -13100,7 +13134,7 @@ index 5594ec7..af72f77 100644
      // show remaining duration/ammo as a draining bar — ammo out of the activation's real total (base + bullets added:
      // 拉特兰, 逃犯引渡手续, refills; community report #35), so every bullet shortens it
 diff --git a/server/sim/spec.js b/server/sim/spec.js
-index af8e636..d3110cd 100644
+index c505b6a..38e0855 100644
 --- a/server/sim/spec.js
 +++ b/server/sim/spec.js
 @@ -42,6 +42,7 @@ import { toDataSource, withUnitLoadouts } from './simdata.js';
@@ -13111,15 +13145,15 @@ index af8e636..d3110cd 100644
  
  export const SPEC_VERSION = 1;
  
-@@ -91,6 +92,7 @@ export function buildBattleSpec(o = {}) {
-     ...(isContentHash(o.vs) ? { vs: o.vs } : {}),
+@@ -93,6 +94,7 @@ export function buildBattleSpec(o = {}) {
+     ...(o.morphPairing === 'plus' ? { morphPairing: 'plus' } : {}),
    };
    const out = JSON.parse(JSON.stringify(spec, specReplacer));
 +  if(Array.isArray(o.customActions)&&o.customActions.length)out.customActions=jsonClone(o.customActions);
    for (const p of out.players) for (const u of (p && Array.isArray(p.units) ? p.units : [])) if (u && typeof u === 'object') sanitizeUnitLoadout(u);
    return out;
  }
-@@ -164,6 +166,7 @@ export function createBattleFromSpec(spec, dataSource, opts = {}) {
+@@ -166,6 +168,7 @@ export function createBattleFromSpec(spec, dataSource, opts = {}) {
      routes: s.routes ?? [],
      sharedBoss,
      flags: s.flags ?? {},
@@ -13127,7 +13161,7 @@ index af8e636..d3110cd 100644
      fieldId: s.fieldId,
      enemyOverrides: s.enemyOverrides ?? {},
      waveId: s.waveId ?? null,
-@@ -395,7 +398,7 @@ function compactMods(m) {
+@@ -402,7 +405,7 @@ function compactMods(m) {
  export function compactResult(res) {
    const r = res && typeof res === 'object' ? res : {};
    const perPlayer = {};
@@ -13137,10 +13171,10 @@ index af8e636..d3110cd 100644
      const layerGains = {};
      for (const [k, v] of Object.entries(p.layerGains || {}).slice(0, 40)) if (isKey(k) && fnum(v) > 0) layerGains[k] = Math.min(1e4, fnum(v));
 diff --git a/server/sim/units.js b/server/sim/units.js
-index 6be5259..2e06dfe 100644
+index 98ed3ed..7d5bcb7 100644
 --- a/server/sim/units.js
 +++ b/server/sim/units.js
-@@ -140,12 +140,23 @@ export class Unit {
+@@ -144,12 +144,23 @@ export class Unit {
      const b = this.base;
      const cm = this.cultMul || NO_MUL;
      const bHp = fin(b.maxHp, 1) > 0 ? fin(b.maxHp, 1) : 1;
@@ -13167,7 +13201,7 @@ index 6be5259..2e06dfe 100644
      const aspd = clamp(fin(b.aspd + a('aspd'), 100), ASPD_MIN, ASPD_MAX);
      const bBat = fin(b.bat, 1) > 0 ? fin(b.bat, 1) : 1;
      const bat = fin(bBat * Math.max(0.1, 1 + a('batPct')), bBat);
-@@ -153,7 +164,7 @@ export class Unit {
+@@ -157,7 +168,7 @@ export class Unit {
        maxHp, atk, def, res, aspd, bat,
        interval: (bat * 100) / aspd,
        blockCnt: Math.max(0, fin(Math.round(b.blockCnt + a('blockCnt')), 0)),
@@ -13176,7 +13210,7 @@ index 6be5259..2e06dfe 100644
        rangeExtend: Math.max(0, Math.round(a('rangeExtend'))),
        // 阻挡半径倍率 − 1 (PRTS 数值范围 BLOCK_RADIUS_SCALE "影响阻挡模式为飞行阻挡的单位的阻挡半径"): Battle._checkBlock
        blockRadiusScale: Math.max(0, fin(a('blockRadiusScale'), 0)),
-@@ -217,7 +228,7 @@ export class Unit {
+@@ -221,7 +232,7 @@ export class Unit {
        if (f.groundbind) return false;
        return this.motion === 'FLY' || !!f.float;
      }
@@ -13354,10 +13388,10 @@ index 0000000..0834043
 +  return config;
 +}
 diff --git a/shared/plugins/validate.js b/shared/plugins/validate.js
-index bb6bf81..ae9589a 100644
+index dcfeef6..515c11c 100644
 --- a/shared/plugins/validate.js
 +++ b/shared/plugins/validate.js
-@@ -74,7 +74,7 @@ export function validateReferences(f, { officialOwnedSkills = true } = {}) {
+@@ -77,7 +77,7 @@ export function validateReferences(f, { officialOwnedSkills = true } = {}) {
            if (officialOwnedSkills && f.skills.length !== 3) err(`DIY slot ${rec.chessId}: owned pick ${p} has ${f.skills.length} skills at ${statusKey(rec.status)}`);
            const ids = Object.keys(u.moduleNames).filter((m) => u.moduleNames[m].typeName !== 'ORIGINAL');
            if (rec.status.equipLevel > 0 && JSON.stringify(f.modules.map((m) => m.uniEquipId)) !== JSON.stringify(ids)) err(`DIY slot ${rec.chessId}: owned pick ${p} modules ${f.modules.map((m) => m.uniEquipId)} ≠ ${ids}`);
@@ -13366,7 +13400,7 @@ index bb6bf81..ae9589a 100644
          }
        }
      }
-@@ -186,7 +186,7 @@ function checkBlackboards(rec, path, bad) {
+@@ -189,7 +189,7 @@ function checkBlackboards(rec, path, bad) {
    if (Array.isArray(rec.abilities)) rec.abilities.forEach((a, i) => checkTimesMap(a?.bb, `${path}.abilities[${i}].bb`, bad));
  }
  
@@ -13375,7 +13409,7 @@ index bb6bf81..ae9589a 100644
    const problems = jsonProblems(data, 'data', { bounded: false });
    const bad = (path, message, code = 'PLUGIN_DATA_REQUIRED') => problems.push(problem(code, path, message));
    const array = (v, path) => { if (!Array.isArray(v)) bad(path, 'array required'); };
-@@ -296,7 +296,7 @@ function checkData(data, { kitExists = null, vanilla = null, owners = null, vali
+@@ -301,7 +301,7 @@ function checkData(data, { kitExists = null, vanilla = null, owners = null, vali
      if (!base || base.effectRef) bad(`${file}.${id}`, 'effectRef must name an official record', 'PLUGIN_EFFECT_REF');
    }
    if (vanilla) {
@@ -13385,10 +13419,10 @@ index bb6bf81..ae9589a 100644
      for (const [id, g] of Object.entries(data.garrisons)) if (!own(vanilla.garrisons, id) && !garKeys.has(g.effectKey)) bad(id, 'unknown garrison effectKey', 'PLUGIN_EFFECT_REF');
      for (const [id, e] of Object.entries(data.effects)) if (!own(vanilla.effects, id)) {
 diff --git a/shared/protocol.js b/shared/protocol.js
-index ce37d0f..3c18d19 100644
+index ab2c5da..4353467 100644
 --- a/shared/protocol.js
 +++ b/shared/protocol.js
-@@ -32,7 +32,7 @@ const isScalar = (v) => isStr(v, 64) || isNum(v) || isBool(v);
+@@ -34,7 +34,7 @@ const isScalar = (v) => isStr(v, 64) || isNum(v) || isBool(v);
  // ---- client-side combat (DESIGN §14): b.progress / b.result payloads -------------------------------------------
  
  /** Size limits of a b.result payload (the whole frame also obeys the 64 KB inbound limit). */
@@ -13397,7 +13431,7 @@ index ce37d0f..3c18d19 100644
  const BIG = 1e13;
  const isStat = (v) => v === undefined || isNum(v, 0, BIG);
  const isModVal = (v) => v === null || isNum(v, -BIG, BIG) || isStr(v, 64) || isBool(v);
-@@ -95,7 +95,7 @@ export const isLoadoutEntries = (v) => isMap(v, LOADOUT_LIMITS.entries, isId, is
+@@ -97,7 +97,7 @@ export const isLoadoutEntries = (v) => isMap(v, LOADOUT_LIMITS.entries, isId, is
  function skillIndexesOf(c) {
    if (!c || typeof c !== 'object') return [];
    if (Array.isArray(c.skills) && c.skills.length) {
@@ -13406,7 +13440,7 @@ index ce37d0f..3c18d19 100644
    }
    return isInt(c.skill?.index, 0, LOADOUT_LIMITS.skillIndex) ? [c.skill.index] : [];
  }
-@@ -390,6 +390,7 @@ export function unitStatsEntry(u, s = null) {
+@@ -474,6 +474,7 @@ export function unitStatsEntry(u, s = null) {
      base: statView(base),
      ...(range ? { range } : {}),
      ...(isDir(u?.dir) ? { dir: u.dir } : {}),
@@ -13414,7 +13448,7 @@ index ce37d0f..3c18d19 100644
      // the enemy card greys a SILENCE-format line (折射) from this; absent flags ⇒ not silenced
      silenced: !!(cur.flags && cur.flags.silence),
    };
-@@ -403,6 +404,7 @@ const target = (v) => {
+@@ -487,6 +488,7 @@ const target = (v) => {
    if (!v || typeof v !== 'object') return false;
    if (v.area === 'board') return isInt(v.row, 0, GEO.ROWS - 1) && isInt(v.col, 0, GEO.COLS - 1);
    if (v.area === 'hand') return isInt(v.idx, 0, GEO.HAND_SIZE - 1);
@@ -13422,13 +13456,7 @@ index ce37d0f..3c18d19 100644
    return false;
  };
  
-@@ -412,11 +414,14 @@ export const C2S = {
-   hello: { name: (v) => isStr(v, NAME_MAX_LEN) && v.trim().length > 0, token: (v) => v == null || isStr(v, 64), version: (v) => v == null || isInt(v, 0, 1e6),
-     noReplace: isBool, claimAt: (v) => isNum(v, 0, Number.MAX_SAFE_INTEGER), $optional: ['token', 'version', 'noReplace', 'claimAt'] },
-   ping: { c: (v) => typeof v === 'number' && Number.isFinite(v) },
--  'room.create': { mode: (v) => v === 'solo' || v === 'coop', difficulty: (v) => DIFFICULTIES.includes(v) },
-+  'room.create': { mode: (v) => v === 'solo' || v === 'coop', difficulty: (v) => DIFFICULTIES.includes(v), rhineEnabled: isBool, doubleRounds: isBool, relicsEnabled: isBool, operatorsEnabled: isBool, damageEnabled: isBool, recruitsEnabled: isBool, luckyEnabled: isBool, targetedEnabled: isBool, $optional: ['rhineEnabled', 'doubleRounds', 'relicsEnabled', 'operatorsEnabled', 'damageEnabled', 'recruitsEnabled', 'luckyEnabled', 'targetedEnabled'] },
-   'room.join': { code: (v) => isStr(v, ROOM_CODE_LEN + 2) && /^[A-Za-z0-9]+$/.test(v) },
+@@ -503,6 +505,9 @@ export const C2S = {
    'room.leave': {},
    'room.ready': { ready: isBool },
    'room.setDifficulty': { difficulty: (v) => DIFFICULTIES.includes(v) },
@@ -13438,18 +13466,23 @@ index ce37d0f..3c18d19 100644
    // the co-op room option 「AI 队友最后选择」 (GitHub #338; host, before the match): the strategy and 机变 drafts order every
    // human seat before every AI seat (server/match/match/phases.js humansFirst); room.state.aiPicksLast
    'room.setAiPicksLast': { on: isBool },
-@@ -480,7 +485,9 @@ export const C2S = {
-   'g.art': { itemUid: isUid, row: (v) => isInt(v, 0, GEO.ROWS - 1), col: (v) => isInt(v, 0, GEO.COLS - 1), dir: isDir, $optional: ['dir'] },
-   'g.destroy': { uid: isUid },
+@@ -571,12 +576,14 @@ export const C2S = {
+   // unequip (DESIGN §34.15): one equipped item back to the hand, else the visible temp window. Official rooms refuse it.
+   'g.unequip': { itemUid: isUid },
    'g.reward': { idx: (v) => isInt(v, 0, 5) },
 -  'g.choice': { idx: (v) => isInt(v, 0, 5), choiceId: isId, $optional: ['choiceId'] },
++  'g.choice': { idx: (v) => isInt(v, 0, 8), choiceId: isId, $optional: ['choiceId'] },
+   // a plugin interaction window (PLUGIN API v2, docs/PLUGINS.md §10b): offerId is the window's declared id, idx the
+   // slot picked; g.offerRefresh redraws one slot (the window's own `refresh.perSlot` bounds how often). The host
+   // applies the window's declared effect primitive — a plugin never receives these messages itself.
+   'g.offer': { offerId: isId, pluginId: isId, seq: (v) => isInt(v, 0, 1000000), cardId: optional(isId), idx: (v) => isInt(v, 0, PLUGIN_OFFER_SLOTS - 1) },
+   'g.offerRefresh': { offerId: isId, pluginId: isId, seq: (v) => isInt(v, 0, 1000000), cardId: optional(isId), idx: (v) => isInt(v, 0, PLUGIN_OFFER_SLOTS - 1) },
 +  'g.relic': { offerId: isId, idx: (v) => isInt(v, 0, 2) },
 +  'g.relicRevive': { relicId: isId, playerId: isId },
-+  'g.choice': { idx: (v) => isInt(v, 0, 8), choiceId: isId, $optional: ['choiceId'] },
    'g.ready': { ready: isBool },
    'g.emote': { id: (v) => EMOTES.includes(v) },
    // playerId: the player tapped in the team panel (a 联防 / boss pair field shows two) — what an eliminated viewer or a
-@@ -526,13 +533,15 @@ export const C2S = {
+@@ -625,13 +632,15 @@ export const C2S = {
      taskId: isId, choice: (v) => v === undefined || isInt(v, 0, 7), error: (v) => v === undefined || v === true,
      $optional: ['choice', 'error'],
    },
@@ -15820,7 +15853,7 @@ index 7a569b8..0956950 100644
            checkInvariants(h.b);
          }
 diff --git a/test/content/kits_alt_t3.test.js b/test/content/kits_alt_t3.test.js
-index e0a2098..cd0db69 100644
+index 25e735d..466547e 100644
 --- a/test/content/kits_alt_t3.test.js
 +++ b/test/content/kits_alt_t3.test.js
 @@ -5,13 +5,11 @@ import { test } from 'node:test';
@@ -21924,7 +21957,7 @@ index 0000000..30d984b
 +
 diff --git a/test/lele-plugins.test.js b/test/lele-plugins.test.js
 new file mode 100644
-index 0000000..db03394
+index 0000000..66fa5c2
 --- /dev/null
 +++ b/test/lele-plugins.test.js
 @@ -0,0 +1,35 @@
@@ -21948,7 +21981,7 @@ index 0000000..db03394
 +test('all eight combine deterministically; extra rounds and duplicate Wisdel resolve',()=>{
 + const s=build(ids),reverse=build([...ids].reverse());assert.equal(s.cs,reverse.cs);
 + assert.ok(Object.values(leleFlags(s.data)).every(Boolean));
-+ for(const [id,mode]of Object.entries(s.data.config.modes))if(id!=='mode_training_1')assert.equal(Object.keys(mode.rounds).length,id==='mode_single_funny'?13:18);
++ for(const [id,mode]of Object.entries(s.data.config.modes))if(id!=='mode_training_1')assert.equal(Object.keys(mode.rounds).length, Object.keys(getData().config.modes[id].rounds).length + 4);
 + const wisdels=Object.values(s.data.chess).filter(c=>!c.isGolden&&!c.isDiy&&!c.isHidden&&c.charId==='char_1035_wisdel');assert.equal(wisdels.length,1);assert.match(wisdels[0].chessId,/kazdel/);
 + assert.ok(s.data.chess.chess_rhine_aphris_a);assert.ok(contentSetFiles(s).has('data/config.json'));
 +});
@@ -21964,10 +21997,10 @@ index 0000000..db03394
 + try{h.start();h.toPrep(1);assert.equal(h.m.relicsEnabled,true);assert.equal(h.m.rhineEnabled,true);assert.equal(h.m.gd.raw.chess.chess_rhine_aphris_a.name,'谬因');assert.equal(h.m.errorCount,0);h.m.onDisconnect('p_0');h.m.onReconnect('p_0');assert.equal(h.m.relicsEnabled,true);assert.equal(h.m.errorCount,0);}finally{h.m.dispose();}
 +});
 diff --git a/test/match/board.test.js b/test/match/board.test.js
-index ac7b494..8feb220 100644
+index 31998ef..4a16fc7 100644
 --- a/test/match/board.test.js
 +++ b/test/match/board.test.js
-@@ -136,7 +136,8 @@ test('g.move to the hand: withdraw, full-hand swap with a chess, hand↔hand swa
+@@ -139,7 +139,8 @@ test('g.move to the hand: withdraw, full-hand swap with a chess, hand↔hand swa
    assert.deepEqual(m.handle('p_0', { t: 'g.move', uid: boardPiece.uid, to: { area: 'hand', idx: itemIdx } }), { error: ERR.HAND_FULL });
    // items cannot be placed on the board but can move inside the hand
    assert.deepEqual(m.handle('p_0', { t: 'g.move', uid: item.uid, to: { area: 'board', row: 9, col: 4 } }).error, ERR.BAD_TARGET);
@@ -22401,10 +22434,10 @@ index 4d73d7b..1a4de1d 100644
  
    test('a real co-op match: the deploying player\'s m.private and their m.public row (a teammate\'s strip) say the count holds the +1', () => {
 diff --git a/test/match/harness.js b/test/match/harness.js
-index 7a452cc..3b3927a 100644
+index f58bd86..d6c9a3a 100644
 --- a/test/match/harness.js
 +++ b/test/match/harness.js
-@@ -79,6 +79,8 @@ export function makeMatch(o = {}) {
+@@ -82,6 +82,8 @@ export function makeMatch(o = {}) {
      botSliceMs: o.botSliceMs,
      clientCombat: o.clientCombat ?? false,
      verify: o.verify ?? 'off',
@@ -22413,7 +22446,7 @@ index 7a452cc..3b3927a 100644
      headlessSliceMs: o.headlessSliceMs,
      aiPicksLast: o.aiPicksLast,
      // a bot prep's layout rehearsal delegated to the room's host (DESIGN §14; test/match/rehearsal-delegate.test.js):
-@@ -104,7 +106,7 @@ export function makeMatch(o = {}) {
+@@ -112,7 +114,7 @@ export function makeMatch(o = {}) {
      assert.ok(ok && m.phase === phase && (round == null || m.round === round), `expected ${phase}${round != null ? ' R' + round : ''}, got ${m.phase} R${m.round}${h.ended ? ' (ended)' : ''}`);
      return h;
    };
@@ -22422,7 +22455,7 @@ index 7a452cc..3b3927a 100644
    /** last message of a type sent to a player (unicast) */
    h.lastTo = (id, type) => { for (let i = h.sent.length - 1; i >= 0; i--) if (h.sent[i][0] === id && h.sent[i][1].t === type) return h.sent[i][1]; return null; };
    h.lastBc = (type) => { for (let i = h.bc.length - 1; i >= 0; i--) if (h.bc[i].t === type) return h.bc[i]; return null; };
-@@ -128,6 +130,7 @@ export function makeMatch(o = {}) {
+@@ -136,6 +138,7 @@ export function makeMatch(o = {}) {
        if (h.ended) return !!pred();
        for (const ps of m.players.values()) {
          if (ps.isBot || ps.left) continue;
@@ -22430,7 +22463,7 @@ index 7a452cc..3b3927a 100644
          if (m.phase === 'INFO_CHECK' && !ps.infoReady) m.handle(ps.playerId, { t: 'g.infoReady' });
          if (m.phase === 'BAND_DRAFT' && m.draftTurn() === ps.playerId) m.handle(ps.playerId, { t: 'g.band', bandId: band });
          if (m.phase === 'SP_DRAFT' && m.spTurn() === ps.playerId) {
-@@ -185,7 +188,7 @@ function legacyInvariants(m) {
+@@ -193,7 +196,7 @@ function legacyInvariants(m) {
      }
      const chessUids = new Set();
      const diyHeld = new Map();
@@ -22439,7 +22472,7 @@ index 7a452cc..3b3927a 100644
      for (const p of all) if (p.kind === 'chess') chessUids.add(p.uid);
      let deployed = 0;
      const dmap = m.deployMapFor(ps); // a pure read (as server/match/invariants.js): no PlayerState cache touched
-@@ -199,7 +202,7 @@ function legacyInvariants(m) {
+@@ -207,7 +210,7 @@ function legacyInvariants(m) {
        assert.ok(canPlace(dmap, cls, r, c), `illegal tile ${p.id} @ ${k}`);
        assert.notEqual(p.kind, 'item', 'items never stand on the board');
        if (p.kind === 'chess') deployed++;
@@ -22448,7 +22481,7 @@ index 7a452cc..3b3927a 100644
      }
      assert.ok(deployed <= ps.deployCap, `${ps.playerId} deployCount ${deployed} > cap ${ps.deployCap}`);
      for (const p of all) {
-@@ -218,7 +221,7 @@ function legacyInvariants(m) {
+@@ -227,7 +230,7 @@ function legacyInvariants(m) {
          assert.ok(m.gd.item(p.id), `unknown item ${p.id}`);
        } else if (p.kind === 'token') {
          assert.ok(p.count >= 1, 'token stack count');
@@ -26239,7 +26272,7 @@ index 0000000..fc5047f
 + });
 +});
 diff --git a/test/render/unitview.test.js b/test/render/unitview.test.js
-index 819719b..ca8191a 100644
+index 11fe5a1..8fa9a54 100644
 --- a/test/render/unitview.test.js
 +++ b/test/render/unitview.test.js
 @@ -10,6 +10,8 @@ import path from 'node:path';
@@ -26251,7 +26284,7 @@ index 819719b..ca8191a 100644
  
  const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
  const ASSETS = JSON.parse(readFileSync(path.join(ROOT, 'data/assets.json'), 'utf8'));
-@@ -150,6 +152,58 @@ describe('diamond cache', () => {
+@@ -161,6 +163,58 @@ describe('diamond cache', () => {
    });
  });
  
@@ -27463,7 +27496,7 @@ index 0000000..7d2532d
 +  assert.equal(JSON.parse(fs.readFileSync(path.join(f.options.out, BUNDLE_NAME, MANIFEST_NAME), 'utf8')).runtime.version, 'v24.14.1');
 +});
 diff --git a/test/ui/assetUrls.test.js b/test/ui/assetUrls.test.js
-index fbadc0c..53e0fa2 100644
+index ae22093..27aaf5d 100644
 --- a/test/ui/assetUrls.test.js
 +++ b/test/ui/assetUrls.test.js
 @@ -7,10 +7,7 @@ import assert from 'node:assert/strict';
@@ -27487,7 +27520,7 @@ index fbadc0c..53e0fa2 100644
    else if (obj && typeof obj === 'object') for (const v of Object.values(obj)) manifestUrls(v, out);
    return out;
  }
-@@ -74,4 +71,19 @@ describe('assetUrls', () => {
+@@ -111,4 +108,19 @@ describe('assetUrls', () => {
      assert.equal(uiUrl(undefined, 'x'), null);
      assert.equal(tokenAvatarUrl(m, null), null);
    });
@@ -27839,7 +27872,7 @@ index 0fe147f..2a3e20e 100644
  });
  
 diff --git a/test/ui/gameLogic.test.js b/test/ui/gameLogic.test.js
-index f6b2c05..393e304 100644
+index bcde650..25f6427 100644
 --- a/test/ui/gameLogic.test.js
 +++ b/test/ui/gameLogic.test.js
 @@ -134,7 +134,7 @@ describe('phases', () => {
@@ -27992,7 +28025,7 @@ index 9cc9195..48efe0e 100644
      await page.screenshot({ path: path.join(OUT, 'loadout-desktop.png') });
      // search → one card
 diff --git a/test/ui/loadout.test.js b/test/ui/loadout.test.js
-index da6bda9..398ff36 100644
+index d3d717a..22326b5 100644
 --- a/test/ui/loadout.test.js
 +++ b/test/ui/loadout.test.js
 @@ -10,11 +10,7 @@ import { fileURLToPath } from 'node:url';
@@ -28903,7 +28936,7 @@ index 0000000..02104d5
 +  }
 +});
 diff --git a/test/ui/standin-ui.test.js b/test/ui/standin-ui.test.js
-index 0c362d2..a1df95f 100644
+index c7a9901..ae28165 100644
 --- a/test/ui/standin-ui.test.js
 +++ b/test/ui/standin-ui.test.js
 @@ -86,7 +86,8 @@ describe('干员持有 model (ui/ownershipModel.js)', () => {
@@ -35918,10 +35951,10 @@ index 0000000..b9137fc
 +  return manifest;
 +}
 diff --git a/tools/build-data.mjs b/tools/build-data.mjs
-index 509851e..9a5b182 100644
+index 9af94ae..1ed6a8a 100644
 --- a/tools/build-data.mjs
 +++ b/tools/build-data.mjs
-@@ -46,6 +46,7 @@ import { FULL_RANK, atRank, stripPotential } from '../shared/potential.js';
+@@ -46,6 +46,7 @@ import { createOfficialUnitBuilders } from '../server/plugins/officialUnitBuilde
  // ===== CLI & IO ==================================================================================
  
  const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -35938,7 +35971,7 @@ index 509851e..9a5b182 100644
  } catch (e) {
    console.error(`build-data: ${e.message}`);
    process.exit(2);
-@@ -3991,7 +3992,8 @@ async function main() {
+@@ -3292,7 +3293,8 @@ async function main() {
    }
  }
  
@@ -53735,7 +53768,7 @@ index 0000000..6b33752
 +  return chess;
 +}
 diff --git a/tools/fetch-assets.mjs b/tools/fetch-assets.mjs
-index dab8f52..a410ba9 100644
+index 3a97749..cc41584 100644
 --- a/tools/fetch-assets.mjs
 +++ b/tools/fetch-assets.mjs
 @@ -59,6 +59,7 @@
@@ -53749,7 +53782,7 @@ index dab8f52..a410ba9 100644
 @@ -68,6 +69,7 @@ import { normalizeProxyPrefix } from './assets/sources.mjs';
  import { loadIndexes } from './assets/cache.mjs';
  import { indexAudio, VOICE_DIRS } from './assets/audio.mjs';
- import { buildPlan, VOICE_OPTIONAL_TREES } from './assets/plan.mjs';
+ import { buildPlan, charModesFromIndex, VOICE_OPTIONAL_TREES } from './assets/plan.mjs';
 +import { rhineArtInput, addRhineArt } from './assets/rhine-plan.mjs';
  import {
    processModels, findLocalEnemyModels, findLocalTokenModels, localSpineMeta, loadLocalSpines, LOCAL_ENEMY_SPINES_FILE,
@@ -53764,7 +53797,7 @@ index dab8f52..a410ba9 100644
    return { dropped, write: dropped.length === 0 || !!allowShrink || !!prune };
  }
  
-@@ -433,8 +436,8 @@ async function main() {
+@@ -444,8 +447,8 @@ async function main() {
    const localTokenSpines = await syncLocalSpines(opts, 'token');
    const statsTemplate = await statsTemplateJobs(ROOT, { offline: opts.offline || opts.dryRun, log });
    const plan = buildPlan({
@@ -53775,7 +53808,7 @@ index dab8f52..a410ba9 100644
      voiceSlots: opts.voiceAll ? null : undefined,
      optionalVoice: opts.optionalVoice,
      extraEnemyIds: Object.keys(dataEnemies || {}),
-@@ -501,7 +504,10 @@ async function main() {
+@@ -513,7 +516,10 @@ async function main() {
      root: ASSETS, spine: spine.entries, sourceOf: (rel) => dl.ledger.files[rel]?.url,
      ...(verifier ? { available: (rel) => dl.accepted.has(rel) } : null),
    });

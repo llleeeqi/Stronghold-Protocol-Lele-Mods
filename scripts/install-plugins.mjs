@@ -7,7 +7,7 @@ const kit=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const runtime=path.resolve(process.argv[2]||'');
 if(!process.argv[2]||runtime===kit)throw new Error('Usage: node scripts/install-plugins.mjs /path/to/adapted-game [lele-id ...]');
 const config=JSON.parse(fs.readFileSync(path.join(runtime,'data/config.json'),'utf8'));
-if(config.economy?.leleHost?.api!==1)throw new Error('This host needs the Lele 0.3.0 compatibility layer first. See docs/PLUGINS.md.');
+if(config.economy?.leleHost?.api!==1)throw new Error('This host needs the Lele 0.3.1 compatibility layer first. See docs/PLUGINS.md.');
 const names=process.argv.slice(3).length?process.argv.slice(3):fs.readdirSync(path.join(kit,'plugins')).filter(id=>id.startsWith('lele-'));
 for(const id of names){
  if(!/^lele-[a-z]+$/.test(id)||!fs.existsSync(path.join(kit,'plugins',id,'plugin.json')))throw new Error('Unknown plugin: '+id);

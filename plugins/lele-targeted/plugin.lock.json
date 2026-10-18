@@ -1,11 +1,11 @@
 {
   "lock": 1,
   "id": "lele-targeted",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
-      "sha256": "c064692d4dadd698131bdf9f5c9cc7168e9573d056313afa4d1966a0f2a899f7",
+      "sha256": "353ffc4f4ec718dad2352bb56e7036aac7d6afd724747a7946acce367f15672d",
       "bytes": 764
     },
     "data/feature.json": {
@@ -13,8 +13,8 @@
       "bytes": 324
     },
     "plugin.json": {
-      "sha256": "f9d035183f137a376275732ae0d5f645f9d57bf3da586caa2085615cb598f3ff",
-      "bytes": 795
+      "sha256": "8a9472b42cae43820589f2f2c794421120ffe262130c7889a7f7c01c728e9235",
+      "bytes": 767
     }
   },
   "spine": {}

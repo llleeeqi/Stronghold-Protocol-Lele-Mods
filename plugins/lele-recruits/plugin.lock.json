@@ -1,11 +1,11 @@
 {
   "lock": 1,
   "id": "lele-recruits",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
-      "sha256": "bc3554b91d6f1459fce62e218a8fc75526484a6e5d49ad240fcaed8c4dc7db9f",
+      "sha256": "8d5da02aec1aa7a9e43a5d7293d50d8344680138ad19ca7d5c0392483a182808",
       "bytes": 759
     },
     "data/feature.json": {
@@ -13,7 +13,7 @@
       "bytes": 251402
     },
     "plugin.json": {
-      "sha256": "846d28367f262bf8840ae48824ee5f26dc83a1f77bb3ff53e08a909d116f7b38",
+      "sha256": "5b66bd9ed5d003442f2d3ccd4cb955449c7be3f825ffc5e0507e0979b338db2f",
       "bytes": 771
     }
   },

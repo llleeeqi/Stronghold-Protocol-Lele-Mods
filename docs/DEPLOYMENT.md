@@ -1,13 +1,13 @@
-# 部署、更新与回退（0.3.1）
+# 部署、更新与回退（0.3.3）
 
 首次部署建议交给 Agent，先读 README、AGENTS.md 和 [插件兼容边界](PLUGINS.md)。需要 Git、Python 3、Docker Compose；Windows 可用 WSL。复制 `.env.example` 为 `.env`，设置端口和资源限制，保留已有 Compose 项目名与其他服务配置。
 
 ```bash
-bash scripts/stage.sh --name plugins-031
-bash scripts/activate.sh plugins-031
+bash scripts/stage.sh --name plugins-033
+bash scripts/activate.sh plugins-033
 ```
 
-stage 在独立目录获取 upstream.lock.json 固定的官方 0.3.1，检查并应用宿主补丁，安装锁文件依赖。历史数据生成器只为准备素材使用；下载完成后恢复官方原版基线，写入 Lele API 1 标记，再安装、严格检查和打包八个插件。最终检查成功才写 READY，不改变运行中的服务。
+stage 在独立目录获取 upstream.lock.json 固定的官方 0.3.3，检查并应用宿主补丁，安装锁文件依赖。历史数据生成器只为准备素材使用；下载完成后恢复官方原版基线，写入 Lele API 1 标记，再安装、严格检查和打包八个插件。最终检查成功才写 READY，不改变运行中的服务。
 
 ```bash
 bash scripts/stage.sh --source /abs/clean-upstream --assets-from /abs/old-runtime --name update-001

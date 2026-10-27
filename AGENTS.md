@@ -2,7 +2,7 @@
 
 先读README.md、docs/PLUGINS.md、docs/DEPLOYMENT.md与upstream.lock.json。继续使用用户已有授权、服务器信息与本会话工作子目录，不重复询问。
 
-这是八个独立插件与固定0.3.1宿主兼容层，不是纯原版即装即用插件，也不是自制新加载器。plugins/lele-*/保存可发布源码；patches/modpack-code.patch保存共享宿主适配。不要掩盖这一依赖，不要绕过官方PLUGIN_*检查。
+这是八个独立插件与固定0.3.3宿主兼容层，不是纯原版即装即用插件，也不是自制新加载器。plugins/lele-*/保存可发布源码；patches/modpack-code.patch保存共享宿主适配。不要掩盖这一依赖，不要绕过官方PLUGIN_*检查。
 
 ## 部署
 

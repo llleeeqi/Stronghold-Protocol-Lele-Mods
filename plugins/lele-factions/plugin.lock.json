@@ -1,11 +1,11 @@
 {
   "lock": 1,
   "id": "lele-factions",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
-      "sha256": "dab38c01d851d4780fcbda73c464d7e025ab382a268c384ca214114174840891",
+      "sha256": "9cfb78f82fde224a61ce977ab93042ed90c40c8b85a1d97f4de31400d0c8c11a",
       "bytes": 870
     },
     "data/feature.json": {
@@ -13,7 +13,7 @@
       "bytes": 649297
     },
     "plugin.json": {
-      "sha256": "b88ecf7fb457d8baa041e597ff0559c25e451870e5229e5f1d489d76dfaa2fd4",
+      "sha256": "3e76928d06d9bf91df87c2dfd99b4d3ccf2e39f93658cfc2682b18a6982b38d2",
       "bytes": 775
     }
   },

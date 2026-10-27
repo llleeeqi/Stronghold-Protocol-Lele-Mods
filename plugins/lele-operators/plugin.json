@@ -3,7 +3,7 @@
   "manifest": 2,
   "id": "lele-operators",
   "name": "新干员包",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "app": ">=0.3.0 <0.4.0",
   "api": 1,
   "class": "content",
@@ -18,7 +18,7 @@
   ],
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods",
-  "description": "整合适配：llleeeqi。结城理、娜仁图亚、予愿安洁莉娜、丰川祥子；包含原有技能和模组。 需要本仓库0.3.1宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
+  "description": "整合适配：llleeeqi。结城理、娜仁图亚、予愿安洁莉娜、丰川祥子；包含原有技能和模组。 需要本仓库0.3.3宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。",
   "permissions": [
     "data.patch"
   ],

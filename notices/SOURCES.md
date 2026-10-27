@@ -12,19 +12,19 @@
 
 ## 实际引用版本与最近检查的来源版本
 
-“实际移植提交”用于重建当前功能；“最近检查 HEAD”记录截至 2026-10-18 对来源仓库默认分支的核对点，不表示整仓移植。差异与取舍见 [更新记录](../docs/MOD-UPDATES.md)。
+“实际移植提交”用于重建当前功能；“最近检查 HEAD”记录截至 2026-10-27 对来源仓库默认分支的核对点，不表示整仓移植。差异与取舍见 [更新记录](../docs/MOD-UPDATES.md)。
 
-| 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-18） |
+| 内容 | 来源项目 / 作者 | 实际移植提交 | 最近检查 HEAD（2026-10-27） |
 |---|---|---|
-| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `c9d804f470b8d7422ae04eb66faf671cef21ad52` | `c9d804f470b8d7422ae04eb66faf671cef21ad52` |
-| 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `19f8f2d853144c94cd71554c0989d7550ad9de65` | `6e2d50a018522f8c19554748845fdc70b24d8626` |
+| 本体、统一启动入口 | [sganggs / Stronghold-Protocol](https://github.com/sganggs/Stronghold-Protocol) | `f07b8965061bbc311ad7aa815879b09264a1e47d` | `f07b8965061bbc311ad7aa815879b09264a1e47d` |
+| 更多阵营：莱茵生命、卡兹戴尔 | [YUYUYUYUYUYUYUTOUA / Stronghold-Protocol-Rhine](https://github.com/YUYUYUYUYUYUYUTOUA/Stronghold-Protocol-Rhine) | `19f8f2d853144c94cd71554c0989d7550ad9de65` | `974650b9fa5cdf5fa6a1efd0a1e8a8f3bd0e2fba` |
 | 谬因二技能（本整合归入莱茵生命） | [SrC2O4 / Stronghold-Protocol](https://github.com/SrC2O4/Stronghold-Protocol) | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` | `c76a81fb5cd8ca5bb360ff10f834cc9a166b0c88` |
-| 收藏品玩法（46 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `7edfb9662f26a7b8e829f378a069a847b341a583` | `f5ba4bf157e0ba176758fe8e46778ed6f9d5e971` |
+| 收藏品玩法（46 件） | [UNDFFIO / Stronghold-Protocol-dlc](https://github.com/UNDFFIO/Stronghold-Protocol-dlc) | `7edfb9662f26a7b8e829f378a069a847b341a583` | `5429757aa53d544cfffbfccd29cb92243401cd5a` |
 | 新干员包 | [remember-4 / Stronghold-Protocol-Rem](https://github.com/remember-4/Stronghold-Protocol-Rem) | `97887cac3abc474f4933ac620ecbd043974c6f3d` | `97887cac3abc474f4933ac620ecbd043974c6f3d` |
 | 伤害统计（当前与上一轮） | [Stardust-minus / Stronghold-Protocol](https://github.com/Stardust-minus/Stronghold-Protocol) | `9bb6b2d833978c0aa9ef1713ef188d6c1588169f` | `3dbdbc25c9cf372b31d95e48546e23ad907e8ebb` |
-| 恭喜发财 | [RiZhiZhaoYi / Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) | `941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21` | `ed42928d707303a7f6ba1c20fadf7545de20cbca` |
+| 恭喜发财 | [RiZhiZhaoYi / Stronghold-Protocol](https://github.com/RiZhiZhaoYi/Stronghold-Protocol) | `941e6ef25c6b50a7a1b8e3a3fd73798b39d79c21` | `f10cd6ffa9bdcfedc7dc1d87c0176cd0f9d8b8cd` |
 | 额外干员包 | [Lunac1a / Stronghold-Protocol](https://github.com/Lunac1a/Stronghold-Protocol) | `c8141334266fd1d5971ed996d62ac59addb92b5d` | `c8141334266fd1d5971ed996d62ac59addb92b5d` |
-| 定向甄选 | [Strinova-xinghui / Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol) | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba` | `a552329e588de19ab94939cbe2fbb3083cafe558` |
+| 定向甄选 | [Strinova-xinghui / Stronghold-Protocol](https://github.com/Strinova-xinghui/Stronghold-Protocol) | `e9bc8c578e1beef7bc7e3deaa226f73f10dd66ba` | `984c2b03f6a6518304a968fa6b74bff3f0430ce8` |
 | 额外4回合及整合适配 | [llleeeqi / Stronghold-Protocol-Lele-Mods](https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods)，基于上游回合系统 | 本仓库实现 | 不适用 |
 
 ## 移植边界与许可
@@ -76,3 +76,7 @@
 ## 2026-10-18 官方优先更新
 
 本轮仅适配官方 0.3.1，已有拓展玩法仍来自上列提交。各来源最新提交已审查，尚未导入的新玩法与作者项目链接见 [更新记录](../docs/UPDATES-031.md)。
+
+## 2026-10-27 官方 0.3.3 兼容
+
+本体与战斗结算采用官方新版。收藏品界面参考 UNDFFIO `5429757aa53d544cfffbfccd29cb92243401cd5a` 的三列预览、更多入口与文字缩放；未导入刮刮乐、超限模拟及新掉落规则。更多阵营保留多萝西和谬因，没有直接替换成来源的新阵容。详情见 [更新记录](../docs/UPDATES-033.md)。

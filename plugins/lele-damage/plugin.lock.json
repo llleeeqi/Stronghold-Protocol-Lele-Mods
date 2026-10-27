@@ -1,11 +1,11 @@
 {
   "lock": 1,
   "id": "lele-damage",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "generator": "tools/plugin.mjs pack",
   "files": {
     "README.md": {
-      "sha256": "32484d63c6f31af1a42dfaa38e4c7c89c23670c6f6230576f7e23a7529f103df",
+      "sha256": "bd52ab1c41cf5d6479e1722e543451e399820ea84d6b0b98a3839f4f1c02c5c7",
       "bytes": 724
     },
     "data/feature.json": {
@@ -13,7 +13,7 @@
       "bytes": 318
     },
     "plugin.json": {
-      "sha256": "03c5339e177eec57891e9dae971f994f0a9faa3cd44262b7e884ffcdcb1e5755",
+      "sha256": "b8d4068508fea08f7f66ee4c3e09874f650037acf4c86e3427aa16f780083f09",
       "bytes": 729
     }
   },

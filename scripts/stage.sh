@@ -57,7 +57,7 @@ if [[ -d "$repo_dir/mods/assets/public/art" ]]; then
 fi
 # Generate only the art inputs in the candidate, then restore the original native content.
 build_memory=${BUILD_MEMORY:-768m}
-docker run --rm --user "$(id -u):$(id -g)" --memory "$build_memory" -e HOME=/tmp -e npm_config_cache=/tmp/npm-cache -e NODE_OPTIONS=--max-old-space-size=512 \
+docker run --rm --ulimit core=0 --user "$(id -u):$(id -g)" --memory "$build_memory" -e HOME=/tmp -e npm_config_cache=/tmp/npm-cache -e NODE_OPTIONS=--max-old-space-size=512 \
  --mount "type=bind,src=$stage_dir,dst=/stage" --mount "type=bind,src=$source_dir,dst=/baseline,readonly" --mount "type=bind,src=$repo_dir,dst=/mod,readonly" -w /stage/source node:22-alpine \
  sh -c 'npm ci --omit=dev && node /mod/mods/rhine/generate-data.mjs /stage/source /baseline && node /mod/mods/rhine/generate-rounds.mjs /stage/source && node /mod/mods/rhine/refresh-data.mjs /stage/source && node /mod/mods/rhine/aphris/generate-data.mjs /stage/source && node /mod/mods/party/generate-data.mjs /stage/source && node /mod/mods/recruits/generate-data.mjs /stage/source && node tools/fetch-assets.mjs --refresh-index --allow-shrink && node /mod/scripts/check-required-assets.mjs /stage/source && node tools/fetch-rhine-assets.mjs && node tools/fetch-kazdel-assets.mjs && node tools/fetch-custom-assets.mjs && node tools/fetch-recruits-assets.mjs && node tools/fetch-relic-icons.mjs && node /mod/scripts/finalize-plugin-host.mjs /stage/source /baseline && node /mod/scripts/install-plugins.mjs /stage/source && node --test test/lele-plugins.test.js test/lobby-plugins.test.js test/plugins/contentSet.test.js test/render/unitview.test.js test/ui/inspect-range.test.js'
 git -C "$repo_dir" rev-parse HEAD > "$stage_dir/MODKIT_REVISION"

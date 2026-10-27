@@ -58,11 +58,12 @@ for(const [key,name,description,authors]of specs){
   changes=diff(original,extendData(structuredClone(original)).data);
  }
  const payload={api:1,feature:key,flag:flagNames[key],changes};
- const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:'0.3.3',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors,credits:authors.length===1&&authors[0]==='llleeeqi'?[]:['整合适配：llleeeqi'],license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:'整合适配：llleeeqi。'+description+' 需要本仓库0.3.1宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
+ const manifest={$schema:'../../schemas/plugin.schema.json',manifest:2,id,name,version:'0.3.4',app:'>=0.3.0 <0.4.0',api:1,class:'content',scope:['room'],authors,credits:authors.length===1&&authors[0]==='llleeeqi'?[]:['整合适配：llleeeqi'],license:'GPL-3.0-or-later',homepage:'https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods',description:'整合适配：llleeeqi。'+description+' 需要本仓库0.3.3宿主适配；原版宿主会拒绝加载，不会以残缺玩法开局。',permissions:['data.patch'],data:['data/feature.json']};
  const patch={patch:1,ops:[{op:'merge',file:'config',path:['economy','leleHost','packages',key],value:payload}]};
- const sources=(sourceKeys[key]||[]).map(k=>`- ${lock.mods[k]}`).join('\n')||'- https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods';
+ const sources=((sourceKeys[key]||[]).map(k=>`- ${lock.mods[k]}`).join('\n')||'- https://github.com/llleeeqi/Stronghold-Protocol-Lele-Mods')
+  + (key === 'relics' && lock.mod_updates.relics_ui_revision ? `\n- 界面参考：https://github.com/UNDFFIO/Stronghold-Protocol-dlc/tree/${lock.mod_updates.relics_ui_revision}（三列图标预览、更多入口与文字缩放）` : '');
  for(const [rel,v]of Object.entries({'plugin.json':manifest,'data/feature.json':patch}))fs.writeFileSync(path.join(folder,rel),JSON.stringify(v,null,2)+'\n');
- fs.writeFileSync(path.join(folder,'README.md'),`# ${name}\n\n${description}\n\n独立选择，默认关闭。放入本仓库构建的0.3.1宿主 plugins/${id}/，由房主在官方插件面板选择。\n\n需要 Lele 宿主适配 API 1，尚非纯原版即装即用插件。没有该适配时，官方检查器会以 PLUGIN_PATCH_PATH 拒绝启用。共享引擎在宿主适配层，功能数据随本插件锁定；不要把插件文件覆盖到游戏源码。\n\n## 来源与署名\n\n${sources}\n\n感谢 ${authors.map(a=>'@'+a).join('、')}，本仓库负责兼容整合。完整引用提交与移植边界见仓库 notices/SOURCES.md。\n`);
+ fs.writeFileSync(path.join(folder,'README.md'),`# ${name}\n\n${description}\n\n独立选择，默认关闭。放入本仓库构建的0.3.3宿主 plugins/${id}/，由房主在官方插件面板选择。\n\n需要 Lele 宿主适配 API 1，尚非纯原版即装即用插件。没有该适配时，官方检查器会以 PLUGIN_PATCH_PATH 拒绝启用。共享引擎在宿主适配层，功能数据随本插件锁定；不要把插件文件覆盖到游戏源码。\n\n## 来源与署名\n\n${sources}\n\n感谢 ${authors.map(a=>'@'+a).join('、')}，本仓库负责兼容整合。完整引用提交与移植边界见仓库 notices/SOURCES.md。\n`);
  console.log(`${id}: ${changes.length} feature data edits`);
 }
 console.log('Eight feature plugin folders generated:',out);

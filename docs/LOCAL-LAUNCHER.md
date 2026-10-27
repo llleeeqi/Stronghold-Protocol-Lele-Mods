@@ -1,6 +1,6 @@
 # 本地统一开服端接入
 
-当前固定官方0.3.1，保留其 scripts/start-windows.bat、scripts/start.sh 和 scripts/launch.mjs 统一入口。先按 [部署说明](DEPLOYMENT.md) 构建带宿主API1与八个插件的游戏候选，不能把本工具包目录直接当游戏本体，也不能把插件直接装到未适配的官方整合包。
+当前固定官方0.3.3，保留其 scripts/start-windows.bat、scripts/start.sh 和 scripts/launch.mjs 统一入口。先按 [部署说明](DEPLOYMENT.md) 构建带宿主API1与八个插件的游戏候选，不能把本工具包目录直接当游戏本体，也不能把插件直接装到未适配的官方整合包。
 
 云服继续用Docker Compose。Windows构建建议WSL与Docker；本仓库没有额外的原生Windows安装器。构建完成后可以复制候选到本机，安装与目标平台匹配的Node依赖和资源，使用Node22或24。
 
